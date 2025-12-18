@@ -1,23 +1,24 @@
-import { TestBed } from '@angular/core/testing';
-import { App } from './app';
+import { Routes } from '@angular/router';
+import { PubliclayoutComponent } from './layouts/public-layout/publiclayout.component';
+import { HomeComponent } from './pages/home/home.component';
 
-describe('App', () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [App],
-    }).compileComponents();
-  });
+export const routes: Routes = [
+  {
+    path: '',
+    component: PubliclayoutComponent,
+    children: [
+      { path: '', component: HomeComponent },
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(App);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
+      // por enquanto redireciona (até criar as páginas)
+      { path: 'consultar-ocorrencia', redirectTo: '', pathMatch: 'full' },
+      { path: 'validadores', redirectTo: '', pathMatch: 'full' },
+      { path: 'ocorrencias', redirectTo: '', pathMatch: 'full' },
+      { path: 'motivos', redirectTo: '', pathMatch: 'full' },
+      { path: 'noticias', redirectTo: '', pathMatch: 'full' },
+      { path: 'informacoes', redirectTo: '', pathMatch: 'full' },
+      { path: 'login', redirectTo: '', pathMatch: 'full' },
+    ]
+  },
 
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(App);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, remessa-segura-portal');
-  });
-});
+  { path: '**', redirectTo: '' }
+];

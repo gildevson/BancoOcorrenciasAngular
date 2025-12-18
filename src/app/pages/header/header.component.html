@@ -1,0 +1,278 @@
+<!-- ============================================
+     HEADER B3 - HTML MELHORADO
+     Versão otimizada com acessibilidade aprimorada
+     ============================================ -->
+
+<header class="b3-header-container" role="banner" [class.scrolled]="isScrolled">
+
+  <!-- Primeira linha: Logo + Menu + Controles -->
+  <div class="header-content">
+
+    <!-- Logo -->
+    <div class="b3-logo">
+      <a
+        routerLink="/"
+        (click)="closeMenu()"
+        class="b3-logo-link"
+        aria-label="Banco Ocorrência - Ir para página inicial"
+      >
+        Banco <strong>Ocorrência</strong>
+      </a>
+    </div>
+
+    <!-- Navegação Principal -->
+    <nav
+      class="b3-nav-main"
+      [class.open]="menuOpen"
+      role="navigation"
+      aria-label="Navegação principal"
+      [attr.aria-hidden]="isMobile && !menuOpen"
+    >
+      <!-- Botão fechar (apenas mobile) -->
+      <button
+        *ngIf="isMobile && menuOpen"
+        class="mobile-close"
+        type="button"
+        (click)="closeMenu()"
+        aria-label="Fechar menu"
+      >
+        <span class="material-icons">close</span>
+      </button>
+
+      <ul class="b3-nav-menu">
+
+        <!-- Item de Login Mobile -->
+        <li class="mobile-login-item" *ngIf="isMobile">
+          <a
+            routerLink="/login"
+            (click)="closeMenu()"
+            aria-label="Fazer login como administrador"
+          >
+            <span class="material-icons" aria-hidden="true">account_circle</span>
+            <span>Admin (Login)</span>
+          </a>
+        </li>
+
+        <!-- Início -->
+        <li>
+          <a
+            routerLink="/"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="closeMenu()"
+            aria-label="Ir para início"
+          >
+            Início
+          </a>
+        </li>
+
+        <!-- Consultar Ocorrências -->
+        <li>
+          <a
+            routerLink="/consultar-ocorrencia"
+            routerLinkActive="active"
+            (click)="closeMenu()"
+            aria-label="Consultar ocorrências"
+          >
+            Consultar Ocorrências
+          </a>
+        </li>
+
+        <!-- Validadores -->
+        <li>
+          <a
+            routerLink="/validadores"
+            routerLinkActive="active"
+            (click)="closeMenu()"
+            aria-label="Ver validadores"
+          >
+            Validadores
+          </a>
+        </li>
+
+        <!-- Ocorrência Bancária -->
+        <li>
+          <a
+            routerLink="/ocorrencias"
+            routerLinkActive="active"
+            (click)="closeMenu()"
+            aria-label="Ver ocorrências bancárias"
+          >
+            Ocorrência Bancária
+          </a>
+        </li>
+
+        <!-- Motivos -->
+        <li>
+          <a
+            routerLink="/motivos"
+            routerLinkActive="active"
+            (click)="closeMenu()"
+            aria-label="Ver motivos"
+          >
+            Motivos
+          </a>
+        </li>
+
+        <!-- Notícias -->
+        <li>
+          <a
+            routerLink="/noticias"
+            routerLinkActive="active"
+            (click)="closeMenu()"
+            aria-label="Ver notícias"
+          >
+            Notícias
+          </a>
+        </li>
+
+        <!-- Dropdown: Relatórios -->
+        <li
+          class="dropdown"
+          [class.active]="dropdownOpen === 'reports'"
+          (keydown.escape)="closeDropdown()"
+        >
+          <button
+            class="dropdown-trigger"
+            type="button"
+            (click)="toggleDropdown('reports')"
+            [attr.aria-expanded]="dropdownOpen === 'reports'"
+            aria-haspopup="true"
+            aria-controls="reports-menu"
+            aria-label="Menu de relatórios"
+          >
+            Relatórios <i class="dropdown-arrow" aria-hidden="true"></i>
+          </button>
+
+          <ul
+            class="dropdown-menu"
+            id="reports-menu"
+            role="menu"
+            [attr.aria-hidden]="dropdownOpen !== 'reports'"
+          >
+            <li role="none">
+              <a
+                routerLink="/relatorio-vendas"
+                (click)="closeMenu()"
+                role="menuitem"
+                aria-label="Relatório de vendas"
+              >
+                Vendas
+              </a>
+            </li>
+            <li role="none">
+              <a
+                routerLink="/relatorio-clientes"
+                (click)="closeMenu()"
+                role="menuitem"
+                aria-label="Relatório de clientes"
+              >
+                Clientes
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- Informações -->
+        <li>
+          <a
+            routerLink="/informacoes"
+            routerLinkActive="active"
+            (click)="closeMenu()"
+            aria-label="Ver informações"
+          >
+            Informações
+          </a>
+        </li>
+
+      </ul>
+    </nav>
+
+    <!-- Controles da Direita -->
+    <div class="b3-controls">
+
+      <!-- Login Icon (Desktop) -->
+      <div class="login-icon" *ngIf="!isMobile">
+        <a
+          routerLink="/login"
+          title="Admin Login"
+          aria-label="Fazer login como administrador"
+        >
+          <span class="material-icons" aria-hidden="true">account_circle</span>
+        </a>
+      </div>
+
+      <!-- Botão de Busca -->
+      <div class="b3-icons">
+        <button
+          type="button"
+          (click)="onSearchClick()"
+          aria-label="Abrir busca"
+          [class.loading]="searchLoading"
+          [disabled]="searchLoading"
+        >
+          <span class="material-icons" aria-hidden="true">search</span>
+          <span class="sr-only">Buscar</span>
+        </button>
+      </div>
+
+      <!-- Botão Menu Mobile -->
+      <button
+        class="menu-toggle"
+        type="button"
+        (click)="toggleMenu()"
+        [attr.aria-expanded]="menuOpen"
+        [attr.aria-label]="menuOpen ? 'Fechar menu' : 'Abrir menu'"
+      >
+        <span class="material-icons" aria-hidden="true">
+          {{ menuOpen ? 'close' : 'menu' }}
+        </span>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Backdrop Mobile -->
+  <div
+    class="backdrop"
+    [class.active]="menuOpen && isMobile"
+    *ngIf="menuOpen && isMobile"
+    (click)="closeMenu()"
+    (keydown.escape)="closeMenu()"
+    tabindex="-1"
+    role="presentation"
+    aria-hidden="true"
+  ></div>
+
+  <!-- Sub-navegação -->
+  <nav class="b3-nav-sub" role="navigation" aria-label="Navegação secundária">
+    <ul>
+      <li class="active">
+        <a
+          href="#"
+          (click)="onSubNavClick($event, 'processamento')"
+          aria-current="page"
+        >
+          PROCESSAMENTO
+        </a>
+      </li>
+      <li>
+        <a
+          href="#"
+          (click)="onSubNavClick($event, 'cadastros')"
+        >
+          CADASTROS
+        </a>
+      </li>
+      <li>
+        <a
+          href="#"
+          (click)="onSubNavClick($event, 'auditoria')"
+        >
+          AUDITORIA
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+</header>

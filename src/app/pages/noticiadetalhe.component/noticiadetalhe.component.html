@@ -1,0 +1,79 @@
+<section class="detail" *ngIf="noticia; else notFound">
+
+  <!-- Breadcrumb / Voltar -->
+  <div class="bread">
+    <a class="back" routerLink="/noticias">← Voltar para notícias</a>
+    <span class="sep">•</span>
+    <span class="crumb">Notícias</span>
+    <span class="sep">•</span>
+    <span class="crumb strong">{{ noticia!.categoria }}</span>
+  </div>
+
+  <!-- Cabeçalho -->
+  <header class="top">
+    <span class="tag">{{ noticia!.categoria }}</span>
+
+    <h1 class="title">{{ noticia!.titulo }}</h1>
+
+    <p class="lead">{{ noticia!.resumo }}</p>
+
+    <div class="meta">
+      <div class="meta-item">
+        <span class="material-icons">event</span>
+        <span>{{ noticia!.data }}</span>
+      </div>
+
+      <span class="dot">•</span>
+
+      <div class="meta-item">
+        <span class="material-icons">schedule</span>
+        <span>{{ noticia!.leituraMin }} min de leitura</span>
+      </div>
+
+      <span class="dot">•</span>
+
+      <div class="meta-item">
+        <span class="material-icons">account_circle</span>
+        <span>Banco Ocorrência</span>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a class="btn primary" routerLink="/noticias">Ver mais notícias</a>
+      <a class="btn ghost" routerLink="/">Voltar para Home</a>
+    </div>
+  </header>
+
+  <!-- Imagem -->
+  <figure class="hero-img">
+    <img [src]="noticia!.imagemUrl" [alt]="noticia!.titulo">
+  </figure>
+
+  <!-- Conteúdo -->
+  <article class="content" [innerHTML]="noticia!.conteudo"></article>
+
+  <!-- CTA final -->
+  <footer class="article-footer">
+    <div class="footer-card">
+      <div class="footer-text">
+        <h3>Gostou dessa publicação?</h3>
+        <p>Veja outras notícias, guias e releases do portal.</p>
+      </div>
+
+      <a class="btn yellow" routerLink="/noticias">Ir para notícias</a>
+    </div>
+  </footer>
+
+</section>
+
+<ng-template #notFound>
+  <section class="detail notfound">
+    <h1>Notícia não encontrada</h1>
+    <p>Essa notícia pode ter sido removida ou o link está incorreto.</p>
+
+    <div class="actions">
+      <a class="btn primary" routerLink="/noticias">Voltar para notícias</a>
+      <a class="btn ghost" routerLink="/">Ir para Home</a>
+    </div>
+  </section>
+</ng-template>

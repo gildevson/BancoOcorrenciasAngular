@@ -1,0 +1,26 @@
+<section class="news-page">
+  <div class="head">
+    <h1>Notícias do mercado financeiro</h1>
+    <p>Conteúdos e publicações do portal.</p>
+  </div>
+
+  <div class="grid">
+    <a class="card" *ngFor="let n of noticias" [routerLink]="['/noticia', n.slug]">
+      <div class="img">
+        <img [src]="n.imagemUrl" alt="">
+        <span class="tag">{{ n.categoria }}</span>
+      </div>
+
+      <div class="meta">
+        <span class="material-icons">event</span>
+        <span>{{ n.data }}</span>
+        <span class="dot">•</span>
+        <span class="material-icons">schedule</span>
+        <span>{{ n.leituraMin }} MIN DE LEITURA</span>
+      </div>
+
+      <h3>{{ n.titulo }}</h3>
+      <p>{{ n.resumo }}</p>
+    </a>
+  </div>
+</section>
