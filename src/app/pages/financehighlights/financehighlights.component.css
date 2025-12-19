@@ -3,14 +3,17 @@
 ================================ */
 
 .hi{
-  position: relative;
-
+position: relative;
   border-radius: 20px;
   overflow: hidden;
   background: #f4f7fb;
   border: 1px solid #0a283c1a;
   padding: 10px;
-  margin: 18px 17% 10px 17%;
+
+  /* AJUSTE CHAVE: Em vez de margem 17%, usamos max-width */
+  max-width: 1200px;
+  margin: 20px auto; /* Centraliza o bloco com espaçamento externo saudável */
+  width: 95%; /* Garante respiro em telas que encostam no limite */
 }
 
 /* “shape” suave no fundo */

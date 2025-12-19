@@ -410,3 +410,132 @@
     display: none;
   }
 }
+
+
+/* ==============================
+   MOBILE: Header compacto + Drawer perfeito
+   Cole no FINAL do CSS
+============================== */
+
+/* 1) Header: melhor distribuição no mobile */
+@media (max-width: 900px) {
+  .header-content{
+    max-width: 100%;
+    padding: 10px 12px;
+    gap: 10px;
+    justify-content: space-between; /* ✅ evita esmagar */
+  }
+
+  .b3-logo{
+    min-width: 0;                 /* ✅ remove travas */
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .b3-logo-link{
+    font-size: 18px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;      /* ✅ não quebra no iPhone */
+  }
+
+  .b3-controls{
+    flex: 0 0 auto;
+    gap: 8px;
+  }
+
+  .b3-icons button,
+  .menu-toggle{
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+  }
+
+  .b3-icons .material-icons{ font-size: 21px; }
+  .menu-toggle .material-icons{ font-size: 24px; }
+}
+
+/* 2) Drawer: scroll, safe-area iOS, botão fechar fixo */
+@media (max-width: 900px) {
+  .b3-nav-main{
+    top: 0;
+    padding-top: calc(env(safe-area-inset-top) + 14px);
+    padding-bottom: calc(env(safe-area-inset-bottom) + 14px);
+
+    overflow-y: auto;            /* ✅ menu rola */
+    -webkit-overflow-scrolling: touch;
+
+    /* melhora toque */
+    touch-action: pan-y;
+  }
+
+  .mobile-close{
+    position: sticky;            /* ✅ fica visível ao rolar */
+    top: calc(env(safe-area-inset-top) + 8px);
+    z-index: 2;
+  }
+}
+
+/* 3) Dropdown no mobile: 100% largura e UX melhor */
+/* ============================================================
+   AJUSTES DE REFINAMENTO PARA RESPONSIVIDADE TOTAL
+   ============================================================ */
+
+@media (max-width: 900px) {
+  /* 1. Ajuste do Header para não comprimir os ícones */
+  .header-content {
+    padding: 8px 16px;
+    gap: 8px;
+  }
+
+  /* 2. Garante que o Drawer (Menu Lateral) ocupe a altura toda e seja legível */
+  .b3-nav-main {
+    width: 280px; /* Largura fixa mais comum para mobile */
+    background: #052332; /* Cor sólida para melhor contraste sobre o conteúdo */
+  }
+
+  /* 3. Sub-navegação: Melhorando o scroll horizontal */
+  .b3-nav-sub {
+    overflow: hidden;
+  }
+
+  .sub-nav-scroll-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    display: flex;
+  }
+
+  .b3-nav-sub ul {
+    padding: 0 16px;
+    width: 100%;
+    justify-content: space-between; /* Distribui itens se houver espaço */
+    min-width: max-content; /* Garante que os itens não quebrem linha */
+  }
+
+  .b3-nav-sub a {
+    white-space: nowrap;
+    font-size: 11px;
+    padding: 12px 4px;
+  }
+}
+
+/* 4. Ajustes para telas muito pequenas (abaixo de 360px) */
+@media (max-width: 360px) {
+  .b3-logo-link {
+    font-size: 16px;
+  }
+
+  .b3-controls {
+    gap: 4px;
+  }
+
+  .b3-icons button, .menu-toggle {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* 5. Estilização da barra de scroll da sub-nav (opcional, para estética) */
+.sub-nav-scroll-container::-webkit-scrollbar {
+  height: 0px; /* Esconde a barra feia no mobile */
+}

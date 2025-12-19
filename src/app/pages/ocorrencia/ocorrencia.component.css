@@ -37,7 +37,8 @@
 
   max-width: 1180px;
   margin: 0 auto;
-  padding: 28px 28px 56px;
+  margin-top: 20px;
+  padding: 30px 28px 56px;
   min-height: 100vh;
   position: relative;
   font-feature-settings: 'ss01', 'cv01', 'cv02';
@@ -640,7 +641,7 @@
   padding: 18px;
   border-radius: var(--radius-md);
   background: rgba(238, 118, 5, 0.03);
-  border: 1px solid rgba(226, 190, 31, 0.08);
+  border: 1px solid rgba(226, 186, 6, 0.08);
   transition: all var(--transition-base);
   box-shadow: var(--shadow-xs);
 }
