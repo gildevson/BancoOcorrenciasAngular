@@ -1,0 +1,22 @@
+<section class="hi">
+  <div class="hi-head">
+    <h2>Finanças em dia</h2>
+    <p>Dicas simples e positivas para manter sua rotina financeira organizada.</p>
+  </div>
+
+  <div class="hi-grid">
+    <article class="hi-card" *ngFor="let t of tips">
+      <div class="ico">
+        <span class="material-icons">{{ t.icon }}</span>
+      </div>
+
+      <h3>{{ t.title }}</h3>
+      <p>{{ t.text }}</p>
+    </article>
+  </div>
+
+  <div class="hi-actions">
+    <a class="btn primary" routerLink="/noticias">Ver conteúdos</a>
+    <a class="btn ghost" routerLink="/consultar-ocorrencia">Consultar ocorrências</a>
+  </div>
+</section>

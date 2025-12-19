@@ -7,7 +7,7 @@
   <div class="grid">
     <a class="card" *ngFor="let n of noticias" [routerLink]="['/noticia', n.slug]">
       <div class="img">
-        <img [src]="n.imagemUrl" alt="">
+        <img [src]="n.imagemUrl" [alt]="n.titulo">
         <span class="tag">{{ n.categoria }}</span>
       </div>
 

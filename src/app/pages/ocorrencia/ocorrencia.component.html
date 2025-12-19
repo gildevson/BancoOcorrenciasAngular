@@ -1,0 +1,297 @@
+<section class="consultar-page">
+  <!-- ================================
+       CABEÇALHO
+  ================================ -->
+  <div class="header">
+    <div class="title-section">
+      <h1>Consultar Ocorrências Bancárias</h1>
+      <p>Digite o código da ocorrência e motivo para ver detalhes, observações e ações recomendadas.</p>
+    </div>
+  </div>
+
+  <!-- ================================
+       FORMULÁRIO DE BUSCA
+  ================================ -->
+  <div class="search-card">
+    <div class="search-header">
+      <span class="material-icons">search</span>
+      <h2>Buscar Ocorrência</h2>
+    </div>
+
+    <div class="search-form">
+      <div class="form-row">
+        <!-- Campo: Código da Ocorrência -->
+        <div class="form-field">
+          <label for="codigo">
+            <span class="material-icons">tag</span>
+            Código da Ocorrência
+          </label>
+          <input
+            id="codigo"
+            type="text"
+            [(ngModel)]="codigoOcorrencia"
+            placeholder="Ex: 02, 03, 06, 09..."
+            maxlength="2"
+            (keyup.enter)="buscar()"
+            autocomplete="off"
+          />
+          <span class="hint">2 dígitos</span>
+        </div>
+
+        <!-- Campo: Código do Motivo -->
+        <div class="form-field">
+          <label for="motivo">
+            <span class="material-icons">info</span>
+            Código do Motivo
+            <span class="optional">(opcional)</span>
+          </label>
+          <input
+            id="motivo"
+            type="text"
+            [(ngModel)]="codigoMotivo"
+            placeholder="Ex: 00, 01, 10..."
+            maxlength="2"
+            (keyup.enter)="buscar()"
+            autocomplete="off"
+          />
+          <span class="hint">2 dígitos (se aplicável)</span>
+        </div>
+      </div>
+
+      <!-- Botões de Ação -->
+      <div class="form-actions">
+        <button
+          class="btn primary"
+          type="button"
+          (click)="buscar()"
+          [disabled]="!buscaValida">
+          <span class="material-icons">search</span>
+          Buscar Ocorrência
+        </button>
+
+        <button
+          class="btn ghost"
+          type="button"
+          (click)="limpar()"
+          *ngIf="buscaRealizada">
+          <span class="material-icons">close</span>
+          Limpar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================
+       RESULTADO DA BUSCA
+  ================================ -->
+  <div class="result-section" *ngIf="resultado">
+    <div class="result-card">
+      <!-- Header do Resultado -->
+      <div class="result-header" [class]="getClasseCategoria(resultado.categoria)">
+        <div class="header-left">
+          <span class="material-icons large">{{ getIconeCategoria(resultado.categoria) }}</span>
+          <div class="header-info">
+            <div class="codigo-badge">
+              <span class="codigo">{{ resultado.codigo }}</span>
+              <span class="separador" *ngIf="resultado.motivo">-</span>
+              <span class="motivo" *ngIf="resultado.motivo">{{ resultado.motivo }}</span>
+            </div>
+            <h2>{{ resultado.descricao }}</h2>
+          </div>
+        </div>
+
+        <span class="categoria-badge" [class]="getClasseCategoria(resultado.categoria)">
+          {{ resultado.categoria }}
+        </span>
+      </div>
+
+      <!-- Informações Principais -->
+      <div class="result-body">
+        <!-- Observações -->
+        <div class="info-block">
+          <div class="info-header">
+            <span class="material-icons">description</span>
+            <h3>Observações</h3>
+          </div>
+          <p class="info-text">{{ resultado.observacoes }}</p>
+        </div>
+
+        <!-- Tipo CNAB -->
+        <div class="info-row">
+          <div class="info-item">
+            <span class="material-icons">integration_instructions</span>
+            <div class="info-content">
+              <span class="info-label">Tipo CNAB</span>
+              <span class="info-value">{{ resultado.tipoCNAB }}</span>
+            </div>
+          </div>
+
+          <!-- Requer Ação -->
+          <div class="info-item" *ngIf="resultado.requerAcao !== undefined">
+            <span class="material-icons" [class.warning]="resultado.requerAcao">
+              {{ resultado.requerAcao ? 'warning' : 'check_circle' }}
+            </span>
+            <div class="info-content">
+              <span class="info-label">Requer Ação</span>
+              <span class="info-value" [class.warning]="resultado.requerAcao">
+                {{ resultado.requerAcao ? 'Sim' : 'Não' }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ações Sugeridas -->
+        <div class="info-block alert" *ngIf="resultado.acoesSugeridas && resultado.acoesSugeridas.length > 0">
+          <div class="info-header">
+            <span class="material-icons">lightbulb</span>
+            <h3>Ações Sugeridas</h3>
+          </div>
+          <ul class="acoes-lista">
+            <li *ngFor="let acao of resultado.acoesSugeridas">
+              <span class="material-icons">arrow_right</span>
+              {{ acao }}
+            </li>
+          </ul>
+        </div>
+
+        <!-- Bancos Específicos -->
+        <div class="info-block" *ngIf="resultado.bancosEspecificos && resultado.bancosEspecificos.length > 0">
+          <div class="info-header">
+            <span class="material-icons">account_balance</span>
+            <h3>Bancos Específicos</h3>
+          </div>
+          <div class="bancos-tags">
+            <span class="banco-tag" *ngFor="let banco of resultado.bancosEspecificos">
+              {{ banco }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ações do Resultado -->
+      <div class="result-actions">
+        <button class="btn ghost" type="button" (click)="copiarCodigo()">
+          <span class="material-icons">content_copy</span>
+          Copiar Código
+        </button>
+
+        <button class="btn ghost" type="button" (click)="compartilhar()">
+          <span class="material-icons">share</span>
+          Compartilhar
+        </button>
+
+        <button class="btn ghost" type="button" (click)="exportarPDF()">
+          <span class="material-icons">picture_as_pdf</span>
+          Exportar PDF
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================
+       RESULTADOS RELACIONADOS (Múltiplos)
+  ================================ -->
+  <div class="related-section" *ngIf="resultadosRelacionados.length > 0 && !resultado">
+    <h3 class="related-title">
+      <span class="material-icons">list</span>
+      Encontramos {{ resultadosRelacionados.length }} ocorrências com o código {{ codigoOcorrencia }}
+    </h3>
+    <p class="related-subtitle">Selecione uma para ver os detalhes:</p>
+
+    <div class="related-grid">
+      <div
+        class="related-card"
+        *ngFor="let ocorrencia of resultadosRelacionados"
+        (click)="selecionarOcorrencia(ocorrencia)">
+        <div class="related-header">
+          <span class="material-icons" [class]="getClasseCategoria(ocorrencia.categoria)">
+            {{ getIconeCategoria(ocorrencia.categoria) }}
+          </span>
+          <div class="related-codigo">
+            {{ ocorrencia.codigo }}<span *ngIf="ocorrencia.motivo">-{{ ocorrencia.motivo }}</span>
+          </div>
+        </div>
+        <h4>{{ ocorrencia.descricao }}</h4>
+        <span class="related-categoria" [class]="getClasseCategoria(ocorrencia.categoria)">
+          {{ ocorrencia.categoria }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================
+       ESTADO VAZIO (Não Encontrado)
+  ================================ -->
+  <div class="empty-state" *ngIf="naoEncontrado">
+    <span class="material-icons large">search_off</span>
+    <h2>Ocorrência não encontrada</h2>
+    <p>
+      Não encontramos a ocorrência
+      <strong>{{ codigoOcorrencia }}<span *ngIf="codigoMotivo">-{{ codigoMotivo }}</span></strong>
+      em nossa base de dados.
+    </p>
+    <div class="empty-suggestions">
+      <p><strong>Dicas:</strong></p>
+      <ul>
+        <li>Verifique se o código está correto (2 dígitos)</li>
+        <li>Tente buscar apenas pelo código da ocorrência</li>
+        <li>Consulte o manual do banco para códigos específicos</li>
+      </ul>
+    </div>
+    <button class="btn primary" type="button" (click)="limpar()">
+      <span class="material-icons">replay</span>
+      Nova Busca
+    </button>
+  </div>
+
+  <!-- ================================
+       AJUDA / INSTRUÇÕES
+  ================================ -->
+  <div class="help-card" *ngIf="!buscaRealizada">
+    <div class="help-header">
+      <span class="material-icons">help</span>
+      <h3>Como usar</h3>
+    </div>
+    <div class="help-content">
+      <div class="help-item">
+        <span class="step">1</span>
+        <div class="help-text">
+          <strong>Digite o código da ocorrência</strong>
+          <p>Exemplo: 02 (confirmação), 03 (rejeição), 06 (liquidação)</p>
+        </div>
+      </div>
+      <div class="help-item">
+        <span class="step">2</span>
+        <div class="help-text">
+          <strong>Digite o código do motivo (opcional)</strong>
+          <p>Exemplo: 00, 01, 10... (para ocorrências com submotivos)</p>
+        </div>
+      </div>
+      <div class="help-item">
+        <span class="step">3</span>
+        <div class="help-text">
+          <strong>Clique em Buscar</strong>
+          <p>Veja detalhes, observações e ações recomendadas</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="help-examples">
+      <h4>Exemplos comuns:</h4>
+      <div class="examples-grid">
+        <button class="example-btn" (click)="codigoOcorrencia='02'; codigoMotivo='00'; buscar()">
+          02-00 <span>Entrada Confirmada</span>
+        </button>
+        <button class="example-btn" (click)="codigoOcorrencia='03'; codigoMotivo='04'; buscar()">
+          03-04 <span>Nosso Número Inválido</span>
+        </button>
+        <button class="example-btn" (click)="codigoOcorrencia='06'; codigoMotivo='00'; buscar()">
+          06-00 <span>Liquidação Normal</span>
+        </button>
+        <button class="example-btn" (click)="codigoOcorrencia='09'; codigoMotivo='00'; buscar()">
+          09-00 <span>Baixa por Solicitação</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

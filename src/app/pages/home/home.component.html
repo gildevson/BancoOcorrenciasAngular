@@ -1,27 +1,35 @@
 <section class="news">
-  <div class="news-head">
-    <h2>Últimas publicações</h2>
-    <a class="link" routerLink="/noticias">Ver todas</a>
-  </div>
+  <div class="news-inner">
+    <div class="news-head">
+      <h2>Últimas publicações</h2>
+      <a class="link" routerLink="/noticias">Ver todas</a>
+    </div>
 
-  <div class="news-grid">
-    <a class="news-card" *ngFor="let n of noticias" [routerLink]="['/noticia', n.slug]">
+    <div class="news-grid">
+      <a class="news-card" *ngFor="let n of noticias" [routerLink]="['/noticia', n.slug]">
+        <div class="img">
+          <img [src]="n.imagemUrl" [alt]="n.titulo">
+          <span class="tag">{{ n.categoria }}</span>
+        </div>
 
-      <div class="img">
-        <img [src]="n.imagemUrl" [alt]="n.titulo">
-        <span class="tag">{{ n.categoria }}</span>
-      </div>
+        <div class="content">
+          <div class="meta">
+            <span class="material-icons">event</span>
+            <span>{{ n.data }}</span>
+            <span class="dot">•</span>
+            <span class="material-icons">schedule</span>
+            <span>{{ n.leituraMin }} MIN DE LEITURA</span>
+          </div>
 
-      <div class="meta">
-        <span class="material-icons">event</span>
-        <span>{{ n.data }}</span>
-        <span class="dot">•</span>
-        <span class="material-icons">schedule</span>
-        <span>{{ n.leituraMin }} MIN DE LEITURA</span>
-      </div>
+          <h3>{{ n.titulo }}</h3>
+          <p>{{ n.resumo }}</p>
 
-      <h3>{{ n.titulo }}</h3>
-      <p>{{ n.resumo }}</p>
-    </a>
+          <span class="read">Ler mais</span>
+        </div>
+      </a>
+    </div>
   </div>
 </section>
+
+<!-- ✅ BLOCO NOVO NA HOME (remove o warning) -->
+<app-finance-highlights></app-finance-highlights>
