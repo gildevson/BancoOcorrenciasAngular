@@ -1,0 +1,66 @@
+<section class="wrap">
+  <div class="bancos-layout">
+
+    <!-- ESQUERDA: GRÁFICO -->
+    <div class="chart-dark-card chart-card-compact">
+      <div class="chart-header">
+        <div class="symbol-info">
+          <img src="https://brapi.dev/favicon.ico" width="32" alt="Setor Bancário">
+          <div>
+            <h3>Setor Bancário</h3>
+            <span class="price">{{ selectedTicker }} • {{ activePeriod }}</span>
+          </div>
+        </div>
+
+        <div class="chart-tabs">
+          <span (click)="setPeriod('1D')" [class.active]="activePeriod==='1D'">1D</span>
+          <span (click)="setPeriod('1M')" [class.active]="activePeriod==='1M'">1M</span>
+          <span (click)="setPeriod('1A')" [class.active]="activePeriod==='1A'">1A</span>
+          <span (click)="setPeriod('Todos')" [class.active]="activePeriod==='Todos'">Todos</span>
+        </div>
+      </div>
+
+      <div class="chart-container">
+  <div class="chart-loading" *ngIf="chartLoading">Atualizando…</div>
+  <canvas baseChart [data]="lineChartData" [options]="lineChartOptions" [type]="lineChartType"></canvas>
+</div>
+    </div>
+
+    <!-- DIREITA: PAINEL B3 (1 card + abas) -->
+    <div class="b3-panel">
+      <div class="b3-tabs">
+        <button (click)="setTab('negociados')" [class.active]="activeTab==='negociados'">Mais Negociados</button>
+        <button (click)="setTab('altas')" [class.active]="activeTab==='altas'">Maiores Altas</button>
+        <button (click)="setTab('baixas')" [class.active]="activeTab==='baixas'">Maiores Baixas</button>
+      </div>
+
+      <div class="b3-list">
+        <div class="b3-row"
+             *ngFor="let q of listaAtual"
+             (click)="setTicker(q.symbol)"
+             [class.active]="selectedTicker === q.symbol">
+
+          <div class="b3-left">
+            <img class="b3-logo" [src]="logoUrl(q.symbol)" (error)="onLogoError($event)" alt="logo">
+            <div class="b3-text">
+              <div class="b3-ticker">{{ q.symbol }}</div>
+              <div class="b3-name">{{ q.shortName || q.longName }}</div>
+            </div>
+          </div>
+
+          <div class="b3-right">
+            <div class="b3-price">{{ fmtPrice(q.regularMarketPrice) }}</div>
+            <div class="b3-change" [class.pos]="isPos(q)" [class.neg]="!isPos(q)">
+              {{ fmtSigned(q.regularMarketChange) }} &nbsp; {{ fmtPct(q.regularMarketChangePercent) }}
+            </div>
+          </div>
+        </div>
+
+        <div class="b3-foot">
+          Clique em um banco para trocar o ativo do gráfico.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>

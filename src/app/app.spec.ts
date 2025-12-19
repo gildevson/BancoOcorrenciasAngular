@@ -1,11 +1,9 @@
 import { Routes } from '@angular/router';
-import { PubliclayoutComponent } from './layouts/public-layout/publiclayout.component';
 import { HomeComponent } from './pages/home/home.component';
 
 export const routes: Routes = [
   {
     path: '',
-    component: PubliclayoutComponent,
     children: [
       { path: '', component: HomeComponent },
 

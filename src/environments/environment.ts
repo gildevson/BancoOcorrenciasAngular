@@ -1,4 +1,6 @@
 export const environment = {
-  production: false,
+  production: true,
+  brapiToken: 'kEWSzrLum3fgQJfSysPF7i',
+  brapiBase: 'https://brapi.dev/api',
   apiUrl: 'https://localhost:7041/api'
 };
