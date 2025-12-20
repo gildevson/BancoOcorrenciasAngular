@@ -9,8 +9,9 @@
 
   /* AJUSTE CHAVE: Em vez de margem 17%, usamos max-width */
   max-width: 1200px;
-  margin: 15px auto; /* Centraliza o bloco com espaçamento externo saudável */
+  margin: 30px auto; /* Centraliza o bloco com espaçamento externo saudável */
   width: 95%; /* Garante respiro em telas que encostam no limite */
+  max-width: 1250px;
 }
 
 .news::after{

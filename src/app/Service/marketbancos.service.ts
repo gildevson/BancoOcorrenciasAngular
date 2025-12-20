@@ -1,38 +1,32 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { Observable } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class MarketBancosService {
-
-  private base = environment.apiUrl + '/market';
+  private base = `${environment.apiUrl}/market`;
 
   constructor(private http: HttpClient) {}
 
-  // 🔹 Lista de bancos (Finance)
-  financeList(sortOrder: string = 'desc', limit: number = 80): Observable<any> {
-    return this.http.get(`${this.base}/list`, {
-      params: {
-        sector: 'Finance',
-        sortBy: 'change',
-        sortOrder,
-        limit
-      }
+  financeList(order: 'asc' | 'desc' = 'desc', limit = 50, page = 1) {
+    const params = new HttpParams()
+      .set('sector', 'Finance')
+      .set('sortBy', 'change')
+      .set('sortOrder', order)
+      .set('limit', limit)
+      .set('page', page);
+
+    return this.http.get<any>(`${this.base}/list`, { params });
+  }
+
+  quotesBancos() {
+    return this.http.get<any>(`${this.base}/quote`, {
+      params: { symbols: 'ITUB4,BBDC4,BBAS3,SANB11,BPAC11,ABCB4,BRSR6,PINE4,BMGB4' }
     });
   }
 
-  // 🔹 Histórico do ativo
-  quoteHistory(ticker: string, range: string, interval: string): Observable<any> {
-    return this.http.get(`${this.base}/history/${ticker}`, {
-      params: { range, interval }
-    });
-  }
-
-  // 🔹 (opcional) quote direto
-  quotesBancos(): Observable<any> {
-    return this.http.get(`${this.base}/list`);
+  quoteHistory(ticker: string, range: string, interval: string) {
+    const params = new HttpParams().set('range', range).set('interval', interval);
+    return this.http.get<any>(`${this.base}/history/${ticker}`, { params });
   }
 }
