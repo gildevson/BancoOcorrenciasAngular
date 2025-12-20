@@ -20,60 +20,92 @@
 
     <div class="search-form">
       <div class="form-row">
-        <!-- Campo: Código da Ocorrência -->
-        <div class="form-field">
+
+  <!-- ✅ Campo: Banco -->
+  <div class="form-field">
+    <label for="banco">
+      <span class="material-icons">account_balance</span>
+      Banco
+      <span class="optional">(opcional)</span>
+    </label>
+
+    <select
+      id="banco"
+      [(ngModel)]="bancoSelecionado"
+      [compareWith]="compareBanco"
+      class="select-banco">
+
+      <option [ngValue]="null">Todos os bancos</option>
+
+      <option *ngFor="let banco of bancos" [ngValue]="banco">
+        {{ banco.codigo }} - {{ banco.nome }}
+      </option>
+    </select>
+
+    <!-- ✅ Preview: logo + nome -->
+    <div class="bank-preview" *ngIf="bancoSelecionado as b; else allBanks">
+      <img class="bank-logo" [src]="b.logo" (error)="onBancoLogoError($event)" alt="" />
+      <div class="bank-meta">
+        <div class="bank-name">{{ b.nome }}</div>
+        <div class="bank-code">Código {{ b.codigo }}</div>
+      </div>
+    </div>
+
+    <ng-template #allBanks>
+      <div class="bank-preview muted">
+        <span class="material-icons">layers</span>
+        <div class="bank-meta">
+          <div class="bank-name">Todos os bancos</div>
+          <div class="bank-code">Sem filtro</div>
+        </div>
+      </div>
+    </ng-template>
+
+    <span class="hint">Selecione um banco para destacar a consulta</span>
+  </div>
+
+  <!-- ✅ Campo: Código do Motivo -->
+  <div class="form-field">
           <label for="codigo">
-            <span class="material-icons">tag</span>
-            Código da Ocorrência
+            <span class="material-icons">pin</span> Nº Ocorrência
           </label>
           <input
             id="codigo"
             type="text"
             [(ngModel)]="codigoOcorrencia"
-            placeholder="Ex: 02, 03, 06, 09..."
+            placeholder="Ex: 02"
             maxlength="2"
             (keyup.enter)="buscar()"
-            autocomplete="off"
           />
           <span class="hint">2 dígitos</span>
         </div>
 
-        <!-- Campo: Código do Motivo -->
         <div class="form-field">
           <label for="motivo">
-            <span class="material-icons">info</span>
-            Código do Motivo
-            <span class="optional">(opcional)</span>
+            <span class="material-icons">info</span> Motivo
           </label>
           <input
             id="motivo"
             type="text"
             [(ngModel)]="codigoMotivo"
-            placeholder="Ex: 00, 01, 10..."
+            placeholder="Ex: 00"
             maxlength="2"
             (keyup.enter)="buscar()"
-            autocomplete="off"
           />
-          <span class="hint">2 dígitos (se aplicável)</span>
+          <span class="hint">Opcional</span>
         </div>
-      </div>
+
+</div>
+
 
       <!-- Botões de Ação -->
       <div class="form-actions">
-        <button
-          class="btn primary"
-          type="button"
-          (click)="buscar()"
-          [disabled]="!buscaValida">
+        <button class="btn primary" type="button" (click)="buscar()" [disabled]="!buscaValida">
           <span class="material-icons">search</span>
           Buscar Ocorrência
         </button>
 
-        <button
-          class="btn ghost"
-          type="button"
-          (click)="limpar()"
-          *ngIf="buscaRealizada">
+        <button class="btn ghost" type="button" (click)="limpar()" *ngIf="buscaRealizada">
           <span class="material-icons">close</span>
           Limpar
         </button>
@@ -89,6 +121,10 @@
       <!-- Header do Resultado -->
       <div class="result-header" [class]="getClasseCategoria(resultado.categoria)">
         <div class="header-left">
+          <div class="bank-badge" *ngIf="bancoSelecionado as b">
+  <img class="bank-logo-sm" [src]="b.logo" (error)="onBancoLogoError($event)" alt="" />
+  <span class="bank-badge-name">{{ b.nome }}</span>
+</div>
           <span class="material-icons large">{{ getIconeCategoria(resultado.categoria) }}</span>
           <div class="header-info">
             <div class="codigo-badge">
@@ -199,9 +235,7 @@
     <p class="related-subtitle">Selecione uma para ver os detalhes:</p>
 
     <div class="related-grid">
-      <div
-        class="related-card"
-        *ngFor="let ocorrencia of resultadosRelacionados"
+      <div class="related-card" *ngFor="let ocorrencia of resultadosRelacionados"
         (click)="selecionarOcorrencia(ocorrencia)">
         <div class="related-header">
           <span class="material-icons" [class]="getClasseCategoria(ocorrencia.categoria)">

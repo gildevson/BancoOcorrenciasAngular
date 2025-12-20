@@ -3,14 +3,10 @@
 ================================ */
 
 .news-page{
-  position: relative;
-
-  border-radius: 20px;
-  overflow: hidden;
-  background: #f4f7fb;
-  border: 1px solid #0a283c1a;
-  padding: 10px;
-  margin: 18px 17% 10px 17%;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 22px 28px 40px;
+  max-width: 1250px;
 }
 
 

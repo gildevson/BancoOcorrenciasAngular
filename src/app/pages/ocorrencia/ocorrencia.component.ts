@@ -9,6 +9,12 @@ import {
   buscarOcorrenciasPorCodigo,
 } from '../../data/ocorrenciasdata';
 
+interface Banco {
+  codigo: string;
+  nome: string;
+  logo: string;
+}
+
 @Component({
   selector: 'app-consultar-ocorrencia',
   standalone: true,
@@ -17,14 +23,31 @@ import {
   styleUrls: ['./ocorrencia.component.css'],
 })
 export class ConsultarOcorrenciaComponent {
-  // Dados das ocorrências
+  // ✅ Lista de bancos (pode aumentar depois)
+  bancos: Banco[] = [
+    { codigo: '001', nome: 'Banco do Brasil', logo: 'assets/logos/bb.png' },
+    { codigo: '237', nome: 'Bradesco',        logo: 'assets/logos/bradesco.png' },
+    { codigo: '341', nome: 'Itaú',            logo: 'assets/logos/itau.png' },
+    { codigo: '033', nome: 'Santander',       logo: 'assets/logos/santander.png' },
+  ];
+
+  bancoSelecionado: Banco | null = null;
+
+  // ✅ compareWith precisa aceitar null
+  compareBanco = (a: Banco | null, b: Banco | null) => a?.codigo === b?.codigo;
+
+  onBancoLogoError(ev: Event): void {
+    (ev.target as HTMLImageElement).src = 'assets/logos/default-bank.png';
+  }
+
+  // Dados
   ocorrencias: OcorrenciaBancaria[] = OCORRENCIAS_BANCARIAS;
 
   // Campos de busca
   codigoOcorrencia = '';
   codigoMotivo = '';
 
-  // Resultado da busca
+  // Resultado
   resultado: OcorrenciaBancaria | null = null;
   resultadosRelacionados: OcorrenciaBancaria[] = [];
 
@@ -32,9 +55,27 @@ export class ConsultarOcorrenciaComponent {
   buscaRealizada = false;
   naoEncontrado = false;
 
-  /**
-   * Realiza a busca da ocorrência
+  /** ✅ Se o banco foi selecionado, filtra ocorrências:
+   * - se a ocorrência NÃO tiver bancosEspecificos => deixa aparecer (genérica)
+   * - se tiver => só aparece se bater com o banco selecionado
    */
+  private filtrarPorBanco(lista: OcorrenciaBancaria[]): OcorrenciaBancaria[] {
+    if (!this.bancoSelecionado) return lista;
+
+    const nome = this.bancoSelecionado.nome.toLowerCase();
+    const codigo = this.bancoSelecionado.codigo;
+
+    return (lista ?? []).filter((o: any) => {
+      const banks = o?.bancosEspecificos as string[] | undefined;
+      if (!banks || banks.length === 0) return true;
+
+      return banks.some((b) => {
+        const s = (b ?? '').toString().toLowerCase();
+        return s.includes(nome) || s.includes(codigo);
+      });
+    });
+  }
+
   buscar(): void {
     this.buscaRealizada = true;
     this.naoEncontrado = false;
@@ -44,38 +85,28 @@ export class ConsultarOcorrenciaComponent {
     const codigo = this.codigoOcorrencia.trim();
     const motivo = this.codigoMotivo.trim();
 
-    if (!codigo) {
-      return;
-    }
+    if (!codigo) return;
 
-    // Busca exata (código + motivo)
+    // 1) Busca exata (código + motivo)
     if (motivo) {
       const found = buscarOcorrencia(codigo, motivo);
-      this.resultado = found || null;
+      const filtrado = this.filtrarPorBanco(found ? [found] : []);
+      this.resultado = filtrado[0] ?? null;
     } else {
-      // Busca apenas por código
+      // 2) Busca por código (pode vir várias)
       const resultados = buscarOcorrenciasPorCodigo(codigo);
-      if (resultados.length === 1) {
-        this.resultado = resultados[0];
-      } else if (resultados.length > 1) {
-        this.resultadosRelacionados = resultados;
-      }
+      const filtrados = this.filtrarPorBanco(resultados);
+
+      if (filtrados.length === 1) this.resultado = filtrados[0];
+      else if (filtrados.length > 1) this.resultadosRelacionados = filtrados;
     }
 
-    // Se não encontrou resultado exato, busca relacionados
-    if (!this.resultado && this.resultadosRelacionados.length === 0) {
-      this.resultadosRelacionados = buscarOcorrenciasPorCodigo(codigo);
-    }
-
-    // Marca como não encontrado se nada foi achado
+    // 3) Se nada encontrado
     if (!this.resultado && this.resultadosRelacionados.length === 0) {
       this.naoEncontrado = true;
     }
   }
 
-  /**
-   * Seleciona uma ocorrência dos resultados relacionados
-   */
   selecionarOcorrencia(ocorrencia: OcorrenciaBancaria): void {
     this.resultado = ocorrencia;
     this.codigoOcorrencia = ocorrencia.codigo;
@@ -83,21 +114,16 @@ export class ConsultarOcorrenciaComponent {
     this.resultadosRelacionados = [];
   }
 
-  /**
-   * Limpa a busca
-   */
   limpar(): void {
     this.codigoOcorrencia = '';
     this.codigoMotivo = '';
+    this.bancoSelecionado = null;
     this.resultado = null;
     this.resultadosRelacionados = [];
     this.buscaRealizada = false;
     this.naoEncontrado = false;
   }
 
-  /**
-   * Retorna a classe CSS para a categoria
-   */
   getClasseCategoria(categoria: CategoriaOcorrencia): string {
     const classes: Record<CategoriaOcorrencia, string> = {
       'Confirmação': 'success',
@@ -112,9 +138,6 @@ export class ConsultarOcorrenciaComponent {
     return classes[categoria] || 'neutral';
   }
 
-  /**
-   * Retorna o ícone para a categoria
-   */
   getIconeCategoria(categoria: CategoriaOcorrencia): string {
     const icones: Record<CategoriaOcorrencia, string> = {
       'Confirmação': 'check_circle',
@@ -129,71 +152,36 @@ export class ConsultarOcorrenciaComponent {
     return icones[categoria] || 'help';
   }
 
-  /**
-   * Copia o código para a área de transferência
-   */
   copiarCodigo(): void {
     if (!this.resultado) return;
 
     const texto = this.resultado.motivo
-      ? `${this.resultado.codigo}${this.resultado.motivo}`
+      ? `${this.resultado.codigo}-${this.resultado.motivo}`
       : this.resultado.codigo;
 
-    navigator.clipboard.writeText(texto).then(() => {
-      alert('Código copiado!');
-    }).catch(err => {
-      console.error('Erro ao copiar:', err);
-    });
+    navigator.clipboard.writeText(texto).then(() => alert('Código copiado!'));
   }
 
-  /**
-   * Compartilha a ocorrência
-   */
   compartilhar(): void {
     if (!this.resultado) return;
 
-    const texto = `
-Ocorrência: ${this.resultado.codigo}${this.resultado.motivo ? '-' + this.resultado.motivo : ''}
-Descrição: ${this.resultado.descricao}
-Categoria: ${this.resultado.categoria}
-    `.trim();
+    const cod = this.resultado.motivo
+      ? `${this.resultado.codigo}-${this.resultado.motivo}`
+      : this.resultado.codigo;
+
+    const texto = `Ocorrência: ${cod}\nDescrição: ${this.resultado.descricao}\nCategoria: ${this.resultado.categoria}`;
 
     if (navigator.share) {
-      navigator.share({
-        title: 'Ocorrência Bancária',
-        text: texto,
-      }).catch(err => console.error('Erro ao compartilhar:', err));
+      navigator.share({ title: 'Ocorrência Bancária', text: texto }).catch(() => {});
     } else {
-      navigator.clipboard.writeText(texto).then(() => {
-        alert('Informações copiadas para a área de transferência!');
-      }).catch(err => {
-        console.error('Erro ao copiar:', err);
-      });
+      navigator.clipboard.writeText(texto).then(() => alert('Copiado!'));
     }
   }
 
-  /**
-   * Exporta para PDF (placeholder)
-   */
   exportarPDF(): void {
-    if (!this.resultado) return;
-    alert('Função de exportação PDF será implementada em breve!');
-    // TODO: Implementar geração de PDF
+    alert('PDF em breve!');
   }
 
-  /**
-   * Formata o código completo
-   */
-  get codigoCompleto(): string {
-    if (!this.resultado) return '';
-    return this.resultado.motivo
-      ? `${this.resultado.codigo}-${this.resultado.motivo}`
-      : this.resultado.codigo;
-  }
-
-  /**
-   * Verifica se a busca é válida
-   */
   get buscaValida(): boolean {
     return this.codigoOcorrencia.trim().length > 0;
   }
