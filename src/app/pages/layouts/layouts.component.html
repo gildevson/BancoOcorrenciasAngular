@@ -51,10 +51,9 @@
   <div class="grid" *ngIf="filtrados.length > 0">
     <article class="card" *ngFor="let layout of filtrados">
 
-      <!-- Topo do card (Logo + Status) -->
+      <!-- Topo do card -->
       <div class="card-top">
         <div class="bank">
-          <!-- Badge com logo/cor do banco -->
           <div
             class="badge"
             [attr.data-bank]="layout.bancoNumero"
@@ -63,7 +62,6 @@
             {{ layout.bancoNumero }}
           </div>
 
-          <!-- Informações do banco -->
           <div class="bank-info">
             <h3>{{ layout.bancoNome }}</h3>
             <p>
@@ -73,7 +71,6 @@
           </div>
         </div>
 
-        <!-- Status do layout -->
         <span
           class="status"
           [class.warn]="layout.status === 'Em revisão'"
@@ -87,7 +84,7 @@
         {{ layout.descricao }}
       </p>
 
-      <!-- Metadados (data de atualização) -->
+      <!-- Metadados -->
       <div class="meta" *ngIf="layout.atualizadoEm">
         <span class="material-icons">event</span>
         <span>Atualizado em {{ layout.atualizadoEm }}</span>
@@ -95,26 +92,35 @@
 
       <!-- Ações -->
       <div class="actions">
-        <a
-          class="btn primary"
-          [routerLink]="['/consultar-ocorrencia']">
+        <a class="btn primary" [routerLink]="['/consultar-ocorrencia']">
           <span class="material-icons" style="font-size: 16px; margin-right: 6px;">launch</span>
           Usar no portal
         </a>
 
-        <button
-          class="btn ghost"
-          type="button"
-          (click)="verDetalhes(layout)">
+        <!-- ✅ Detalhes vira ROTA -->
+        <a class="btn ghost" [routerLink]="['/layouts', layout.id]">
           <span class="material-icons" style="font-size: 16px; margin-right: 6px;">info</span>
           Detalhes
-        </button>
+        </a>
+
+        <!-- ✅ Download do PDF (só aparece se existir pdfUrl) -->
+       <a
+  *ngIf="layout.pdfUrl"
+  class="btn ghost"
+  [href]="layout.pdfUrl"
+  download
+  target="_blank"
+  rel="noopener">
+  <span class="material-icons" style="font-size: 16px; margin-right: 6px;">download</span>
+  Baixar PDF
+</a>
+
       </div>
     </article>
   </div>
 
   <!-- ================================
-       ESTADO VAZIO (SEM RESULTADOS)
+       ESTADO VAZIO
   ================================ -->
   <div class="empty" *ngIf="filtrados.length === 0">
     <span class="material-icons" style="font-size: 64px; opacity: 0.3; margin-bottom: 16px; display: block;">

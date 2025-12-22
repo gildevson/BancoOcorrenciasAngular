@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { BancoLayout, LAYOUTS_BANCO, TipoLayout } from '../../data/layouts.data';
 
@@ -12,6 +12,9 @@ import { BancoLayout, LAYOUTS_BANCO, TipoLayout } from '../../data/layouts.data'
   styleUrls: ['./layouts.component.css'],
 })
 export class LayoutsComponent {
+
+  private router = inject(Router); // ✅ NOVO
+
   // Dados dos layouts
   layouts: BancoLayout[] = LAYOUTS_BANCO;
 
@@ -19,90 +22,57 @@ export class LayoutsComponent {
   q = '';
   tipo: TipoLayout | 'Todos' = 'Todos';
 
-  /**
-   * Retorna os layouts filtrados baseado nos critérios de busca
-   */
   get filtrados(): BancoLayout[] {
     const query = this.q.trim().toLowerCase();
 
-    return this.layouts
-      .filter(layout => {
-        // Filtro por tipo
-        if (this.tipo !== 'Todos' && layout.tipoLayout !== this.tipo) {
-          return false;
-        }
+    return this.layouts.filter(layout => {
+      if (this.tipo !== 'Todos' && layout.tipoLayout !== this.tipo) return false;
+      if (!query) return true;
 
-        // Filtro por texto
-        if (!query) {
-          return true;
-        }
-
-        return (
-          layout.bancoNome.toLowerCase().includes(query) ||
-          layout.bancoNumero.toLowerCase().includes(query) ||
-          layout.tipoLayout.toLowerCase().includes(query) ||
-          (layout.versao ?? '').toLowerCase().includes(query) ||
-          (layout.descricao ?? '').toLowerCase().includes(query)
-        );
-      });
+      return (
+        layout.bancoNome.toLowerCase().includes(query) ||
+        layout.bancoNumero.toLowerCase().includes(query) ||
+        layout.tipoLayout.toLowerCase().includes(query) ||
+        (layout.versao ?? '').toLowerCase().includes(query) ||
+        (layout.descricao ?? '').toLowerCase().includes(query)
+      );
+    });
   }
 
-  /**
-   * Limpa todos os filtros aplicados
-   */
   limpar(): void {
     this.q = '';
     this.tipo = 'Todos';
   }
 
-  /**
-   * Exibe os detalhes de um layout específico
-   * @param layout Layout a ser visualizado
-   */
+  // ✅ AGORA "Detalhes" VAI PRA ROTA /layouts/:id
   verDetalhes(layout: BancoLayout): void {
-    console.log('📋 Detalhes do Layout:', layout);
-
-    // Opção 1: Abrir modal com detalhes
-    // this.modalService.open(LayoutDetalhesComponent, { data: layout });
-
-    // Opção 2: Navegar para página de detalhes
-    // this.router.navigate(['/layouts', layout.bancoNumero, layout.tipoLayout]);
-
-    // Opção 3: Mostrar alert (temporário para testes)
-    alert(`
-      📋 ${layout.bancoNome}
-      🏦 Código: ${layout.bancoNumero}
-      📄 Tipo: ${layout.tipoLayout}
-      ${layout.versao ? `📌 Versão: ${layout.versao}` : ''}
-      ${layout.status ? `📊 Status: ${layout.status}` : ''}
-      ${layout.descricao ? `\n${layout.descricao}` : ''}
-    `.trim());
+    this.router.navigate(['/layouts', layout.id]);
   }
 
-  /**
-   * Retorna a quantidade de layouts filtrados
-   */
+  // ✅ OPCIONAL: download via TS (se quiser usar botão (click))
+  baixarPdf(layout: BancoLayout): void {
+    if (!layout.pdfUrl) return;
+
+    const a = document.createElement('a');
+    a.href = layout.pdfUrl;
+    a.download = `${layout.bancoNumero}-${layout.tipoLayout}${layout.versao ? '-v' + layout.versao : ''}.pdf`;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.click();
+  }
+
   get totalFiltrados(): number {
     return this.filtrados.length;
   }
 
-  /**
-   * Retorna a quantidade total de layouts
-   */
   get totalLayouts(): number {
     return this.layouts.length;
   }
 
-  /**
-   * Verifica se há filtros ativos
-   */
   get temFiltrosAtivos(): boolean {
     return this.q.trim() !== '' || this.tipo !== 'Todos';
   }
 
-  /**
-   * Exporta os layouts filtrados para JSON
-   */
   exportarJSON(): void {
     const dados = JSON.stringify(this.filtrados, null, 2);
     const blob = new Blob([dados], { type: 'application/json' });
@@ -114,9 +84,6 @@ export class LayoutsComponent {
     window.URL.revokeObjectURL(url);
   }
 
-  /**
-   * Exporta os layouts filtrados para CSV
-   */
   exportarCSV(): void {
     const headers = ['Banco', 'Número', 'Tipo', 'Versão', 'Status', 'Descrição', 'Atualizado Em'];
     const rows = this.filtrados.map(l => [
@@ -129,10 +96,7 @@ export class LayoutsComponent {
       l.atualizadoEm || ''
     ]);
 
-    const csv = [
-      headers.join(','),
-      ...rows.map(row => row.join(','))
-    ].join('\n');
+    const csv = [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
 
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url = window.URL.createObjectURL(blob);
@@ -143,27 +107,16 @@ export class LayoutsComponent {
     window.URL.revokeObjectURL(url);
   }
 
-  /**
-   * Retorna sugestões de busca baseado no input do usuário
-   */
   get sugestoesBusca(): string[] {
-    if (!this.q || this.q.length < 2) {
-      return [];
-    }
+    if (!this.q || this.q.length < 2) return [];
 
     const query = this.q.toLowerCase();
     const sugestoes = new Set<string>();
 
     this.layouts.forEach(layout => {
-      if (layout.bancoNome.toLowerCase().includes(query)) {
-        sugestoes.add(layout.bancoNome);
-      }
-      if (layout.bancoNumero.toLowerCase().includes(query)) {
-        sugestoes.add(`${layout.bancoNumero} - ${layout.bancoNome}`);
-      }
-      if (layout.tipoLayout.toLowerCase().includes(query)) {
-        sugestoes.add(layout.tipoLayout);
-      }
+      if (layout.bancoNome.toLowerCase().includes(query)) sugestoes.add(layout.bancoNome);
+      if (layout.bancoNumero.toLowerCase().includes(query)) sugestoes.add(`${layout.bancoNumero} - ${layout.bancoNome}`);
+      if (layout.tipoLayout.toLowerCase().includes(query)) sugestoes.add(layout.tipoLayout);
     });
 
     return Array.from(sugestoes).slice(0, 5);

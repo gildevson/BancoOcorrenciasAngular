@@ -1,58 +1,33 @@
 /**
- * Dados dos layouts de bancos brasileiros
- * Arquivo: src/app/data/layouts.data.ts
+ * AUTO-GERADO por: gerar-layouts-data.mjs
+ * Pasta: C:\CSharp\ProjetosEstudos\RemessaSeguraFullstack\remessa-segura-portal\src\app\assets\pdfs\layouts
+ * NÃO edite manualmente (vai sobrescrever).
  */
 
-// ================================
-// TIPOS E INTERFACES
-// ================================
-
-/** Status possíveis de um layout */
-export type StatusLayout = 'Ativo' | 'Em revisão' | 'Descontinuado';
-
-/** Tipos de layout disponíveis */
-export type TipoLayout = 'CNAB240' | 'CNAB400' | 'Febraban' | 'Outro';
-
-/** Interface representando um layout de banco */
-
-export interface BancoLayout {
-  id: string;
-  bancoNumero: string;
-  bancoNome: string;
-  tipoLayout: TipoLayout;
-  versao?: string;
-  status?: StatusLayout;
-  descricao?: string;
-  atualizadoEm?: string;
-  documentacaoUrl?: string;
-  observacoes?: string;
-  pdfUrl?: string;
-}
-// ================================
-// DADOS DOS LAYOUTS
-// ================================
-
+import { BancoLayout } from './layouts.data';
 
 export const LAYOUTS_BANCO: BancoLayout[] = [
   {
-    id: '001-cnab400-1f93f9',
-    bancoNumero: '001',
+    id: '???-cnab400-1f93f9',
+    bancoNumero: '???',
     bancoNome: 'Banco Brasil CNAB400',
     tipoLayout: 'CNAB400',
+
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Banco Brasil_CNAB400_convenio7.pdf`,
     atualizadoEm: '23/02/2010',
-    pdfUrl: '../assets/pdfs/layouts/Banco Brasil_CNAB400_convenio7',
+    pdfUrl: 'assets/pdfs/layouts/Banco Brasil_CNAB400_convenio7.pdf',
   },
   {
-    id: '422-cnab400-737489',
-    bancoNumero: '422',
+    id: '???-cnab400-737489',
+    bancoNumero: '???',
     bancoNome: 'Banco safra CNAB400',
     tipoLayout: 'CNAB400',
+
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Banco_safra_CNAB400_cobranca2007.pdf`,
     atualizadoEm: '15/09/2011',
-    pdfUrl: '../assets/pdfs/layouts/Banco_safra_CNAB400_cobranca2007.pdf',
+    pdfUrl: 'assets/pdfs/layouts/Banco_safra_CNAB400_cobranca2007.pdf',
   },
   {
     id: '041-febraban-237674',
@@ -63,7 +38,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Banrisul_layout_pdr_Febraban240.pdf`,
     atualizadoEm: '03/12/2009',
-    pdfUrl: '../assets/pdfs/layouts/Banrisul_layout_pdr_Febraban240.pdf',
+    pdfUrl: 'assets/pdfs/layouts/Banrisul_layout_pdr_Febraban240.pdf',
   },
   {
     id: '041-febraban-7d540a',
@@ -74,7 +49,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Banrisul_layout_pdr_Febraban400_.pdf`,
     atualizadoEm: '03/12/2009',
-    pdfUrl: '../../assets/pdfs/layouts/Banrisul_layout_pdr_Febraban400_.pdf',
+    pdfUrl: 'assets/pdfs/layouts/Banrisul_layout_pdr_Febraban400_.pdf',
   },
   {
     id: '001-outro-0f173c',
@@ -85,18 +60,18 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: BB_240.pdf`,
     atualizadoEm: '30/09/2013',
-    pdfUrl: '../assets/pdfs/layouts/BB_240.pdf',
+    pdfUrl: 'assets/pdfs/layouts/BB_240.pdf',
   },
   {
-    id: '237-cnab400-622b82',
-    bancoNumero: '237',
+    id: '???-cnab400-622b82',
+    bancoNumero: '???',
     bancoNome: 'BMP CNAB400 V.006',
     tipoLayout: 'CNAB400',
 
     status: 'Ativo',
     descricao: `PDF importado automaticamente: BMP_CNAB400_V.006.pdf`,
     atualizadoEm: '12/05/2021',
-    pdfUrl: '../assets/pdfs/layouts/BMP_CNAB400_V.006.pdf',
+    pdfUrl: 'assets/pdfs/layouts/BMP_CNAB400_V.006.pdf',
   },
   {
     id: 'Boa Vista-outro-9dc54e',
@@ -107,7 +82,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: BoaVista.pdf`,
     atualizadoEm: '08/12/2017',
-    pdfUrl: '../assets/pdfs/layouts/BoaVista.pdf',
+    pdfUrl: 'assets/pdfs/layouts/BoaVista.pdf',
   },
   {
     id: '237-cnab400-4f00f2',
@@ -118,7 +93,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Bradesco CNAB 400 atualizado 2022.pdf`,
     atualizadoEm: '04/10/2022',
-    pdfUrl: '../assets/pdfs/layouts/Bradesco CNAB 400 atualizado 2022.pdf',
+    pdfUrl: 'assets/pdfs/layouts/Bradesco CNAB 400 atualizado 2022.pdf',
   },
   {
     id: '237-cnab400-ec4091',
@@ -129,7 +104,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Bradesco_CNAB400.pdf`,
     atualizadoEm: '05/07/2019',
-    pdfUrl: '../assets/pdfs/layouts/Bradesco_CNAB400.pdf',
+    pdfUrl: 'assets/pdfs/layouts/Bradesco_CNAB400.pdf',
   },
   {
     id: '237-cnab400-60fe7a',
@@ -140,7 +115,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Bradesco_layout_CNAB400.pdf`,
     atualizadoEm: '19/06/2019',
-    pdfUrl: '../assets/pdfs/layouts/Bradesco_layout_CNAB400.pdf',
+    pdfUrl: 'assets/pdfs/layouts/Bradesco_layout_CNAB400.pdf',
   },
   {
     id: '104-outro-359552',
@@ -151,7 +126,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: CNAB_240_caixa_ (1).pdf`,
     atualizadoEm: '03/12/2013',
-    pdfUrl: '../assets/pdfs/layouts/CNAB_240_caixa_ (1).pdf',
+    pdfUrl: 'assets/pdfs/layouts/CNAB_240_caixa_ (1).pdf',
   },
   {
     id: '077-outro-273881',
@@ -162,7 +137,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: CNAB_400_Banco_Inter.pdf`,
     atualizadoEm: '22/07/2021',
-    pdfUrl: '../assets/pdfs/layouts/CNAB_400_Banco_Inter.pdf',
+    pdfUrl: 'assets/pdfs/layouts/CNAB_400_Banco_Inter.pdf',
   },
   {
     id: '???-outro-979979',
@@ -173,7 +148,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: CNAB_400_V9_bmp.pdf`,
     atualizadoEm: '22/12/2021',
-    pdfUrl: '../assets/pdfs/layouts/CNAB_400_V9_bmp.pdf',
+    pdfUrl: 'assets/pdfs/layouts/CNAB_400_V9_bmp.pdf',
   },
   {
     id: '399-outro-1012c4',
@@ -184,7 +159,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: cob240HSBC.pdf`,
     atualizadoEm: '15/06/2011',
-    pdfUrl: '../assets/pdfs/layouts/cob240HSBC.pdf',
+    pdfUrl: 'assets/pdfs/layouts/cob240HSBC.pdf',
   },
   {
     id: '041-febraban-3646cb',
@@ -195,7 +170,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: CobrancaEletronicaBanrisul_layout_pdr_Febraban400_vrs26052010_ed02.pdf`,
     atualizadoEm: '26/05/2010',
-    pdfUrl: '../assets/pdfs/layouts/CobrancaEletronicaBanrisul_layout_pdr_Febraban400_vrs26052010_ed02.pdf',
+    pdfUrl: 'assets/pdfs/layouts/CobrancaEletronicaBanrisul_layout_pdr_Febraban400_vrs26052010_ed02.pdf',
   },
   {
     id: '041-outro-e2865d',
@@ -206,7 +181,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: CobrancaEletronicaBanrisul_pdr400_vrs15072015_ed06.pdf`,
     atualizadoEm: '15/07/2015',
-    pdfUrl: '../assets/pdfs/layouts/CobrancaEletronicaBanrisul_pdr400_vrs15072015_ed06.pdf',
+    pdfUrl: 'assets/pdfs/layouts/CobrancaEletronicaBanrisul_pdr400_vrs15072015_ed06.pdf',
   },
   {
     id: '341-cnab240-72e649',
@@ -217,7 +192,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: cobrancaItau_cnab240.pdf`,
     atualizadoEm: '03/09/2012',
-    pdfUrl: '../assets/pdfs/layouts/cobrancaItau_cnab240.pdf',
+    pdfUrl: 'assets/pdfs/layouts/cobrancaItau_cnab240.pdf',
   },
   {
     id: '???-outro-e15df3',
@@ -228,7 +203,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: conciliacao_bancaria_240_posicoes_V_5.pdf.pdf`,
     atualizadoEm: '29/06/2018',
-    pdfUrl: '../assets/pdfs/layouts/conciliacao_bancaria_240_posicoes_V_5.pdf.pdf',
+    pdfUrl: 'assets/pdfs/layouts/conciliacao_bancaria_240_posicoes_V_5.pdf.pdf',
   },
   {
     id: '341-outro-4b2e7e',
@@ -239,7 +214,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Convenio Cheques ITAU.pdf`,
     atualizadoEm: '21/10/2014',
-    pdfUrl: '../assets/pdfs/layouts/Convenio Cheques ITAU.pdf',
+    pdfUrl: 'assets/pdfs/layouts/Convenio Cheques ITAU.pdf',
   },
   {
     id: '???-outro-03aed7',
@@ -250,7 +225,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Doc2627CBR641Pos7_1__nova_cobran__a_BB.pdf`,
     atualizadoEm: '22/07/2019',
-    pdfUrl: '../assets/pdfs/layouts/Doc2627CBR641Pos7_1__nova_cobran__a_BB.pdf',
+    pdfUrl: 'assets/pdfs/layouts/Doc2627CBR641Pos7_1__nova_cobran__a_BB.pdf',
   },
   {
     id: '041-outro-0c8b5d',
@@ -261,7 +236,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Layout_arquivo_Custódia_Eletrônica_de_Cheques_Banrisul.pdf`,
     atualizadoEm: '23/11/2012',
-    pdfUrl: '../assets/pdfs/layouts/Layout_arquivo_Custódia_Eletrônica_de_Cheques_Banrisul.pdf',
+    pdfUrl: 'assets/pdfs/layouts/Layout_arquivo_Custódia_Eletrônica_de_Cheques_Banrisul.pdf',
   },
   {
     id: '???-outro-fb8d1c',
@@ -272,7 +247,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Layout_CNAB_400-10_bmp.pdf`,
     atualizadoEm: '19/08/2024',
-    pdfUrl: '../assets/pdfs/layouts/Layout_CNAB_400-10_bmp.pdf',
+    pdfUrl: 'assets/pdfs/layouts/Layout_CNAB_400-10_bmp.pdf',
   },
   {
     id: '???-cnab240-11ece5',
@@ -283,7 +258,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Layout_FEBRABAN_CNAB240_ V_10_06.pdf`,
     atualizadoEm: '13/02/2025',
-    pdfUrl: '../assets/pdfs/layouts/Layout_FEBRABAN_CNAB240_ V_10_06.pdf',
+    pdfUrl: 'assets/pdfs/layouts/Layout_FEBRABAN_CNAB240_ V_10_06.pdf',
   },
   {
     id: '???-outro-f9bf1d',
@@ -294,7 +269,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Layout_SPC_BRASIL_registro_e_cancelamento_v7-1.pdf`,
     atualizadoEm: '02/07/2012',
-    pdfUrl: '../assets/pdfs/layouts/Layout_SPC_BRASIL_registro_e_cancelamento_v7-1.pdf',
+    pdfUrl: 'assets/pdfs/layouts/Layout_SPC_BRASIL_registro_e_cancelamento_v7-1.pdf',
   },
   {
     id: '???-outro-ce7ff9',
@@ -305,7 +280,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: LayoutCobrancaABCBrasil_MAIO2020.pdf`,
     atualizadoEm: '19/07/2021',
-    pdfUrl: '../assets/pdfs/layouts/LayoutCobrancaABCBrasil_MAIO2020.pdf',
+    pdfUrl: 'assets/pdfs/layouts/LayoutCobrancaABCBrasil_MAIO2020.pdf',
   },
   {
     id: '???-outro-959be0',
@@ -316,7 +291,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Layouts_Cust__dia_de_Cheques_Remessa_Retorno.pdf`,
     atualizadoEm: '01/08/2012',
-    pdfUrl: '../assets/pdfs/layouts/Layouts_Cust__dia_de_Cheques_Remessa_Retorno.pdf',
+    pdfUrl: 'assets/pdfs/layouts/Layouts_Cust__dia_de_Cheques_Remessa_Retorno.pdf',
   },
   {
     id: '041-febraban-5418ee',
@@ -327,7 +302,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: LeiauteBanrisulFebraban_pdr240_v103_23062023.pdf`,
     atualizadoEm: '03/23/0620',
-    pdfUrl: '../assets/pdfs/layouts/LeiauteBanrisulFebraban_pdr240_v103_23062023.pdf',
+    pdfUrl: 'assets/pdfs/layouts/LeiauteBanrisulFebraban_pdr240_v103_23062023.pdf',
   },
   {
     id: '237-outro-4658de',
@@ -338,7 +313,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Manual - CNAB Bradesco 07 6 3 (1)(pagfor).pdf`,
     atualizadoEm: '13/03/2017',
-    pdfUrl: '../assets/pdfs/layouts/Manual - CNAB Bradesco 07 6 3 (1)(pagfor).pdf',
+    pdfUrl: 'assets/pdfs/layouts/Manual - CNAB Bradesco 07 6 3 (1)(pagfor).pdf',
   },
   {
     id: '???-cnab400-b79fe9',
@@ -349,7 +324,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Manual CNAB 400 - ID BANCO 439 - FEV.24 (1).pdf`,
     atualizadoEm: '13/12/2024',
-    pdfUrl: '../assets/pdfs/layouts/Manual CNAB 400 - ID BANCO 439 - FEV.24 (1).pdf',
+    pdfUrl: 'assets/pdfs/layouts/Manual CNAB 400 - ID BANCO 439 - FEV.24 (1).pdf',
   },
   {
     id: '???-cnab400-3323cc',
@@ -360,7 +335,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Manual de cobranca CNAB400 - Kanastra (1).pdf`,
     atualizadoEm: '28/04/2025',
-    pdfUrl: '../assets/pdfs/layouts/Manual de cobranca CNAB400 - Kanastra (1).pdf',
+    pdfUrl: 'assets/pdfs/layouts/Manual de cobranca CNAB400 - Kanastra (1).pdf',
   },
   {
     id: '???-outro-18e504',
@@ -371,7 +346,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Manual de Implantacao v2.2.1.pdf`,
     atualizadoEm: '13/02/2025',
-    pdfUrl: '../assets/pdfs/layouts/Manual de Implantacao v2.2.1.pdf',
+    pdfUrl: 'assets/pdfs/layouts/Manual de Implantacao v2.2.1.pdf',
   },
   {
     id: '???-outro-d900a9',
@@ -382,7 +357,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Manual Simplificado - Relato para Factorings v01.pdf`,
     atualizadoEm: '16/09/2005',
-    pdfUrl: '../assets/pdfs/layouts/Manual Simplificado - Relato para Factorings v01.pdf',
+    pdfUrl: 'assets/pdfs/layouts/Manual Simplificado - Relato para Factorings v01.pdf',
   },
   {
     id: '???-outro-56160f',
@@ -393,7 +368,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: MANUAL_BOLETOS_BANCO_ABC_2021.pdf`,
     atualizadoEm: '19/07/2021',
-    pdfUrl: '../assets/pdfs/layouts/MANUAL_BOLETOS_BANCO_ABC_2021.pdf',
+    pdfUrl: 'assets/pdfs/layouts/MANUAL_BOLETOS_BANCO_ABC_2021.pdf',
   },
   {
     id: '???-cnab240-9fec94',
@@ -404,7 +379,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Manual_Leiaute_CNAB240_SIGCB.pdf`,
     atualizadoEm: '25/11/2016',
-    pdfUrl: '../assets/pdfs/layouts/Manual_Leiaute_CNAB240_SIGCB.pdf',
+    pdfUrl: 'assets/pdfs/layouts/Manual_Leiaute_CNAB240_SIGCB.pdf',
   },
   {
     id: '208-outro-8c77fc',
@@ -415,7 +390,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Mascara boleto BTG PACTUAL.pdf`,
     atualizadoEm: '13/02/2025',
-    pdfUrl: '../assets/pdfs/layouts/Mascara boleto BTG PACTUAL.pdf',
+    pdfUrl: 'assets/pdfs/layouts/Mascara boleto BTG PACTUAL.pdf',
   },
   {
     id: '001-cnab240-41e829',
@@ -426,7 +401,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: MI - CBB - Manual CNAB 240.pdf`,
     atualizadoEm: '30/06/2020',
-    pdfUrl: '../assets/pdfs/layouts/MI - CBB - Manual CNAB 240.pdf',
+    pdfUrl: 'assets/pdfs/layouts/MI - CBB - Manual CNAB 240.pdf',
   },
   {
     id: '???-outro-f44504',
@@ -437,7 +412,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Microsoft Word - novo lay-out banco bva versão 06-2008.pdf`,
     atualizadoEm: '21/07/2010',
-    pdfUrl: '../assets/pdfs/layouts/Microsoft Word - novo lay-out banco bva versão 06-2008.pdf',
+    pdfUrl: 'assets/pdfs/layouts/Microsoft Word - novo lay-out banco bva versão 06-2008.pdf',
   },
   {
     id: '???-outro-6153ec',
@@ -448,7 +423,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Microsoft Word - novo lay-out banco bva.pdf`,
     atualizadoEm: '21/12/2007',
-    pdfUrl: '../assets/pdfs/layouts/Microsoft Word - novo lay-out banco bva.pdf',
+    pdfUrl: 'assets/pdfs/layouts/Microsoft Word - novo lay-out banco bva.pdf',
   },
   {
     id: '237-outro-a6e92c',
@@ -459,7 +434,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Multipag_Bradesco_v3prot.pdf`,
     atualizadoEm: '01/11/2024',
-    pdfUrl: '../assets/pdfs/layouts/Multipag_Bradesco_v3prot.pdf',
+    pdfUrl: 'assets/pdfs/layouts/Multipag_Bradesco_v3prot.pdf',
   },
   {
     id: '???-outro-22e581',
@@ -470,7 +445,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Novo Layout de Remessa Banco Paulista 2013.pdf`,
     atualizadoEm: '11/12/2013',
-    pdfUrl: '../assets/pdfs/layouts/Novo Layout de Remessa Banco Paulista 2013.pdf',
+    pdfUrl: 'assets/pdfs/layouts/Novo Layout de Remessa Banco Paulista 2013.pdf',
   },
   {
     id: '???-febraban-8f6a8d',
@@ -481,7 +456,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Padrão Febraban 240 bytes (pdf - 183Kb).pdf`,
     atualizadoEm: '21/12/2009',
-    pdfUrl: '../assets/pdfs/layouts/Padrão Febraban 240 bytes (pdf - 183Kb).pdf',
+    pdfUrl: 'assets/pdfs/layouts/Padrão Febraban 240 bytes (pdf - 183Kb).pdf',
   },
   {
     id: '???-outro-8a2f68',
@@ -492,7 +467,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: REAL_COBRANCA_400_POSICOES REAL.pdf`,
     atualizadoEm: '05/10/2005',
-    pdfUrl: '../assets/pdfs/layouts/REAL_COBRANCA_400_POSICOES REAL.pdf',
+    pdfUrl: 'assets/pdfs/layouts/REAL_COBRANCA_400_POSICOES REAL.pdf',
   },
   {
     id: '033-cnab400-a38469',
@@ -503,7 +478,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: SANTANDER_Layout CNAB 400 posições Out de 2009.pdf`,
     atualizadoEm: '11/06/2012',
-    pdfUrl: '../assets/pdfs/layouts/SANTANDER_Layout CNAB 400 posições Out de 2009.pdf',
+    pdfUrl: 'assets/pdfs/layouts/SANTANDER_Layout CNAB 400 posições Out de 2009.pdf',
   },
   {
     id: '033-outro-8fff57',
@@ -514,7 +489,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: SANTANDER_Layout Cobrança 240 - 092009.pdf`,
     atualizadoEm: '11/06/2012',
-    pdfUrl: '../assets/pdfs/layouts/SANTANDER_Layout Cobrança 240 - 092009.pdf',
+    pdfUrl: 'assets/pdfs/layouts/SANTANDER_Layout Cobrança 240 - 092009.pdf',
   },
   {
     id: '001-outro-8ab3a3',
@@ -525,7 +500,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Sicoob_BB_240.pdf`,
     atualizadoEm: '15/07/2013',
-    pdfUrl: '../assets/pdfs/layouts/Sicoob_BB_240.pdf',
+    pdfUrl: 'assets/pdfs/layouts/Sicoob_BB_240.pdf',
   },
   {
     id: '748-cnab400-17e7b3',
@@ -536,7 +511,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Sicredi manual cnab 400.pdf`,
     atualizadoEm: '21/07/2010',
-    pdfUrl: '../assets/pdfs/layouts/Sicredi manual cnab 400.pdf',
+    pdfUrl: 'assets/pdfs/layouts/Sicredi manual cnab 400.pdf',
   },
   {
     id: '748-outro-f95417',
@@ -547,7 +522,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: SICREDI_CED_240.pdf`,
     atualizadoEm: '03/12/2009',
-    pdfUrl: '../assets/pdfs/layouts/SICREDI_CED_240.pdf',
+    pdfUrl: 'assets/pdfs/layouts/SICREDI_CED_240.pdf',
   },
   {
     id: '748-outro-288a22',
@@ -558,7 +533,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: SICREDI_CED_400.pdf`,
     atualizadoEm: '03/12/2009',
-    pdfUrl: '../assets/pdfs/layouts/SICREDI_CED_400.pdf',
+    pdfUrl: 'assets/pdfs/layouts/SICREDI_CED_400.pdf',
   },
   {
     id: '748-outro-3e5695',
@@ -569,7 +544,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: SICREDI_MANUAL_CNAB_400.pdf`,
     atualizadoEm: '20/07/2021',
-    pdfUrl: '../assets/pdfs/layouts/SICREDI_MANUAL_CNAB_400.pdf',
+    pdfUrl: 'assets/pdfs/layouts/SICREDI_MANUAL_CNAB_400.pdf',
   },
   {
     id: '???-outro-e8c537',
@@ -580,49 +555,6 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     status: 'Ativo',
     descricao: `PDF importado automaticamente: sofisa_NOVO_CNAB444.pdf`,
     atualizadoEm: '02/09/2019',
-    pdfUrl: '../assets/pdfs/layouts/sofisa_NOVO_CNAB444.pdf',
+    pdfUrl: 'assets/pdfs/layouts/sofisa_NOVO_CNAB444.pdf',
   },
 ];
-
-
-// ================================
-// FUNÇÕES AUXILIARES
-// ================================
-
-/** Busca um layout específico por ID */
-export function buscarLayoutPorId(id: string): BancoLayout | undefined {
-  return LAYOUTS_BANCO.find(l => l.id === id);
-}
-
-/** Busca um layout específico por número do banco e tipo */
-export function buscarLayout(bancoNumero: string, tipo: TipoLayout): BancoLayout | undefined {
-  return LAYOUTS_BANCO.find(l => l.bancoNumero === bancoNumero && l.tipoLayout === tipo);
-}
-
-/** Retorna todos os layouts de um banco específico */
-export function buscarLayoutsPorBanco(bancoNumero: string): BancoLayout[] {
-  return LAYOUTS_BANCO.filter(l => l.bancoNumero === bancoNumero);
-}
-
-/** Retorna todos os layouts de um tipo específico */
-export function buscarLayoutsPorTipo(tipo: TipoLayout): BancoLayout[] {
-  return LAYOUTS_BANCO.filter(l => l.tipoLayout === tipo);
-}
-
-/** Retorna todos os layouts ativos */
-export function buscarLayoutsAtivos(): BancoLayout[] {
-  return LAYOUTS_BANCO.filter(l => !l.status || l.status === 'Ativo');
-}
-
-/** Retorna estatísticas dos layouts */
-export function obterEstatisticas() {
-  return {
-    total: LAYOUTS_BANCO.length,
-    ativos: LAYOUTS_BANCO.filter(l => !l.status || l.status === 'Ativo').length,
-    emRevisao: LAYOUTS_BANCO.filter(l => l.status === 'Em revisão').length,
-    descontinuados: LAYOUTS_BANCO.filter(l => l.status === 'Descontinuado').length,
-    cnab240: LAYOUTS_BANCO.filter(l => l.tipoLayout === 'CNAB240').length,
-    cnab400: LAYOUTS_BANCO.filter(l => l.tipoLayout === 'CNAB400').length,
-    bancosUnicos: new Set(LAYOUTS_BANCO.map(l => l.bancoNumero)).size,
-  };
-}
