@@ -12,7 +12,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'Banco Brasil CNAB400',
     tipoLayout: 'CNAB400',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Banco Brasil_CNAB400_convenio7.pdf`,
     atualizadoEm: '23/02/2010',
@@ -23,7 +23,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'Banco safra CNAB400',
     tipoLayout: 'CNAB400',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Banco_safra_CNAB400_cobranca2007.pdf`,
     atualizadoEm: '15/09/2011',
@@ -34,7 +34,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '041',
     bancoNome: 'Banrisul',
     tipoLayout: 'Febraban',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Banrisul_layout_pdr_Febraban240.pdf`,
     atualizadoEm: '03/12/2009',
@@ -45,7 +45,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '041',
     bancoNome: 'Banrisul',
     tipoLayout: 'Febraban',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Banrisul_layout_pdr_Febraban400_.pdf`,
     atualizadoEm: '03/12/2009',
@@ -56,7 +56,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '001',
     bancoNome: 'Banco do Brasil',
     tipoLayout: 'Outro',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: BB_240.pdf`,
     atualizadoEm: '30/09/2013',
@@ -67,18 +67,18 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'BMP CNAB400 V.006',
     tipoLayout: 'CNAB400',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: BMP_CNAB400_V.006.pdf`,
     atualizadoEm: '12/05/2021',
     pdfUrl: 'assets/pdfs/layouts/BMP_CNAB400_V.006.pdf',
   },
   {
-    id: 'Boa Vista-outro-9dc54e',
+    id: '???-outro-9dc54e',
     bancoNumero: '???',
     bancoNome: 'Boa Vista',
     tipoLayout: 'Outro',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: BoaVista.pdf`,
     atualizadoEm: '08/12/2017',
@@ -89,7 +89,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '237',
     bancoNome: 'Bradesco',
     tipoLayout: 'CNAB400',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Bradesco CNAB 400 atualizado 2022.pdf`,
     atualizadoEm: '04/10/2022',
@@ -100,7 +100,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '237',
     bancoNome: 'Bradesco',
     tipoLayout: 'CNAB400',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Bradesco_CNAB400.pdf`,
     atualizadoEm: '05/07/2019',
@@ -111,7 +111,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '237',
     bancoNome: 'Bradesco',
     tipoLayout: 'CNAB400',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Bradesco_layout_CNAB400.pdf`,
     atualizadoEm: '19/06/2019',
@@ -122,7 +122,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '104',
     bancoNome: 'Caixa Econômica Federal',
     tipoLayout: 'Outro',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: CNAB_240_caixa_ (1).pdf`,
     atualizadoEm: '03/12/2013',
@@ -133,7 +133,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '077',
     bancoNome: 'Banco Inter',
     tipoLayout: 'Outro',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: CNAB_400_Banco_Inter.pdf`,
     atualizadoEm: '22/07/2021',
@@ -144,7 +144,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'CNAB 400 V9',
     tipoLayout: 'Outro',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: CNAB_400_V9_bmp.pdf`,
     atualizadoEm: '22/12/2021',
@@ -155,7 +155,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '399',
     bancoNome: 'HSBC',
     tipoLayout: 'Outro',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: cob240HSBC.pdf`,
     atualizadoEm: '15/06/2011',
@@ -188,7 +188,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '341',
     bancoNome: 'Itaú',
     tipoLayout: 'CNAB240',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: cobrancaItau_cnab240.pdf`,
     atualizadoEm: '03/09/2012',
@@ -199,7 +199,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'conciliacao bancaria 240',
     tipoLayout: 'Outro',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: conciliacao_bancaria_240_posicoes_V_5.pdf.pdf`,
     atualizadoEm: '29/06/2018',
@@ -210,7 +210,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '341',
     bancoNome: 'Itaú',
     tipoLayout: 'Outro',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Convenio Cheques ITAU.pdf`,
     atualizadoEm: '21/10/2014',
@@ -221,7 +221,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'Doc2627CBR641Pos7 1 nova',
     tipoLayout: 'Outro',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Doc2627CBR641Pos7_1__nova_cobran__a_BB.pdf`,
     atualizadoEm: '22/07/2019',
@@ -232,7 +232,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '041',
     bancoNome: 'Banrisul',
     tipoLayout: 'Outro',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Layout_arquivo_Custódia_Eletrônica_de_Cheques_Banrisul.pdf`,
     atualizadoEm: '23/11/2012',
@@ -243,7 +243,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'Layout CNAB 400',
     tipoLayout: 'Outro',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Layout_CNAB_400-10_bmp.pdf`,
     atualizadoEm: '19/08/2024',
@@ -276,7 +276,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'LayoutCobrancaABCBrasil MAIO2020',
     tipoLayout: 'Outro',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: LayoutCobrancaABCBrasil_MAIO2020.pdf`,
     atualizadoEm: '19/07/2021',
@@ -287,7 +287,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'Layouts Cust dia',
     tipoLayout: 'Outro',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Layouts_Cust__dia_de_Cheques_Remessa_Retorno.pdf`,
     atualizadoEm: '01/08/2012',
@@ -309,7 +309,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '237',
     bancoNome: 'Bradesco',
     tipoLayout: 'Outro',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Manual - CNAB Bradesco 07 6 3 (1)(pagfor).pdf`,
     atualizadoEm: '13/03/2017',
@@ -320,7 +320,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'Manual CNAB 400',
     tipoLayout: 'CNAB400',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Manual CNAB 400 - ID BANCO 439 - FEV.24 (1).pdf`,
     atualizadoEm: '13/12/2024',
@@ -331,7 +331,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'Manual de cobranca',
     tipoLayout: 'CNAB400',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Manual de cobranca CNAB400 - Kanastra (1).pdf`,
     atualizadoEm: '28/04/2025',
@@ -353,7 +353,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'Manual Simplificado ',
     tipoLayout: 'Outro',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Manual Simplificado - Relato para Factorings v01.pdf`,
     atualizadoEm: '16/09/2005',
@@ -364,7 +364,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'MANUAL BOLETOS BANCO',
     tipoLayout: 'Outro',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: MANUAL_BOLETOS_BANCO_ABC_2021.pdf`,
     atualizadoEm: '19/07/2021',
@@ -375,7 +375,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'Manual Leiaute CNAB240',
     tipoLayout: 'CNAB240',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Manual_Leiaute_CNAB240_SIGCB.pdf`,
     atualizadoEm: '25/11/2016',
@@ -386,7 +386,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '208',
     bancoNome: 'BTG Pactual',
     tipoLayout: 'Outro',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Mascara boleto BTG PACTUAL.pdf`,
     atualizadoEm: '13/02/2025',
@@ -397,7 +397,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '001',
     bancoNome: 'Banco do Brasil',
     tipoLayout: 'CNAB240',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: MI - CBB - Manual CNAB 240.pdf`,
     atualizadoEm: '30/06/2020',
@@ -408,7 +408,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'Microsoft Word ',
     tipoLayout: 'Outro',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Microsoft Word - novo lay-out banco bva versão 06-2008.pdf`,
     atualizadoEm: '21/07/2010',
@@ -419,7 +419,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'Microsoft Word ',
     tipoLayout: 'Outro',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Microsoft Word - novo lay-out banco bva.pdf`,
     atualizadoEm: '21/12/2007',
@@ -430,7 +430,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '237',
     bancoNome: 'Bradesco',
     tipoLayout: 'Outro',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Multipag_Bradesco_v3prot.pdf`,
     atualizadoEm: '01/11/2024',
@@ -441,7 +441,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'Novo Layout de',
     tipoLayout: 'Outro',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Novo Layout de Remessa Banco Paulista 2013.pdf`,
     atualizadoEm: '11/12/2013',
@@ -452,7 +452,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'Padrão Febraban 240',
     tipoLayout: 'Febraban',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Padrão Febraban 240 bytes (pdf - 183Kb).pdf`,
     atualizadoEm: '21/12/2009',
@@ -463,7 +463,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'REAL COBRANCA 400',
     tipoLayout: 'Outro',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: REAL_COBRANCA_400_POSICOES REAL.pdf`,
     atualizadoEm: '05/10/2005',
@@ -474,7 +474,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '033',
     bancoNome: 'Santander',
     tipoLayout: 'CNAB400',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: SANTANDER_Layout CNAB 400 posições Out de 2009.pdf`,
     atualizadoEm: '11/06/2012',
@@ -485,7 +485,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '033',
     bancoNome: 'Santander',
     tipoLayout: 'Outro',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: SANTANDER_Layout Cobrança 240 - 092009.pdf`,
     atualizadoEm: '11/06/2012',
@@ -496,7 +496,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '001',
     bancoNome: 'Banco do Brasil',
     tipoLayout: 'Outro',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Sicoob_BB_240.pdf`,
     atualizadoEm: '15/07/2013',
@@ -507,7 +507,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '748',
     bancoNome: 'Sicredi',
     tipoLayout: 'CNAB400',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Sicredi manual cnab 400.pdf`,
     atualizadoEm: '21/07/2010',
@@ -518,7 +518,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '748',
     bancoNome: 'Sicredi',
     tipoLayout: 'Outro',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: SICREDI_CED_240.pdf`,
     atualizadoEm: '03/12/2009',
@@ -529,7 +529,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '748',
     bancoNome: 'Sicredi',
     tipoLayout: 'Outro',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: SICREDI_CED_400.pdf`,
     atualizadoEm: '03/12/2009',
@@ -540,7 +540,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '748',
     bancoNome: 'Sicredi',
     tipoLayout: 'Outro',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: SICREDI_MANUAL_CNAB_400.pdf`,
     atualizadoEm: '20/07/2021',
@@ -551,7 +551,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'sofisa NOVO CNAB444',
     tipoLayout: 'Outro',
-
+    
     status: 'Ativo',
     descricao: `PDF importado automaticamente: sofisa_NOVO_CNAB444.pdf`,
     atualizadoEm: '02/09/2019',

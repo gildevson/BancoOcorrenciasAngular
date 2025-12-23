@@ -539,3 +539,23 @@
 .sub-nav-scroll-container::-webkit-scrollbar {
   height: 0px; /* Esconde a barra feia no mobile */
 }
+.b3-logo-link{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.b3-logo-icon{
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  display: block;
+}
+
+.b3-logo-text{
+  line-height: 1;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+}

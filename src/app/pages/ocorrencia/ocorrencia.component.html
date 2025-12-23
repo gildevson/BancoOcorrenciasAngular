@@ -1,7 +1,7 @@
 <section class="consultar-page">
   <!-- ================================
        CABEÇALHO
-  ================================ -->
+  ================================= -->
   <div class="header">
     <div class="title-section">
       <h1>Consultar Ocorrências Bancárias</h1>
@@ -11,61 +11,80 @@
 
   <!-- ================================
        FORMULÁRIO DE BUSCA
-  ================================ -->
+  ================================= -->
   <div class="search-card">
     <div class="search-header">
       <span class="material-icons">search</span>
       <h2>Buscar Ocorrência</h2>
     </div>
 
+    <!-- ✅ Loading -->
+    <div class="loading-bar" *ngIf="carregando">
+      <span class="material-icons spin">autorenew</span>
+      <span>Consultando...</span>
+    </div>
+
     <div class="search-form">
       <div class="form-row">
 
-  <!-- ✅ Campo: Banco -->
-  <div class="form-field">
-    <label for="banco">
-      <span class="material-icons">account_balance</span>
-      Banco
-      <span class="optional">(Obrigatorio)</span>
-    </label>
+        <!-- ✅ Campo: Banco (Obrigatório) -->
+        <div class="form-field">
+          <label for="banco">
+            <span class="material-icons">account_balance</span>
+            Banco
+            <span class="optional">(Obrigatorio)</span>
+          </label>
 
-    <select
-      id="banco"
-      [(ngModel)]="bancoSelecionado"
-      [compareWith]="compareBanco"
-      class="select-banco">
+          <select
+            id="banco"
+            [(ngModel)]="bancoSelecionado"
+            [compareWith]="compareBanco"
+            class="select-banco">
 
-      <option [ngValue]="null">Todos os bancos</option>
+            <!-- placeholder -->
+            <option [ngValue]="null" disabled>Selecione um banco</option>
 
-      <option *ngFor="let banco of bancos" [ngValue]="banco">
-        {{ banco.codigo }} - {{ banco.nome }}
-      </option>
-    </select>
+            <option
+              *ngFor="let banco of bancos"
+              [ngValue]="banco"
+              [disabled]="!banco.id">
+              {{ banco.codigo }} - {{ banco.nome }}{{ !banco.id ? ' (em breve)' : '' }}
+            </option>
+          </select>
 
-    <!-- ✅ Preview: logo + nome -->
-    <div class="bank-preview" *ngIf="bancoSelecionado as b; else allBanks">
-      <img class="bank-logo" [src]="b.logo" (error)="onBancoLogoError($event)" alt="" />
-      <div class="bank-meta">
-        <div class="bank-name">{{ b.nome }}</div>
-        <div class="bank-code">Código {{ b.codigo }}</div>
-      </div>
-    </div>
+          <!-- ✅ erro quando buscar sem banco -->
+          <div class="hint error" *ngIf="erroBancoObrigatorio">
+            Selecione um banco válido para continuar.
+          </div>
 
-    <ng-template #allBanks>
-      <div class="bank-preview muted">
-        <span class="material-icons">layers</span>
-        <div class="bank-meta">
-          <div class="bank-name">Todos os bancos</div>
-          <div class="bank-code">Sem filtro</div>
+          <!-- ✅ Preview -->
+          <div class="bank-preview" *ngIf="bancoSelecionado as b; else noBank">
+            <img class="bank-logo" [src]="b.logo" loading="lazy"
+     (error)="onBancoLogoError($event)" alt="" />
+
+            <div class="bank-meta">
+              <div class="bank-name">{{ b.nome }}</div>
+              <div class="bank-code">Código {{ b.codigo }}</div>
+            </div>
+          </div>
+
+          <ng-template #noBank>
+            <div class="bank-preview muted">
+              <span class="material-icons">layers</span>
+              <div class="bank-meta">
+                <div class="bank-name">Nenhum banco selecionado</div>
+                <div class="bank-code">Selecione para continuar</div>
+              </div>
+            </div>
+          </ng-template>
+
+          <span class="hint" *ngIf="!bancoSelecionado">
+            Selecione um banco para destacar a consulta
+          </span>
         </div>
-      </div>
-    </ng-template>
 
-    <span class="hint">Selecione um banco para destacar a consulta</span>
-  </div>
-
-  <!-- ✅ Campo: Código do Motivo -->
-  <div class="form-field span-2">
+        <!-- ✅ Campo: Nº Ocorrência -->
+        <div class="form-field span-2">
           <label for="codigo">
             <span class="material-icons">pin</span> Nº Ocorrência
           </label>
@@ -80,6 +99,7 @@
           <span class="hint">2 dígitos</span>
         </div>
 
+        <!-- ✅ Campo: Motivo (opcional) -->
         <div class="form-field">
           <label for="motivo">
             <span class="material-icons">info</span> Motivo
@@ -95,17 +115,25 @@
           <span class="hint">Opcional</span>
         </div>
 
-</div>
-
+      </div>
 
       <!-- Botões de Ação -->
       <div class="form-actions">
-        <button class="btn primary" type="button" (click)="buscar()" [disabled]="!buscaValida">
+        <button
+          class="btn primary"
+          type="button"
+          (click)="buscar()"
+          [disabled]="!buscaValida || carregando">
           <span class="material-icons">search</span>
           Buscar Ocorrência
         </button>
 
-        <button class="btn ghost" type="button" (click)="limpar()" *ngIf="buscaRealizada">
+        <button
+          class="btn ghost"
+          type="button"
+          (click)="limpar()"
+          *ngIf="buscaRealizada"
+          [disabled]="carregando">
           <span class="material-icons">close</span>
           Limpar
         </button>
@@ -115,17 +143,18 @@
 
   <!-- ================================
        RESULTADO DA BUSCA
-  ================================ -->
-  <div class="result-section" *ngIf="resultado">
+  ================================= -->
+  <div class="result-section" *ngIf="resultado && !carregando">
     <div class="result-card">
-      <!-- Header do Resultado -->
       <div class="result-header" [class]="getClasseCategoria(resultado.categoria)">
         <div class="header-left">
           <div class="bank-badge" *ngIf="bancoSelecionado as b">
-  <img class="bank-logo-sm" [src]="b.logo" (error)="onBancoLogoError($event)" alt="" />
-  <span class="bank-badge-name">{{ b.nome }}</span>
-</div>
+            <img class="bank-logo-sm" [src]="b.logo" (error)="onBancoLogoError($event)" alt="" />
+            <span class="bank-badge-name">{{ b.nome }}</span>
+          </div>
+
           <span class="material-icons large">{{ getIconeCategoria(resultado.categoria) }}</span>
+
           <div class="header-info">
             <div class="codigo-badge">
               <span class="codigo">{{ resultado.codigo }}</span>
@@ -141,9 +170,7 @@
         </span>
       </div>
 
-      <!-- Informações Principais -->
       <div class="result-body">
-        <!-- Observações -->
         <div class="info-block">
           <div class="info-header">
             <span class="material-icons">description</span>
@@ -152,7 +179,6 @@
           <p class="info-text">{{ resultado.observacoes }}</p>
         </div>
 
-        <!-- Tipo CNAB -->
         <div class="info-row">
           <div class="info-item">
             <span class="material-icons">integration_instructions</span>
@@ -162,7 +188,6 @@
             </div>
           </div>
 
-          <!-- Requer Ação -->
           <div class="info-item" *ngIf="resultado.requerAcao !== undefined">
             <span class="material-icons" [class.warning]="resultado.requerAcao">
               {{ resultado.requerAcao ? 'warning' : 'check_circle' }}
@@ -176,8 +201,7 @@
           </div>
         </div>
 
-        <!-- Ações Sugeridas -->
-        <div class="info-block alert" *ngIf="resultado.acoesSugeridas && resultado.acoesSugeridas.length > 0">
+        <div class="info-block alert" *ngIf="resultado.acoesSugeridas?.length">
           <div class="info-header">
             <span class="material-icons">lightbulb</span>
             <h3>Ações Sugeridas</h3>
@@ -190,8 +214,7 @@
           </ul>
         </div>
 
-        <!-- Bancos Específicos -->
-        <div class="info-block" *ngIf="resultado.bancosEspecificos && resultado.bancosEspecificos.length > 0">
+        <div class="info-block" *ngIf="resultado.bancosEspecificos?.length">
           <div class="info-header">
             <span class="material-icons">account_balance</span>
             <h3>Bancos Específicos</h3>
@@ -204,7 +227,6 @@
         </div>
       </div>
 
-      <!-- Ações do Resultado -->
       <div class="result-actions">
         <button class="btn ghost" type="button" (click)="copiarCodigo()">
           <span class="material-icons">content_copy</span>
@@ -225,9 +247,9 @@
   </div>
 
   <!-- ================================
-       RESULTADOS RELACIONADOS (Múltiplos)
-  ================================ -->
-  <div class="related-section" *ngIf="resultadosRelacionados.length > 0 && !resultado">
+       RESULTADOS RELACIONADOS
+  ================================= -->
+  <div class="related-section" *ngIf="resultadosRelacionados.length > 0 && !resultado && !carregando">
     <h3 class="related-title">
       <span class="material-icons">list</span>
       Encontramos {{ resultadosRelacionados.length }} ocorrências com o código {{ codigoOcorrencia }}
@@ -235,8 +257,9 @@
     <p class="related-subtitle">Selecione uma para ver os detalhes:</p>
 
     <div class="related-grid">
-      <div class="related-card" *ngFor="let ocorrencia of resultadosRelacionados"
-        (click)="selecionarOcorrencia(ocorrencia)">
+      <div class="related-card"
+           *ngFor="let ocorrencia of resultadosRelacionados"
+           (click)="selecionarOcorrencia(ocorrencia)">
         <div class="related-header">
           <span class="material-icons" [class]="getClasseCategoria(ocorrencia.categoria)">
             {{ getIconeCategoria(ocorrencia.categoria) }}
@@ -255,8 +278,8 @@
 
   <!-- ================================
        ESTADO VAZIO (Não Encontrado)
-  ================================ -->
-  <div class="empty-state" *ngIf="naoEncontrado">
+  ================================= -->
+  <div class="empty-state" *ngIf="naoEncontrado && !carregando">
     <span class="material-icons large">search_off</span>
     <h2>Ocorrência não encontrada</h2>
     <p>
@@ -264,6 +287,7 @@
       <strong>{{ codigoOcorrencia }}<span *ngIf="codigoMotivo">-{{ codigoMotivo }}</span></strong>
       em nossa base de dados.
     </p>
+
     <div class="empty-suggestions">
       <p><strong>Dicas:</strong></p>
       <ul>
@@ -272,6 +296,7 @@
         <li>Consulte o manual do banco para códigos específicos</li>
       </ul>
     </div>
+
     <button class="btn primary" type="button" (click)="limpar()">
       <span class="material-icons">replay</span>
       Nova Busca
@@ -280,32 +305,35 @@
 
   <!-- ================================
        AJUDA / INSTRUÇÕES
-  ================================ -->
-  <div class="help-card" *ngIf="!buscaRealizada">
+  ================================= -->
+  <div class="help-card" *ngIf="!buscaRealizada && !carregando">
     <div class="help-header">
       <span class="material-icons">help</span>
       <h3>Como usar</h3>
     </div>
+
     <div class="help-content">
       <div class="help-item">
         <span class="step">1</span>
         <div class="help-text">
-          <strong>Digite o código da ocorrência</strong>
-          <p>Exemplo: 02 (confirmação), 03 (rejeição), 06 (liquidação)</p>
+          <strong>Selecione o banco</strong>
+          <p>O banco é obrigatório para consultar a base do backend</p>
         </div>
       </div>
+
       <div class="help-item">
         <span class="step">2</span>
         <div class="help-text">
-          <strong>Digite o código do motivo (opcional)</strong>
-          <p>Exemplo: 00, 01, 10... (para ocorrências com submotivos)</p>
+          <strong>Digite o código da ocorrência</strong>
+          <p>Exemplo: 02, 03, 06</p>
         </div>
       </div>
+
       <div class="help-item">
         <span class="step">3</span>
         <div class="help-text">
-          <strong>Clique em Buscar</strong>
-          <p>Veja detalhes, observações e ações recomendadas</p>
+          <strong>Digite o motivo (opcional)</strong>
+          <p>Exemplo: 00, 01, 10...</p>
         </div>
       </div>
     </div>
