@@ -46,27 +46,6 @@ export const BANCOS_DATA: BancoData[] = [
     /*INSERT INTO ocorrencias_motivos(id, banco_id, ocorrencia, motivo, descricao)VALUES(gen_random_uuid(),'ae2a0308-abe3-4aa1-a9cb-9cf9b597636e'::uuid,*/
   },
   {
-    id: '1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d',
-    codigo: '756',
-    nome: 'Bancoob',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Sicoob_logo.svg/512px-Sicoob_logo.svg.png',
-    ativo: true,
-  },
-  {
-    id: 'a1b2c3d4-e5f6-7a8b-9c0d-e1f2a3b4c5d6',
-    codigo: '077',
-    nome: 'Banco Inter',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Banco_Inter_logo.svg/512px-Banco_Inter_logo.svg.png',
-    ativo: true,
-  },
-  {
-    id: 'f6e5d4c3-b2a1-0f9e-8d7c-6b5a4f3e2d1c',
-    codigo: '260',
-    nome: 'Nu Pagamentos',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Nubank_logo_2021.svg/512px-Nubank_logo_2021.svg.png',
-    ativo: true,
-  },
-  {
     id: '4aad7f3d-f26a-4cad-ab71-7fe86115a995',
     codigo: '041',
     nome: 'Banrisul',
@@ -74,11 +53,68 @@ export const BANCOS_DATA: BancoData[] = [
     ativo: true, // Em breve
   },
   {
-    id: '',
+    id: '38a11456-ee76-4861-8b8b-d86bc94038de',
+    codigo: '274',
+    nome: 'Banco Grafeno',
+    logo: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Grafeno/grafeno.svg',
+    ativo: true,
+    /*INSERT INTO ocorrencias_motivos(id, banco_id, ocorrencia, motivo, descricao)VALUES(gen_random_uuid(),'ae2a0308-abe3-4aa1-a9cb-9cf9b597636e'::uuid,*/
+  },
+  {
+    id: '8253727a-1b36-41e6-b16f-b3e19caf0804',
     codigo: '422',
     nome: 'Banco Safra',
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Banco_Safra_logo.svg/512px-Banco_Safra_logo.svg.png',
+    logo: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banco%20Safra%20S.A/logo-safra-nome.svg',
     ativo: false, // Em breve
+  },
+  {
+    id: 'de7768cf-1c21-4af3-996a-650396ef412b',
+    codigo: '756',
+    nome: 'Banco Sicoob',
+    logo: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Sicoob/sicoob-vector-logo.svg',
+    ativo: true,
+  },
+  {
+    id: 'e76f9df1-36e1-440a-be0b-6ba095321152',
+    codigo: '756',
+    nome: 'Banco LiveBank',
+    logo: 'https://livework.com.vc/assets/app/media/img/gestor/logo-finanblue-livework.svg',
+    ativo: true,
+  },
+   {
+    id: 'bc09c7e7-a68f-4f78-ba69-8e0bd37bdd66',
+    codigo: '320',
+    nome: 'Bic banco',
+    logo: 'https://images.seeklogo.com/logo-png/27/1/banco-bic-logo-png_seeklogo-277058.png',
+    ativo: true,
+  },
+  {
+    id: '37e09f1e-8d29-4827-baee-505079de5839',
+    codigo: '213',
+    nome: 'Banco arbi',
+    logo: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banco%20Arbi/Banco_Arbi%20.svg',
+    ativo: true,
+  },
+   {
+    id: '572a4b74-d565-4046-94cc-cd944364acdf',
+    codigo: '748',
+    nome: 'Banco Sicredi',
+    logo: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Sicredi/logo-svg2.svg',
+    ativo: true,
+  },
+  {
+    id: '',
+    codigo: '077',
+    nome: 'Banco Inter',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Banco_Inter_logo.svg/512px-Banco_Inter_logo.svg.png',
+    ativo: false,
+  },
+  {
+    id: '',
+    codigo: '260',
+    nome: 'Nu Pagamentos',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Nubank_logo_2021.svg/512px-Nubank_logo_2021.svg.png',
+    ativo: false,
   },
   {
     id: '',
@@ -93,5 +129,12 @@ export const BANCOS_DATA: BancoData[] = [
     nome: 'BRB - Banco de Brasília',
     logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/BRB_logo.svg/512px-BRB_logo.svg.png',
     ativo: false, // Em breve
+  },
+  {
+    id: '',
+    codigo: '208',
+    nome: 'Banco BTG',
+    logo: 'https://images.seeklogo.com/logo-png/27/1/banco-bic-logo-png_seeklogo-277058.png',
+    ativo: false,
   },
 ];
