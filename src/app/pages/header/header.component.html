@@ -1,37 +1,34 @@
-<!-- ============================================
-     HEADER B3 - HTML MELHORADO
-     Versão otimizada com acessibilidade aprimorada
-     ============================================ -->
-
 <header class="b3-header-container" role="banner" [class.scrolled]="isScrolled">
-
-  <!-- Primeira linha: Logo + Menu + Controles -->
   <div class="header-content">
-
     <!-- Logo -->
     <div class="b3-logo">
-  <a
-    routerLink="/"
-    (click)="closeMenu()"
-    class="b3-logo-link"
-    aria-label="Banco Ocorrência - Ir para página inicial"
-  >
-    <img class="b3-logo-icon" src="../assets/logo/logoBo.png" alt="Logo BO - Banco Ocorrência" />
-
-
-    <span class="b3-logo-text">
-      Banco <strong>Ocorrência</strong>
-    </span>
-  </a>
-</div>
+      <a
+        routerLink="/"
+        (click)="closeMenu()"
+        class="b3-logo-link"
+        aria-label="Banco Ocorrência - Ir para página inicial"
+      >
+        <img
+          class="b3-logo-icon"
+          src="assets/logo/logoBo.png"
+          alt="Logo BO - Banco Ocorrência"
+          loading="eager"
+        />
+        <span class="b3-logo-text">
+          Banco <strong>Ocorrência</strong>
+        </span>
+      </a>
+    </div>
 
     <!-- Navegação Principal -->
     <nav
+      id="navigation-menu"
       class="b3-nav-main"
       [class.open]="menuOpen"
       role="navigation"
       aria-label="Navegação principal"
       [attr.aria-hidden]="isMobile && !menuOpen"
+      (click)="onMenuClick($event)"
     >
       <!-- Botão fechar (apenas mobile) -->
       <button
@@ -39,14 +36,13 @@
         class="mobile-close"
         type="button"
         (click)="closeMenu()"
-        aria-label="Fechar menu"
+        aria-label="Fechar menu de navegação"
       >
-        <span class="material-icons">close</span>
+        <span class="material-icons" aria-hidden="true">close</span>
       </button>
 
       <ul class="b3-nav-menu">
-
-        <!-- Item de Login Mobile -->
+        <!-- Login Mobile -->
         <li class="mobile-login-item" *ngIf="isMobile">
           <a
             routerLink="/login"
@@ -59,69 +55,67 @@
         </li>
 
         <!-- Início -->
-        <li>
+        <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" #rlaHome="routerLinkActive">
           <a
             routerLink="/"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
             (click)="closeMenu()"
-            aria-label="Ir para início"
+            aria-label="Ir para página inicial"
+            [attr.aria-current]="rlaHome.isActive ? 'page' : null"
           >
             Início
           </a>
         </li>
 
         <!-- Consultar Ocorrências -->
-        <li>
+        <li routerLinkActive="active" #rlaOc="routerLinkActive">
           <a
             routerLink="/ocorrencia"
-            routerLinkActive="active"
             (click)="closeMenu()"
-            aria-label="Consultar ocorrências"
+            aria-label="Consultar ocorrências bancárias"
+            [attr.aria-current]="rlaOc.isActive ? 'page' : null"
           >
             Consultar Ocorrências
           </a>
         </li>
 
         <!-- Validadores -->
-        <li>
+        <li routerLinkActive="active" #rlaVal="routerLinkActive">
           <a
             routerLink="/validadores"
-            routerLinkActive="active"
             (click)="closeMenu()"
-            aria-label="Ver validadores"
+            aria-label="Ver validadores de dados"
+            [attr.aria-current]="rlaVal.isActive ? 'page' : null"
           >
             Validadores
           </a>
         </li>
 
-        <li>
+        <!-- Layouts -->
+        <li routerLinkActive="active" #rlaLay="routerLinkActive">
           <a
             routerLink="/layouts"
-            routerLinkActive="active"
             (click)="closeMenu()"
-            aria-label="Ver notícias"
+            aria-label="Ver layouts CNAB"
+            [attr.aria-current]="rlaLay.isActive ? 'page' : null"
           >
             Layouts
           </a>
         </li>
-        <li>
+
+        <!-- Notícias -->
+        <li routerLinkActive="active" #rlaNot="routerLinkActive">
           <a
             routerLink="/noticias"
-            routerLinkActive="active"
             (click)="closeMenu()"
-            aria-label="Ver notícias"
+            aria-label="Ver notícias do sistema bancário"
+            [attr.aria-current]="rlaNot.isActive ? 'page' : null"
           >
             Notícias
           </a>
         </li>
 
         <!-- Dropdown: Relatórios -->
-        <li
-          class="dropdown"
-          [class.active]="dropdownOpen === 'reports'"
-          (keydown.escape)="closeDropdown()"
-        >
+        <li class="dropdown" [class.active]="dropdownOpen === 'reports'">
           <button
             class="dropdown-trigger"
             type="button"
@@ -129,9 +123,10 @@
             [attr.aria-expanded]="dropdownOpen === 'reports'"
             aria-haspopup="true"
             aria-controls="reports-menu"
-            aria-label="Menu de relatórios"
+            aria-label="Menu de relatórios - expandir para ver opções"
           >
-            Relatórios <i class="dropdown-arrow" aria-hidden="true"></i>
+            Relatórios
+            <i class="dropdown-arrow" aria-hidden="true"></i>
           </button>
 
           <ul
@@ -141,119 +136,117 @@
             [attr.aria-hidden]="dropdownOpen !== 'reports'"
           >
             <li role="none">
-              <a
-                routerLink="/relatorio-vendas"
-                (click)="closeMenu()"
-                role="menuitem"
-                aria-label="Relatório de vendas"
-              >
-                Vendas
-              </a>
+              <a routerLink="/relatorio-vendas" (click)="closeMenu()" role="menuitem">Vendas</a>
             </li>
             <li role="none">
-              <a
-                routerLink="/relatorio-clientes"
-                (click)="closeMenu()"
-                role="menuitem"
-                aria-label="Relatório de clientes"
-              >
-                Clientes
-              </a>
+              <a routerLink="/relatorio-clientes" (click)="closeMenu()" role="menuitem">Clientes</a>
+            </li>
+            <li role="none">
+              <a routerLink="/relatorio-financeiro" (click)="closeMenu()" role="menuitem">Financeiro</a>
             </li>
           </ul>
         </li>
 
         <!-- Informações -->
-        <li>
+        <li routerLinkActive="active" #rlaInfo="routerLinkActive">
           <a
             routerLink="/informacoes"
-            routerLinkActive="active"
             (click)="closeMenu()"
-            aria-label="Ver informações"
+            aria-label="Ver informações gerais do sistema"
+            [attr.aria-current]="rlaInfo.isActive ? 'page' : null"
           >
             Informações
           </a>
         </li>
-
       </ul>
     </nav>
 
     <!-- Controles da Direita -->
     <div class="b3-controls">
-
-      <!-- Login Icon (Desktop) -->
+      <!-- Login Desktop -->
       <div class="login-icon" *ngIf="!isMobile">
-        <a
-          routerLink="/login"
-          title="Admin Login"
-          aria-label="Fazer login como administrador"
-        >
+        <a routerLink="/login" title="Login Administrativo" aria-label="Fazer login como administrador">
           <span class="material-icons" aria-hidden="true">account_circle</span>
         </a>
       </div>
 
-      <!-- Botão de Busca -->
+      <!-- Busca -->
       <div class="b3-icons">
         <button
           type="button"
           (click)="onSearchClick()"
-          aria-label="Abrir busca"
+          aria-label="Abrir busca de ocorrências"
           [class.loading]="searchLoading"
           [disabled]="searchLoading"
         >
-          <span class="material-icons" aria-hidden="true">search</span>
-          <span class="sr-only">Buscar</span>
+          <span class="material-icons" aria-hidden="true">
+            {{ searchLoading ? 'hourglass_empty' : 'search' }}
+          </span>
+          <span class="sr-only">Buscar ocorrências</span>
         </button>
       </div>
 
-      <!-- Botão Menu Mobile -->
+      <!-- Menu Mobile -->
       <button
         class="menu-toggle"
         type="button"
         (click)="toggleMenu()"
         [attr.aria-expanded]="menuOpen"
-        [attr.aria-label]="menuOpen ? 'Fechar menu' : 'Abrir menu'"
+        [attr.aria-controls]="'navigation-menu'"
+        [attr.aria-label]="menuOpen ? 'Fechar menu principal' : 'Abrir menu principal'"
       >
         <span class="material-icons" aria-hidden="true">
           {{ menuOpen ? 'close' : 'menu' }}
         </span>
       </button>
-
     </div>
   </div>
 
-  <!-- Backdrop Mobile s-->
+  <!-- Backdrop Mobile -->
   <div
     class="backdrop"
-    [class.active]="menuOpen && isMobile"
     *ngIf="menuOpen && isMobile"
-    (click)="closeMenu()"
-    (keydown.escape)="closeMenu()"
-    tabindex="-1"
+    [class.active]="menuOpen && isMobile"
+    (click)="onBackdropClick()"
     role="presentation"
     aria-hidden="true"
   ></div>
 
   <!-- Sub-navegação -->
-  <nav class="b3-nav-sub" role="navigation" aria-label="Navegação secundária">
-    <ul>
-      <li class="active">
-        <a
-          href="#"
-          (click)="onSubNavClick($event, 'processamento')"
-          aria-current="page"
-        >
-          PROCESSAMENTO
-        </a>
-      </li>
-     <nav class="b3-nav-sub" role="navigation" aria-label="Navegação secundária">
-  <div class="sub-nav-scroll-container"> <ul>
-      <li><a href="#" (click)="onSubNavClick($event, 'cadastros')">CADASTROS</a></li>
-      <li><a href="#" (click)="onSubNavClick($event, 'auditoria')">AUDITORIA</a></li>
-    </ul>
-  </div>
-</nav>
-    </ul>
+  <nav class="b3-nav-sub" role="navigation" aria-label="Navegação de categorias">
+    <div class="sub-nav-scroll-container" (scroll)="onSubNavScroll($event)">
+      <ul>
+        <li [class.active]="activeSubNav === 'processamento'">
+          <a href="#" (click)="onSubNavClick($event, 'processamento')" [attr.aria-current]="activeSubNav === 'processamento' ? 'page' : null">
+            PROCESSAMENTO
+          </a>
+        </li>
+        <li [class.active]="activeSubNav === 'cadastros'">
+          <a href="#" (click)="onSubNavClick($event, 'cadastros')" [attr.aria-current]="activeSubNav === 'cadastros' ? 'page' : null">
+            CADASTROS
+          </a>
+        </li>
+        <li [class.active]="activeSubNav === 'auditoria'">
+          <a href="#" (click)="onSubNavClick($event, 'auditoria')" [attr.aria-current]="activeSubNav === 'auditoria' ? 'page' : null">
+            AUDITORIA
+          </a>
+        </li>
+        <li [class.active]="activeSubNav === 'relatorios'">
+          <a href="#" (click)="onSubNavClick($event, 'relatorios')" [attr.aria-current]="activeSubNav === 'relatorios' ? 'page' : null">
+            RELATÓRIOS
+          </a>
+        </li>
+        <li [class.active]="activeSubNav === 'configuracoes'">
+          <a href="#" (click)="onSubNavClick($event, 'configuracoes')" [attr.aria-current]="activeSubNav === 'configuracoes' ? 'page' : null">
+            CONFIGURAÇÕES
+          </a>
+        </li>
+        <li [class.active]="activeSubNav === 'integracao'">
+          <a href="#" (click)="onSubNavClick($event, 'integracao')" [attr.aria-current]="activeSubNav === 'integracao' ? 'page' : null">
+            INTEGRAÇÃO
+          </a>
+        </li>
+      </ul>
+    </div>
   </nav>
-
 </header>
