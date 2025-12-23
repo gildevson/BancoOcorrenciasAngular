@@ -10,17 +10,11 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
-  // ===== Estado do header =====
+
   isMobile = false;
   menuOpen = false;
-
-  // usado no template: [class.scrolled]="isScrolled"
   isScrolled = false;
-
-  // usado no template: dropdownOpen === 'reports'
   dropdownOpen: string | null = null;
-
-  // usado no template: [class.loading]="searchLoading" e [disabled]
   searchLoading = false;
 
   constructor() {
