@@ -1,0 +1,123 @@
+<section class="login-shell">
+  <div class="login-card" role="region" aria-label="Área de login">
+    <button type="button" class="modal-close" (click)="close()" aria-label="Fechar login">
+      <span class="material-icons" aria-hidden="true">close</span>
+    </button>
+    <!-- ✅ SPINNER NO CARD -->
+    <div class="loading-overlay-card" *ngIf="loading()">
+      <div class="loading-content">
+        <div class="spinner-box">
+          <div class="spinner-main"></div>
+          <div class="spinner-ring"></div>
+        </div>
+        <p>Autenticando...</p>
+        <span class="loading-sub">Por favor, aguarde</span>
+      </div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="login-head">
+      <div class="brand">
+        <img class="brand-logo" src="assets/logo/logoBo.png" alt="Banco Ocorrência" />
+        <div class="brand-text">
+          <div class="brand-title">Banco <strong>Ocorrência</strong></div>
+          <div class="brand-sub">Acesso administrativo</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- BODY -->
+    <div class="login-body">
+      <h1>Entrar</h1>
+      <p class="hint">Use seu e-mail e senha para acessar o painel.</p>
+
+      <!-- ALERTA DE ERRO -->
+      <div class="alert" *ngIf="errorMsg() as msg" role="alert">
+        <span class="material-icons" aria-hidden="true">error_outline</span>
+        <span>{{ msg }}</span>
+      </div>
+
+      <!-- FORMULÁRIO -->
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+
+        <!-- E-MAIL -->
+        <div class="field" [class.invalid]="hasError('email')">
+          <label for="email">E-mail</label>
+          <div class="control">
+            <span class="material-icons" aria-hidden="true">mail</span>
+            <input id="email" type="email" inputmode="email" autocomplete="email" formControlName="email"
+              placeholder="seuemail@dominio.com" aria-describedby="emailHelp" />
+          </div>
+          <small id="emailHelp" class="help" *ngIf="hasError('email')">
+            Informe um e-mail válido.
+          </small>
+        </div>
+
+        <!-- SENHA -->
+        <div class="field" [class.invalid]="hasError('senha')">
+          <label for="senha">Senha</label>
+          <div class="control">
+            <span class="material-icons" aria-hidden="true">lock</span>
+            <input id="senha" [type]="showPassword() ? 'text' : 'password'" autocomplete="current-password"
+              formControlName="senha" placeholder="••••••••" aria-describedby="senhaHelp" />
+            <button type="button" class="icon-btn" (click)="togglePassword()"
+              [attr.aria-label]="showPassword() ? 'Ocultar senha' : 'Mostrar senha'">
+              <span class="material-icons" aria-hidden="true">
+                {{ showPassword() ? 'visibility_off' : 'visibility' }}
+              </span>
+            </button>
+          </div>
+          <small id="senhaHelp" class="help" *ngIf="hasError('senha')">
+            A senha deve ter pelo menos 4 caracteres.
+          </small>
+        </div>
+
+        <!-- OPÇÕES -->
+        <div class="row">
+          <label class="check">
+            <input type="checkbox" formControlName="lembrar" />
+            <span>Lembrar de mim</span>
+          </label>
+          <button type="button" class="link" (click)="goForgot()">
+            Esqueci minha senha
+          </button>
+        </div>
+
+        <!-- BOTÃO ENTRAR -->
+        <button class="primary" type="submit" [disabled]="loading()">
+          <span class="btn-content">
+            <ng-container *ngIf="loading(); else iconLogin">
+              <span class="btn-spinner" aria-hidden="true"></span>
+              <span>Entrando...</span>
+            </ng-container>
+            <ng-template #iconLogin>
+              <span class="material-icons" aria-hidden="true">login</span>
+              <span>Entrar</span>
+            </ng-template>
+          </span>
+        </button>
+
+        <!-- DIVIDER -->
+        <div class="divider">
+          <span>ou</span>
+        </div>
+
+        <!-- BOTÃO GOOGLE -->
+        <button class="google" type="button" (click)="loginWithGoogle()" [disabled]="loading()">
+          <span class="gmark" aria-hidden="true">G</span>
+          <span>Continuar com Google</span>
+        </button>
+
+        <!-- RODAPÉ -->
+        <div class="foot">
+          <a routerLink="/" class="back">
+            <span class="material-icons" aria-hidden="true">arrow_back</span>
+            Voltar para o site
+          </a>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</section>
