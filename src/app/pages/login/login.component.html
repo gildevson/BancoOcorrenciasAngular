@@ -1,8 +1,11 @@
-<section class="login-shell">
+<!-- ✅ Adicionado (click)="$event.stopPropagation()" -->
+<section class="login-shell" (click)="$event.stopPropagation()">
   <div class="login-card" role="region" aria-label="Área de login">
+
     <button type="button" class="modal-close" (click)="close()" aria-label="Fechar login">
       <span class="material-icons" aria-hidden="true">close</span>
     </button>
+
     <!-- ✅ SPINNER NO CARD -->
     <div class="loading-overlay-card" *ngIf="loading()">
       <div class="loading-content">
@@ -45,8 +48,15 @@
           <label for="email">E-mail</label>
           <div class="control">
             <span class="material-icons" aria-hidden="true">mail</span>
-            <input id="email" type="email" inputmode="email" autocomplete="email" formControlName="email"
-              placeholder="seuemail@dominio.com" aria-describedby="emailHelp" />
+            <input
+              id="email"
+              type="email"
+              inputmode="email"
+              autocomplete="email"
+              formControlName="email"
+              placeholder="seuemail@dominio.com"
+              aria-describedby="emailHelp"
+            />
           </div>
           <small id="emailHelp" class="help" *ngIf="hasError('email')">
             Informe um e-mail válido.
@@ -58,10 +68,20 @@
           <label for="senha">Senha</label>
           <div class="control">
             <span class="material-icons" aria-hidden="true">lock</span>
-            <input id="senha" [type]="showPassword() ? 'text' : 'password'" autocomplete="current-password"
-              formControlName="senha" placeholder="••••••••" aria-describedby="senhaHelp" />
-            <button type="button" class="icon-btn" (click)="togglePassword()"
-              [attr.aria-label]="showPassword() ? 'Ocultar senha' : 'Mostrar senha'">
+            <input
+              id="senha"
+              [type]="showPassword() ? 'text' : 'password'"
+              autocomplete="current-password"
+              formControlName="senha"
+              placeholder="••••••••"
+              aria-describedby="senhaHelp"
+            />
+            <button
+              type="button"
+              class="icon-btn"
+              (click)="togglePassword()"
+              [attr.aria-label]="showPassword() ? 'Ocultar senha' : 'Mostrar senha'"
+            >
               <span class="material-icons" aria-hidden="true">
                 {{ showPassword() ? 'visibility_off' : 'visibility' }}
               </span>

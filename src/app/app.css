@@ -1,5 +1,7 @@
-
-/** {
+/* ===========================
+   RESET E BASE
+=========================== */
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -11,43 +13,90 @@ html, body {
   height: 100%;
   width: 100%;
 }
-*/
 
+/* ===========================
+   APP CONTENT
+=========================== */
 .app-content {
   min-height: calc(100vh - 120px);
-  transition: filter .2s ease, transform .2s ease;
+  transition: filter 0.2s ease, transform 0.2s ease;
 }
 
-.blurred {
+.app-content.blurred {
   filter: blur(10px);
 }
 
-/* Fundo escuro por cima do site */
-.modal-backdrop{
+/* ===========================
+   MODAL OVERLAY (FUNDO ESCURO)
+=========================== */
+.modal-overlay {
   position: fixed;
-  inset: 0;
-  background: rgba(10, 12, 20, .55);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(10, 12, 20, 0.55);
   backdrop-filter: blur(10px) saturate(140%);
   -webkit-backdrop-filter: blur(10px) saturate(140%);
-  z-index: 1000;
+  z-index: 9998;
+  animation: fadeIn 0.3s ease-out;
 }
 
-.modal-layer{
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ===========================
+   MODAL CONTAINER (CENTRALIZAÇÃO)
+=========================== */
+.modal-container {
   position: fixed;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  padding: 16px;
-  z-index: 1001;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 9999;
+  pointer-events: none;
+  overflow-y: auto;
 }
 
-.modal-panel{
+.modal-container > * {
+  pointer-events: auto;
   width: min(520px, 94vw);
-  animation: modalIn .16s ease-out;
+  max-height: 95vh;
+  overflow-y: auto;
+  animation: modalIn 0.3s ease-out;
 }
 
-@keyframes modalIn{
-  from{ transform: translateY(8px) scale(.98); opacity: 0; }
-  to{ transform: translateY(0) scale(1); opacity: 1; }
+@keyframes modalIn {
+  from {
+    transform: translateY(20px) scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
 }
 
+/* ===========================
+   RESPONSIVE
+=========================== */
+@media (max-width: 640px) {
+  .modal-container {
+    padding: 0.5rem;
+  }
+
+  .modal-container > * {
+    width: 100%;
+  }
+}

@@ -40,6 +40,8 @@ export const routes: Routes = [
       import('./pages/bancos/bancos.component')
         .then(m => m.BancosComponent),
   },
+
+  // ==================== AUTH ROUTES ====================
   {
     path: 'login',
     outlet: 'modal',
@@ -47,5 +49,20 @@ export const routes: Routes = [
       import('./pages/login/login.component')
         .then(m => m.LoginComponent),
   },
+  {
+    path: 'forgot-password',
+    outlet: 'modal',
+    loadComponent: () =>
+      import('./pages/forgotpassword/forgot.password.component')
+        .then(m => m.ForgotPasswordComponent),
+  },
+  // Reset password é página normal (não modal) pois vem de link externo
+  {
+    path: 'reset-password',
+    loadComponent: () =>
+      import('./pages/resetpasswordcomponent/resetpassword.component')
+        .then(m => m.ResetPasswordComponent),
+  },
+
   { path: '**', redirectTo: '' },
 ];

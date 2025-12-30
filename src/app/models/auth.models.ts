@@ -16,3 +16,22 @@ export interface LoginResponse {
   user: LoginUser;
   roles: Role[];
 }
+
+// ✅ Adicione isso no seu arquivo auth.models.ts existente
+
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ForgotPasswordResponse {
+  message: string;
+}
+
+export interface ResetPasswordRequest {
+  token: string;
+  novaSenha: string;
+}
+
+export interface ResetPasswordResponse {
+  message: string;
+}

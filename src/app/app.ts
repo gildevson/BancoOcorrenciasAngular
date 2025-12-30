@@ -16,13 +16,15 @@ import { FooterComponent } from './pages/footer/footer.component';
 export class AppComponent {
   private router = inject(Router);
 
-  isLoginOpen = signal(false);
+  // ✅ Renomeado para isModalOpen (detecta qualquer modal)
+  isModalOpen = signal(false);
 
   constructor() {
     this.router.events
       .pipe(filter(e => e instanceof NavigationEnd))
       .subscribe(() => {
-        this.isLoginOpen.set(this.router.url.includes('(modal:login)'));
+        // ✅ Detecta qualquer rota dentro do outlet modal
+        this.isModalOpen.set(this.router.url.includes('(modal:'));
       });
   }
 
@@ -30,7 +32,12 @@ export class AppComponent {
     this.router.navigate([{ outlets: { modal: ['login'] } }]);
   }
 
-  closeLogin(): void {
+  closeModal(): void {
     this.router.navigate([{ outlets: { modal: null } }]);
+  }
+
+  // ✅ Manter compatibilidade com código antigo
+  closeLogin(): void {
+    this.closeModal();
   }
 }
