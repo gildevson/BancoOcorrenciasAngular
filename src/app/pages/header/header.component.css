@@ -11,8 +11,9 @@
   --bo-border-2: rgba(255, 255, 255, 0.18);
   --bo-shadow: 0 14px 42px rgba(0, 0, 0, 0.38);
   --bo-radius: 18px;
+  --bo-accent: #7fd0ff;
 
-  /* largura “B3” pra centralizar tudo */
+  /* largura "B3" pra centralizar tudo */
   --bo-container: 1280px;
 }
 
@@ -36,7 +37,7 @@
    PRIMEIRA LINHA (CENTRALIZADA)
    ========================= */
 .header-content{
-  /* centraliza o “miolo” do header */
+  /* centraliza o "miolo" do header */
   max-width: var(--bo-container);
   margin: 0 auto;
 
@@ -191,6 +192,72 @@
   gap: 10px;
 }
 
+/* =========================================================
+   ÁREA DO USUÁRIO (quando logado)
+   ========================================================= */
+.user-area {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  color: #ffffff;
+  font-size: 0.95rem;
+  white-space: nowrap;
+
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.user-area:hover {
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+.user-area .material-icons {
+  font-size: 20px;
+  opacity: 0.9;
+}
+
+.user-name {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.user-name strong {
+  font-weight: 600;
+}
+
+.logout-btn {
+  margin-left: 0.4rem;
+  padding: 0.15rem 0.45rem;
+
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+
+  color: #ffdddd;
+  font-size: 0.8rem;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.logout-btn:hover {
+  background: rgba(255, 80, 80, 0.15);
+  color: #ffffff;
+}
+
+/* =========================================================
+   ÍCONES DE AÇÃO (Organizar, Busca, Login)
+   ========================================================= */
 .login-icon a,
 .b3-icons button,
 .menu-toggle{
@@ -206,7 +273,7 @@
   color: var(--bo-text);
   cursor: pointer;
 
-  transition: transform .14s ease, background .14s ease;
+  transition: transform .14s ease, background .14s ease, box-shadow .14s ease;
 }
 
 .login-icon a:hover,
@@ -216,9 +283,76 @@
   transform: translateY(-1px);
 }
 
+/* =========================================================
+   ÍCONE ORGANIZAR OCORRÊNCIAS (NOVO)
+   ========================================================= */
+.organize-icon button {
+  position: relative;
+}
+
+.organize-icon button::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+
+  width: 24px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--bo-accent);
+
+  transition: transform .2s ease;
+}
+
+.organize-icon button.active,
+.organize-icon button:active {
+  background: rgba(127, 208, 255, 0.15);
+  border-color: rgba(127, 208, 255, 0.25);
+  box-shadow: 0 0 0 1px rgba(127, 208, 255, 0.20) inset;
+}
+
+.organize-icon button.active::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
+.organize-icon button:hover {
+  background: rgba(127, 208, 255, 0.12);
+  border-color: rgba(127, 208, 255, 0.20);
+}
+
+/* Estado de loading */
 .b3-icons button.loading{
   opacity: .75;
   pointer-events: none;
+}
+
+.b3-icons button.loading .material-icons {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* =========================================================
+   SEPARADOR VISUAL (opcional)
+   ========================================================= */
+.b3-controls > .organize-icon {
+  position: relative;
+}
+
+.b3-controls > .organize-icon::after {
+  content: '';
+  position: absolute;
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  width: 1px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.12);
 }
 
 /* BACKDROP */
@@ -325,7 +459,7 @@
 
   .b3-nav-main.open{ transform: translateX(0); }
 
-  /* vira “lista” vertical (resolve o menu quebrado do print) */
+  /* vira "lista" vertical (resolve o menu quebrado do print) */
   .b3-nav-menu{
     width: 100%;
     margin: 0;
@@ -384,7 +518,7 @@
     border: 1px solid rgba(255,255,255,0.10);
   }
 
-  /* dropdown no mobile fica “embutido” abaixo */
+  /* dropdown no mobile fica "embutido" abaixo */
   .dropdown-menu{
     position: static;
     display: grid;
@@ -407,6 +541,16 @@
   /* sub-nav fica um pouco menor no mobile */
   .b3-nav-sub{
     padding: 10px 10px 12px;
+  }
+
+  /* Remove separador no mobile */
+  .b3-controls > .organize-icon::after {
+    display: none;
+  }
+
+  /* Ajusta espaçamento dos ícones no mobile */
+  .b3-controls {
+    gap: 8px;
   }
 }
 

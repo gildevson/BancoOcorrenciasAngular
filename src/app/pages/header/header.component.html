@@ -41,7 +41,7 @@
         <li routerLinkActive="active" #rlaOc="routerLinkActive">
           <a routerLink="/ocorrencia" (click)="closeMenu()" aria-label="Consultar ocorrências bancárias"
             [attr.aria-current]="rlaOc.isActive ? 'page' : null">
-            Consultar Ocorrências
+            Ocorrências
           </a>
         </li>
 
@@ -104,17 +104,44 @@
     <!-- Controles da Direita -->
     <div class="b3-controls">
       <!-- Login Desktop -->
-     <div class="login-icon" *ngIf="!isMobile">
-  <a
-    [routerLink]="[{ outlets: { modal: ['login'] } }]"
-    title="Login Administrativo"
-    aria-label="Fazer login como administrador"
-    (click)="closeMenu()"
-  >
-    <span class="material-icons" aria-hidden="true">account_circle</span>
-  </a>
-</div>
+      <ng-container *ngIf="!isMobile">
+        <ng-container *ngIf="user$ | async as u; else loginDesktop">
+          <div class="user-area">
+            <span class="material-icons" aria-hidden="true">account_circle</span>
+            <span class="user-name">Olá, <strong>{{ u.nome }}</strong></span>
 
+            <button type="button" class="logout-btn" (click)="logout()">
+              Sair
+            </button>
+          </div>
+        </ng-container>
+
+        <ng-template #loginDesktop>
+          <div class="login-icon">
+            <a
+              [routerLink]="[{ outlets: { modal: ['login'] } }]"
+              title="Login Administrativo"
+              aria-label="Fazer login como administrador"
+              (click)="closeMenu()"
+            >
+              <span class="material-icons" aria-hidden="true">account_circle</span>
+            </a>
+          </div>
+        </ng-template>
+      </ng-container>
+
+      <!-- NOVO: Ícone Organizar Ocorrências -->
+      <div class="b3-icons organize-icon">
+        <button
+          type="button"
+          (click)="onOrganizeClick()"
+          aria-label="Organizar ocorrências"
+          title="Organizar Ocorrências"
+          [class.active]="organizePanelOpen">
+          <span class="material-icons" aria-hidden="true">sort</span>
+          <span class="sr-only">Organizar ocorrências</span>
+        </button>
+      </div>
 
       <!-- Busca -->
       <div class="b3-icons">
