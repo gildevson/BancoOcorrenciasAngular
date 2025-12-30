@@ -118,12 +118,8 @@
 
         <ng-template #loginDesktop>
           <div class="login-icon">
-            <a
-              [routerLink]="[{ outlets: { modal: ['login'] } }]"
-              title="Login Administrativo"
-              aria-label="Fazer login como administrador"
-              (click)="closeMenu()"
-            >
+            <a [routerLink]="[{ outlets: { modal: ['login'] } }]" title="Login Administrativo"
+              aria-label="Fazer login como administrador" (click)="closeMenu()">
               <span class="material-icons" aria-hidden="true">account_circle</span>
             </a>
           </div>
@@ -132,12 +128,8 @@
 
       <!-- NOVO: Ícone Organizar Ocorrências -->
       <div class="b3-icons organize-icon">
-        <button
-          type="button"
-          (click)="onOrganizeClick()"
-          aria-label="Organizar ocorrências"
-          title="Organizar Ocorrências"
-          [class.active]="organizePanelOpen">
+        <button type="button" (click)="onOrganizeClick()" aria-label="Organizar ocorrências"
+          title="Organizar Ocorrências" [class.active]="organizePanelOpen">
           <span class="material-icons" aria-hidden="true">sort</span>
           <span class="sr-only">Organizar ocorrências</span>
         </button>
@@ -168,48 +160,42 @@
   <!-- Backdrop Mobile -->
   <div class="backdrop" *ngIf="menuOpen && isMobile" [class.active]="menuOpen && isMobile" (click)="onBackdropClick()"
     role="presentation" aria-hidden="true"></div>
+<!-- Sub-navegação (ADMIN ONLY) -->
+<nav
+  class="b3-nav-sub"
+  role="navigation"
+  aria-label="Navegação de categorias"
+  *ngIf="isAdmin$ | async"
+>
+  <div class="sub-nav-scroll-container" (scroll)="onSubNavScroll($event)">
+    <ul>
+      <li [class.active]="activeSubNav === 'processamento'">
+        <a href="#" (click)="onSubNavClick($event, 'processamento')">PROCESSAMENTO</a>
+      </li>
 
-  <!-- Sub-navegação -->
-  <nav class="b3-nav-sub" role="navigation" aria-label="Navegação de categorias">
-    <div class="sub-nav-scroll-container" (scroll)="onSubNavScroll($event)">
-      <ul>
-        <li [class.active]="activeSubNav === 'processamento'">
-          <a href="#" (click)="onSubNavClick($event, 'processamento')"
-            [attr.aria-current]="activeSubNav === 'processamento' ? 'page' : null">
-            PROCESSAMENTO
-          </a>
-        </li>
-        <li [class.active]="activeSubNav === 'cadastros'">
-          <a href="#" (click)="onSubNavClick($event, 'cadastros')"
-            [attr.aria-current]="activeSubNav === 'cadastros' ? 'page' : null">
-            CADASTROS
-          </a>
-        </li>
-        <li [class.active]="activeSubNav === 'auditoria'">
-          <a href="#" (click)="onSubNavClick($event, 'auditoria')"
-            [attr.aria-current]="activeSubNav === 'auditoria' ? 'page' : null">
-            AUDITORIA
-          </a>
-        </li>
-        <li [class.active]="activeSubNav === 'relatorios'">
-          <a href="#" (click)="onSubNavClick($event, 'relatorios')"
-            [attr.aria-current]="activeSubNav === 'relatorios' ? 'page' : null">
-            RELATÓRIOS
-          </a>
-        </li>
-        <li [class.active]="activeSubNav === 'configuracoes'">
-          <a href="#" (click)="onSubNavClick($event, 'configuracoes')"
-            [attr.aria-current]="activeSubNav === 'configuracoes' ? 'page' : null">
-            CONFIGURAÇÕES
-          </a>
-        </li>
-        <li [class.active]="activeSubNav === 'integracao'">
-          <a href="#" (click)="onSubNavClick($event, 'integracao')"
-            [attr.aria-current]="activeSubNav === 'integracao' ? 'page' : null">
-            INTEGRAÇÃO
-          </a>
-        </li>
-      </ul>
-    </div>
-  </nav>
+      <li [class.active]="activeSubNav === 'cadastros'">
+        <a href="#" (click)="onSubNavClick($event, 'cadastros')">CADASTROS</a>
+      </li>
+
+      <li [class.active]="activeSubNav === 'auditoria'">
+        <a href="#" (click)="onSubNavClick($event, 'auditoria')">AUDITORIA</a>
+      </li>
+
+      <li [class.active]="activeSubNav === 'relatorios'">
+        <a href="#" (click)="onSubNavClick($event, 'relatorios')">RELATÓRIOS</a>
+      </li>
+
+      <li [class.active]="activeSubNav === 'configuracoes'">
+        <a href="#" (click)="onSubNavClick($event, 'configuracoes')">CONFIGURAÇÕES</a>
+      </li>
+
+      <li [class.active]="activeSubNav === 'integracao'">
+        <a href="#" (click)="onSubNavClick($event, 'integracao')">INTEGRAÇÃO</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+
+
 </header>
