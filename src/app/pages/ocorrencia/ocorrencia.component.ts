@@ -10,7 +10,7 @@ import { finalize } from 'rxjs/operators';
 import { BancoData, BANCOS_DATA } from '../../data/bancos.data';
 
 // ✅ Importar serviço de API
-import { OcorrenciasApi, ApiOcorrenciaMotivo } from '../../Service/ocorrencias.api';
+import { OcorrenciasApi, ApiOcorrenciaMotivo } from '../../service/ocorrencias.api';
 
 // ================================
 // TIPOS E INTERFACES

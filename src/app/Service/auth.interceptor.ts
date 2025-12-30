@@ -1,23 +1,19 @@
-import { Injectable, inject } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler } from '@angular/common/http';
+import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
 import { AuthService } from './auth.service';
 
-@Injectable()
-export class AuthInterceptor implements HttpInterceptor {
-  private auth = inject(AuthService);
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const auth = inject(AuthService);
+  const token = auth.getToken();
 
-  intercept(req: HttpRequest<any>, next: HttpHandler) {
-    const token = this.auth.getToken();
-
-    // ✅ NÃO colocar token no /auth/login e /auth/seed-admin
-    if (!token || req.url.includes('/api/auth/login') || req.url.includes('/api/auth/seed-admin')) {
-      return next.handle(req);
-    }
-
-    const authReq = req.clone({
-      setHeaders: { Authorization: `Bearer ${token}` },
-    });
-
-    return next.handle(authReq);
+  // não manda token no login
+  if (!token || req.url.includes('/auth/login')) {
+    return next(req);
   }
-}
+
+  const cloned = req.clone({
+    setHeaders: { Authorization: `Bearer ${token}` },
+  });
+
+  return next(cloned);
+};

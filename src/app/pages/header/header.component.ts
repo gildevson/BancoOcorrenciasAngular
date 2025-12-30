@@ -21,17 +21,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   activeSubNav = 'processamento';
 
   private routerSubscription?: Subscription;
-
   private touchStartX = 0;
   private touchStartY = 0;
-
-  // scroll lock seguro
   private lockedScrollY = 0;
-
-  // refs para remover listeners
   private onTouchStartRef?: (e: TouchEvent) => void;
   private onTouchEndRef?: (e: TouchEvent) => void;
-
   constructor(private router: Router) {}
 
   ngOnInit(): void {
@@ -96,7 +90,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private lockBodyScroll(): void {
     this.lockedScrollY = window.scrollY || 0;
-
+    
     document.body.style.position = 'fixed';
     document.body.style.top = `-${this.lockedScrollY}px`;
     document.body.style.left = '0';

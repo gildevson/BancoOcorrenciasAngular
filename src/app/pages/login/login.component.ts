@@ -1,85 +1,77 @@
-import { Component, inject, signal, OnDestroy } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
-import { AuthService } from '../../Service/auth.service';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../service/auth.service'; // Ajuste o caminho conforme necessário
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnDestroy {
+export class LoginComponent {
   private fb = inject(FormBuilder);
-  private router = inject(Router);
   private auth = inject(AuthService);
-  private destroy$ = new Subject<void>();
+  private router = inject(Router);
 
   loading = signal(false);
   errorMsg = signal<string | null>(null);
   showPassword = signal(false);
 
-  private readonly REDIRECT_DELAY = 800;
-
   form = this.fb.group({
-    email: this.fb.nonNullable.control('', [Validators.required, Validators.email]),
-    senha: this.fb.nonNullable.control('', [Validators.required, Validators.minLength(4)]),
-    lembrar: this.fb.nonNullable.control(true),
+    email: ['', [Validators.required, Validators.email]],
+    senha: ['', [Validators.required, Validators.minLength(4)]],
+    lembrar: [false]
   });
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  hasError(field: string): boolean {
+    const control = this.form.get(field);
+    return !!(control && control.invalid && control.touched);
   }
 
   togglePassword(): void {
     this.showPassword.update(v => !v);
   }
 
-  hasError(field: 'email' | 'senha'): boolean {
-    const c = this.form.get(field);
-    return !!(c && c.touched && c.invalid);
-  }
-
   submit(): void {
-    this.errorMsg.set(null);
-
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
 
-    const { email, senha, lembrar } = this.form.getRawValue();
-
     this.loading.set(true);
+    this.errorMsg.set(null);
 
-    this.auth.login({ email, senha }, lembrar)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: () => {
-          this.loading.set(false);
-          setTimeout(() => this.close(), this.REDIRECT_DELAY);
-        },
-        error: (err) => {
-          this.loading.set(false);
-          this.errorMsg.set(this.auth.getErrorMessage(err));
-        }
-      });
-  }
+    const { email, senha, lembrar } = this.form.value;
 
-  close(): void {
-    // seu modal outlet
-    this.router.navigate([{ outlets: { modal: null } }]);
-  }
-
-  goForgot(): void {
-    this.router.navigate(['/recuperar-senha']);
+    this.auth.login(
+      { email: email!, senha: senha! },
+      lembrar ?? false
+    ).subscribe({
+      next: () => {
+        this.loading.set(false);
+        this.router.navigate(['/']); // ou redirecione para onde preferir
+      },
+      error: (err) => {
+        this.loading.set(false);
+        this.errorMsg.set(this.auth.getErrorMessage(err));
+      }
+    });
   }
 
   loginWithGoogle(): void {
-    alert('Login com Google ainda não implementado.');
+    // Implementar login com Google
+    console.log('Login com Google');
+  }
+
+  goForgot(): void {
+    // Implementar "Esqueci minha senha"
+    console.log('Esqueci minha senha');
+  }
+
+  close(): void {
+    this.router.navigate([{ outlets: { modal: null } }]);
   }
 }

@@ -40,15 +40,12 @@ export const routes: Routes = [
       import('./pages/bancos/bancos.component')
         .then(m => m.BancosComponent),
   },
-
-   {
+  {
     path: 'login',
     outlet: 'modal',
     loadComponent: () =>
       import('./pages/login/login.component')
         .then(m => m.LoginComponent),
   },
-
-
   { path: '**', redirectTo: '' },
 ];
