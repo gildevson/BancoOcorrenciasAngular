@@ -1,53 +1,106 @@
+// edicoesocorrencias.editar.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { OcorrenciasMotivosService, OcorrenciaMotivo } from '../../service/ocorrenciasmotivos.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import {
+  OcorrenciasApi,
+  ApiOcorrenciaMotivo,
+  UpdateOcorrenciaMotivoRequest
+} from '../../service/ocorrencias.api';
 
 @Component({
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './edicoesocorrencias.editar.component.html'
+  templateUrl: './edicoesocorrencias.editar.component.html',
+  styleUrls: ['./edicoesocorrencias.editar.component.css']
 })
 export class EdicoesOcorrenciasEditarComponent implements OnInit {
+  bancoId = '';
+  ocorrencia = '';
+  motivo = '';
 
-  bancoId!: string;
-  ocorrencia!: string;
-  motivo!: string;
+  model: Partial<ApiOcorrenciaMotivo> = {
+    descricao: '',
+    observacao: ''
+  };
 
-  model!: OcorrenciaMotivo;
-  loading = true;
+  erro = '';
+  loading = false;
+  salvando = false;
 
   constructor(
     private route: ActivatedRoute,
-    private api: OcorrenciasMotivosService,
-    private router: Router
+    private router: Router,
+    private api: OcorrenciasApi
   ) {}
 
   ngOnInit(): void {
-    this.bancoId = this.route.snapshot.paramMap.get('bancoId')!;
-    this.ocorrencia = this.route.snapshot.paramMap.get('ocorrencia')!;
-    this.motivo = this.route.snapshot.paramMap.get('motivo')!;
+    // Pega os parâmetros da rota
+    this.bancoId = this.route.snapshot.paramMap.get('bancoId') || '';
+    this.ocorrencia = this.route.snapshot.paramMap.get('ocorrencia') || '';
+    this.motivo = this.route.snapshot.paramMap.get('motivo') || '';
 
-    this.api.getDetalhe(this.bancoId, this.ocorrencia, this.motivo)
-      .subscribe(res => {
+    if (!this.bancoId || !this.ocorrencia || !this.motivo) {
+      this.erro = 'Parâmetros inválidos.';
+      return;
+    }
+
+    this.carregarDetalhe();
+  }
+
+  private carregarDetalhe(): void {
+    this.loading = true;
+    this.erro = '';
+
+    this.api.getDetalhe(this.bancoId, this.ocorrencia, this.motivo).subscribe({
+      next: (res) => {
         this.model = res;
         this.loading = false;
-      });
+      },
+      error: (err) => {
+        console.error('Erro ao carregar detalhe:', err);
+        this.erro = 'Não foi possível carregar o detalhe.';
+        this.loading = false;
+      }
+    });
   }
 
   salvar(): void {
-    this.api.atualizar(
-      this.bancoId,
-      this.ocorrencia,
-      this.motivo,
-      {
-        descricao: this.model.descricao,
-        observacao: this.model.observacao
+    this.erro = '';
+
+    // Validações
+    if (!this.model.descricao?.trim()) {
+      this.erro = 'A descrição é obrigatória.';
+      return;
+    }
+
+    this.salvando = true;
+
+    const body: UpdateOcorrenciaMotivoRequest = {
+      descricao: this.model.descricao.trim(),
+      observacao: this.model.observacao?.trim() || null
+    };
+
+    this.api.atualizarMotivo(this.bancoId, this.ocorrencia, this.motivo, body).subscribe({
+      next: () => {
+        this.salvando = false;
+        this.router.navigate(['/edicoes-ocorrencias/pesquisar']);
+      },
+      error: (err) => {
+        console.error('Erro ao atualizar motivo:', err);
+        this.salvando = false;
+
+        if (err.error?.message) {
+          this.erro = err.error.message;
+        } else {
+          this.erro = 'Erro ao atualizar motivo. Tente novamente.';
+        }
       }
-    ).subscribe(() => {
-      alert('Atualizado com sucesso');
-      this.router.navigate(['/edicoes-ocorrencias/pesquisar']);
     });
+  }
+
+  voltar(): void {
+    this.router.navigate(['/edicoes-ocorrencias/pesquisar']);
   }
 }

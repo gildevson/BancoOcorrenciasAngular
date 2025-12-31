@@ -1,13 +1,45 @@
-<h3>Editar Motivo</h3>
+<div class="container">
+  <h3>Editar Motivo</h3>
 
-<div *ngIf="loading">Carregando...</div>
+  <div class="form-card">
+    <div class="loading-state" *ngIf="loading">Carregando...</div>
 
-<form *ngIf="!loading">
-  <label>Descrição</label>
-  <input [(ngModel)]="model.descricao" name="descricao"/>
+    <p class="erro" *ngIf="erro">{{ erro }}</p>
 
-  <label>Observação</label>
-  <textarea [(ngModel)]="model.observacao" name="observacao"></textarea>
+    <form *ngIf="!loading">
+      <div class="info-box">
+        <div class="info-label">Banco / Ocorrência / Motivo</div>
+        <div class="info-value">
+          {{ bancoId | slice:0:8 }}... / {{ ocorrencia }} / {{ motivo }}
+        </div>
+      </div>
 
-  <button type="button" (click)="salvar()">Salvar</button>
-</form>
+      <div class="form-group">
+        <label>Descrição</label>
+        <input
+          [(ngModel)]="model.descricao"
+          name="descricao"
+          placeholder="Descrição do motivo"
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="optional">Observação</label>
+        <textarea
+          [(ngModel)]="model.observacao"
+          name="observacao"
+          placeholder="Informações adicionais (opcional)"
+        ></textarea>
+      </div>
+
+      <div class="button-group">
+        <button type="button" class="btn-voltar" (click)="voltar()">
+          Voltar
+        </button>
+        <button type="button" class="btn-salvar" (click)="salvar()" [disabled]="salvando">
+          {{ salvando ? 'Salvando...' : 'Salvar' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

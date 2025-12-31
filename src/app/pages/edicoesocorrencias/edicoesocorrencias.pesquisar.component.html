@@ -1,37 +1,88 @@
-<h3>Pesquisar Ocorrências</h3>
+<div class="container">
+  <h3>Pesquisar Ocorrências</h3>
 
-<div class="form">
-  <input
-    placeholder="GUID do banco"
-    [(ngModel)]="bancoId"
-  />
+  <div class="form">
+    <div class="form-group">
+      <label>Banco</label>
+      <select [(ngModel)]="bancoId" [disabled]="loadingBancos">
+        <option value="">Selecione um banco</option>
+        <option *ngFor="let b of bancos" [value]="b.id">
+          {{ pad(b.numero_banco) }} - {{ b.nome }}
+        </option>
+      </select>
+    </div>
 
-  <input
-    placeholder="Ocorrência (ex: 02)"
-    [(ngModel)]="ocorrencia"
-  />
+    <div class="form-group">
+      <label>Ocorrência</label>
+      <input
+        placeholder="Ex: 02"
+        [(ngModel)]="ocorrencia"
+        maxlength="2"
+      />
+    </div>
 
-  <button (click)="buscar()">Buscar</button>
+    <div class="form-group">
+      <label>Motivo (opcional)</label>
+      <input
+        placeholder="Ex: 00 (deixe vazio para listar todos)"
+        [(ngModel)]="motivo"
+        maxlength="2"
+      />
+    </div>
+
+    <div class="button-group">
+      <button
+        type="button"
+        class="btn-buscar"
+        (click)="buscar()"
+        [disabled]="loading || loadingBancos">
+        {{ loading ? 'Buscando...' : 'Buscar' }}
+      </button>
+
+      <button
+        type="button"
+        class="btn-limpar"
+        (click)="limpar()"
+        [disabled]="loading || loadingBancos">
+        Limpar
+      </button>
+
+      <button
+        type="button"
+        class="btn-novo"
+        (click)="novoCadastro()"
+        [disabled]="loadingBancos">
+        Nova Ocorrência/Motivo
+      </button>
+    </div>
+  </div>
+
+  <p class="erro" *ngIf="erro">{{ erro }}</p>
+  <p class="info" *ngIf="loadingBancos">Carregando bancos...</p>
+  <p class="info" *ngIf="loading">Buscando...</p>
+
+  <table *ngIf="motivos.length > 0">
+    <thead>
+      <tr>
+        <th>Ocorrência</th>
+        <th>Motivo</th>
+        <th>Descrição</th>
+        <th>Observação</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let m of motivos">
+        <td>{{ m.ocorrencia }}</td>
+        <td>{{ m.motivo }}</td>
+        <td>{{ m.descricao }}</td>
+        <td>{{ m.observacao || '-' }}</td>
+        <td>
+          <button type="button" class="btn-editar" (click)="editar(m)">
+            Editar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
-
-<p class="erro" *ngIf="erro">{{ erro }}</p>
-<p *ngIf="loading">Carregando...</p>
-
-<table *ngIf="motivos.length">
-  <thead>
-    <tr>
-      <th>Motivo</th>
-      <th>Descrição</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let m of motivos">
-      <td>{{ m.motivo }}</td>
-      <td>{{ m.descricao }}</td>
-      <td>
-        <button (click)="editar(m)">Editar</button>
-      </td>
-    </tr>
-  </tbody>
-</table>

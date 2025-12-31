@@ -24,7 +24,7 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard],
     data: { roles: ['ADMIN', 'SUPERVISOR'] },
     loadComponent: () =>
-      import('./pages/edicoesocorrencias/editarocorrencias.shell.component')
+      import('./pages/edicoesocorrencias/editarocorrencias.shell.component')  // ✅ CORRIGIDO AQUI
         .then(m => m.EdicoesOcorrenciasShellComponent),
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'pesquisar' },
