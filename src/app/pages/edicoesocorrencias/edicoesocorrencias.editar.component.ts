@@ -28,6 +28,7 @@ export class EdicoesOcorrenciasEditarComponent implements OnInit {
   erro = '';
   loading = false;
   salvando = false;
+  sucessoMsg = ''; // ✅ NOVO
 
   constructor(
     private route: ActivatedRoute,
@@ -36,7 +37,6 @@ export class EdicoesOcorrenciasEditarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Pega os parâmetros da rota
     this.bancoId = this.route.snapshot.paramMap.get('bancoId') || '';
     this.ocorrencia = this.route.snapshot.paramMap.get('ocorrencia') || '';
     this.motivo = this.route.snapshot.paramMap.get('motivo') || '';
@@ -68,8 +68,8 @@ export class EdicoesOcorrenciasEditarComponent implements OnInit {
 
   salvar(): void {
     this.erro = '';
+    this.sucessoMsg = ''; // ✅ Limpa mensagem anterior
 
-    // Validações
     if (!this.model.descricao?.trim()) {
       this.erro = 'A descrição é obrigatória.';
       return;
@@ -85,7 +85,12 @@ export class EdicoesOcorrenciasEditarComponent implements OnInit {
     this.api.atualizarMotivo(this.bancoId, this.ocorrencia, this.motivo, body).subscribe({
       next: () => {
         this.salvando = false;
-        this.router.navigate(['/edicoes-ocorrencias/pesquisar']);
+        this.sucessoMsg = 'Motivo atualizado com sucesso!'; // ✅ Mostra sucesso
+
+        // ✅ Aguarda 2 segundos e redireciona
+        setTimeout(() => {
+          this.router.navigate(['/edicoes-ocorrencias/pesquisar']);
+        }, 2000);
       },
       error: (err) => {
         console.error('Erro ao atualizar motivo:', err);

@@ -1,9 +1,11 @@
 /* edicoesocorrencias.novo.component.css */
 
 .container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
+  max-width: 1200px;
+  margin: 20px auto; /* Centraliza o bloco com espaçamento externo saudável */
+  width: 95%; /* Garante respiro em telas que encostam no limite */
+  max-width: 1250px;
+  margin-bottom: 15px;
 }
 
 h3 {

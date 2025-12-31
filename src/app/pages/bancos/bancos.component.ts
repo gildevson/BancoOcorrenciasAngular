@@ -2,7 +2,7 @@ import { Component, inject, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BaseChartDirective } from 'ng2-charts';
 import { Chart, registerables, ChartConfiguration, ChartData, ChartType } from 'chart.js';
-import { MarketBancosService } from '../../Service/marketbancos.service';
+import { MarketBancosService } from '../../service/marketbancos.service';
 
 import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
 import { distinctUntilChanged, switchMap, tap, takeUntil, finalize } from 'rxjs/operators';
