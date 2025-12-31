@@ -23,6 +23,7 @@ export class BancosComponent implements OnInit, OnDestroy {
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
   private api = inject(MarketBancosService);
+  private refreshInterval?: any;
 
   // listas
   bancosAll: any[] = [];
@@ -31,6 +32,7 @@ export class BancosComponent implements OnInit, OnDestroy {
   bancosNegociados: any[] = [];
 
   activeTab: ListTab = 'altas';
+  searchTerm = ''; // ✅ Propriedade para busca
 
   // UI
   selectedTicker = 'ITUB4';
@@ -51,11 +53,11 @@ export class BancosComponent implements OnInit, OnDestroy {
   trackBySymbol = (_: number, item: any) => item?.symbol;
 
   private periodMap: Record<PeriodKey, { range: string; interval: string }> = {
-  '1D':   { range: '5d',  interval: '15m' }, // ✅ mais pontos e menos bloqueio
-  '1M':   { range: '3mo', interval: '1d'  },
-  '1A':   { range: '5y',  interval: '1wk' },
-  'Todos':{ range: 'max', interval: '1mo' }
-};
+    '1D': { range: '5d', interval: '15m' },
+    '1M': { range: '3mo', interval: '1d' },
+    '1A': { range: '5y', interval: '1wk' },
+    'Todos': { range: 'max', interval: '1mo' }
+  };
 
   public lineChartOptions: ChartConfiguration['options'] = {
     responsive: true,
@@ -80,12 +82,19 @@ export class BancosComponent implements OnInit, OnDestroy {
   };
 
   ngOnInit() {
+    // ✅ Carrega lista inicial
     this.carregarBancos();
 
+    // ✅ Atualiza lista a cada 30 segundos
+    this.refreshInterval = setInterval(() => {
+      console.log('🔄 Atualizando lista de bancos...');
+      this.carregarBancos();
+    }, 30000);
+
+    // ✅ Monitora mudanças no ticker e período
     combineLatest([this.ticker$, this.period$]).pipe(
       distinctUntilChanged(([t1, p1], [t2, p2]) => t1 === t2 && p1 === p2),
 
-      // ✅ quando clicar / trocar período: limpa + loading
       tap(() => {
         this.chartLoading = true;
         this.chartError = '';
@@ -114,51 +123,34 @@ export class BancosComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+
+    // ✅ Limpa o intervalo de atualização
+    if (this.refreshInterval) {
+      clearInterval(this.refreshInterval);
+    }
   }
 
   // =========================
   // LISTAS
   // =========================
   carregarBancos() {
-  // ✅ 1) sempre tenta a watchlist primeiro
-  this.api.quotesBancos().subscribe({
-    next: (r) => {
-      const results = (r?.results ?? r?.stocks ?? []) as any[];
-      if (results.length) {
-        this.normalizarListas(results);
-        return;
-      }
-      // ✅ 2) se falhar, cai no list
-      this.api.financeList('desc', 80).subscribe({
-        next: (rr: any) => this.normalizarListas(rr?.stocks ?? []),
-      });
-    },
-    error: () => {
-      this.api.financeList('desc', 80).subscribe({
-        next: (rr: any) => this.normalizarListas(rr?.stocks ?? []),
-      });
-    }
-  });
-}
-
-  private carregarBancosViaFinanceList() {
-    const bancos = new Set(['ITUB4', 'BBDC4', 'BBAS3', 'SANB11', 'BPAC11', 'ABCB4', 'BRSR6', 'PINE4', 'BMGB4']);
-
-    this.api.financeList('desc', 80).subscribe({
-      next: (r: any) => {
-        const list = (r?.stocks ?? []) as any[];
-        const apenasBancos = list.filter(x => bancos.has((x.stock ?? '').toUpperCase()));
-
-        const results = apenasBancos.map(x => ({
-          symbol: x.stock,
-          shortName: x.name,
-          longName: x.name,
-          regularMarketPrice: x.close ?? x.price ?? null,
-          regularMarketChangePercent: x.change ?? 0,
-          regularMarketVolume: x.volume ?? 0
-        }));
-
-        this.normalizarListas(results);
+    // ✅ 1) sempre tenta a watchlist primeiro
+    this.api.quotesBancos().subscribe({
+      next: (r) => {
+        const results = (r?.results ?? r?.stocks ?? []) as any[];
+        if (results.length) {
+          this.normalizarListas(results);
+          return;
+        }
+        // ✅ 2) se falhar, cai no list
+        this.api.financeList('desc', 80).subscribe({
+          next: (rr: any) => this.normalizarListas(rr?.stocks ?? []),
+        });
+      },
+      error: () => {
+        this.api.financeList('desc', 80).subscribe({
+          next: (rr: any) => this.normalizarListas(rr?.stocks ?? []),
+        });
       }
     });
   }
@@ -220,7 +212,6 @@ export class BancosComponent implements OnInit, OnDestroy {
     this.period$.next(this.activePeriod);
   }
 
-  // ✅ agora troca UI e consulta (remove F se vier)
   setTicker(ticker: string) {
     const display = (ticker ?? '').trim().toUpperCase();
     if (!display) return;
@@ -236,9 +227,22 @@ export class BancosComponent implements OnInit, OnDestroy {
   }
 
   get listaAtual(): any[] {
-    if (this.activeTab === 'negociados') return this.bancosNegociados;
-    if (this.activeTab === 'baixas') return this.bancosBaixas;
-    return this.bancosAltas;
+    let list = [];
+
+    if (this.activeTab === 'negociados') list = this.bancosNegociados;
+    else if (this.activeTab === 'baixas') list = this.bancosBaixas;
+    else list = this.bancosAltas;
+
+    // ✅ Filtra por termo de busca
+    if (this.searchTerm.trim()) {
+      const term = this.searchTerm.toLowerCase();
+      list = list.filter(item =>
+        item.symbol.toLowerCase().includes(term) ||
+        (item.shortName || '').toLowerCase().includes(term)
+      );
+    }
+
+    return list;
   }
 
   // =========================
@@ -264,6 +268,17 @@ export class BancosComponent implements OnInit, OnDestroy {
     if (!isFinite(n)) return '';
     const s = n >= 0 ? '+' : '';
     return `${s}${n.toFixed(2)}%`;
+  }
+
+  fmtVolume(v: any): string {
+    const n = Number(v);
+    if (!isFinite(n) || n === 0) return '-';
+
+    if (n >= 1_000_000_000) return (n / 1_000_000_000).toFixed(1) + 'B';
+    if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
+    if (n >= 1_000) return (n / 1_000).toFixed(1) + 'K';
+
+    return n.toString();
   }
 
   isPos(item: any) {
@@ -313,38 +328,55 @@ export class BancosComponent implements OnInit, OnDestroy {
   // MONTA O GRÁFICO
   // =========================
   private atualizarGraficoComResposta(r: any) {
+    // ✅ LOG 1: Ver o que a API retornou
+    console.log('📊 RESPOSTA COMPLETA DA API:', r);
+    console.log('📊 r.results:', r?.results);
+    console.log('📊 r.results[0]:', r?.results?.[0]);
+
     const stock = r?.results?.[0];
     const raw = stock?.historicalDataPrice;
 
+    // ✅ LOG 2: Ver os dados históricos
+    console.log('📊 historicalDataPrice:', raw);
+    console.log('📊 É array?', Array.isArray(raw));
+    console.log('📊 Tamanho:', raw?.length);
+
     if (!Array.isArray(raw) || raw.length === 0) {
+      console.error('❌ SEM DADOS:', { raw, isArray: Array.isArray(raw), length: raw?.length });
       this.chartError = 'Sem histórico disponível para esse ativo no período selecionado.';
       this.clearChart();
       return;
     }
 
     let hist = raw
-  .map((p: any) => {
-    const dateMs = this.parseDateMs(p.date);
-    const close = Number(p.close);
-    return { dateMs, close };
-  })
-  .filter((p: any) => Number.isFinite(p.dateMs) && Number.isFinite(p.close))
-  .sort((a: any, b: any) => a.dateMs - b.dateMs);
+      .map((p: any) => {
+        const dateMs = this.parseDateMs(p.date);
+        const close = Number(p.close);
+        return { dateMs, close };
+      })
+      .filter((p: any) => Number.isFinite(p.dateMs) && Number.isFinite(p.close))
+      .sort((a: any, b: any) => a.dateMs - b.dateMs);
 
-if (!hist.length) {
-  this.chartError = 'Sem pontos válidos para montar o gráfico.';
-  this.clearChart();
-  return;
-}
+    // ✅ LOG 3: Ver dados processados
+    console.log('📊 Dados processados (primeiros 3):', hist.slice(0, 3));
+    console.log('📊 Total de pontos:', hist.length);
 
-// ✅ se estiver no 1D, mostra apenas o último dia (mesmo tendo buscado 5d)
-if (this.activePeriod === '1D') {
-  const lastYmd = new Date(hist[hist.length - 1].dateMs).toISOString().slice(0, 10);
-  const onlyLastDay = hist.filter(p => new Date(p.dateMs).toISOString().slice(0, 10) === lastYmd);
+    if (!hist.length) {
+      console.error('❌ SEM PONTOS VÁLIDOS');
+      this.chartError = 'Sem pontos válidos para montar o gráfico.';
+      this.clearChart();
+      return;
+    }
 
-  // se tiver pontos suficientes, usa só o último dia
-  if (onlyLastDay.length >= 10) hist = onlyLastDay;
-}
+    // ✅ se estiver no 1D, mostra apenas o último dia
+    if (this.activePeriod === '1D') {
+      const lastYmd = new Date(hist[hist.length - 1].dateMs).toISOString().slice(0, 10);
+      const onlyLastDay = hist.filter(p => new Date(p.dateMs).toISOString().slice(0, 10) === lastYmd);
+
+      console.log('📊 Filtrando 1D - Antes:', hist.length, 'Depois:', onlyLastDay.length);
+
+      if (onlyLastDay.length >= 10) hist = onlyLastDay;
+    }
 
     const fmt = new Intl.DateTimeFormat(
       'pt-BR',
@@ -373,6 +405,10 @@ if (this.activePeriod === '1D') {
         }
       }]
     };
+
+    console.log('✅ GRÁFICO MONTADO COM SUCESSO!');
+    console.log('📊 Labels (primeiros 5):', this.lineChartData.labels?.slice(0, 5));
+    console.log('📊 Data (primeiros 5):', this.lineChartData.datasets[0].data.slice(0, 5));
 
     setTimeout(() => this.chart?.update(), 0);
   }

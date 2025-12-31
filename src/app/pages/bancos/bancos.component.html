@@ -64,11 +64,17 @@
         </div>
 
         <div class="right">
-          <div class="price">{{ fmtPrice(item.regularMarketPrice) }}</div>
-          <div class="pct" [class.pos]="isPos(item)" [class.neg]="!isPos(item)">
-            {{ fmtPct(item.regularMarketChangePercent) }}
-          </div>
-        </div>
+  <div class="price">{{ fmtPrice(item.regularMarketPrice) }}</div>
+
+  <!-- ✅ ADICIONE ESTA LINHA -->
+  <div class="volume" *ngIf="item.regularMarketVolume">
+    Vol: {{ fmtVolume(item.regularMarketVolume) }}
+  </div>
+
+  <div class="pct" [class.pos]="isPos(item)" [class.neg]="!isPos(item)">
+    {{ fmtPct(item.regularMarketChangePercent) }}
+  </div>
+</div>
 
       </button>
     </div>
