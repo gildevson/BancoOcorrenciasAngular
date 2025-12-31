@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
   OcorrenciasApi,
-  ApiOcorrenciaMotivo,
   ApiBanco,
   CreateOcorrenciaMotivoRequest
 } from '../../service/ocorrencias.api';
@@ -13,7 +12,7 @@ import {
 @Component({
   standalone: true,
   imports: [CommonModule, FormsModule],
-    templateUrl: './edicoesocorrencias.novo.component.html',
+  templateUrl: './edicoesocorrencias.novo.component.html',
   styleUrls: ['./edicoesocorrencias.novo.component.css']
 })
 export class EdicoesOcorrenciasNovoComponent implements OnInit {
@@ -30,6 +29,7 @@ export class EdicoesOcorrenciasNovoComponent implements OnInit {
   erro = '';
   loading = false;
   loadingBancos = false;
+  sucessoMsg = ''; // ✅ ADICIONE ESTA LINHA
 
   constructor(
     private api: OcorrenciasApi,
@@ -59,6 +59,7 @@ export class EdicoesOcorrenciasNovoComponent implements OnInit {
 
   salvar(): void {
     this.erro = '';
+    this.sucessoMsg = '';
 
     // Validações
     if (!this.form.bancoId) {
@@ -83,7 +84,6 @@ export class EdicoesOcorrenciasNovoComponent implements OnInit {
 
     this.loading = true;
 
-    // ✅ Body completo conforme a API espera
     const body: CreateOcorrenciaMotivoRequest = {
       bancoId: this.form.bancoId,
       ocorrencia: this.form.ocorrencia.trim(),
@@ -95,7 +95,12 @@ export class EdicoesOcorrenciasNovoComponent implements OnInit {
     this.api.criarMotivo(body).subscribe({
       next: () => {
         this.loading = false;
-        this.router.navigate(['/edicoes-ocorrencias/pesquisar']);
+        this.sucessoMsg = 'Motivo cadastrado com sucesso!';
+
+        // Aguarda 2 segundos e redireciona
+        setTimeout(() => {
+          this.router.navigate(['/edicoes-ocorrencias/pesquisar']);
+        }, 2000);
       },
       error: (err) => {
         console.error('Erro ao criar motivo:', err);
