@@ -45,6 +45,13 @@
           </a>
         </li>
 
+        <li routerLinkActive="active" #rlaCalc="routerLinkActive">
+          <a routerLink="/calculadora" (click)="closeMenu()" aria-label="Calculadora financeira"
+            [attr.aria-current]="rlaCalc.isActive ? 'page' : null">
+            Calculadora
+          </a>
+        </li>
+
         <!-- Validadores -->
 
 
@@ -151,59 +158,57 @@
   <div class="backdrop" *ngIf="menuOpen && isMobile" [class.active]="menuOpen && isMobile" (click)="onBackdropClick()"
     role="presentation" aria-hidden="true"></div>
   <!-- Sub-navegação (ADMIN ONLY) -->
- <!-- Sub-navegação (ADMIN ONLY) -->
-<nav class="b3-nav-sub"
-     role="navigation"
-     aria-label="Navegação de categorias"
-     *ngIf="(isAdmin$ | async) || (isSupervisor$ | async)">
+  <!-- Sub-navegação (ADMIN ONLY) -->
+  <nav class="b3-nav-sub" role="navigation" aria-label="Navegação de categorias"
+    *ngIf="(isAdmin$ | async) || (isSupervisor$ | async)">
 
-  <div class="sub-nav-scroll-container" (scroll)="onSubNavScroll($event)">
+    <div class="sub-nav-scroll-container" (scroll)="onSubNavScroll($event)">
 
-    <!-- ✅ SE for SUPERVISOR (e não ADMIN), mostra só Edições -->
-    <ng-container *ngIf="onlyEdicoes$ | async; else adminNav">
-      <ul>
-        <li routerLinkActive="active">
-          <a routerLink="/edicoes-ocorrencias" (click)="closeMenu()">
-            EDITAR OCORRÊNCIAS
-          </a>
-        </li>
-      </ul>
-    </ng-container>
+      <!-- ✅ SE for SUPERVISOR (e não ADMIN), mostra só Edições -->
+      <ng-container *ngIf="onlyEdicoes$ | async; else adminNav">
+        <ul>
+          <li routerLinkActive="active">
+            <a routerLink="/edicoes-ocorrencias" (click)="closeMenu()">
+              EDITAR OCORRÊNCIAS
+            </a>
+          </li>
+        </ul>
+      </ng-container>
 
-    <!-- ✅ SE for ADMIN, mostra tudo -->
-    <ng-template #adminNav>
-      <ul>
-        <li [class.active]="activeSubNav === 'processamento'">
-          <a href="#" (click)="onSubNavClick($event, 'processamento')">PROCESSAMENTO</a>
-        </li>
+      <!-- ✅ SE for ADMIN, mostra tudo -->
+      <ng-template #adminNav>
+        <ul>
+          <li [class.active]="activeSubNav === 'processamento'">
+            <a href="#" (click)="onSubNavClick($event, 'processamento')">PROCESSAMENTO</a>
+          </li>
 
-        <li [class.active]="activeSubNav === 'cadastros'">
-          <a href="#" (click)="onSubNavClick($event, 'cadastros')">CADASTROS</a>
-        </li>
+          <li [class.active]="activeSubNav === 'cadastros'">
+            <a href="#" (click)="onSubNavClick($event, 'cadastros')">CADASTROS</a>
+          </li>
 
-        <li [class.active]="activeSubNav === 'auditoria'">
-          <a href="#" (click)="onSubNavClick($event, 'auditoria')">AUDITORIA</a>
-        </li>
+          <li [class.active]="activeSubNav === 'auditoria'">
+            <a href="#" (click)="onSubNavClick($event, 'auditoria')">AUDITORIA</a>
+          </li>
 
-        <li [class.active]="activeSubNav === 'relatorios'">
-          <a href="#" (click)="onSubNavClick($event, 'relatorios')">RELATÓRIOS</a>
-        </li>
+          <li [class.active]="activeSubNav === 'relatorios'">
+            <a href="#" (click)="onSubNavClick($event, 'relatorios')">RELATÓRIOS</a>
+          </li>
 
-        <li [class.active]="activeSubNav === 'configuracoes'">
-          <a href="#" (click)="onSubNavClick($event, 'configuracoes')">CONFIGURAÇÕES</a>
-        </li>
+          <li [class.active]="activeSubNav === 'configuracoes'">
+            <a href="#" (click)="onSubNavClick($event, 'configuracoes')">CONFIGURAÇÕES</a>
+          </li>
 
-        <!-- ✅ Editar Ocorrências com mesmo estilo -->
-        <li routerLinkActive="active">
-          <a routerLink="/edicoes-ocorrencias" (click)="closeMenu()">
-            EDITAR OCORRÊNCIAS
-          </a>
-        </li>
-      </ul>
-    </ng-template>
+          <!-- ✅ Editar Ocorrências com mesmo estilo -->
+          <li routerLinkActive="active">
+            <a routerLink="/edicoes-ocorrencias" (click)="closeMenu()">
+              EDITAR OCORRÊNCIAS
+            </a>
+          </li>
+        </ul>
+      </ng-template>
 
-  </div>
-</nav>
+    </div>
+  </nav>
 
 
 

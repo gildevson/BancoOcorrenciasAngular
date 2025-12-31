@@ -78,6 +78,12 @@ export const routes: Routes = [
       .then(m => m.ResetPasswordComponent)
   },
 
+  {
+    path: 'calculadora',
+    loadComponent: () => import('./pages/calculadoracomponent/calculadora.component')
+      .then(m => m.CalculadoraComponent)
+  },
+
   // ===============================================
   // ÁREA ADMINISTRATIVA - EDIÇÕES DE OCORRÊNCIAS
   // ===============================================
@@ -114,7 +120,10 @@ export const routes: Routes = [
         path: 'editar/:bancoId/:ocorrencia/:motivo',
         loadComponent: () => import('./pages/edicoesocorrencias/edicoesocorrencias.editar.component')
           .then(m => m.EdicoesOcorrenciasEditarComponent)
-      }
+      },
+      // ✅ ADICIONE ESTA LINHA após as outras rotas
+
+
     ]
   },
 
