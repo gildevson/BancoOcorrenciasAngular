@@ -93,6 +93,10 @@ export class AuthService {
       'Falha ao autenticar. Verifique e-mail e senha.';
     return msg;
   }
+  getRolesSnapshot(): Role[] {
+  return this.rolesSubject.value; // BehaviorSubject já existe aí
+}
+
 
   // ==================== PRIVADOS ====================
   private persistSession(res: LoginResponse, lembrar: boolean): void {

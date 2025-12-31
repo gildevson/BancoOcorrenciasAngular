@@ -1,0 +1,13 @@
+<h3>Editar Motivo</h3>
+
+<div *ngIf="loading">Carregando...</div>
+
+<form *ngIf="!loading">
+  <label>Descrição</label>
+  <input [(ngModel)]="model.descricao" name="descricao"/>
+
+  <label>Observação</label>
+  <textarea [(ngModel)]="model.observacao" name="observacao"></textarea>
+
+  <button type="button" (click)="salvar()">Salvar</button>
+</form>

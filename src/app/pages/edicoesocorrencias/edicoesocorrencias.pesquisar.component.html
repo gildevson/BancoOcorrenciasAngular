@@ -1,0 +1,37 @@
+<h3>Pesquisar Ocorrências</h3>
+
+<div class="form">
+  <input
+    placeholder="GUID do banco"
+    [(ngModel)]="bancoId"
+  />
+
+  <input
+    placeholder="Ocorrência (ex: 02)"
+    [(ngModel)]="ocorrencia"
+  />
+
+  <button (click)="buscar()">Buscar</button>
+</div>
+
+<p class="erro" *ngIf="erro">{{ erro }}</p>
+<p *ngIf="loading">Carregando...</p>
+
+<table *ngIf="motivos.length">
+  <thead>
+    <tr>
+      <th>Motivo</th>
+      <th>Descrição</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let m of motivos">
+      <td>{{ m.motivo }}</td>
+      <td>{{ m.descricao }}</td>
+      <td>
+        <button (click)="editar(m)">Editar</button>
+      </td>
+    </tr>
+  </tbody>
+</table>

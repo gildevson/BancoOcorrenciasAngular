@@ -12,6 +12,7 @@
   display: grid;
   grid-template-columns: 1.25fr 0.75fr;
   gap: 18px;
+  max-width: 1250px;
 }
 
 .logo {
@@ -109,5 +110,33 @@
 
   .cols {
     grid-template-columns: 1fr;
+  }
+}
+
+
+.cf-badge {
+  margin-left: auto; /* joga pro canto direito no footer-bottom */
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cf-badge img {
+  height: 20px;
+  width: auto;
+  opacity: 0.85;
+  filter: drop-shadow(0 6px 14px rgba(0,0,0,0.25));
+}
+
+.cf-badge img:hover {
+  opacity: 1;
+}
+
+@media (max-width: 620px) {
+  .footer-bottom {
+    flex-wrap: wrap;
+  }
+  .cf-badge {
+    margin-left: 0;
   }
 }

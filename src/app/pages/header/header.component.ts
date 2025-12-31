@@ -2,7 +2,7 @@ import { Component, HostListener, OnInit, OnDestroy } from '@angular/core';
 import { Router, NavigationEnd, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { filter, map } from 'rxjs/operators';
-import { Subscription, Observable } from 'rxjs';
+import { Subscription, Observable, combineLatest  } from 'rxjs';
 
 import { AuthService } from '../../service/auth.service';
 import { LoginUser, Role } from '../../models/auth.models';
@@ -20,7 +20,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isScrolled = false;
   isMobile = false;
   searchLoading = false;
-
+  isSupervisor$!: Observable<boolean>;
+onlyEdicoes$!: Observable<boolean>;
   organizePanelOpen = false;
   activeSubNav = 'processamento';
 
@@ -40,13 +41,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private auth: AuthService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.user$ = this.auth.user$;
 
     this.isAdmin$ = this.auth.roles$.pipe(
       map((roles: Role[]) => roles.includes('ADMIN'))
+    );
+
+    this.isSupervisor$ = this.auth.roles$.pipe(
+      map((roles: Role[]) => roles.includes('SUPERVISOR'))
+    );
+
+    this.onlyEdicoes$ = combineLatest([this.isAdmin$, this.isSupervisor$]).pipe(
+      map(([isAdmin, isSupervisor]) => !isAdmin && isSupervisor)
     );
 
     this.checkMobile();

@@ -10,6 +10,7 @@ import { NOTICIAS } from '../../data/noticias.data';
   templateUrl: './noticias.component.html',
   styleUrls: ['./noticias.component.css']
 })
+
 export class NoticiasComponent {
   noticias = NOTICIAS;
 }
