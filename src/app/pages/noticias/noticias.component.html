@@ -4,23 +4,59 @@
     <p>Conteúdos e publicações do portal.</p>
   </div>
 
-  <div class="grid">
+  <!-- Loading -->
+  <div class="loading" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Carregando notícias...</p>
+  </div>
+
+  <!-- Erro -->
+  <div class="erro" *ngIf="erro && !loading">
+    <span class="material-icons">error_outline</span>
+    <p>{{ erro }}</p>
+    <button (click)="carregarNoticias()">Tentar novamente</button>
+  </div>
+
+  <!-- Grid de Notícias -->
+  <div class="grid" *ngIf="!loading && !erro && noticias.length">
     <a class="card" *ngFor="let n of noticias" [routerLink]="['/noticia', n.slug]">
       <div class="img">
-        <img [src]="n.imagemUrl" [alt]="n.titulo">
-        <span class="tag">{{ n.categoria }}</span>
+        <img
+          [src]="n.imagemCapa || 'https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?w=400&q=80'"
+          [alt]="n.titulo"
+          (error)="onImageError($event)"
+        >
+        <span class="tag" *ngIf="n.categoria">{{ n.categoria }}</span>
+        <span class="tag destaque" *ngIf="n.destaque">⭐ Destaque</span>
       </div>
 
       <div class="meta">
         <span class="material-icons">event</span>
-        <span>{{ n.data }}</span>
+        <span>{{ formatarData(n.dataPublicacao) }}</span>
         <span class="dot">•</span>
         <span class="material-icons">schedule</span>
-        <span>{{ n.leituraMin }} MIN DE LEITURA</span>
+        <span>{{ calcularTempoLeitura(n.conteudo) }} MIN DE LEITURA</span>
       </div>
 
       <h3>{{ n.titulo }}</h3>
       <p>{{ n.resumo }}</p>
+
+      <div class="footer" *ngIf="n.autorNome || n.visualizacoes > 0">
+        <span *ngIf="n.autorNome">
+          <span class="material-icons">person</span>
+          {{ n.autorNome }}
+        </span>
+        <span *ngIf="n.visualizacoes > 0">
+          <span class="material-icons">visibility</span>
+          {{ n.visualizacoes }} visualizações
+        </span>
+      </div>
     </a>
+  </div>
+
+  <!-- Vazio -->
+  <div class="vazio" *ngIf="!loading && !erro && !noticias.length">
+    <span class="material-icons">article</span>
+    <p>Nenhuma notícia publicada ainda.</p>
   </div>
 </section>

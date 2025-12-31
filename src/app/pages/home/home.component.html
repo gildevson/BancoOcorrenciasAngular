@@ -1,4 +1,5 @@
 <app-bancos></app-bancos>
+
 <section class="news">
   <div class="news-inner">
     <div class="news-head">
@@ -6,20 +7,31 @@
       <a class="link" routerLink="/noticias">Ver todas</a>
     </div>
 
-    <div class="news-grid">
+    <!-- Loading -->
+    <div class="loading-container" *ngIf="loading">
+      <div class="spinner"></div>
+      <p>Carregando notícias...</p>
+    </div>
+
+    <!-- Grid de Notícias -->
+    <div class="news-grid" *ngIf="!loading && noticias.length">
       <a class="news-card" *ngFor="let n of noticias" [routerLink]="['/noticia', n.slug]">
         <div class="img">
-          <img [src]="n.imagemUrl" [alt]="n.titulo">
-          <span class="tag">{{ n.categoria }}</span>
+          <img
+            [src]="n.imagemCapa || 'https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?w=400&q=80'"
+            [alt]="n.titulo"
+            (error)="onImageError($event)"
+          >
+          <span class="tag" *ngIf="n.categoria">{{ n.categoria }}</span>
         </div>
 
         <div class="content">
           <div class="meta">
             <span class="material-icons">event</span>
-            <span>{{ n.data }}</span>
+            <span>{{ formatarData(n.dataPublicacao) }}</span>
             <span class="dot">•</span>
             <span class="material-icons">schedule</span>
-            <span>{{ n.leituraMin }} MIN DE LEITURA</span>
+            <span>{{ calcularTempoLeitura(n.conteudo) }} MIN DE LEITURA</span>
           </div>
 
           <h3>{{ n.titulo }}</h3>
@@ -29,8 +41,13 @@
         </div>
       </a>
     </div>
+
+    <!-- Vazio -->
+    <div class="empty" *ngIf="!loading && !noticias.length">
+      <span class="material-icons">article</span>
+      <p>Nenhuma publicação disponível no momento.</p>
+    </div>
   </div>
 </section>
 
-<!-- ✅ BLOCO NOVO NA HOME (remove o warning) -->
 <app-finance-highlights></app-finance-highlights>

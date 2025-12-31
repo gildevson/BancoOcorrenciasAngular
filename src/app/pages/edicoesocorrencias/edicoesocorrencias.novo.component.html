@@ -1,3 +1,12 @@
+<!-- ✅ Toast de Sucesso (FORA do container) -->
+<div class="toast-success" *ngIf="sucessoMsg">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+  </svg>
+  <span>{{ sucessoMsg }}</span>
+</div>
+
 <div class="container">
   <h3>Novo Motivo</h3>
 
@@ -8,8 +17,14 @@
     <form (ngSubmit)="salvar()" #f="ngForm">
       <div class="form-group">
         <label>Banco</label>
-        <select name="bancoId" [(ngModel)]="form.bancoId" required>
-          <option value="" disabled>Selecione um banco</option>
+        <select
+          name="bancoId"
+          [(ngModel)]="form.bancoId"
+          required
+          [disabled]="loading || loadingBancos">
+          <option value="" disabled>
+            {{ loadingBancos ? 'Carregando bancos...' : 'Selecione um banco' }}
+          </option>
           <option *ngFor="let b of bancos" [value]="b.id">
             {{ pad4(b.numero_banco) }} - {{ b.nome }}
           </option>
@@ -24,6 +39,7 @@
           maxlength="2"
           [(ngModel)]="form.ocorrencia"
           required
+          [disabled]="loading"
         />
       </div>
 
@@ -35,6 +51,7 @@
           maxlength="2"
           [(ngModel)]="form.motivo"
           required
+          [disabled]="loading"
         />
       </div>
 
@@ -45,6 +62,7 @@
           placeholder="Descrição do motivo"
           [(ngModel)]="form.descricao"
           required
+          [disabled]="loading"
         />
       </div>
 
@@ -55,14 +73,22 @@
           rows="4"
           placeholder="Informações adicionais (opcional)"
           [(ngModel)]="form.observacao"
+          [disabled]="loading"
         ></textarea>
       </div>
 
       <div class="button-group">
-        <button type="button" class="btn-voltar" (click)="voltar()">
+        <button
+          type="button"
+          class="btn-voltar"
+          (click)="voltar()"
+          [disabled]="loading">
           Voltar
         </button>
-        <button type="submit" class="btn-salvar" [disabled]="loading || f.invalid">
+        <button
+          type="submit"
+          class="btn-salvar"
+          [disabled]="loading || f.invalid || loadingBancos">
           {{ loading ? 'Salvando...' : 'Salvar' }}
         </button>
       </div>

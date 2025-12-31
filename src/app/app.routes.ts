@@ -20,35 +20,109 @@ export const routes: Routes = [
 
   // ✅ Área de edições
   {
+    path: 'financas',
+    loadComponent: () => import('./pages/financehighlights/financehighlights.component')
+      .then(m => m.FinanceHighlightsComponent)
+  },
+
+  {
+    path: 'noticias',
+    loadComponent: () => import('./pages/noticias/noticias.component')
+      .then(m => m.NoticiasComponent)
+  },
+
+  {
+    path: 'noticia/:slug',
+    loadComponent: () => import('./pages/noticiadetalhe.component/noticiadetalhe.component')
+      .then(m => m.NoticiaDetalheComponent)
+  },
+
+  {
+    path: 'layouts',
+    loadComponent: () => import('./pages/layouts/layouts.component')
+      .then(m => m.LayoutsComponent)
+  },
+
+  {
+    path: 'ocorrencia',
+    loadComponent: () => import('./pages/ocorrencia/ocorrencia.component')
+      .then(m => m.ConsultarOcorrenciaComponent)
+  },
+
+  {
+    path: 'bancos',
+    loadComponent: () => import('./pages/bancos/bancos.component')
+      .then(m => m.BancosComponent)
+  },
+
+  // ===============================================
+  // MODAIS DE AUTENTICAÇÃO
+  // ===============================================
+  {
+    path: 'login',
+    outlet: 'modal',
+    loadComponent: () => import('./pages/login/login.component')
+      .then(m => m.LoginComponent)
+  },
+
+  {
+    path: 'forgot-password',
+    outlet: 'modal',
+    loadComponent: () => import('./pages/forgotpassword/forgot.password.component')
+      .then(m => m.ForgotPasswordComponent)
+  },
+
+  {
+    path: 'reset-password',
+    loadComponent: () => import('./pages/resetpasswordcomponent/resetpassword.component')
+      .then(m => m.ResetPasswordComponent)
+  },
+
+  // ===============================================
+  // ÁREA ADMINISTRATIVA - EDIÇÕES DE OCORRÊNCIAS
+  // ===============================================
+  {
     path: 'edicoes-ocorrencias',
     canActivate: [authGuard, roleGuard],
     data: { roles: ['ADMIN', 'SUPERVISOR'] },
-    loadComponent: () =>
-      import('./pages/edicoesocorrencias/editarocorrencias.shell.component')  // ✅ CORRIGIDO AQUI
-        .then(m => m.EdicoesOcorrenciasShellComponent),
+    loadComponent: () => import('./pages/edicoesocorrencias/editarocorrencias.shell.component')
+      .then(m => m.EdicoesOcorrenciasShellComponent),
     children: [
-      { path: '', pathMatch: 'full', redirectTo: 'pesquisar' },
+      // Redireciona para pesquisar por padrão
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'pesquisar'
+      },
 
+      // Pesquisar ocorrências
       {
         path: 'pesquisar',
-        loadComponent: () =>
-          import('./pages/edicoesocorrencias/edicoesocorrencias.pesquisar.component')
-            .then(m => m.EdicoesOcorrenciasPesquisarComponent),
+        loadComponent: () => import('./pages/edicoesocorrencias/edicoesocorrencias.pesquisar.component')
+          .then(m => m.EdicoesOcorrenciasPesquisarComponent)
       },
+
+      // Nova ocorrência/motivo
       {
         path: 'novo',
-        loadComponent: () =>
-          import('./pages/edicoesocorrencias/edicoesocorrencias.novo.component')
-            .then(m => m.EdicoesOcorrenciasNovoComponent),
+        loadComponent: () => import('./pages/edicoesocorrencias/edicoesocorrencias.novo.component')
+          .then(m => m.EdicoesOcorrenciasNovoComponent)
       },
+
+      // Editar ocorrência/motivo
       {
         path: 'editar/:bancoId/:ocorrencia/:motivo',
-        loadComponent: () =>
-          import('./pages/edicoesocorrencias/edicoesocorrencias.editar.component')
-            .then(m => m.EdicoesOcorrenciasEditarComponent),
-      },
-    ],
+        loadComponent: () => import('./pages/edicoesocorrencias/edicoesocorrencias.editar.component')
+          .then(m => m.EdicoesOcorrenciasEditarComponent)
+      }
+    ]
   },
 
-  { path: '**', redirectTo: '' },
+  // ===============================================
+  // FALLBACK - REDIRECIONA PARA HOME
+  // ===============================================
+  {
+    path: '**',
+    redirectTo: ''
+  }
 ];

@@ -46,12 +46,7 @@
         </li>
 
         <!-- Validadores -->
-        <li routerLinkActive="active" #rlaVal="routerLinkActive">
-          <a routerLink="/validadores" (click)="closeMenu()" aria-label="Ver validadores de dados"
-            [attr.aria-current]="rlaVal.isActive ? 'page' : null">
-            Validadores
-          </a>
-        </li>
+
 
         <!-- Layouts -->
         <li routerLinkActive="active" #rlaLay="routerLinkActive">
@@ -69,7 +64,7 @@
           </a>
         </li>
 
-        <!-- Dropdown: Relatórios -->
+        <!-- Dropdown: Relatórios
         <li class="dropdown" [class.active]="dropdownOpen === 'reports'">
           <button class="dropdown-trigger" type="button" (click)="toggleDropdown('reports')"
             [attr.aria-expanded]="dropdownOpen === 'reports'" aria-haspopup="true" aria-controls="reports-menu"
@@ -91,13 +86,8 @@
           </ul>
         </li>
 
-        <!-- Informações -->
-        <li routerLinkActive="active" #rlaInfo="routerLinkActive">
-          <a routerLink="/informacoes" (click)="closeMenu()" aria-label="Ver informações gerais do sistema"
-            [attr.aria-current]="rlaInfo.isActive ? 'page' : null">
-            Informações
-          </a>
-        </li>
+        -->
+
       </ul>
     </nav>
 
