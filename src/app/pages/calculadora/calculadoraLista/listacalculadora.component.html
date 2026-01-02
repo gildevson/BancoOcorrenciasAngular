@@ -1,0 +1,114 @@
+<section class="calc-list">
+  <div class="container">
+    <div class="header-section">
+      <h1>Calculos Operacionais Financeiros</h1>
+      <p>Escolha o tipo de cálculo que deseja realizar</p>
+    </div>
+
+    <div class="calculadoras-list">
+
+      <!-- DESÁGIO -->
+      <a class="calc-item" routerLink="/calculadora/desagio">
+        <div class="calc-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+          </svg>
+        </div>
+
+        <div class="calc-info">
+          <h3>Deságio</h3>
+          <p>Calcule o desconto para pagamento antecipado</p>
+        </div>
+
+        <div class="calc-arrow">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </div>
+      </a>
+
+      <!-- MORA -->
+      <a class="calc-item" routerLink="/calculadora/mora">
+        <div class="calc-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 6v6l4 2" />
+          </svg>
+        </div>
+
+        <div class="calc-info">
+          <h3>Mora</h3>
+          <p>Calcule os encargos por atraso no pagamento</p>
+        </div>
+
+        <div class="calc-arrow">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </div>
+      </a>
+
+      <!-- JUROS -->
+      <a class="calc-item" routerLink="/calculadora/juros">
+        <div class="calc-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v20" />
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+            <circle cx="12" cy="12" r="1" />
+          </svg>
+        </div>
+
+        <div class="calc-info">
+          <h3>Juros</h3>
+          <p>Calcule os juros de mora sobre o valor</p>
+        </div>
+
+        <div class="calc-arrow">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </div>
+      </a>
+
+      <!-- MULTA (desabilitado por enquanto) -->
+      <a class="calc-item" routerLink="/calculadora/multa">
+        <div class="calc-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <path d="M14 2v6h6" />
+            <path d="M12 18v-6" />
+            <path d="M9 15l3-3 3 3" />
+          </svg>
+        </div>
+
+        <div class="calc-info">
+          <h3>Multa</h3>
+          <p>Calcule a multa por inadimplência</p>
+        </div>
+
+        <div class="calc-arrow">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </div>
+      </a>
+      <!-- CÁLCULO COMPLETO (desabilitado) -->
+      <div class="calc-item disabled">
+        <div class="calc-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <path d="M9 9h6v6H9z" />
+          </svg>
+        </div>
+
+        <div class="calc-info">
+          <h3>Cálculo Completo</h3>
+          <p>Todos os encargos em um único cálculo</p>
+        </div>
+
+        <span class="badge">Em breve</span>
+      </div>
+
+    </div>
+  </div>
+</section>

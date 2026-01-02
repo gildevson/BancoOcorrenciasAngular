@@ -1,0 +1,28 @@
+<div class="calc-card">
+  <div class="top">
+    <a class="back" routerLink="/calculadora">← Voltar</a>
+    <h2>Cálculo de Juros</h2>
+    <small>Fórmula: (percentual/30) * dias_atraso * valor_face / 100</small>
+  </div>
+
+  <div class="form">
+    <label>Valor de Face (R$)</label>
+    <input type="number" [(ngModel)]="valorFace" />
+
+    <label>Percentual (%)</label>
+    <input type="number" [(ngModel)]="percentual" />
+
+    <label>Dias de atraso</label>
+    <input type="number" [(ngModel)]="diasAtraso" />
+  </div>
+
+  <div class="actions">
+    <button (click)="calcular()">Calcular</button>
+    <button class="outline" (click)="limpar()">Limpar</button>
+  </div>
+
+  <div class="result" *ngIf="resultado">
+    <p><strong>Juros:</strong> {{ formatarMoeda(resultado.juros) }}</p>
+    <p><strong>Total (Face + Juros):</strong> {{ formatarMoeda(resultado.total) }}</p>
+  </div>
+</div>

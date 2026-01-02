@@ -1,0 +1,36 @@
+<section class="calc-list">
+  <div class="calc-card">
+    <div class="top">
+      <a class="back" routerLink="/calculadora">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 4px;">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Voltar
+      </a>
+      <h2>Cálculo de Multa</h2>
+      <small><strong>Fórmula:</strong> valor face × (percentual / 100)</small>
+    </div>
+
+    <div class="form">
+      <div>
+        <label>Valor de Face (R$)</label>
+        <input type="number" [(ngModel)]="valorFace" placeholder="Ex: 1000,00" />
+      </div>
+
+      <div>
+        <label>Percentual (%)</label>
+        <input type="number" [(ngModel)]="percentual" placeholder="Ex: 2" />
+      </div>
+    </div>
+
+    <div class="actions">
+      <button (click)="calcular()">Calcular Multa</button>
+      <button class="outline" (click)="limpar()">Limpar</button>
+    </div>
+
+    <div class="result" *ngIf="resultado">
+      <p><span>Multa:</span> <strong>{{ formatarMoeda(resultado.multa) }}</strong></p>
+      <p><span>Total Geral:</span> <strong>{{ formatarMoeda(resultado.total) }}</strong></p>
+    </div>
+  </div>
+</section>

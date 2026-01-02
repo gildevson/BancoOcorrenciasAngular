@@ -1,0 +1,196 @@
+/* ================================
+   CALC CARD (Mora / Juros)
+   ================================ */
+
+.calc-card{
+  max-width: 920px;
+  margin: 28px auto;
+  padding: 22px 22px 20px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.92);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  box-shadow:
+    0 18px 45px rgba(15, 23, 42, 0.10),
+    0 2px 10px rgba(15, 23, 42, 0.06);
+  backdrop-filter: blur(10px) saturate(140%);
+}
+
+.top{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  margin-bottom: 16px;
+}
+
+.top h2{
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+  color: #0f172a;
+}
+
+.top small{
+  color: rgba(15, 23, 42, 0.65);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.back{
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 13px;
+  color: #0f172a;
+  background: rgba(2, 132, 199, 0.08);
+  border: 1px solid rgba(2, 132, 199, 0.18);
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+
+.back:hover{
+  transform: translateY(-1px);
+  background: rgba(2, 132, 199, 0.12);
+  box-shadow: 0 8px 18px rgba(2, 132, 199, 0.16);
+}
+
+.form{
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  padding: 6px 0 14px;
+}
+
+.form label{
+  grid-column: span 1;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  color: rgba(15, 23, 42, 0.72);
+}
+
+.form input{
+  grid-column: span 1;
+  width: 100%;
+  height: 44px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(15, 23, 42, 0.14);
+  background: rgba(248, 250, 252, 0.9);
+  color: #0f172a;
+  font-size: 14px;
+  outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease;
+}
+
+.form input:focus{
+  border-color: rgba(2, 132, 199, 0.55);
+  box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.16);
+  background: #fff;
+}
+
+.form input:hover{
+  transform: translateY(-1px);
+}
+
+.actions{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-end;
+  padding-top: 10px;
+  border-top: 1px solid rgba(15, 23, 42, 0.08);
+  margin-top: 6px;
+}
+
+.actions button{
+  height: 44px;
+  padding: 0 16px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+}
+
+.actions button:first-child{
+  color: #fff;
+  background: linear-gradient(135deg, #0ea5e9, #2563eb);
+  box-shadow: 0 12px 26px rgba(37, 99, 235, 0.22);
+}
+
+.actions button:first-child:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 16px 34px rgba(37, 99, 235, 0.30);
+}
+
+.actions button.outline{
+  background: rgba(255,255,255,0.85);
+  border-color: rgba(15, 23, 42, 0.18);
+  color: #0f172a;
+}
+
+.actions button.outline:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.10);
+}
+
+.actions button:active{
+  transform: translateY(0px) scale(0.98);
+}
+
+.result{
+  margin-top: 16px;
+  padding: 14px 14px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(16,185,129,0.10), rgba(2,132,199,0.08));
+  border: 1px solid rgba(15, 23, 42, 0.10);
+}
+
+.result p{
+  margin: 8px 0;
+  color: #0f172a;
+  font-size: 14px;
+}
+
+.result strong{
+  color: rgba(15, 23, 42, 0.75);
+}
+
+/* ================================
+   RESPONSIVO
+   ================================ */
+
+@media (max-width: 860px){
+  .form{
+    grid-template-columns: 1fr;
+  }
+  .form label,
+  .form input{
+    grid-column: 1 / -1;
+  }
+  .actions{
+    justify-content: stretch;
+  }
+  .actions button{
+    flex: 1;
+  }
+}
+
+@media (max-width: 520px){
+  .calc-card{
+    margin: 16px 12px;
+    padding: 16px 14px;
+    border-radius: 16px;
+  }
+  .top h2{
+    font-size: 22px;
+  }
+}

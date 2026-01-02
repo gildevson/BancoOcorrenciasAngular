@@ -5,7 +5,13 @@
   </div>
 
   <div class="hi-grid">
-    <article class="hi-card" *ngFor="let t of tips">
+    <article
+      class="hi-card"
+      *ngFor="let t of tips"
+      [routerLink]="t.link || null"
+      [attr.role]="t.link ? 'link' : null"
+      [attr.tabindex]="t.link ? '0' : null"
+    >
       <div class="ico">
         <span class="material-icons">{{ t.icon }}</span>
       </div>
