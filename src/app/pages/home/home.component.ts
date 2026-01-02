@@ -16,6 +16,7 @@ import { Noticia } from '../../models/noticia.model';
 export class HomeComponent implements OnInit {
   noticias: Noticia[] = [];
   loading = false;
+  erro = '';
 
   constructor(private noticiasService: NoticiasService) {}
 
@@ -25,15 +26,24 @@ export class HomeComponent implements OnInit {
 
   carregarNoticias(): void {
     this.loading = true;
+    this.erro = '';
 
     this.noticiasService.getPublicadas().subscribe({
       next: (data) => {
-        // ✅ Pega apenas as 3 primeiras (ou 6, como preferir)
-        this.noticias = data.slice(0, 6);
+        // ✅ Ordena por data de publicação (mais recente primeiro)
+        const noticiasOrdenadas = data.sort((a, b) => {
+          const dataA = a.dataPublicacao ? new Date(a.dataPublicacao).getTime() : 0;
+          const dataB = b.dataPublicacao ? new Date(b.dataPublicacao).getTime() : 0;
+          return dataB - dataA; // Decrescente (mais recente primeiro)
+        });
+
+        // ✅ Pega exatamente as 6 primeiras
+        this.noticias = noticiasOrdenadas.slice(0, 6);
         this.loading = false;
       },
       error: (err) => {
         console.error('Erro ao carregar notícias:', err);
+        this.erro = 'Erro ao carregar notícias. Tente novamente.';
         this.loading = false;
       }
     });
@@ -51,15 +61,28 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  // ✅ Calcula tempo de leitura
+  // ✅ Calcula tempo de leitura (remove HTML)
   calcularTempoLeitura(conteudo: string): number {
-    const palavras = conteudo.split(/\s+/).length;
-    return Math.ceil(palavras / 250);
+    if (!conteudo) return 1;
+
+    const textoLimpo = conteudo
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/&nbsp;/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    const palavras = textoLimpo.split(/\s+/).length;
+    return Math.max(1, Math.ceil(palavras / 250));
   }
 
   // ✅ Fallback de imagem
   onImageError(event: Event): void {
     const img = event.target as HTMLImageElement;
     img.src = 'https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?w=400&q=80';
+  }
+
+  // ✅ Método para recarregar em caso de erro
+  recarregar(): void {
+    this.carregarNoticias();
   }
 }

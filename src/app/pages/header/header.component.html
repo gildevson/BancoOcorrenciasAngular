@@ -133,15 +133,6 @@
       </div>
 -->
       <!-- Busca -->
-      <div class="b3-icons">
-        <button type="button" (click)="onSearchClick()" aria-label="Abrir busca de ocorrências"
-          [class.loading]="searchLoading" [disabled]="searchLoading">
-          <span class="material-icons" aria-hidden="true">
-            {{ searchLoading ? 'hourglass_empty' : 'search' }}
-          </span>
-          <span class="sr-only">Buscar ocorrências</span>
-        </button>
-      </div>
 
       <!-- Menu Mobile -->
       <button class="menu-toggle" type="button" (click)="toggleMenu()" [attr.aria-expanded]="menuOpen"

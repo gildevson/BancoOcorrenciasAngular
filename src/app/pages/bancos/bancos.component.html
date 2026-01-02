@@ -8,20 +8,21 @@
       </div>
 
       <div class="periods" aria-label="Períodos do gráfico">
-
-        <button type="button" (click)="setPeriod('1D')" [class.active]="activePeriod==='1D'">1D</button>
-
-        <button type="button" (click)="setPeriod('1M')" [class.active]="activePeriod==='1M'">1M</button>
-
-        <button type="button" (click)="setPeriod('1A')" [class.active]="activePeriod==='1A'">1A</button>
-
-        <button type="button" (click)="setPeriod('Todos')" [class.active]="activePeriod==='Todos'">Todos</button>
-
+        <button
+          type="button"
+          *ngFor="let p of periodKeys"
+          (click)="setPeriod(p)"
+          [class.active]="activePeriod === p">
+          {{ p }}
+        </button>
       </div>
     </div>
 
     <div class="chart-body">
-      <div class="loading" *ngIf="chartLoading">Carregando...</div>
+      <div class="loading" *ngIf="chartLoading">
+        <div class="spinner"></div>
+        <span>Carregando...</span>
+      </div>
 
       <div class="chart-msg" *ngIf="chartError && !chartLoading">
         {{ chartError }}
@@ -44,6 +45,24 @@
       <button type="button" (click)="setTab('baixas')" [class.active]="activeTab==='baixas'">Maiores Baixas</button>
     </div>
 
+    <div class="search-box">
+      <span class="material-icons search-icon">search</span>
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Buscar por código ou nome..."
+        [(ngModel)]="searchTerm"
+        aria-label="Buscar banco">
+      <button
+        type="button"
+        class="clear-btn"
+        *ngIf="searchTerm"
+        (click)="clearSearch()"
+        aria-label="Limpar busca">
+        <span class="material-icons">close</span>
+      </button>
+    </div>
+
     <div class="hint">Clique em um banco para trocar o ativo do gráfico.</div>
 
     <div class="list" *ngIf="listaAtual?.length; else empty">
@@ -64,23 +83,24 @@
         </div>
 
         <div class="right">
-  <div class="price">{{ fmtPrice(item.regularMarketPrice) }}</div>
+          <div class="price">{{ fmtPrice(item.regularMarketPrice) }}</div>
 
-  <!-- ✅ ADICIONE ESTA LINHA -->
-  <div class="volume" *ngIf="item.regularMarketVolume">
-    Vol: {{ fmtVolume(item.regularMarketVolume) }}
-  </div>
+          <div class="volume" *ngIf="item.regularMarketVolume">
+            Vol: {{ fmtVolume(item.regularMarketVolume) }}
+          </div>
 
-  <div class="pct" [class.pos]="isPos(item)" [class.neg]="!isPos(item)">
-    {{ fmtPct(item.regularMarketChangePercent) }}
-  </div>
-</div>
-
+          <div class="pct" [class.pos]="isPos(item)" [class.neg]="!isPos(item)">
+            {{ fmtPct(item.regularMarketChangePercent) }}
+          </div>
+        </div>
       </button>
     </div>
 
     <ng-template #empty>
-      <div class="empty">Sem dados para mostrar.</div>
+      <div class="empty-state">
+        <span class="material-icons">{{ searchTerm ? 'search_off' : 'info' }}</span>
+        <p>{{ searchTerm ? 'Nenhum resultado encontrado' : 'Sem dados para mostrar' }}</p>
+      </div>
     </ng-template>
   </aside>
 </div>

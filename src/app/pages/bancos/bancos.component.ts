@@ -1,11 +1,19 @@
 import { Component, inject, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { BaseChartDirective } from 'ng2-charts';
-import { Chart, registerables, ChartConfiguration, ChartData, ChartType } from 'chart.js';
-import { MarketBancosService } from '../../service/marketbancos.service';
+import {
+  Chart,
+  registerables,
+  ChartConfiguration,
+  ChartData,
+  TooltipItem
+} from 'chart.js';
 
-import { BehaviorSubject, combineLatest, Subject } from 'rxjs';
-import { distinctUntilChanged, switchMap, tap, takeUntil, finalize } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Subject, timer, of } from 'rxjs';
+import { distinctUntilChanged, switchMap, tap, takeUntil, catchError, finalize, map, shareReplay } from 'rxjs/operators';
+
+import { MarketBancosService, QuoteItem, HistoryResponse } from '../../service/marketbancos.service';
 
 Chart.register(...registerables);
 
@@ -15,102 +23,120 @@ type ListTab = 'negociados' | 'altas' | 'baixas';
 @Component({
   selector: 'app-bancos',
   standalone: true,
-  imports: [CommonModule, BaseChartDirective],
+  imports: [CommonModule, BaseChartDirective, FormsModule],
   templateUrl: './bancos.component.html',
   styleUrls: ['./bancos.component.css']
 })
 export class BancosComponent implements OnInit, OnDestroy {
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
+public lineChartType: 'line' = 'line';
 
   private api = inject(MarketBancosService);
-  private refreshInterval?: any;
+  private destroy$ = new Subject<void>();
 
-  // listas
+  // ✅ usado no HTML (evita string[])
+  periodKeys: PeriodKey[] = ['1D', '1M', '1A', 'Todos'];
+
   bancosAll: any[] = [];
   bancosAltas: any[] = [];
   bancosBaixas: any[] = [];
   bancosNegociados: any[] = [];
 
   activeTab: ListTab = 'altas';
-  searchTerm = ''; // ✅ Propriedade para busca
+  searchTerm = '';
 
-  // UI
-  selectedTicker = 'ITUB4';
+  selectedTicker: string = 'ITUB4';
   activePeriod: PeriodKey = '1D';
 
-  // estados do gráfico
-  chartLoading = false;
+  chartLoading = true;
   chartError = '';
 
-  // ✅ o que vai pra API (pode ser diferente do que aparece no UI)
-  private tickerQuery = this.selectedTicker;
-
-  // ✅ Observables
+  private tickerQuery = this.normalizeTickerForHistory(this.selectedTicker);
   private ticker$ = new BehaviorSubject<string>(this.tickerQuery);
   private period$ = new BehaviorSubject<PeriodKey>(this.activePeriod);
-  private destroy$ = new Subject<void>();
 
   trackBySymbol = (_: number, item: any) => item?.symbol;
 
   private periodMap: Record<PeriodKey, { range: string; interval: string }> = {
-    '1D': { range: '5d', interval: '15m' },
-    '1M': { range: '3mo', interval: '1d' },
-    '1A': { range: '5y', interval: '1wk' },
+    '1D': { range: '1d', interval: '5m' },
+    '1M': { range: '1mo', interval: '1d' },
+    '1A': { range: '1y', interval: '1wk' },
     'Todos': { range: 'max', interval: '1mo' }
   };
 
   public lineChartOptions: ChartConfiguration['options'] = {
-    responsive: true,
-    maintainAspectRatio: false,
-    elements: { line: { tension: 0.4 }, point: { radius: 0 } },
-    scales: {
-      x: { grid: { display: false }, ticks: { color: '#d1d4dc', maxTicksLimit: 8 } },
-      y: { position: 'right', grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#d1d4dc' } }
+  responsive: true,
+  maintainAspectRatio: false,
+  elements: { line: { tension: 0.35 }, point: { radius: 0, hitRadius: 12 } },
+  interaction: { mode: 'index', intersect: false },
+  scales: {
+    x: {
+      grid: { display: false },
+      ticks: { color: '#d1d4dc', maxTicksLimit: 8 }
     },
-    plugins: { legend: { display: false } }
-  };
+    y: {
+      position: 'right',
+      grid: { color: 'rgba(255,255,255,0.06)' }, // ✅ sem borderDash
+      ticks: {
+        color: '#d1d4dc',
+        callback: (value) => this.formatBRL(value) // ok
+      }
+    }
+  },
+  plugins: {
+    legend: { display: false },
+    tooltip: {
+      callbacks: {
+        label: (ctx) => ` ${this.formatBRL(ctx.parsed?.y ?? 0)}`
+      }
+    }
+  }
+};
 
-  public lineChartType: ChartType = 'line';
 
   public lineChartData: ChartData<'line'> = {
     labels: [],
     datasets: [{
       data: [],
       label: this.selectedTicker,
-      fill: true
+      borderColor: '#22d3ee',
+      pointRadius: 0,
+      fill: true,
+      backgroundColor: (ctx: any) => {
+        const chart = ctx.chart;
+        const { ctx: canvasCtx, chartArea } = chart;
+        if (!chartArea) return 'rgba(34, 211, 238, 0.12)';
+
+        const gradient = canvasCtx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+        gradient.addColorStop(0, 'rgba(34, 211, 238, 0.28)');
+        gradient.addColorStop(1, 'rgba(34, 211, 238, 0)');
+        return gradient;
+      }
     }]
   };
 
   ngOnInit() {
-    // ✅ Carrega lista inicial
-    this.carregarBancos();
+    // 🔄 atualiza lista a cada 30s (sem setInterval)
+    timer(0, 30000)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.carregarBancos());
 
-    // ✅ Atualiza lista a cada 30 segundos
-    this.refreshInterval = setInterval(() => {
-      console.log('🔄 Atualizando lista de bancos...');
-      this.carregarBancos();
-    }, 30000);
-
-    // ✅ Monitora mudanças no ticker e período
+    // 📈 histórico reage a ticker + período
     combineLatest([this.ticker$, this.period$]).pipe(
       distinctUntilChanged(([t1, p1], [t2, p2]) => t1 === t2 && p1 === p2),
-
       tap(() => {
         this.chartLoading = true;
         this.chartError = '';
         this.clearChart();
       }),
-
-      switchMap(([ticker, period]) => {
-        const { range, interval } = this.periodMap[period];
-        return this.api.quoteHistory(ticker, range, interval).pipe(
+      switchMap(([ticker, period]) =>
+        this.loadHistoryWithFallback$(ticker, period).pipe(
           finalize(() => (this.chartLoading = false))
-        );
-      }),
-
+        )
+      ),
       takeUntil(this.destroy$)
     ).subscribe({
-      next: (r: any) => this.atualizarGraficoComResposta(r),
+      next: (res) => this.atualizarGraficoComResposta(res),
       error: (err) => {
         console.error('Erro ao carregar histórico:', err);
         this.chartLoading = false;
@@ -123,72 +149,46 @@ export class BancosComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
-
-    // ✅ Limpa o intervalo de atualização
-    if (this.refreshInterval) {
-      clearInterval(this.refreshInterval);
-    }
   }
 
-  // =========================
-  // LISTAS
-  // =========================
+  // =======================
+  // LISTA
+  // =======================
   carregarBancos() {
-    // ✅ 1) sempre tenta a watchlist primeiro
-    this.api.quotesBancos().subscribe({
-      next: (r) => {
-        const results = (r?.results ?? r?.stocks ?? []) as any[];
-        if (results.length) {
-          this.normalizarListas(results);
-          return;
-        }
-        // ✅ 2) se falhar, cai no list
-        this.api.financeList('desc', 80).subscribe({
-          next: (rr: any) => this.normalizarListas(rr?.stocks ?? []),
-        });
-      },
-      error: () => {
-        this.api.financeList('desc', 80).subscribe({
-          next: (rr: any) => this.normalizarListas(rr?.stocks ?? []),
-        });
-      }
-    });
+    this.api.quotesBancos().pipe(
+      catchError(() => of({} as any)),
+      switchMap((r: any) => {
+        const results = (r?.results ?? r?.stocks ?? []) as QuoteItem[];
+        if (results?.length) return of(results);
+
+        return this.api.financeList('desc', 80).pipe(
+          map((rr: any) => (rr?.stocks ?? []) as QuoteItem[]),
+          catchError(() => of([] as QuoteItem[]))
+        );
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe(list => this.normalizarListas(list as any[]));
   }
 
   private mapToUiModel(x: any) {
-    const symbol = (x?.symbol ?? x?.stock ?? x?.ticker ?? '')
-      .toString()
-      .toUpperCase()
-      .trim();
-
-    const name = (x?.shortName ?? x?.longName ?? x?.name ?? x?.companyName ?? '')
-      .toString()
-      .trim();
-
-    const price =
-      x?.regularMarketPrice ?? x?.close ?? x?.price ?? x?.lastPrice ?? null;
-
-    const changePct =
-      x?.regularMarketChangePercent ?? x?.change ?? x?.changePercent ?? 0;
-
-    const volume =
-      x?.regularMarketVolume ?? x?.volume ?? x?.totalVolume ?? 0;
+    const symbol = (x?.symbol ?? x?.stock ?? x?.ticker ?? '').toString().toUpperCase().trim();
+    const name = (x?.shortName ?? x?.longName ?? x?.name ?? x?.companyName ?? '').toString().trim();
+    const price = x?.regularMarketPrice ?? x?.close ?? x?.price ?? x?.lastPrice ?? null;
+    const changePct = x?.regularMarketChangePercent ?? x?.change ?? x?.changePercent ?? 0;
+    const volume = x?.regularMarketVolume ?? x?.volume ?? x?.totalVolume ?? 0;
 
     return {
       symbol,
       shortName: name,
       longName: name,
-      regularMarketPrice: price,
+      regularMarketPrice: Number(price),
       regularMarketChangePercent: Number(changePct) || 0,
       regularMarketVolume: Number(volume) || 0
     };
   }
 
   private normalizarListas(results: any[]) {
-    const list = (results ?? [])
-      .map(x => this.mapToUiModel(x))
-      .filter(x => !!x.symbol);
-
+    const list = (results ?? []).map(x => this.mapToUiModel(x)).filter(x => !!x.symbol);
     this.bancosAll = list;
 
     const pct = (x: any) => Number(x?.regularMarketChangePercent ?? 0);
@@ -199,9 +199,9 @@ export class BancosComponent implements OnInit, OnDestroy {
     this.bancosNegociados = [...list].sort((a, b) => vol(b) - vol(a));
   }
 
-  // =========================
-  // UI AÇÕES
-  // =========================
+  // =======================
+  // AÇÕES
+  // =======================
   setTab(t: ListTab) {
     this.activeTab = t;
   }
@@ -209,7 +209,7 @@ export class BancosComponent implements OnInit, OnDestroy {
   setPeriod(p: PeriodKey) {
     if (p === this.activePeriod) return;
     this.activePeriod = p;
-    this.period$.next(this.activePeriod);
+    this.period$.next(p);
   }
 
   setTicker(ticker: string) {
@@ -217,37 +217,40 @@ export class BancosComponent implements OnInit, OnDestroy {
     if (!display) return;
 
     const query = this.normalizeTickerForHistory(display);
-
     if (display === this.selectedTicker && query === this.tickerQuery) return;
 
-    this.selectedTicker = display; // UI
-    this.tickerQuery = query;      // API
+    this.selectedTicker = display;
+    this.tickerQuery = query;
+    this.ticker$.next(query);
 
-    this.ticker$.next(this.tickerQuery);
+    // label coerente
+    this.lineChartData.datasets[0].label = display;
+  }
+
+  clearSearch() {
+    this.searchTerm = '';
   }
 
   get listaAtual(): any[] {
-    let list = [];
+    let list: any[] = [];
 
     if (this.activeTab === 'negociados') list = this.bancosNegociados;
     else if (this.activeTab === 'baixas') list = this.bancosBaixas;
     else list = this.bancosAltas;
 
-    // ✅ Filtra por termo de busca
-    if (this.searchTerm.trim()) {
-      const term = this.searchTerm.toLowerCase();
-      list = list.filter(item =>
-        item.symbol.toLowerCase().includes(term) ||
-        (item.shortName || '').toLowerCase().includes(term)
-      );
-    }
+    const term = this.searchTerm.trim().toLowerCase();
+    if (!term) return list;
 
-    return list;
+    return list.filter(item =>
+      (item.symbol || '').toLowerCase().includes(term) ||
+      (item.shortName || '').toLowerCase().includes(term) ||
+      (item.longName || '').toLowerCase().includes(term)
+    );
   }
 
-  // =========================
+  // =======================
   // HELPERS
-  // =========================
+  // =======================
   logoUrl(symbol: string) {
     const s = (symbol ?? '').trim();
     return `https://s3-symbol-logo.tradingview.com/${s.substring(0, 4)}--big.svg`;
@@ -273,16 +276,21 @@ export class BancosComponent implements OnInit, OnDestroy {
   fmtVolume(v: any): string {
     const n = Number(v);
     if (!isFinite(n) || n === 0) return '-';
-
     if (n >= 1_000_000_000) return (n / 1_000_000_000).toFixed(1) + 'B';
     if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
     if (n >= 1_000) return (n / 1_000).toFixed(1) + 'K';
-
     return n.toString();
   }
 
   isPos(item: any) {
     return Number(item?.regularMarketChangePercent ?? 0) >= 0;
+  }
+
+  // ✅ resolve ticks (string|number) e tooltip (null)
+  private formatBRL(value: number | string | null | undefined) {
+    const n = typeof value === 'string' ? Number(value) : Number(value ?? NaN);
+    if (!isFinite(n)) return '';
+    return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   }
 
   private normalizeTickerForHistory(symbol: string) {
@@ -300,84 +308,88 @@ export class BancosComponent implements OnInit, OnDestroy {
     return ts > 1_000_000_000_000 ? ts : ts * 1000;
   }
 
+  // =======================
+  // CHART
+  // =======================
   private clearChart() {
     this.lineChartData = {
       labels: [],
       datasets: [{
         data: [],
         label: this.selectedTicker,
-        borderColor: '#00d084',
-        borderWidth: 3,
+        borderColor: '#22d3ee',
+        borderWidth: 2,
         pointRadius: 0,
         fill: true,
         backgroundColor: (ctx: any) => {
           const chart = ctx.chart;
           const { ctx: canvasCtx, chartArea } = chart;
-          if (!chartArea) return 'rgba(0, 208, 132, 0.10)';
+          if (!chartArea) return 'rgba(34, 211, 238, 0.12)';
+
           const gradient = canvasCtx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-          gradient.addColorStop(0, 'rgba(0, 208, 132, 0.35)');
-          gradient.addColorStop(1, 'rgba(0, 208, 132, 0)');
+          gradient.addColorStop(0, 'rgba(34, 211, 238, 0.28)');
+          gradient.addColorStop(1, 'rgba(34, 211, 238, 0)');
           return gradient;
         }
       }]
     };
-    setTimeout(() => this.chart?.update(), 0);
+
+    queueMicrotask(() => this.chart?.update());
   }
 
-  // =========================
-  // MONTA O GRÁFICO
-  // =========================
+  private loadHistoryWithFallback$(ticker: string, period: PeriodKey) {
+    const { range, interval } = this.periodMap[period];
+
+    return this.api.quoteHistory(ticker, range, interval).pipe(
+      catchError(() => of({} as HistoryResponse)),
+      switchMap((res) => {
+        const raw = res?.results?.[0]?.historicalDataPrice;
+        const ok = Array.isArray(raw) && raw.length >= 2;
+
+        // ✅ fallback do 1D -> 1M se intraday não vier
+        if (period === '1D' && !ok) {
+          const fb = this.periodMap['1M'];
+          return this.api.quoteHistory(ticker, fb.range, fb.interval).pipe(
+            catchError(() => of({} as HistoryResponse))
+          );
+        }
+        return of(res);
+      }),
+      shareReplay(1)
+    );
+  }
+
   private atualizarGraficoComResposta(r: any) {
-    // ✅ LOG 1: Ver o que a API retornou
-    console.log('📊 RESPOSTA COMPLETA DA API:', r);
-    console.log('📊 r.results:', r?.results);
-    console.log('📊 r.results[0]:', r?.results?.[0]);
-
-    const stock = r?.results?.[0];
-    const raw = stock?.historicalDataPrice;
-
-    // ✅ LOG 2: Ver os dados históricos
-    console.log('📊 historicalDataPrice:', raw);
-    console.log('📊 É array?', Array.isArray(raw));
-    console.log('📊 Tamanho:', raw?.length);
+    const raw = r?.results?.[0]?.historicalDataPrice;
 
     if (!Array.isArray(raw) || raw.length === 0) {
-      console.error('❌ SEM DADOS:', { raw, isArray: Array.isArray(raw), length: raw?.length });
-      this.chartError = 'Sem histórico disponível para esse ativo no período selecionado.';
+      this.chartError = 'Dados históricos indisponíveis na API para este ativo.';
       this.clearChart();
       return;
     }
 
     let hist = raw
-      .map((p: any) => {
-        const dateMs = this.parseDateMs(p.date);
-        const close = Number(p.close);
-        return { dateMs, close };
-      })
-      .filter((p: any) => Number.isFinite(p.dateMs) && Number.isFinite(p.close))
+      .map((p: any) => ({ dateMs: this.parseDateMs(p.date), close: Number(p.close) }))
+      .filter((p: any) => p.dateMs > 0 && p.close > 0)
       .sort((a: any, b: any) => a.dateMs - b.dateMs);
 
-    // ✅ LOG 3: Ver dados processados
-    console.log('📊 Dados processados (primeiros 3):', hist.slice(0, 3));
-    console.log('📊 Total de pontos:', hist.length);
-
-    if (!hist.length) {
-      console.error('❌ SEM PONTOS VÁLIDOS');
-      this.chartError = 'Sem pontos válidos para montar o gráfico.';
+    if (hist.length < 2) {
+      this.chartError = 'Pontos insuficientes para gerar o gráfico.';
       this.clearChart();
       return;
     }
 
-    // ✅ se estiver no 1D, mostra apenas o último dia
+    // intradiário: filtra para o último dia disponível
     if (this.activePeriod === '1D') {
-      const lastYmd = new Date(hist[hist.length - 1].dateMs).toISOString().slice(0, 10);
-      const onlyLastDay = hist.filter(p => new Date(p.dateMs).toISOString().slice(0, 10) === lastYmd);
-
-      console.log('📊 Filtrando 1D - Antes:', hist.length, 'Depois:', onlyLastDay.length);
-
-      if (onlyLastDay.length >= 10) hist = onlyLastDay;
+      const lastDate = new Date(hist[hist.length - 1].dateMs).toISOString().split('T')[0];
+      const filtered = hist.filter(p => new Date(p.dateMs).toISOString().split('T')[0] === lastDate);
+      if (filtered.length >= 2) hist = filtered;
     }
 
+    this.renderizarDadosNoGrafico(hist);
+  }
+
+  private renderizarDadosNoGrafico(hist: Array<{ dateMs: number; close: number }>) {
     const fmt = new Intl.DateTimeFormat(
       'pt-BR',
       this.activePeriod === '1D'
@@ -390,26 +402,23 @@ export class BancosComponent implements OnInit, OnDestroy {
       datasets: [{
         data: hist.map(p => p.close),
         label: this.selectedTicker,
-        borderColor: '#00d084',
-        borderWidth: 3,
+        borderColor: '#22d3ee',
+        borderWidth: 2,
         pointRadius: 0,
         fill: true,
         backgroundColor: (ctx: any) => {
           const chart = ctx.chart;
           const { ctx: canvasCtx, chartArea } = chart;
-          if (!chartArea) return 'rgba(0, 208, 132, 0.10)';
+          if (!chartArea) return 'rgba(34, 211, 238, 0.12)';
+
           const gradient = canvasCtx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-          gradient.addColorStop(0, 'rgba(0, 208, 132, 0.35)');
-          gradient.addColorStop(1, 'rgba(0, 208, 132, 0)');
+          gradient.addColorStop(0, 'rgba(34, 211, 238, 0.28)');
+          gradient.addColorStop(1, 'rgba(34, 211, 238, 0)');
           return gradient;
         }
       }]
     };
 
-    console.log('✅ GRÁFICO MONTADO COM SUCESSO!');
-    console.log('📊 Labels (primeiros 5):', this.lineChartData.labels?.slice(0, 5));
-    console.log('📊 Data (primeiros 5):', this.lineChartData.datasets[0].data.slice(0, 5));
-
-    setTimeout(() => this.chart?.update(), 0);
+    queueMicrotask(() => this.chart?.update());
   }
 }

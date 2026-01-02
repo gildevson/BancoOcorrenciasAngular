@@ -2,6 +2,44 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
+export type QuoteItem = {
+  symbol?: string;
+  stock?: string;
+  ticker?: string;
+
+  shortName?: string;
+  longName?: string;
+  name?: string;
+  companyName?: string;
+
+  regularMarketPrice?: number;
+  price?: number;
+  lastPrice?: number;
+  close?: number;
+
+  regularMarketChangePercent?: number;
+  changePercent?: number;
+  change?: number;
+
+  regularMarketVolume?: number;
+  volume?: number;
+  totalVolume?: number;
+};
+
+export type HistoryPoint = {
+  date: string | number;   // BRAPI pode vir em string ISO ou timestamp
+  close: number;
+};
+
+export type HistoryResult = {
+  historicalDataPrice?: HistoryPoint[];
+};
+
+export type HistoryResponse = {
+  results?: HistoryResult[];
+  stocks?: any[];
+};
+
 @Injectable({ providedIn: 'root' })
 export class MarketBancosService {
   private base = `${environment.apiUrl}/market`;
@@ -27,6 +65,6 @@ export class MarketBancosService {
 
   quoteHistory(ticker: string, range: string, interval: string) {
     const params = new HttpParams().set('range', range).set('interval', interval);
-    return this.http.get<any>(`${this.base}/history/${ticker}`, { params });
+    return this.http.get<HistoryResponse>(`${this.base}/history/${ticker}`, { params });
   }
 }

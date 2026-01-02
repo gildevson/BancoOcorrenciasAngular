@@ -17,4 +17,8 @@ export interface Noticia {
   destaque: boolean;
   metaDescription: string | null;
   ordemDestaque: number | null;
+  fonteNome?: string;
+  fonteUrl?: string;
+  fontePublicadaEm?: string;
+  fonteAutor?: string;
 }

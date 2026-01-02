@@ -257,14 +257,13 @@
    COVER IMAGE
 ================================ */
 .cover {
-  margin: 0 auto 48px; /* ✅ Centraliza */
-  max-width: 800px; /* ✅ Limita largura */
+  margin: 0 auto 48px;
+  max-width: 800px;
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
   position: relative;
 }
-
 
 .cover::before {
   content: "";
@@ -274,11 +273,10 @@
   pointer-events: none;
 }
 
-
 .cover img {
-  width: 80%;
+  width: 100%;
   height: auto;
-  max-height: 450px; /* ✅ Limita altura */
+  max-height: 450px;
   object-fit: cover;
   display: block;
   transition: transform 0.5s ease;
@@ -287,7 +285,6 @@
 .cover:hover img {
   transform: scale(1.02);
 }
-
 
 /* ================================
    ARTICLE BODY
@@ -413,6 +410,187 @@
 }
 
 /* ================================
+   SOCIAL SHARE - Estilo Estadão
+================================ */
+.social-share {
+  margin-top: 48px;
+  padding: 0;
+  border: none;
+  background: none;
+}
+
+.social-share h3 {
+  display: none;
+}
+
+.social-buttons {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 0;
+}
+
+.social-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid #d1d5db;
+  background: white;
+  color: #4b5563;
+  font-size: 18px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  box-shadow: none;
+}
+
+.social-btn span {
+  display: none;
+}
+
+.social-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.social-btn:active {
+  transform: translateY(0);
+}
+
+.social-btn i {
+  font-size: 18px;
+}
+
+/* Cores específicas das redes sociais */
+.social-btn.whatsapp {
+  border-color: #25d366;
+  color: #25d366;
+}
+
+.social-btn.whatsapp:hover {
+  background: #25d366;
+  color: white;
+}
+
+.social-btn.facebook {
+  border-color: #1877f2;
+  color: #1877f2;
+}
+
+.social-btn.facebook:hover {
+  background: #1877f2;
+  color: white;
+}
+
+.social-btn.twitter {
+  border-color: #000000;
+  color: #000000;
+}
+
+.social-btn.twitter:hover {
+  background: #000000;
+  color: white;
+}
+
+.social-btn.linkedin {
+  border-color: #0a66c2;
+  color: #0a66c2;
+}
+
+.social-btn.linkedin:hover {
+  background: #0a66c2;
+  color: white;
+}
+
+.social-btn.telegram {
+  border-color: #0088cc;
+  color: #0088cc;
+}
+
+.social-btn.telegram:hover {
+  background: #0088cc;
+  color: white;
+}
+
+.social-btn.email {
+  border-color: #ea4335;
+  color: #ea4335;
+}
+
+.social-btn.email:hover {
+  background: #ea4335;
+  color: white;
+}
+
+.social-btn.copy {
+  border-color: #6b7280;
+  color: #6b7280;
+}
+
+.social-btn.copy:hover {
+  background: #6b7280;
+  color: white;
+}
+
+.social-btn.copy.copied {
+  background: #10b981;
+  color: white;
+  border-color: #10b981;
+}
+
+/* ================================
+   SOURCE BOX - Estilo Estadão
+================================ */
+.source-box {
+  margin-top: 40px;
+  padding: 20px 24px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  box-shadow: none;
+}
+
+.source-box h3 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+  letter-spacing: 0;
+}
+
+.source-line {
+  margin: 8px 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #4b5563;
+}
+
+.source-line strong {
+  color: #111827;
+  font-weight: 700;
+  margin-right: 4px;
+}
+
+.source-box a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s;
+  border-bottom: 1px solid transparent;
+}
+
+.source-box a:hover {
+  color: #1d4ed8;
+  border-bottom-color: #1d4ed8;
+}
+
+/* ================================
    ARTICLE FOOTER
 ================================ */
 .article-footer {
@@ -460,7 +638,6 @@
 /* ================================
    RESPONSIVE
 ================================ */
-
 @media (max-width: 980px) {
   .noticia-page {
     padding: 24px 20px 60px;
@@ -484,6 +661,14 @@
 
   .article-body h3 {
     font-size: 24px;
+  }
+
+  .cover {
+    max-width: 100%;
+  }
+
+  .cover img {
+    max-height: 380px;
   }
 }
 
@@ -539,6 +724,23 @@
   .erro .material-icons {
     font-size: 64px;
   }
+
+  .cover img {
+    max-height: 300px;
+  }
+
+  .social-buttons {
+    gap: 10px;
+  }
+
+  .social-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .social-btn i {
+    font-size: 16px;
+  }
 }
 
 @media (max-width: 520px) {
@@ -563,29 +765,28 @@
     font-size: 13px;
     padding: 6px 10px;
   }
-}
-@media (max-width: 980px) {
-  .cover {
-    max-width: 100%;
-  }
 
-  .cover img {
-    max-height: 380px;
-  }
-}
-
-@media (max-width: 768px) {
-  .cover img {
-    max-height: 300px;
-  }
-}
-
-@media (max-width: 520px) {
   .cover {
     border-radius: 12px;
   }
 
   .cover img {
     max-height: 240px;
+  }
+
+  .social-buttons {
+    justify-content: center;
+  }
+
+  .source-box {
+    padding: 16px 18px;
+  }
+
+  .source-box h3 {
+    font-size: 15px;
+  }
+
+  .source-line {
+    font-size: 13px;
   }
 }
