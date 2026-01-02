@@ -140,3 +140,47 @@
     margin-left: 0;
   }
 }
+
+/* Container que agrupa todas as logos à direita */
+.footer-badges {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 20px; /* Espaço entre as logos */
+}
+
+/* Estilo para as imagens dentro dos badges */
+.footer-badges img {
+  height: 18px; /* Altura uniforme para não bagunçar a linha */
+  width: auto;
+  opacity: 0.6; /* Deixa discreto como um rodapé profissional */
+  transition: all 0.3s ease;
+  filter: grayscale(100%) brightness(1.5); /* Efeito clean que combina com o fundo escuro */
+}
+
+.footer-badges img:hover {
+  opacity: 1;
+  filter: grayscale(0%) brightness(1); /* Ganha cor ao passar o mouse */
+}
+
+/* Ajuste específico para a logo GDS se ela for muito larga ou alta */
+.logo-gds {
+  height: 22px !important; /* Um pouco maior se for o ícone principal */
+}
+
+/* Responsividade */
+@media (max-width: 620px) {
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .footer-badges {
+    margin-left: 0;
+    width: 100%;
+    justify-content: flex-start;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 15px;
+  }
+}
