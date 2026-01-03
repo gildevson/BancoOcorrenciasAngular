@@ -4,10 +4,8 @@
   <router-outlet></router-outlet>
 </main>
 
-<!-- 🔥 OVERLAY DO MODAL -->
 <div class="modal-overlay" *ngIf="isModalOpen()"></div>
 
-<!-- 🔥 MODAL CONTAINER - Clique aqui agora -->
 <div class="modal-container" *ngIf="isModalOpen()" (click)="closeModal()">
   <div (click)="$event.stopPropagation()">
     <router-outlet name="modal"></router-outlet>

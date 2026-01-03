@@ -1,6 +1,5 @@
 /* ================================
-   LAYOUTS DE BANCO - FIXED VERSION
-   Background claro e contraste melhorado
+   LAYOUTS DE BANCO - PREMIUM COM LOGOS E ESTILOS
 ================================ */
 
 :root {
@@ -51,7 +50,6 @@ html {
   background: var(--color-bg-page);
   min-height: 100vh;
   animation: fadeInUp 0.5s ease-out;
-
 }
 
 @keyframes fadeInUp {
@@ -263,7 +261,7 @@ html {
 }
 
 /* ================================
-   CARD - BACKGROUND BRANCO FORÇADO
+   CARD - COM LOGOS E ESTILOS DINÂMICOS
 ================================ */
 
 .card {
@@ -283,7 +281,7 @@ html {
   top: 0;
   left: 0;
   right: 0;
-  height: 3px;
+  height: 4px;
   background: linear-gradient(90deg,
     transparent 0%,
     var(--color-accent) 50%,
@@ -304,7 +302,7 @@ html {
 }
 
 /* ================================
-   CARD TOP (Logo + Status)
+   CARD TOP (Logo Banco + Logo Tipo + Status)
 ================================ */
 
 .card-top {
@@ -316,7 +314,7 @@ html {
 }
 
 /* ================================
-   BANCO (Logo + Info)
+   BANCO (Logo Real + Info)
 ================================ */
 
 .bank {
@@ -326,130 +324,124 @@ html {
   flex: 1;
 }
 
-/* Badge com logo do banco */
+/* Badge com LOGO REAL do banco */
 .badge {
-  min-width: 60px;
-  height: 60px;
+  min-width: 72px;
+  height: 72px;
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(13, 75, 103, 0.08) 0%, rgba(13, 75, 103, 0.12) 100%);
-  border: 1.5px solid rgba(13, 75, 103, 0.18);
-  color: var(--color-primary) !important;
-  font-weight: 950;
-  font-size: 16px;
-  letter-spacing: -0.3px;
-  box-shadow: var(--shadow-sm);
+  background: #ffffff;
+  border: 2px solid rgba(13, 75, 103, 0.12);
+  box-shadow: var(--shadow-md);
   position: relative;
   overflow: hidden;
   transition: all var(--transition-base);
+  padding: 10px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .card:hover .badge {
-  transform: scale(1.05);
-  box-shadow: var(--shadow-md);
+  transform: scale(1.08) rotate(2deg);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(13, 75, 103, 0.25);
 }
 
-/* Cores oficiais dos bancos */
+/* URLs dos logos oficiais dos bancos */
 .badge[data-bank="001"] {
-  background: linear-gradient(135deg, #ffeb3b 0%, #fdd835 100%) !important;
-  color: #1a237e !important;
-  border-color: rgba(253, 216, 53, 0.4);
+  background-image: url('https://logodownload.org/wp-content/uploads/2015/02/banco-do-brasil-logo-1-1.png');
+  background-color: #fff;
 }
 
 .badge[data-bank="033"] {
-  background: linear-gradient(135deg, #ec0000 0%, #c50000 100%) !important;
-  color: #ffffff !important;
-  border-color: rgba(236, 0, 0, 0.4);
+  background-image: url('https://seeklogo.com/images/B/banco-santander-logo-1B89349D0F-seeklogo.com.png');
+  background-color: #fff;
 }
 
 .badge[data-bank="104"] {
-  background: linear-gradient(135deg, #0066a1 0%, #004d7a 100%) !important;
-  color: #ffffff !important;
-  border-color: rgba(0, 102, 161, 0.4);
+  background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Logo_Caixa_Econ%C3%B4mica_Federal.svg/1200px-Logo_Caixa_Econ%C3%B4mica_Federal.svg.png');
+  background-color: #fff;
 }
 
 .badge[data-bank="237"] {
-  background: linear-gradient(135deg, #cc092f 0%, #a00724 100%) !important;
-  color: #ffffff !important;
-  border-color: rgba(204, 9, 47, 0.4);
+  background-image: url('https://logodownload.org/wp-content/uploads/2014/04/bradesco-logo-1.png');
+  background-color: #fff;
 }
 
 .badge[data-bank="341"] {
-  background: linear-gradient(135deg, #ec7000 0%, #d46200 100%) !important;
-  color: #ffffff !important;
-  border-color: rgba(236, 112, 0, 0.4);
+  background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Banco_Ita%C3%BA_logo.svg/2560px-Banco_Ita%C3%BA_logo.svg.png');
+  background-color: #fff;
 }
 
 .badge[data-bank="077"] {
-  background: linear-gradient(135deg, #ff8700 0%, #ff6d00 100%) !important;
-  color: #ffffff !important;
-  border-color: rgba(255, 135, 0, 0.4);
-}
-
-.badge[data-bank="212"] {
-  background: linear-gradient(135deg, #7ed321 0%, #5fb800 100%) !important;
-  color: #ffffff !important;
-  border-color: rgba(126, 211, 33, 0.4);
+  background-image: url('https://logodownload.org/wp-content/uploads/2020/04/banco-inter-logo-0.png');
+  background-color: #fff;
 }
 
 .badge[data-bank="260"] {
-  background: linear-gradient(135deg, #8a05be 0%, #6a0495 100%) !important;
-  color: #ffffff !important;
-  border-color: rgba(138, 5, 190, 0.4);
-}
-
-.badge[data-bank="422"] {
-  background: linear-gradient(135deg, #003087 0%, #002166 100%) !important;
-  color: #ffffff !important;
-  border-color: rgba(0, 48, 135, 0.4);
-}
-
-.badge[data-bank="748"] {
-  background: linear-gradient(135deg, #00953d 0%, #007530 100%) !important;
-  color: #ffffff !important;
-  border-color: rgba(0, 149, 61, 0.4);
-}
-
-.badge[data-bank="756"] {
-  background: linear-gradient(135deg, #003641 0%, #002329 100%) !important;
-  color: #ffffff !important;
-  border-color: rgba(0, 54, 65, 0.4);
-}
-
-.badge[data-bank="041"] {
-  background: linear-gradient(135deg, #0052a5 0%, #003d7a 100%) !important;
-  color: #ffffff !important;
-  border-color: rgba(0, 82, 165, 0.4);
-}
-
-.badge[data-bank="070"] {
-  background: linear-gradient(135deg, #0072bc 0%, #005a96 100%) !important;
-  color: #ffffff !important;
-  border-color: rgba(0, 114, 188, 0.4);
-}
-
-.badge[data-bank="085"] {
-  background: linear-gradient(135deg, #00a651 0%, #008040 100%) !important;
-  color: #ffffff !important;
-  border-color: rgba(0, 166, 81, 0.4);
+  background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Nubank_logo_2021.svg/2560px-Nubank_logo_2021.svg.png');
+  background-color: #fff;
 }
 
 .badge[data-bank="290"] {
-  background: linear-gradient(135deg, #00a868 0%, #008653 100%) !important;
-  color: #ffffff !important;
-  border-color: rgba(0, 168, 104, 0.4);
+  background-image: url('https://logodownload.org/wp-content/uploads/2019/08/pagbank-logo-5.png');
+  background-color: #fff;
+}
+
+.badge[data-bank="422"] {
+  background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Safra_logo.svg/2560px-Safra_logo.svg.png');
+  background-color: #fff;
+}
+
+.badge[data-bank="748"] {
+  background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Sicredi_logo.svg/2560px-Sicredi_logo.svg.png');
+  background-color: #fff;
+}
+
+.badge[data-bank="756"] {
+  background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Bancoob_logo.svg/2560px-Bancoob_logo.svg.png');
+  background-color: #fff;
+}
+
+.badge[data-bank="041"] {
+  background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Banrisul_logo.svg/2560px-Banrisul_logo.svg.png');
+  background-color: #fff;
+}
+
+.badge[data-bank="212"] {
+  background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Banco_Original_logo.svg/2560px-Banco_Original_logo.svg.png');
+  background-color: #fff;
+}
+
+.badge[data-bank="070"] {
+  background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Banco_BRB_logo.svg/2560px-Banco_BRB_logo.svg.png');
+  background-color: #fff;
+}
+
+.badge[data-bank="085"] {
+  background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Logo_Ailos.svg/2560px-Logo_Ailos.svg.png');
+  background-color: #fff;
 }
 
 .badge[data-bank="323"] {
-  background: linear-gradient(135deg, #009ee3 0%, #007ab8 100%) !important;
-  color: #ffffff !important;
-  border-color: rgba(0, 158, 227, 0.4);
+  background-image: url('https://logodownload.org/wp-content/uploads/2019/11/mercado-pago-logo-0.png');
+  background-color: #fff;
+}
+
+/* Fallback: se não tiver logo, mostra número */
+.badge:not([style*="background-image"])::after {
+  content: attr(data-bank);
+  font-weight: 950;
+  font-size: 18px;
+  letter-spacing: -0.4px;
+  color: var(--color-primary);
 }
 
 /* ================================
-   BANK INFO
+   BANK INFO COM BADGE DE TIPO
 ================================ */
 
 .bank-info {
@@ -458,7 +450,7 @@ html {
 }
 
 .bank-info h3 {
-  margin: 0;
+  margin: 0 0 8px 0;
   font-size: 18px;
   font-weight: 950;
   color: var(--color-text-primary) !important;
@@ -467,16 +459,122 @@ html {
 }
 
 .bank-info p {
-  margin: 6px 0 0;
+  margin: 0;
   font-size: 13px;
   color: var(--color-text-secondary) !important;
   font-weight: 600;
   line-height: 1.4;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .bank-info p strong {
-  color: var(--color-primary) !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
   font-weight: 900;
+  font-size: 11.5px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  transition: all var(--transition-base);
+  position: relative;
+}
+
+/* Ícone antes do tipo de layout */
+.bank-info p strong::before {
+  content: '';
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: brightness(0) invert(1);
+}
+
+/* Estilos específicos por tipo de layout */
+
+/* CNAB240 - Azul Profissional */
+.bank-info p strong:contains("CNAB240"),
+.card:has(.bank-info p strong:contains("CNAB240")) .bank-info p strong {
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+  color: #ffffff !important;
+  border: 1.5px solid rgba(37, 99, 235, 0.3);
+  box-shadow: 0 2px 12px rgba(37, 99, 235, 0.25);
+}
+
+.bank-info p strong:contains("CNAB240")::before {
+  content: '📄';
+  filter: none;
+}
+
+/* CNAB400 - Verde Clássico */
+.card:has(.bank-info p:contains("CNAB400")) .bank-info p strong,
+.bank-info p strong:contains("CNAB400") {
+  background: linear-gradient(135deg, #065f46 0%, #10b981 100%);
+  color: #ffffff !important;
+  border: 1.5px solid rgba(16, 185, 129, 0.3);
+  box-shadow: 0 2px 12px rgba(16, 185, 129, 0.25);
+}
+
+.bank-info p strong:contains("CNAB400")::before {
+  content: '📋';
+  filter: none;
+}
+
+/* Febraban - Laranja Institucional */
+.card:has(.bank-info p:contains("Febraban")) .bank-info p strong,
+.bank-info p strong:contains("Febraban") {
+  background: linear-gradient(135deg, #c2410c 0%, #f97316 100%);
+  color: #ffffff !important;
+  border: 1.5px solid rgba(249, 115, 22, 0.3);
+  box-shadow: 0 2px 12px rgba(249, 115, 22, 0.25);
+}
+
+.bank-info p strong:contains("Febraban")::before {
+  content: '🏛️';
+  filter: none;
+}
+
+/* Outro - Roxo Moderno */
+.card:has(.bank-info p:contains("Outro")) .bank-info p strong,
+.bank-info p strong:contains("Outro") {
+  background: linear-gradient(135deg, #6b21a8 0%, #a855f7 100%);
+  color: #ffffff !important;
+  border: 1.5px solid rgba(168, 85, 247, 0.3);
+  box-shadow: 0 2px 12px rgba(168, 85, 247, 0.25);
+}
+
+.bank-info p strong:contains("Outro")::before {
+  content: '📦';
+  filter: none;
+}
+
+/* Efeito hover no badge de tipo */
+.bank-info p strong:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Borda colorida no card baseada no tipo */
+.card:has(.bank-info p:contains("CNAB240"))::before {
+  background: linear-gradient(90deg, transparent 0%, #2563eb 50%, transparent 100%);
+}
+
+.card:has(.bank-info p:contains("CNAB400"))::before {
+  background: linear-gradient(90deg, transparent 0%, #10b981 50%, transparent 100%);
+}
+
+.card:has(.bank-info p:contains("Febraban"))::before {
+  background: linear-gradient(90deg, transparent 0%, #f97316 50%, transparent 100%);
+}
+
+.card:has(.bank-info p:contains("Outro"))::before {
+  background: linear-gradient(90deg, transparent 0%, #a855f7 50%, transparent 100%);
 }
 
 /* ================================
@@ -496,6 +594,18 @@ html {
   box-shadow: 0 2px 8px rgba(46, 204, 113, 0.1);
   white-space: nowrap;
   transition: all var(--transition-base);
+}
+
+.status::before {
+  content: '●';
+  margin-right: 6px;
+  font-size: 10px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 
 .status:hover {
@@ -525,11 +635,23 @@ html {
   color: var(--color-text-secondary) !important;
   font-size: 14px;
   line-height: 1.6;
-  padding: 12px 14px;
+  padding: 14px 16px;
   background: rgba(13, 75, 103, 0.04);
   border-left: 3px solid var(--color-accent);
-  border-radius: 8px;
+  border-radius: 10px;
   font-weight: 500;
+  position: relative;
+}
+
+.desc::before {
+  content: '"';
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-size: 32px;
+  color: var(--color-accent);
+  opacity: 0.2;
+  font-family: Georgia, serif;
 }
 
 /* ================================
@@ -541,18 +663,23 @@ html {
   align-items: center;
   gap: 8px;
   margin-top: 14px;
-  padding: 10px 12px;
+  padding: 11px 14px;
   background: rgba(13, 75, 103, 0.04);
   border: 1px solid rgba(13, 75, 103, 0.08);
   border-radius: var(--radius-sm);
   color: var(--color-text-secondary) !important;
   font-size: 12px;
   font-weight: 800;
+  transition: all var(--transition-base);
+}
+
+.meta:hover {
+  background: rgba(13, 75, 103, 0.06);
 }
 
 .meta .material-icons {
-  font-size: 16px;
-  line-height: 16px;
+  font-size: 17px;
+  line-height: 17px;
   opacity: 0.7;
 }
 
@@ -603,42 +730,6 @@ html {
   max-width: 500px;
   margin: 0 auto;
   color: var(--color-text-secondary) !important;
-}
-
-/* ================================
-   DESABILITA DARK MODE
-================================ */
-
-@media (prefers-color-scheme: dark) {
-  /* Força modo claro mesmo em dark mode do sistema */
-  body,
-  html,
-  .layouts-page,
-  .card,
-  .field,
-  .select,
-  .empty {
-    background-color: var(--color-bg-page) !important;
-    color: var(--color-text-primary) !important;
-  }
-
-  .card {
-    background: #ffffff !important;
-  }
-
-  .title h1,
-  .bank-info h3,
-  .empty h2 {
-    color: var(--color-text-primary) !important;
-  }
-
-  .title p,
-  .bank-info p,
-  .desc,
-  .meta,
-  .empty p {
-    color: var(--color-text-secondary) !important;
-  }
 }
 
 /* ================================
@@ -740,9 +831,13 @@ html {
   }
 
   .badge {
-    min-width: 56px;
-    height: 56px;
-    font-size: 15px;
+    min-width: 64px;
+    height: 64px;
+  }
+
+  .bank-info p {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 

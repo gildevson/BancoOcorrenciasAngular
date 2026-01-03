@@ -41,8 +41,8 @@ export const routes: Routes = [
   {
     path: 'bancos',
     loadComponent: () =>
-      import('./pages/bancos/bancos.component')
-        .then(m => m.BancosComponent),
+      import('./pages/moeda/moedas.component')
+        .then(m => m.MoedasComponent),
   },
 
   // ===============================

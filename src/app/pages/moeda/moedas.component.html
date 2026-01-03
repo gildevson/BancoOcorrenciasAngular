@@ -3,8 +3,8 @@
   <section class="chart-card">
     <div class="chart-head">
       <div class="title">
-        <div class="label">Setor Bancário</div>
-        <div class="ticker">{{ selectedTicker }} • {{ activePeriod }}</div>
+        <div class="label">Câmbio</div>
+        <div class="ticker">{{ selectedSymbol }} • {{ activePeriod }}</div>
       </div>
 
       <div class="periods" aria-label="Períodos do gráfico">
@@ -18,17 +18,33 @@
       </div>
     </div>
 
+    <!-- Conversão rápida -->
+    <div class="convert">
+      <div class="field">
+        <span>BRL</span>
+        <input type="number" [(ngModel)]="amountBRL" (input)="onChangeBRL()" />
+      </div>
+      <div class="eq">≈</div>
+      <div class="field">
+        <span>USD</span>
+        <input type="text" [value]="amountUSD.toFixed(2)" disabled />
+      </div>
+    </div>
+
+    <!-- Área do gráfico -->
     <div class="chart-body">
       <div class="loading" *ngIf="chartLoading">
         <div class="spinner"></div>
         <span>Carregando...</span>
       </div>
 
-      <div class="chart-msg" *ngIf="chartError && !chartLoading">
+      <div class="chart-msg error" *ngIf="chartError && !chartLoading">
+        <span class="material-icons">error_outline</span>
         {{ chartError }}
       </div>
 
       <canvas
+        *ngIf="!chartLoading && !chartError"
         baseChart
         [data]="lineChartData"
         [options]="lineChartOptions"
@@ -40,7 +56,7 @@
   <!-- CARD DA LISTA -->
   <aside class="list-card">
     <div class="tabs" aria-label="Filtros da lista">
-      <button type="button" (click)="setTab('negociados')" [class.active]="activeTab==='negociados'">Mais Negociados</button>
+      <button type="button" (click)="setTab('principais')" [class.active]="activeTab==='principais'">Principais</button>
       <button type="button" (click)="setTab('altas')" [class.active]="activeTab==='altas'">Maiores Altas</button>
       <button type="button" (click)="setTab('baixas')" [class.active]="activeTab==='baixas'">Maiores Baixas</button>
     </div>
@@ -50,32 +66,28 @@
       <input
         type="text"
         class="search-input"
-        placeholder="Buscar por código ou nome..."
-        [(ngModel)]="searchTerm"
-        aria-label="Buscar banco">
+        placeholder="Buscar por código..."
+        [(ngModel)]="searchTerm">
       <button
         type="button"
         class="clear-btn"
         *ngIf="searchTerm"
-        (click)="clearSearch()"
-        aria-label="Limpar busca">
+        (click)="clearSearch()">
         <span class="material-icons">close</span>
       </button>
     </div>
 
-    <div class="hint">Clique em um banco para trocar o ativo do gráfico.</div>
+    <div class="hint">Clique em uma moeda para trocar o ativo do gráfico.</div>
 
     <div class="list" *ngIf="listaAtual?.length; else empty">
       <button
         type="button"
         class="row"
-        *ngFor="let item of listaAtual; trackBy: trackBySymbol"
-        (click)="setTicker(item.symbol)"
-        [class.active]="item.symbol === selectedTicker">
+        *ngFor="let item of listaAtual"
+        (click)="setSymbol(item.symbol)"
+        [class.active]="item.symbol === selectedSymbol">
 
         <div class="left">
-          <img class="logo" [src]="logoUrl(item.symbol)" (error)="onLogoError($event)" alt="" />
-
           <div class="meta">
             <div class="sym">{{ item.symbol }}</div>
             <div class="name">{{ item.shortName || item.longName }}</div>
@@ -84,11 +96,6 @@
 
         <div class="right">
           <div class="price">{{ fmtPrice(item.regularMarketPrice) }}</div>
-
-          <div class="volume" *ngIf="item.regularMarketVolume">
-            Vol: {{ fmtVolume(item.regularMarketVolume) }}
-          </div>
-
           <div class="pct" [class.pos]="isPos(item)" [class.neg]="!isPos(item)">
             {{ fmtPct(item.regularMarketChangePercent) }}
           </div>
