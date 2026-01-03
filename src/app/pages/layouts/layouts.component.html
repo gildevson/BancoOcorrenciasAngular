@@ -1,15 +1,14 @@
 <section class="layouts-page">
-  <!-- ================================
-       CABEÇALHO E FILTROS
-  ================================ -->
+  <!-- CABEÇALHO E FILTROS -->
   <div class="head">
     <div class="title">
       <h1>Layouts de Banco</h1>
-      <p>Consulte por banco, número e tipo (CNAB240/CNAB400) com logos oficiais dos principais bancos brasileiros.</p>
+      <p class="subtitle">
+        Consulte por banco, número e tipo (CNAB240/CNAB400) com logos oficiais dos principais bancos brasileiros.
+      </p>
     </div>
 
     <div class="filters">
-      <!-- Campo de busca -->
       <div class="field">
         <span class="material-icons">search</span>
         <input
@@ -21,7 +20,6 @@
         />
       </div>
 
-      <!-- Filtro por tipo -->
       <div class="select">
         <span class="material-icons">tune</span>
         <select [(ngModel)]="tipo" aria-label="Filtrar por tipo">
@@ -33,95 +31,71 @@
         </select>
       </div>
 
-      <!-- Botão limpar -->
-      <button
-        class="btn ghost"
-        type="button"
-        (click)="limpar()"
-        *ngIf="temFiltrosAtivos">
+      <button class="btn ghost" type="button" (click)="limpar()" *ngIf="temFiltrosAtivos">
         <span class="material-icons" style="font-size: 16px; margin-right: 6px;">close</span>
         Limpar filtros
       </button>
     </div>
   </div>
 
-  <!-- ================================
-       GRID DE LAYOUTS
-  ================================ -->
+  <!-- GRID -->
   <div class="grid" *ngIf="filtrados.length > 0">
     <article class="card" *ngFor="let layout of filtrados">
-
-      <!-- Topo do card -->
       <div class="card-top">
         <div class="bank">
-          <div
-            class="badge"
-            [attr.data-bank]="layout.bancoNumero"
-            [attr.data-bank-name]="layout.bancoNome"
-            [title]="layout.bancoNome">
-            {{ layout.bancoNumero }}
+          <!-- LOGO DO BANCO -->
+          <div class="logo">
+            <img
+              *ngIf="layout.imagemURL"
+              [src]="layout.imagemURL"
+              [alt]="layout.bancoNome"
+              loading="lazy"
+            />
+            <div class="logo-fallback" *ngIf="!layout.imagemURL">
+              {{ layout.bancoNumero }}
+            </div>
           </div>
 
           <div class="bank-info">
             <h3>{{ layout.bancoNome }}</h3>
-            <p>
-              Tipo: <strong>{{ layout.tipoLayout }}</strong>
-              <span *ngIf="layout.versao"> • Versão {{ layout.versao }}</span>
-            </p>
+
+            <!-- TROQUEI <p> por <div> (evita implied end tags) -->
+            <div class="line">
+              <span>Tipo:</span>
+              <strong class="tipo">{{ layout.tipoLayout }}</strong>
+              <span class="versao" *ngIf="layout.versao">• Versão {{ layout.versao }}</span>
+            </div>
+
+            <div class="line muted">
+              <span class="pill">Banco {{ layout.bancoNumero }}</span>
+            </div>
           </div>
         </div>
 
-        <span
-          class="status"
-          [class.warn]="layout.status === 'Em revisão'"
-          [class.off]="layout.status === 'Descontinuado'">
+        <span class="status" [class.warn]="layout.status === 'Em revisão'" [class.off]="layout.status === 'Descontinuado'">
           {{ layout.status || 'Ativo' }}
         </span>
       </div>
 
-      <!-- Descrição -->
-      <p class="desc" *ngIf="layout.descricao">
+      <div class="desc" *ngIf="layout.descricao">
         {{ layout.descricao }}
-      </p>
+      </div>
 
-      <!-- Metadados -->
       <div class="meta" *ngIf="layout.atualizadoEm">
         <span class="material-icons">event</span>
         <span>Atualizado em {{ layout.atualizadoEm }}</span>
       </div>
 
-      <!-- Ações -->
       <div class="actions">
-        <a class="btn primary" [routerLink]="['/consultar-ocorrencia']">
-          <span class="material-icons" style="font-size: 16px; margin-right: 6px;">launch</span>
-          Usar no portal
+        <a *ngIf="layout.pdfUrl" class="btn ghost" [href]="layout.pdfUrl" download target="_blank" rel="noopener">
+          <span class="material-icons" style="font-size: 16px; margin-right: 6px;">download</span>
+          Baixar PDF
         </a>
-
-        <!-- ✅ Detalhes vira ROTA -->
-        <a class="btn ghost" [routerLink]="['/layouts', layout.id]">
-          <span class="material-icons" style="font-size: 16px; margin-right: 6px;">info</span>
-          Detalhes
-        </a>
-
-        <!-- ✅ Download do PDF (só aparece se existir pdfUrl) -->
-       <a
-  *ngIf="layout.pdfUrl"
-  class="btn ghost"
-  [href]="layout.pdfUrl"
-  download
-  target="_blank"
-  rel="noopener">
-  <span class="material-icons" style="font-size: 16px; margin-right: 6px;">download</span>
-  Baixar PDF
-</a>
-
       </div>
     </article>
   </div>
 
-  <!-- ================================
-       ESTADO VAZIO
-  ================================ -->
+  <!-- VAZIO -->
   <div class="empty" *ngIf="filtrados.length === 0">
     <span class="material-icons" style="font-size: 64px; opacity: 0.3; margin-bottom: 16px; display: block;">
       search_off
@@ -130,12 +104,8 @@
     <p>
       Tente buscar por número do banco (ex: 001, 237, 341) ou por tipo de layout (CNAB240/CNAB400).
     </p>
-    <button
-      class="btn primary"
-      type="button"
-      (click)="limpar()"
-      style="margin-top: 20px;"
-      *ngIf="temFiltrosAtivos">
+
+    <button class="btn primary" type="button" (click)="limpar()" style="margin-top: 20px;" *ngIf="temFiltrosAtivos">
       Ver todos os layouts
     </button>
   </div>

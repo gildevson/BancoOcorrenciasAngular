@@ -516,10 +516,10 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
   },
   {
     id: '001-outro-8ab3a3',
-    bancoNumero: '001',
-    bancoNome: 'Banco do Brasil',
+    bancoNumero: '756',
+    bancoNome: 'Banco Sicredi',
     tipoLayout: 'CNAB240',
-    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Bradesco%20S.A/bradesco.svg',
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Sicredi/logo-svg2.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Sicoob_BB_240.pdf`,
     atualizadoEm: '15/07/2013',
@@ -530,12 +530,12 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '748',
     bancoNome: 'Sicredi',
     tipoLayout: 'CNAB400',
-    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Bradesco%20S.A/bradesco.svg',
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Sicredi/logo-svg2.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Sicredi manual cnab 400.pdf`,
     atualizadoEm: '21/07/2010',
     pdfUrl: 'assets/pdfs/layouts/Sicredi manual cnab 400.pdf',
-  }, /**https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Sicredi/logo-svg2.svg */
+  },
   {
     id: '748-outro-f95417',
     bancoNumero: '748',
