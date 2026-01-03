@@ -20,6 +20,7 @@ export interface BancoLayout {
   bancoNumero: string;
   bancoNome: string;
   tipoLayout: TipoLayout;
+  imagemURL: string,
   versao?: string;
   status?: StatusLayout;
   descricao?: string;
@@ -32,7 +33,6 @@ export interface BancoLayout {
 // DADOS DOS LAYOUTS
 // ================================
 
-
 export const LAYOUTS_BANCO: BancoLayout[] = [
 
   {
@@ -40,7 +40,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '001',
     bancoNome: 'Banco Brasil CNAB400',
     tipoLayout: 'CNAB400',
-
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banco%20do%20Brasil%20S.A/banco-do-brasil-com-fundo.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Banco Brasil_CNAB400_convenio7.pdf`,
     atualizadoEm: '23/02/2010',
@@ -51,7 +51,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '422',
     bancoNome: 'Banco safra CNAB400',
     tipoLayout: 'CNAB400',
-
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banco%20Safra%20S.A/logo-safra.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Banco_safra_CNAB400_cobranca2007.pdf`,
     atualizadoEm: '15/09/2011',
@@ -61,8 +61,8 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     id: '041-febraban-237674',
     bancoNumero: '041',
     bancoNome: 'Banrisul',
-    tipoLayout: 'Febraban',
-
+    tipoLayout: 'CNAB240',
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banrisul/banrisul-logo-nome-2023.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Banrisul_layout_pdr_Febraban240.pdf`,
     atualizadoEm: '03/12/2009',
@@ -72,8 +72,8 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     id: '041-febraban-7d540a',
     bancoNumero: '041',
     bancoNome: 'Banrisul',
-    tipoLayout: 'Febraban',
-
+    tipoLayout: 'CNAB400',
+   imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banrisul/banrisul-logo-nome-2023.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Banrisul_layout_pdr_Febraban400_.pdf`,
     atualizadoEm: '03/12/2009',
@@ -83,8 +83,8 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     id: '001-outro-0f173c',
     bancoNumero: '001',
     bancoNome: 'Banco do Brasil',
-    tipoLayout: 'Outro',
-
+    tipoLayout: 'CNAB240',
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banco%20do%20Brasil%20S.A/banco-do-brasil-com-fundo.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: BB_240.pdf`,
     atualizadoEm: '30/09/2013',
@@ -95,7 +95,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '274',
     bancoNome: 'BMP CNAB400 V.006',
     tipoLayout: 'CNAB400',
-
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banco%20BMP/logo_bmp.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: BMP_CNAB400_V.006.pdf`,
     atualizadoEm: '12/05/2021',
@@ -106,7 +106,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'Boa Vista',
     tipoLayout: 'Outro',
-
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banco%20BMP/logo_bmp.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: BoaVista.pdf`,
     atualizadoEm: '08/12/2017',
@@ -117,7 +117,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '237',
     bancoNome: 'Bradesco',
     tipoLayout: 'CNAB400',
-
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Bradesco%20S.A/bradesco%20com%20nome.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Bradesco CNAB 400 atualizado 2022.pdf`,
     atualizadoEm: '04/10/2022',
@@ -128,7 +128,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '237',
     bancoNome: 'Bradesco',
     tipoLayout: 'CNAB400',
-
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Bradesco%20S.A/bradesco%20com%20nome.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Bradesco_CNAB400.pdf`,
     atualizadoEm: '05/07/2019',
@@ -139,7 +139,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '237',
     bancoNome: 'Bradesco',
     tipoLayout: 'CNAB400',
-
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Bradesco%20S.A/bradesco%20com%20nome.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Bradesco_layout_CNAB400.pdf`,
     atualizadoEm: '19/06/2019',
@@ -149,8 +149,8 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     id: '104-outro-359552',
     bancoNumero: '104',
     bancoNome: 'Caixa Econômica Federal',
-    tipoLayout: 'Outro',
-
+    tipoLayout: 'CNAB240',
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Caixa%20Econ%C3%B4mica%20Federal/caixa-economica-federal-X.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: CNAB_240_caixa_ (1).pdf`,
     atualizadoEm: '03/12/2013',
@@ -160,8 +160,8 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     id: '077-outro-273881',
     bancoNumero: '077',
     bancoNome: 'Banco Inter',
-    tipoLayout: 'Outro',
-
+    tipoLayout: 'CNAB400',
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banco%20Inter%20S.A/inter.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: CNAB_400_Banco_Inter.pdf`,
     atualizadoEm: '22/07/2021',
@@ -171,8 +171,8 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     id: '274-outro-979979',
     bancoNumero: '274',
     bancoNome: 'CNAB 400 V9',
-    tipoLayout: 'Outro',
-
+    tipoLayout: 'CNAB400',
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banco%20Inter%20S.A/inter.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: CNAB_400_V9_bmp.pdf`,
     atualizadoEm: '22/12/2021',
@@ -182,8 +182,8 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     id: '399-outro-1012c4',
     bancoNumero: '399',
     bancoNome: 'HSBC',
-    tipoLayout: 'Outro',
-
+    tipoLayout: 'CNAB240',
+    imagemURL: 'https://i.pinimg.com/564x/3d/28/fa/3d28fad44ed6dfc81dfd8ff03f1bf495.jpg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: cob240HSBC.pdf`,
     atualizadoEm: '15/06/2011',
@@ -193,7 +193,8 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     id: '041-febraban-3646cb',
     bancoNumero: '041',
     bancoNome: 'Banrisul',
-    tipoLayout: 'Febraban',
+    tipoLayout: 'CNAB400',
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banrisul/banrisul-logo-2023.svg',
     versao: '26052010',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: CobrancaEletronicaBanrisul_layout_pdr_Febraban400_vrs26052010_ed02.pdf`,
@@ -204,7 +205,8 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     id: '041-outro-e2865d',
     bancoNumero: '041',
     bancoNome: 'Banrisul',
-    tipoLayout: 'Outro',
+    tipoLayout: 'CNAB400',
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banrisul/banrisul-logo-2023.svg',
     versao: '15072015',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: CobrancaEletronicaBanrisul_pdr400_vrs15072015_ed06.pdf`,
@@ -216,7 +218,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '341',
     bancoNome: 'Itaú',
     tipoLayout: 'CNAB240',
-
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Ita%C3%BA%20Unibanco%20S.A/itau-2-laranja.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: cobrancaItau_cnab240.pdf`,
     atualizadoEm: '03/09/2012',
@@ -227,7 +229,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '237',
     bancoNome: 'conciliacao bancaria 240',
     tipoLayout: 'Outro',
-
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Ita%C3%BA%20Unibanco%20S.A/itau-2-laranja.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: conciliacao_bancaria_240_posicoes_V_5.pdf.pdf`,
     atualizadoEm: '29/06/2018',
@@ -238,7 +240,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '341',
     bancoNome: 'Itaú',
     tipoLayout: 'Outro',
-
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Ita%C3%BA%20Unibanco%20S.A/itau-2-laranja.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Convenio Cheques ITAU.pdf`,
     atualizadoEm: '21/10/2014',
@@ -246,10 +248,10 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
   },
   {
     id: '???-outro-03aed7',
-    bancoNumero: '???',
+    bancoNumero: '001',
     bancoNome: 'Doc2627CBR641Pos7 1 nova',
-    tipoLayout: 'Outro',
-
+    tipoLayout: 'CNAB240',
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banco%20do%20Brasil%20S.A/banco-do-brasil-com-fundo.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Doc2627CBR641Pos7_1__nova_cobran__a_BB.pdf`,
     atualizadoEm: '22/07/2019',
@@ -260,7 +262,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '041',
     bancoNome: 'Banrisul',
     tipoLayout: 'Outro',
-
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banrisul/banrisul-logo-2023.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Layout_arquivo_Custódia_Eletrônica_de_Cheques_Banrisul.pdf`,
     atualizadoEm: '23/11/2012',
@@ -268,10 +270,10 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
   },
   {
     id: '???-outro-fb8d1c',
-    bancoNumero: '???',
+    bancoNumero: '274',
     bancoNome: 'Layout CNAB 400',
-    tipoLayout: 'Outro',
-
+    tipoLayout: 'CNAB400',
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banco%20BMP/logo_bmp.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Layout_CNAB_400-10_bmp.pdf`,
     atualizadoEm: '19/08/2024',
@@ -282,6 +284,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'Layout FEBRABAN CNAB240',
     tipoLayout: 'CNAB240',
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banco%20BMP/logo_bmp.svg',
     versao: '10.06',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Layout_FEBRABAN_CNAB240_ V_10_06.pdf`,
@@ -293,6 +296,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'Layout SPC BRASIL',
     tipoLayout: 'Outro',
+    imagemURL: 'https://www.spcbrasil.com.br/_next/image?url=https%3A%2F%2Fwww.spcbrasil.com.br%2Fuploads%2Flogo_b770a0e7b5.png&w=1200&q=75',
     versao: '7.1',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Layout_SPC_BRASIL_registro_e_cancelamento_v7-1.pdf`,
@@ -303,8 +307,8 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     id: '???-outro-ce7ff9',
     bancoNumero: '???',
     bancoNome: 'LayoutCobrancaABCBrasil MAIO2020',
-    tipoLayout: 'Outro',
-
+    tipoLayout: 'CNAB240',
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/ABC%20Brasil/logoabc-negativada.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: LayoutCobrancaABCBrasil_MAIO2020.pdf`,
     atualizadoEm: '19/07/2021',
@@ -315,7 +319,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'Layouts Cust dia',
     tipoLayout: 'Outro',
-
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/ABC%20Brasil/logoabc-negativada.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Layouts_Cust__dia_de_Cheques_Remessa_Retorno.pdf`,
     atualizadoEm: '01/08/2012',
@@ -325,7 +329,8 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     id: '041-febraban-5418ee',
     bancoNumero: '041',
     bancoNome: 'Banrisul',
-    tipoLayout: 'Febraban',
+    tipoLayout: 'CNAB240',
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banrisul/banrisul-logo-2023.svg',
     versao: '103.230',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: LeiauteBanrisulFebraban_pdr240_v103_23062023.pdf`,
@@ -333,22 +338,11 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     pdfUrl: 'assets/pdfs/layouts/LeiauteBanrisulFebraban_pdr240_v103_23062023.pdf',
   },
   {
-    id: '237-outro-4658de',
-    bancoNumero: '237',
-    bancoNome: 'Bradesco',
-    tipoLayout: 'Outro',
-
-    status: 'Ativo',
-    descricao: `PDF importado automaticamente: Manual - CNAB Bradesco 07 6 3 (1)(pagfor).pdf`,
-    atualizadoEm: '13/03/2017',
-    pdfUrl: 'assets/pdfs/layouts/Manual - CNAB Bradesco 07 6 3 (1)(pagfor).pdf',
-  },
-  {
     id: '???-cnab400-b79fe9',
     bancoNumero: '???',
     bancoNome: 'Manual CNAB 400',
     tipoLayout: 'CNAB400',
-
+    imagemURL: 'https://www.idbanco.com.br/bancodigital/web/images/logo.png',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Manual CNAB 400 - ID BANCO 439 - FEV.24 (1).pdf`,
     atualizadoEm: '13/12/2024',
@@ -359,7 +353,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'Manual de cobranca',
     tipoLayout: 'CNAB400',
-
+    imagemURL: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQD9Lkqq-J5ivrXeZjWJFhgOSaXcmlyqUQxnA&s',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Manual de cobranca CNAB400 - Kanastra (1).pdf`,
     atualizadoEm: '28/04/2025',
@@ -370,6 +364,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'Manual de Implantacao',
     tipoLayout: 'Outro',
+    imagemURL: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQD9Lkqq-J5ivrXeZjWJFhgOSaXcmlyqUQxnA&s',
     versao: '2.2.1',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Manual de Implantacao v2.2.1.pdf`,
@@ -381,7 +376,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'Manual Simplificado ',
     tipoLayout: 'Outro',
-
+    imagemURL: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQD9Lkqq-J5ivrXeZjWJFhgOSaXcmlyqUQxnA&s',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Manual Simplificado - Relato para Factorings v01.pdf`,
     atualizadoEm: '16/09/2005',
@@ -392,7 +387,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'MANUAL BOLETOS BANCO',
     tipoLayout: 'Outro',
-
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/ABC%20Brasil/logoabc-negativada.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: MANUAL_BOLETOS_BANCO_ABC_2021.pdf`,
     atualizadoEm: '19/07/2021',
@@ -403,7 +398,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'Manual Leiaute CNAB240',
     tipoLayout: 'CNAB240',
-
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Sicoob/sicoob-vector-logo.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Manual_Leiaute_CNAB240_SIGCB.pdf`,
     atualizadoEm: '25/11/2016',
@@ -414,7 +409,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '208',
     bancoNome: 'BTG Pactual',
     tipoLayout: 'Outro',
-
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banco%20BTG%20Pacutal/btg-pactual.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Mascara boleto BTG PACTUAL.pdf`,
     atualizadoEm: '13/02/2025',
@@ -425,7 +420,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '001',
     bancoNome: 'Banco do Brasil',
     tipoLayout: 'CNAB240',
-
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banco%20BTG%20Pacutal/btg-pactual.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: MI - CBB - Manual CNAB 240.pdf`,
     atualizadoEm: '30/06/2020',
@@ -434,9 +429,9 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
   {
     id: '???-outro-f44504',
     bancoNumero: '???',
-    bancoNome: 'Microsoft Word ',
+    bancoNome: 'bANCO BVA',
     tipoLayout: 'Outro',
-
+    imagemURL: 'https://media.licdn.com/dms/image/v2/C4E0BAQHQNzT3SXsNuA/company-logo_200_200/company-logo_200_200/0/1635337472047/aulios_gmbh_logo?e=2147483647&v=beta&t=9bQz8Y5TL8JpUA2st32bfUOmqkWHN6w8HYCjQPdIYFg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Microsoft Word - novo lay-out banco bva versão 06-2008.pdf`,
     atualizadoEm: '21/07/2010',
@@ -447,7 +442,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'Microsoft Word ',
     tipoLayout: 'Outro',
-
+    imagemURL: '',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Microsoft Word - novo lay-out banco bva.pdf`,
     atualizadoEm: '21/12/2007',
@@ -458,7 +453,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '237',
     bancoNome: 'Bradesco',
     tipoLayout: 'Outro',
-
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Bradesco%20S.A/bradesco.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Multipag_Bradesco_v3prot.pdf`,
     atualizadoEm: '01/11/2024',
@@ -469,7 +464,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'Novo Layout de',
     tipoLayout: 'Outro',
-
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Bradesco%20S.A/bradesco.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Novo Layout de Remessa Banco Paulista 2013.pdf`,
     atualizadoEm: '11/12/2013',
@@ -480,7 +475,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'Padrão Febraban 240',
     tipoLayout: 'Febraban',
-
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Bradesco%20S.A/bradesco.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Padrão Febraban 240 bytes (pdf - 183Kb).pdf`,
     atualizadoEm: '21/12/2009',
@@ -491,7 +486,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'REAL COBRANCA 400',
     tipoLayout: 'Outro',
-
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Bradesco%20S.A/bradesco.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: REAL_COBRANCA_400_POSICOES REAL.pdf`,
     atualizadoEm: '05/10/2005',
@@ -500,9 +495,9 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
   {
     id: '033-cnab400-a38469',
     bancoNumero: '033',
-    bancoNome: 'Santander',
-    tipoLayout: 'CNAB400',
-
+    bancoNome: 'Santander', /**/
+    tipoLayout: 'CNAB240',
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banco%20Santander%20Brasil%20S.A/santander-fundo-vermelho.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: SANTANDER_Layout CNAB 400 posições Out de 2009.pdf`,
     atualizadoEm: '11/06/2012',
@@ -512,8 +507,8 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     id: '033-outro-8fff57',
     bancoNumero: '033',
     bancoNome: 'Santander',
-    tipoLayout: 'Outro',
-
+    tipoLayout: 'CNAB240',
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banco%20Santander%20Brasil%20S.A/santander-fundo-vermelho.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: SANTANDER_Layout Cobrança 240 - 092009.pdf`,
     atualizadoEm: '11/06/2012',
@@ -523,8 +518,8 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     id: '001-outro-8ab3a3',
     bancoNumero: '001',
     bancoNome: 'Banco do Brasil',
-    tipoLayout: 'Outro',
-
+    tipoLayout: 'CNAB240',
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Bradesco%20S.A/bradesco.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Sicoob_BB_240.pdf`,
     atualizadoEm: '15/07/2013',
@@ -535,18 +530,18 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '748',
     bancoNome: 'Sicredi',
     tipoLayout: 'CNAB400',
-
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Bradesco%20S.A/bradesco.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: Sicredi manual cnab 400.pdf`,
     atualizadoEm: '21/07/2010',
     pdfUrl: 'assets/pdfs/layouts/Sicredi manual cnab 400.pdf',
-  },
+  }, /**https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Sicredi/logo-svg2.svg */
   {
     id: '748-outro-f95417',
     bancoNumero: '748',
     bancoNome: 'Sicredi',
-    tipoLayout: 'Outro',
-
+    tipoLayout: 'CNAB400',
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Sicredi/logo-svg2.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: SICREDI_CED_240.pdf`,
     atualizadoEm: '03/12/2009',
@@ -556,8 +551,8 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     id: '748-outro-288a22',
     bancoNumero: '748',
     bancoNome: 'Sicredi',
-    tipoLayout: 'Outro',
-
+    tipoLayout: 'CNAB400',
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Sicredi/logo-svg2.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: SICREDI_CED_400.pdf`,
     atualizadoEm: '03/12/2009',
@@ -567,8 +562,8 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     id: '748-outro-3e5695',
     bancoNumero: '748',
     bancoNome: 'Sicredi',
-    tipoLayout: 'Outro',
-
+    tipoLayout: 'CNAB400',
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Sicredi/logo-svg2.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: SICREDI_MANUAL_CNAB_400.pdf`,
     atualizadoEm: '20/07/2021',
@@ -579,7 +574,7 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     bancoNumero: '???',
     bancoNome: 'sofisa NOVO CNAB444',
     tipoLayout: 'Outro',
-
+    imagemURL: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banco%20Sofisa/logo-banco-sofisa.svg',
     status: 'Ativo',
     descricao: `PDF importado automaticamente: sofisa_NOVO_CNAB444.pdf`,
     atualizadoEm: '02/09/2019',
