@@ -1,199 +1,395 @@
-/* =========================
-   CALC CARD (Mora) - Premium
-   ========================= */
+/* ===== CALCULADORA DE MORA - CLEAN & MODERN ===== */
 
-:host{
-  display:block;
-  padding: 28px 16px 60px;
-}
-
-.calc-card{
-  max-width: 720px;
+:host {
+  width: 100%;
+  max-width: 980px;
   margin: 0 auto;
-  padding: 22px 22px 18px;
-  border-radius: 18px;
-  background: rgba(255,255,255,0.86);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  box-shadow:
-    0 18px 50px rgba(2, 6, 23, 0.10),
-    0 2px 10px rgba(2, 6, 23, 0.06);
-  backdrop-filter: blur(12px) saturate(160%);
-  -webkit-backdrop-filter: blur(12px) saturate(160%);
-
+  max-width: 1250px;
 }
 
-/* Top */
-.top{
-  display:flex;
-  flex-direction: column;
+.calc-card {
+    width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  max-width: 1250px;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== TOP SECTION ===== */
+.top {
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #e8f4f8;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
   gap: 8px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid rgba(2, 6, 23, 0.08);
-  margin-bottom: 14px;
-}
-
-.back{
-  width: fit-content;
+  padding: 8px 14px;
+  background: #e8f4f8;
+  border: 1px solid #d0e8f2;
+  border-radius: 8px;
   text-decoration: none;
-  color: #0b3a61;
-  font-weight: 700;
-  padding: 8px 10px;
-  border-radius: 10px;
-  background: rgba(11, 58, 97, 0.06);
-  border: 1px solid rgba(11, 58, 97, 0.12);
-  transition: transform .15s ease, background .15s ease, border-color .15s ease;
-}
-.back:hover{
-  transform: translateY(-1px);
-  background: rgba(11, 58, 97, 0.10);
-  border-color: rgba(11, 58, 97, 0.18);
-}
-
-.top h2{
-  margin: 0;
-  font-size: 26px;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  color: #0f172a;
-}
-
-.top small{
-  color: rgba(15, 23, 42, 0.70);
+  color: #0b3a53;
   font-size: 13px;
-  line-height: 1.4;
+  font-weight: 700;
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
 }
 
-/* Form */
-.form{
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px 14px;
-  padding: 10px 0 6px;
+.back:hover {
+  background: #0b3a53;
+  color: #ffffff;
+  transform: translateX(-4px);
 }
 
-.form label{
-  grid-column: span 2;
+h2 {
+  margin: 0 0 8px;
+  font-size: 26px;
+  font-weight: 900;
+  color: #0b3a53;
+  letter-spacing: -0.5px;
+}
+
+small {
+  display: block;
   font-size: 12px;
-  font-weight: 800;
-  letter-spacing: .04em;
+  color: #64748b;
+  font-weight: 600;
+  line-height: 1.5;
+  background: #fef9e7;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border-left: 3px solid #f2c84b;
+  margin-top: 12px;
+}
+
+small::before {
+  content: '📐 ';
+  margin-right: 4px;
+}
+
+/* ===== FORM ===== */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.form label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: #0b3a53;
+  margin-bottom: 8px;
   text-transform: uppercase;
-  color: rgba(15, 23, 42, 0.65);
-  margin-top: 8px;
+  letter-spacing: 0.3px;
 }
 
-/* Faz cada input ocupar a linha toda por padrão */
-.form input{
-  grid-column: span 2;
-  height: 46px;
-  padding: 10px 12px;
-  border-radius: 12px;
-  border: 1px solid rgba(15, 23, 42, 0.14);
-  background: rgba(255,255,255,0.92);
-  color: #0f172a;
-  outline: none;
+.form input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid #d0e8f2;
+  border-radius: 10px;
   font-size: 15px;
-  transition: box-shadow .15s ease, border-color .15s ease, transform .1s ease;
+  font-weight: 600;
+  color: #0b3a53;
+  background: #f8fcff;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  box-sizing: border-box;
 }
 
-.form input::placeholder{
-  color: rgba(15,23,42,0.45);
+.form input::placeholder {
+  color: #94a3b8;
+  font-weight: 500;
 }
 
-.form input:focus{
-  border-color: rgba(11, 58, 97, 0.35);
-  box-shadow: 0 0 0 4px rgba(11, 58, 97, 0.14);
+.form input:focus {
+  outline: none;
+  border-color: #0b3a53;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(11, 58, 83, 0.08);
 }
 
-/* Remove setinhas no number (Chrome/Edge) */
+/* Remove setas do input number */
 .form input[type="number"]::-webkit-outer-spin-button,
-.form input[type="number"]::-webkit-inner-spin-button{
+.form input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-/* Firefox */
-.form input[type="number"]{
+
+.form input[type="number"] {
   -moz-appearance: textfield;
 }
 
-/* Actions */
-.actions{
-  display:flex;
+/* ===== ACTIONS (BUTTONS) ===== */
+.actions {
+  display: flex;
   gap: 12px;
-  margin-top: 12px;
-  padding-top: 14px;
-  border-top: 1px solid rgba(2, 6, 23, 0.08);
+  margin-bottom: 24px;
 }
 
-.actions button{
+.actions button {
   flex: 1;
-  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 20px;
   border: none;
-  border-radius: 12px;
-  font-weight: 900;
-  letter-spacing: .02em;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 800;
   cursor: pointer;
-  transition: transform .12s ease, box-shadow .15s ease, opacity .15s ease;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.actions button:first-child{
-  color: #fff;
-  background: linear-gradient(135deg, #0b3a61, #0ea5e9);
-  box-shadow: 0 14px 28px rgba(14, 165, 233, 0.18);
-}
-.actions button:first-child:hover{
-  transform: translateY(-1px);
-  box-shadow: 0 18px 34px rgba(14, 165, 233, 0.22);
+/* Botão Calcular (primary) */
+.actions button:not(.outline) {
+  background: linear-gradient(135deg, #0b3a53 0%, #0d5d79 100%);
+  color: #ffffff;
+  box-shadow: 0 6px 20px rgba(11, 58, 83, 0.25);
 }
 
-.actions button.outline{
-  color: #0b3a61;
-  background: rgba(11, 58, 97, 0.08);
-  border: 1px solid rgba(11, 58, 97, 0.18);
-}
-.actions button.outline:hover{
-  transform: translateY(-1px);
-  opacity: .95;
+.actions button:not(.outline)::before {
+  content: '⏱️';
+  font-size: 16px;
 }
 
-.actions button:active{
-  transform: translateY(0px) scale(0.99);
+.actions button:not(.outline):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(11, 58, 83, 0.35);
+  filter: brightness(1.1);
 }
 
-/* Result */
-.result{
-  margin-top: 16px;
-  padding: 14px 14px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, rgba(11, 58, 97, 0.08), rgba(14, 165, 233, 0.08));
-  border: 1px solid rgba(11, 58, 97, 0.16);
+.actions button:not(.outline):active {
+  transform: translateY(0);
 }
 
-.result p{
-  margin: 6px 0;
-  color: #0f172a;
-  font-size: 15px;
+/* Botão Limpar (outline) */
+.actions button.outline {
+  background: transparent;
+  border: 2px solid #d0e8f2;
+  color: #0b3a53;
 }
 
-.result strong{
-  color: #0b3a61;
+.actions button.outline::before {
+  content: '🔄';
+  font-size: 16px;
 }
 
-/* Responsivo */
-@media (max-width: 560px){
-  .calc-card{
-    padding: 18px 16px 14px;
-    border-radius: 16px;
+.actions button.outline:hover {
+  background: #e8f4f8;
+  border-color: #0b3a53;
+}
+
+.actions button.outline:active {
+  transform: scale(0.98);
+}
+
+/* ===== RESULT ===== */
+.result {
+  background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%);
+  border: 2px solid #7dd3fc;
+  border-radius: 12px;
+  padding: 20px;
+  animation: resultFadeIn 0.5s ease;
+}
+
+@keyframes resultFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.result p {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 0 14px 0;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(125, 211, 252, 0.3);
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.result p:last-child {
+  margin-bottom: 0;
+  background: #0b3a53;
+  border-color: #0b3a53;
+  padding: 16px;
+  box-shadow: 0 4px 16px rgba(11, 58, 83, 0.2);
+  color: #ffffff;
+}
+
+.result p:hover {
+  transform: translateX(4px);
+}
+
+.result p strong {
+  font-weight: 700;
+  color: #0b3a53;
+  font-size: 13px;
+  margin-right: 12px;
+}
+
+.result p:last-child strong {
+  color: #ffffff;
+  font-size: 14px;
+}
+
+/* Valores à direita */
+.result p::after {
+  content: attr(data-value);
+  font-weight: 900;
+  font-size: 17px;
+  color: #0b3a53;
+  margin-left: auto;
+}
+
+.result p:last-child::after {
+  font-size: 22px;
+  color: #7dd3fc;
+}
+
+/* Se estiver usando {{ }} no HTML em vez de ::after */
+.result-value {
+  font-weight: 900;
+  font-size: 17px;
+  color: #0b3a53;
+  margin-left: auto;
+}
+
+.result p:last-child .result-value {
+  font-size: 22px;
+  color: #7dd3fc;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-result {
+  text-align: center;
+  padding: 48px 32px;
+  background: #f8fcff;
+  border: 2px dashed #d0e8f2;
+  border-radius: 12px;
+  animation: pulse 2s ease infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.empty-result .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
+  background: #e8f4f8;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  font-size: 36px;
+}
+
+.empty-result h3 {
+  margin: 0 0 10px;
+  font-size: 18px;
+  font-weight: 800;
+  color: #0b3a53;
+}
+
+.empty-result p {
+  margin: 0;
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.5;
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  :host {
+    padding: 24px 16px;
   }
 
-  .top h2{
-    font-size: 22px;
+  .calc-card {
+    padding: 24px;
   }
 
-  .actions{
+  h2 {
+    font-size: 24px;
+  }
+
+  .actions {
     flex-direction: column;
   }
 
-  .actions button{
-    flex: unset;
+  .actions button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .calc-card {
+    padding: 20px;
+    border-radius: 16px;
+  }
+
+  h2 {
+    font-size: 22px;
+  }
+
+  .form input {
+    font-size: 14px;
+    padding: 11px 13px;
+  }
+
+  .result-value,
+  .result p::after {
+    font-size: 15px !important;
+  }
+
+  .result p:last-child .result-value,
+  .result p:last-child::after {
+    font-size: 19px !important;
+  }
+
+  .empty-result {
+    padding: 40px 24px;
+  }
+
+  .empty-result .icon {
+    width: 60px;
+    height: 60px;
+    font-size: 32px;
   }
 }

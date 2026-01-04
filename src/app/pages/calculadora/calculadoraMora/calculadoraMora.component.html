@@ -2,18 +2,35 @@
   <div class="top">
     <a class="back" routerLink="/calculadora">← Voltar</a>
     <h2>Cálculo de Mora</h2>
-    <small>Fórmula: (percentual/30) * dias_atraso * valor_face / 100</small>
+    <small><strong>Fórmula:</strong> (percentual/30) × dias_atraso × valor_face / 100</small>
   </div>
 
   <div class="form">
     <label>Valor de Face (R$)</label>
-    <input type="number" [(ngModel)]="valorFace" />
+    <input
+      type="number"
+      [(ngModel)]="valorFace"
+      placeholder="Ex: 1.000,00"
+      min="0"
+      step="0.01"
+    />
 
     <label>Percentual (%)</label>
-    <input type="number" [(ngModel)]="percentual" />
+    <input
+      type="number"
+      [(ngModel)]="percentual"
+      placeholder="Ex: 1%"
+      min="0"
+      step="0.01"
+    />
 
     <label>Dias de atraso</label>
-    <input type="number" [(ngModel)]="diasAtraso" />
+    <input
+      type="number"
+      [(ngModel)]="diasAtraso"
+      placeholder="Ex: 30"
+      min="0"
+    />
   </div>
 
   <div class="actions">
@@ -21,8 +38,22 @@
     <button class="outline" (click)="limpar()">Limpar</button>
   </div>
 
+  <!-- Resultado -->
   <div class="result" *ngIf="resultado">
-    <p><strong>Mora:</strong> {{ formatarMoeda(resultado.mora) }}</p>
-    <p><strong>Total (Face + Mora):</strong> {{ formatarMoeda(resultado.valorTotal) }}</p>
+    <p>
+      <strong>Mora:</strong>
+      <span class="result-value">{{ formatarMoeda(resultado.mora) }}</span>
+    </p>
+    <p>
+      <strong>Total (Face + Mora):</strong>
+      <span class="result-value">{{ formatarMoeda(resultado.valorTotal) }}</span>
+    </p>
+  </div>
+
+  <!-- Estado vazio -->
+  <div class="empty-result" *ngIf="!resultado">
+    <div class="icon">⏱️</div>
+    <h3>Aguardando cálculo</h3>
+    <p>Preencha os campos acima e clique em "Calcular"</p>
   </div>
 </div>
