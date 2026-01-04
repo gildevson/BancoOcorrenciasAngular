@@ -5,7 +5,7 @@ import { BaseChartDirective } from 'ng2-charts';
 import { Chart, registerables, ChartConfiguration, ChartData } from 'chart.js';
 
 import { BehaviorSubject, combineLatest, Subject, timer, of } from 'rxjs';
-import { catchError, distinctUntilChanged, finalize, map, shareReplay, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { catchError, distinctUntilChanged, finalize, map, shareReplay, switchMap, takeUntil, tap, debounceTime } from 'rxjs/operators';
 
 import { MarketMoedasService, FxQuoteItem, HistoryResponse } from '../../service/marketmoedas.service';
 
@@ -40,14 +40,29 @@ export class MoedasComponent implements OnInit, OnDestroy {
   baixas: FxQuoteItem[] = [];
   principais: FxQuoteItem[] = [];
 
-  amountBRL = 100;
-  amountUSD = 0;
+  // ✅ NOVO: Conversão com seleção de moedas
+  fromCurrency = 'USD';
+  toCurrency = 'BRL';
+  amountFrom = 1;
+  amountTo = 0;
+
+  availableCurrencies = [
+    { code: 'USD', name: 'Dólar', symbol: '$' },
+    { code: 'EUR', name: 'Euro', symbol: '€' },
+    { code: 'GBP', name: 'Libra', symbol: '£' },
+    { code: 'BRL', name: 'Real', symbol: 'R$' },
+    { code: 'ARS', name: 'Peso', symbol: '$' }
+  ];
+
+  conversionLoading = false;
+  conversionRate = 0;
 
   chartLoading = true;
   chartError = '';
 
   private symbol$ = new BehaviorSubject<string>(this.selectedSymbol);
   private period$ = new BehaviorSubject<PeriodKey>(this.activePeriod);
+  private conversion$ = new Subject<void>();
 
   public lineChartType: 'line' = 'line';
 
@@ -108,11 +123,18 @@ export class MoedasComponent implements OnInit, OnDestroy {
   };
 
   ngOnInit(): void {
-    // ✅ MUDADO: Timer de 60 segundos
+    // Timer de 60 segundos para atualizar cotações
     timer(0, 60000)
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => this.loadQuotes());
 
+    // ✅ NOVO: Conversão automática com debounce
+    this.conversion$.pipe(
+      debounceTime(500),
+      takeUntil(this.destroy$)
+    ).subscribe(() => this.convertCurrency());
+
+    // Gráfico
     combineLatest([this.symbol$, this.period$]).pipe(
       distinctUntilChanged(([s1, p1], [s2, p2]) => s1 === s2 && p1 === p2),
       tap(() => {
@@ -134,11 +156,83 @@ export class MoedasComponent implements OnInit, OnDestroy {
         this.clearChart();
       },
     });
+
+    // ✅ Converte na inicialização
+    this.convertCurrency();
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  // ✅ NOVO: Método de conversão usando a API
+  convertCurrency() {
+    if (this.amountFrom <= 0) {
+      this.amountTo = 0;
+      return;
+    }
+
+    this.conversionLoading = true;
+
+    this.api.convertCurrency(this.fromCurrency, this.toCurrency, this.amountFrom)
+      .pipe(
+        catchError(() => {
+          // Fallback: usa cotação da lista se API falhar
+          const pair = `${this.fromCurrency}${this.toCurrency}`;
+          const quote = this.all.find(x => x.symbol === pair);
+          if (quote?.regularMarketPrice) {
+            return of({
+              from: this.fromCurrency,
+              to: this.toCurrency,
+              amount: this.amountFrom,
+              rate: quote.regularMarketPrice,
+              converted: this.amountFrom * quote.regularMarketPrice,
+              timestamp: Date.now()
+            });
+          }
+          return of(null);
+        }),
+        finalize(() => this.conversionLoading = false),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(result => {
+        if (result) {
+          this.amountTo = result.converted;
+          this.conversionRate = result.rate;
+        }
+      });
+  }
+
+  // ✅ NOVO: Trocar moedas (swap)
+  swapCurrencies() {
+    const temp = this.fromCurrency;
+    this.fromCurrency = this.toCurrency;
+    this.toCurrency = temp;
+    this.conversion$.next();
+  }
+
+  // ✅ NOVO: Triggers para conversão
+  onAmountChange() {
+    this.conversion$.next();
+  }
+
+  onFromCurrencyChange() {
+    this.conversion$.next();
+    // Atualiza gráfico se possível
+    const newSymbol = `${this.fromCurrency}${this.toCurrency}`;
+    if (this.all.some(x => x.symbol === newSymbol)) {
+      this.setSymbol(newSymbol);
+    }
+  }
+
+  onToCurrencyChange() {
+    this.conversion$.next();
+    // Atualiza gráfico se possível
+    const newSymbol = `${this.fromCurrency}${this.toCurrency}`;
+    if (this.all.some(x => x.symbol === newSymbol)) {
+      this.setSymbol(newSymbol);
+    }
   }
 
   loadQuotes() {
@@ -157,8 +251,8 @@ export class MoedasComponent implements OnInit, OnDestroy {
       this.altas = [...normalized].sort((a, b) => pct(b) - pct(a));
       this.baixas = [...normalized].sort((a, b) => pct(a) - pct(b));
 
-      const usd = normalized.find(x => x.symbol === 'USDBRL')?.regularMarketPrice ?? 0;
-      this.amountUSD = usd > 0 ? (this.amountBRL / usd) : 0;
+      // ✅ Atualiza conversão se as moedas mudaram
+      this.conversion$.next();
     });
   }
 
@@ -194,11 +288,6 @@ export class MoedasComponent implements OnInit, OnDestroy {
   }
 
   clearSearch() { this.searchTerm = ''; }
-
-  onChangeBRL() {
-    const usd = this.all.find(x => x.symbol === 'USDBRL')?.regularMarketPrice ?? 0;
-    this.amountUSD = usd > 0 ? (this.amountBRL / usd) : 0;
-  }
 
   get listaAtual(): FxQuoteItem[] {
     let list: FxQuoteItem[] = [];

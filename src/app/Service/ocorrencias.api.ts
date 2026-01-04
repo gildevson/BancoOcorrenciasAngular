@@ -32,10 +32,13 @@ export interface UpdateOcorrenciaMotivoRequest {
   observacao?: string | null;
 }
 
-// ============= SERVIÇO =============
+// ============= SERVIÇO ============= 'https://localhost:7041/api'; 'https://exceptional-melita-gildevson-sistemas-1fffc163.koyeb.app/api';
 @Injectable({ providedIn: 'root' })
 export class OcorrenciasApi {
-  private readonly API = 'https://localhost:7041/api';
+
+private readonly API ='https://localhost:7041/api';
+
+  /*private readonly API = 'https://exceptional-melita-gildevson-sistemas-1fffc163.koyeb.app/api'; ;*/
 
   constructor(private http: HttpClient) {}
 

@@ -18,16 +18,71 @@
       </div>
     </div>
 
-    <!-- Conversão rápida -->
-    <div class="convert">
-      <div class="field">
-        <span>BRL</span>
-        <input type="number" [(ngModel)]="amountBRL" (input)="onChangeBRL()" />
+    <!-- ✅ CONVERSOR MELHORADO -->
+    <div class="converter">
+      <div class="converter-header">
+        <span class="material-icons">swap_horiz</span>
+        <span>Conversor de Moedas</span>
       </div>
-      <div class="eq">≈</div>
-      <div class="field">
-        <span>USD</span>
-        <input type="text" [value]="amountUSD.toFixed(2)" disabled />
+
+      <div class="converter-body">
+        <!-- Moeda de Origem -->
+        <div class="currency-input">
+          <select
+            [(ngModel)]="fromCurrency"
+            (change)="onFromCurrencyChange()"
+            class="currency-select">
+            <option *ngFor="let curr of availableCurrencies" [value]="curr.code">
+              {{ curr.code }} - {{ curr.name }}
+            </option>
+          </select>
+          <input
+            type="number"
+            [(ngModel)]="amountFrom"
+            (input)="onAmountChange()"
+            min="0"
+            step="0.01"
+            class="amount-input"
+            placeholder="0.00">
+        </div>
+
+        <!-- Botão de Trocar -->
+        <button
+          type="button"
+          class="swap-btn"
+          (click)="swapCurrencies()"
+          title="Trocar moedas">
+          <span class="material-icons">swap_vert</span>
+        </button>
+
+        <!-- Moeda de Destino -->
+        <div class="currency-input">
+          <select
+            [(ngModel)]="toCurrency"
+            (change)="onToCurrencyChange()"
+            class="currency-select">
+            <option *ngFor="let curr of availableCurrencies" [value]="curr.code">
+              {{ curr.code }} - {{ curr.name }}
+            </option>
+          </select>
+          <input
+            type="text"
+            [value]="amountTo | number:'1.2-2'"
+            class="amount-input result"
+            readonly>
+        </div>
+      </div>
+
+      <!-- Taxa de Conversão -->
+      <div class="conversion-rate" *ngIf="conversionRate > 0">
+        <span class="material-icons">info</span>
+        1 {{ fromCurrency }} = {{ conversionRate | number:'1.4-4' }} {{ toCurrency }}
+      </div>
+
+      <!-- Loading -->
+      <div class="conversion-loading" *ngIf="conversionLoading">
+        <div class="mini-spinner"></div>
+        Convertendo...
       </div>
     </div>
 

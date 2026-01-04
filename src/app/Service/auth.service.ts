@@ -25,8 +25,9 @@ interface ResetPasswordResponse {
 export class AuthService {
   private readonly TOKEN_KEY = 'auth_token';
   private readonly USER_KEY  = 'auth_user';
-  private readonly ROLES_KEY = 'auth_roles';
-
+  private readonly ROLES_KEY = 'auth_roles'; /*https://localhost:7041/api*/
+/*  private readonly API = 'https://exceptional-melita-gildevson-sistemas-1fffc163.koyeb.app/api';
+*/
   private readonly API = 'https://localhost:7041/api';
 
   private userSubject = new BehaviorSubject<LoginUser | null>(this.loadUser());
