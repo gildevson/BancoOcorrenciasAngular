@@ -72,6 +72,13 @@
             Notícias
           </a>
         </li>
+        <!-- Cadastrar Notícia (apenas ADMIN) -->
+        <li *ngIf="isAdmin$ | async" routerLinkActive="active" #rlaNotCad="routerLinkActive">
+          <a routerLink="/noticias/cadastrar" (click)="closeMenu()" aria-label="Cadastrar nova notícia"
+            [attr.aria-current]="rlaNotCad.isActive ? 'page' : null">
+            Cadastrar Notícia
+          </a>
+        </li>
 
         <!-- Dropdown: Relatórios
         <li class="dropdown" [class.active]="dropdownOpen === 'reports'">
@@ -175,12 +182,9 @@
             <a href="#" (click)="onSubNavClick($event, 'processamento')">PROCESSAMENTO</a>
           </li>
 
+
           <li [class.active]="activeSubNav === 'cadastros'">
             <a href="#" (click)="onSubNavClick($event, 'cadastros')">CADASTROS</a>
-          </li>
-
-          <li [class.active]="activeSubNav === 'auditoria'">
-            <a href="#" (click)="onSubNavClick($event, 'auditoria')">AUDITORIA</a>
           </li>
 
           <li [class.active]="activeSubNav === 'relatorios'">
@@ -196,6 +200,9 @@
             <a routerLink="/edicoes-ocorrencias" (click)="closeMenu()">
               EDITAR OCORRÊNCIAS
             </a>
+          </li>
+           <li [class.active]="activeSubNav === 'auditoria'">
+            <a routerLink="/noticias/cadastrar" (click)="onSubNavClick($event, 'auditoria')">CADASTRAR NOTICIA</a>
           </li>
         </ul>
       </ng-template>

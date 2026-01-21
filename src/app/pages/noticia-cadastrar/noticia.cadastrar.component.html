@@ -1,0 +1,28 @@
+<div class="cadastrar-noticia-container">
+  <h2>Cadastrar Notícia</h2>
+  <form [formGroup]="noticiaForm" (ngSubmit)="onSubmit()">
+    <div *ngIf="errorMsg" class="error">{{ errorMsg }}</div>
+    <label>Título:<input formControlName="titulo" required></label>
+    <label>Slug:<input formControlName="slug" required></label>
+    <label>Resumo:<textarea formControlName="resumo" required></textarea></label>
+    <label>Conteúdo:<textarea formControlName="conteudo" required></textarea></label>
+    <label>Categoria:<input formControlName="categoria" required></label>
+    <label>Status:
+      <select formControlName="status">
+        <option value="publicado">Publicado</option>
+        <option value="rascunho">Rascunho</option>
+      </select>
+    </label>
+    <label>Publicado:<input type="checkbox" formControlName="publicado"></label>
+    <label>Data Publicação:<input type="datetime-local" formControlName="dataPublicacao" required></label>
+    <label>Autor:<input formControlName="autorNome" required></label>
+    <label>Destaque:<input type="checkbox" formControlName="destaque"></label>
+    <label>Meta Description:<input formControlName="metaDescription"></label>
+    <label>Imagem URL:<input formControlName="imagemUrl"></label>
+    <label>Fonte Nome:<input formControlName="fonteNome"></label>
+    <label>Fonte URL:<input formControlName="fonteUrl"></label>
+    <label>Fonte Publicada Em:<input type="datetime-local" formControlName="fontePublicadaEm"></label>
+    <label>Fonte Autor:<input formControlName="fonteAutor"></label>
+    <button type="submit" [disabled]="isSubmitting || noticiaForm.invalid">Cadastrar</button>
+  </form>
+</div>

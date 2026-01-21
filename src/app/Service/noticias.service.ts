@@ -41,4 +41,9 @@ export class NoticiasService {
   registrarVisualizacao(id: string): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/${id}/visualizar`, {});
   }
+  
+    // POST /api/noticias - Cadastra nova notícia
+    cadastrarNoticia(noticia: any): Observable<any> {
+      return this.http.post<any>(this.apiUrl, noticia);
+    }
 }

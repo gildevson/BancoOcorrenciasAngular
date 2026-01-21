@@ -21,6 +21,14 @@ export const routes: Routes = [
         .then(m => m.NoticiasComponent),
   },
   {
+    path: 'noticias/cadastrar',
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ADMIN'] },
+    loadComponent: () =>
+      import('./pages/noticia-cadastrar/noticia.cadastrar.component')
+        .then(m => m.NoticiaCadastrarComponent),
+  },
+  {
     path: 'noticia/:slug',
     loadComponent: () =>
       import('./pages/noticiadetalhe.component/noticiadetalhe.component')
