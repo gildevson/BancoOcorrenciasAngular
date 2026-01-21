@@ -1,0 +1,23 @@
+<div class="validador-list">
+  <h2>Validadores de Bancos</h2>
+  <div style="text-align:center; margin-bottom:18px; color:#1976d2; font-size:1.1em;">
+    Clique no botão do validador desejado para simular a leitura e validação do arquivo remessa do banco correspondente.
+  </div>
+  <div class="bancos-grid">
+    <div *ngFor="let banco of bancos" class="banco-card">
+      <img [src]="banco.logo" [alt]="banco.nome + ' logo'" class="banco-logo" />
+      <div class="banco-info">
+        <div class="banco-nome">{{ banco.nome }}</div>
+        <div class="banco-codigo">{{ banco.codigo }}</div>
+        <div class="validador-links" *ngIf="banco.validadores && banco.validadores.length">
+          <a *ngFor="let validador of banco.validadores" [routerLink]="validador.routerLink" class="validador-btn">
+            {{ validador.nome }}
+          </a>
+        </div>
+        <div *ngIf="!banco.validadores || !banco.validadores.length">
+          <span class="no-validador">Nenhum validador disponível</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -6,6 +6,10 @@ export interface BancoData {
   nome: string;      // "Bradesco"
   logo: string;      // URL externa ou assets/...
   ativo?: boolean;   // opcional - indica se está disponível
+  validadores?: Array<{
+    nome: string;
+    routerLink: string;
+  }>;
 }
 
 export const BANCOS_DATA: BancoData[] = [
@@ -15,6 +19,10 @@ export const BANCOS_DATA: BancoData[] = [
     nome: 'Bradesco',
     logo: 'https://img.icons8.com/?size=100&id=IQoGuxn2kFxM&format=png&color=000000',
     ativo: true,
+    validadores: [
+      { nome: 'Validador CNAB 400', routerLink: '/validadores/bradesco/cnab400' },
+      { nome: 'Validador CNAB 240', routerLink: '/validadores/bradesco/cnab240' }
+    ]
   },
   {
     id: 'd44d850e-b5da-4e28-a1ec-1bf69696ed71',
@@ -22,6 +30,9 @@ export const BANCOS_DATA: BancoData[] = [
     nome: 'Banco do Brasil',
     logo: 'https://logopng.com.br/logos/banco-do-brasil-5.png',
     ativo: true,
+    validadores: [
+      { nome: 'Validador CNAB 240', routerLink: '/validador/bb-cnab240' }
+    ]
   },
   {
     id: '0f3f2581-b572-4e7e-8b89-2068b1641190',
@@ -29,6 +40,10 @@ export const BANCOS_DATA: BancoData[] = [
     nome: 'Itaú Unibanco',
     logo: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Ita%C3%BA%20Unibanco%20S.A/itau-fundo-azul.svg',
     ativo: true,
+    validadores: [
+      { nome: 'Validador CNAB 400', routerLink: '/validador/itau-cnab400' },
+      { nome: 'Validador CNAB 240', routerLink: '/validador/itau-cnab240' }
+    ]
   },
   {
     id: 'ae2a0308-abe3-4aa1-a9cb-9cf9b597636e',
@@ -36,6 +51,7 @@ export const BANCOS_DATA: BancoData[] = [
     nome: 'Caixa Econômica Federal',
     logo: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Caixa%20Econ%C3%B4mica%20Federal/caixa-economica-federal-1.svg',
     ativo: true,
+    // ...sem validadores...
   },
   {
     id: 'b0118017-5e0b-41ba-97aa-7c9d0af94221',
@@ -43,14 +59,18 @@ export const BANCOS_DATA: BancoData[] = [
     nome: 'Santander',
     logo: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banco%20Santander%20Brasil%20S.A/banco-santander-logo.svg',
     ativo: true,
-    /*INSERT INTO ocorrencias_motivos(id, banco_id, ocorrencia, motivo, descricao)VALUES(gen_random_uuid(),'ae2a0308-abe3-4aa1-a9cb-9cf9b597636e'::uuid,*/
+    validadores: [
+      { nome: 'Validador CNAB 400', routerLink: '/validador/santander-cnab400' },
+      { nome: 'Validador CNAB 240', routerLink: '/validador/santander-cnab240' }
+    ]
   },
   {
     id: '4aad7f3d-f26a-4cad-ab71-7fe86115a995',
     codigo: '041',
     nome: 'Banrisul',
     logo: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banrisul/banrisul-logo-2023.svg',
-    ativo: true, // Em breve
+    ativo: true,
+    // ...sem validadores...
   },
   {
     id: '38a11456-ee76-4861-8b8b-d86bc94038de',
@@ -58,7 +78,7 @@ export const BANCOS_DATA: BancoData[] = [
     nome: 'Banco Grafeno',
     logo: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Grafeno/grafeno.svg',
     ativo: true,
-    /*INSERT INTO ocorrencias_motivos(id, banco_id, ocorrencia, motivo, descricao)VALUES(gen_random_uuid(),'ae2a0308-abe3-4aa1-a9cb-9cf9b597636e'::uuid,*/
+    // ...sem validadores...
   },
   {
     id: '8253727a-1b36-41e6-b16f-b3e19caf0804',
@@ -103,38 +123,38 @@ export const BANCOS_DATA: BancoData[] = [
     ativo: true,
   },
   {
-    id: '',
+    id: '1e967da2-8706-448e-9080-606bc455110f',
     codigo: '077',
     nome: 'Banco Inter',
     logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Banco_Inter_logo.svg/512px-Banco_Inter_logo.svg.png',
     ativo: false,
   },
   {
-    id: '',
+    id: '792f9e42-990a-4702-8669-07f185df7ff5',
     codigo: '260',
     nome: 'Nu Pagamentos',
     logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Nubank_logo_2021.svg/512px-Nubank_logo_2021.svg.png',
     ativo: false,
   },
   {
-    id: '',
+    id: '0f26949a-5b9c-4876-8051-54c7943d7890',
     codigo: '212',
     nome: 'Banco Original',
     logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Banco_Original_logo.svg/512px-Banco_Original_logo.svg.png',
     ativo: false, // Em breve
   },
   {
-    id: '',
+    id: '6ca668f4-48f5-4680-a841-83d8e0638ce2',
     codigo: '070',
     nome: 'BRB - Banco de Brasília',
     logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/BRB_logo.svg/512px-BRB_logo.svg.png',
     ativo: false, // Em breve
   },
   {
-    id: '',
+    id: '990f7015-c289-4b71-b29c-699adca6663f',
     codigo: '208',
     nome: 'Banco BTG',
-    logo: 'https://images.seeklogo.com/logo-png/27/1/banco-bic-logo-png_seeklogo-277058.png',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/4/4e/Btg-logo.png',
     ativo: false,
   },
 ];

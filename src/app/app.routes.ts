@@ -52,11 +52,25 @@ export const routes: Routes = [
         .then(m => m.ConsultarOcorrenciaComponent),
   },
   {
-    path: 'bancos',
+    path: 'validadores',
     title: 'Validadores de Bancos',
     loadComponent: () =>
-      import('./pages/bancos/listaValidadores.component')
+      import('./pages/validadores/listaValidadores.component')
         .then(m => m.ListaValidadoresComponent),
+  },
+  {
+    path: 'validadores/bradesco/cnab400',
+    title: 'Validador Bradesco CNAB 400',
+    loadComponent: () =>
+      import('./pages/validadores/bradesco/bradesco-cnab400-validador.component')
+        .then(m => m.BradescoCnab400ValidadorComponent),
+  },
+  {
+    path: 'validadores/bradesco/cnab240',
+    title: 'Validador Bradesco CNAB 240',
+    loadComponent: () =>
+      import('./pages/validadores/bradesco/bradesco-cnab240-validador.component')
+        .then(m => m.BradescoCnab240ValidadorComponent),
   },
 
   // ===============================

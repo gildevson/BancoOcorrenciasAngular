@@ -1,0 +1,32 @@
+.cnab-matrix-header {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 2px;
+}
+.cnab-matrix-row {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 4px;
+}
+.cnab-matrix-cell {
+  display: inline-block;
+  height: 18px;
+  line-height: 18px;
+  text-align: center;
+  border: 1px solid #fff;
+  font-size: 13px;
+  font-family: monospace;
+}
+.cnab-tipo { background: #f8bbd0; }
+.cnab-agencia { background: #ffe082; }
+.cnab-conta { background: #b2dfdb; }
+.cnab-empresa { background: #c5cae9; }
+.cnab-controle { background: #f5f5f5; }
+.cnab-banco { background: #b3e5fc; }
+.cnab-nosso { background: #f8bbd0; }
+.cnab-doc { background: #dcedc8; }
+.cnab-venc { background: #fff9c4; }
+.cnab-valor { background: #ffcdd2; }
+.cnab-sacado { background: #ffecb3; }
+.cnab-cpf { background: #b3e5fc; }
+.cnab-seq { background: #b2ebf2; }

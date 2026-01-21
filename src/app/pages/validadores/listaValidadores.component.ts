@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { BANCOS_DATA, BancoData } from '../../data/bancos.data';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-lista-validadores',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './listaValidadores.component.html',
-  styleUrl: './listaValidadores.component.css'
+  styleUrls: ['./listaValidadores.component.css']
 })
 export class ListaValidadoresComponent {
-  bancos: BancoData[] = BANCOS_DATA.filter(b => b.ativo !== false);
+  bancos: BancoData[] = BANCOS_DATA;
 }

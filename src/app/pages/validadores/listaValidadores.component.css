@@ -1,0 +1,98 @@
+.validador-list {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 0 32px 0;
+}
+.validador-list h2 {
+  text-align: center;
+  margin-bottom: 32px;
+  font-size: 2rem;
+  color: #1976d2;
+  letter-spacing: 0.5px;
+}
+.bancos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 32px;
+}
+.banco-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff;
+  border-radius: 10px;
+  padding: 28px 18px 20px 18px;
+  box-shadow: 0 2px 12px rgba(25, 118, 210, 0.07);
+  transition: box-shadow 0.2s, transform 0.2s;
+  min-height: 270px;
+}
+.banco-card:hover {
+  box-shadow: 0 6px 24px rgba(25, 118, 210, 0.13);
+  transform: translateY(-4px) scale(1.03);
+}
+.banco-logo {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  margin-bottom: 14px;
+  background: #f5f5f5;
+  border-radius: 50%;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.banco-info {
+  text-align: center;
+  width: 100%;
+}
+.banco-nome {
+  font-weight: 700;
+  font-size: 1.15em;
+  margin-bottom: 2px;
+}
+.banco-codigo {
+  color: #1976d2;
+  font-size: 0.98em;
+  margin-bottom: 10px;
+}
+.validador-links {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.validador-btn {
+  display: inline-block;
+  padding: 8px 18px;
+  background: linear-gradient(90deg, #1976d2 60%, #2196f3 100%);
+  color: #fff;
+  border-radius: 5px;
+  font-weight: 500;
+  font-size: 1em;
+  text-decoration: none;
+  box-shadow: 0 1px 4px rgba(25, 118, 210, 0.08);
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+.validador-btn:hover {
+  background: linear-gradient(90deg, #1565c0 60%, #1976d2 100%);
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.18);
+  transform: scale(1.04);
+}
+.no-validador {
+  color: #888;
+  font-size: 0.97em;
+  margin-top: 12px;
+}
+@media (max-width: 700px) {
+  .bancos-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .banco-card {
+    min-height: 200px;
+    padding: 18px 8px 14px 8px;
+  }
+  .banco-logo {
+    width: 54px;
+    height: 54px;
+  }
+}
