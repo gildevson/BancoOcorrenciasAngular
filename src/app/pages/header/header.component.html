@@ -56,6 +56,14 @@
 
         <!-- Validadores -->
 
+        <!-- Lista de Bancos -->
+        <li routerLinkActive="active" #rlaBancos="routerLinkActive">
+          <a routerLink="/bancos" (click)="closeMenu()" aria-label="Validadores: lista de bancos e logos"
+            [attr.aria-current]="rlaBancos.isActive ? 'page' : null">
+            Validadores
+          </a>
+        </li>
+
 
         <!-- Layouts -->
         <li routerLinkActive="active" #rlaLay="routerLinkActive">
@@ -72,13 +80,7 @@
             Notícias
           </a>
         </li>
-        <!-- Cadastrar Notícia (apenas ADMIN) -->
-        <li *ngIf="isAdmin$ | async" routerLinkActive="active" #rlaNotCad="routerLinkActive">
-          <a routerLink="/noticias/cadastrar" (click)="closeMenu()" aria-label="Cadastrar nova notícia"
-            [attr.aria-current]="rlaNotCad.isActive ? 'page' : null">
-            Cadastrar Notícia
-          </a>
-        </li>
+
 
         <!-- Dropdown: Relatórios
         <li class="dropdown" [class.active]="dropdownOpen === 'reports'">
@@ -201,9 +203,13 @@
               EDITAR OCORRÊNCIAS
             </a>
           </li>
-           <li [class.active]="activeSubNav === 'auditoria'">
-            <a routerLink="/noticias/cadastrar" (click)="onSubNavClick($event, 'auditoria')">CADASTRAR NOTICIA</a>
+          <!-- ✅ Gerenciar Notícias (apenas ADMIN) -->
+          <li routerLinkActive="active">
+            <a routerLink="/noticias-admin" (click)="closeMenu()">
+              GERENCIAR NOTÍCIAS
+            </a>
           </li>
+
         </ul>
       </ng-template>
 

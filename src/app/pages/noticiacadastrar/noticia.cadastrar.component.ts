@@ -47,12 +47,44 @@ export class NoticiaCadastrarComponent {
     if (this.noticiaForm.invalid) return;
     this.isSubmitting = true;
     this.errorMsg = '';
-    this.noticiasService.cadastrarNoticia(this.noticiaForm.value).subscribe({
+
+    // Ajustar payload
+    const raw = this.noticiaForm.value;
+    const payload = {
+      ...raw,
+      // Remover espaços extras
+      titulo: raw.titulo?.trim(),
+      slug: raw.slug?.trim(),
+      resumo: raw.resumo?.trim(),
+      conteudo: raw.conteudo?.trim(),
+      categoria: raw.categoria?.trim(),
+      autorNome: raw.autorNome?.trim(),
+      metaDescription: raw.metaDescription?.trim(),
+      imagemUrl: raw.imagemUrl?.trim(),
+      fonteNome: raw.fonteNome?.trim(),
+      fonteUrl: raw.fonteUrl?.trim(),
+      fonteAutor: raw.fonteAutor?.trim(),
+      // Datas no formato ISO completo ou null
+      dataPublicacao: raw.dataPublicacao ? this.toIsoWithSeconds(raw.dataPublicacao) : null,
+      fontePublicadaEm: raw.fontePublicadaEm ? this.toIsoWithSeconds(raw.fontePublicadaEm) : null,
+    };
+
+    this.noticiasService.cadastrarNoticia(payload).subscribe({
       next: () => this.router.navigate(['/noticias']),
       error: err => {
         this.errorMsg = 'Erro ao cadastrar notícia.';
         this.isSubmitting = false;
       }
     });
+  }
+
+  // Converte "2026-01-20T23:47" para "2026-01-20T23:47:00"
+  private toIsoWithSeconds(dt: string): string {
+    if (!dt) return '';
+    // Se já tem segundos, retorna
+    if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(dt)) return dt;
+    // Se não tem segundos, adiciona
+    if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(dt)) return dt + ':00';
+    return dt;
   }
 }

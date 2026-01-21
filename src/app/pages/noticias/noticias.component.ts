@@ -22,6 +22,7 @@ export class NoticiasComponent implements OnInit {
     this.carregarNoticias();
   }
 
+
   carregarNoticias(): void {
     this.loading = true;
     this.erro = '';

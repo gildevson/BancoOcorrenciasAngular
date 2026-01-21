@@ -20,27 +20,29 @@
 
   <!-- Grid de Notícias -->
   <div class="grid" *ngIf="!loading && !erro && noticias.length">
-    <a class="card" *ngFor="let n of noticias" [routerLink]="['/noticia', n.slug]">
-      <div class="img">
-        <img
-          [src]="n.imagemCapa || 'https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?w=400&q=80'"
-          [alt]="n.titulo"
-          (error)="onImageError($event)"
-        >
-        <span class="tag" *ngIf="n.categoria">{{ n.categoria }}</span>
-        <span class="tag destaque" *ngIf="n.destaque">⭐ Destaque</span>
-      </div>
+    <div class="card" *ngFor="let n of noticias">
+      <a [routerLink]="['/noticia', n.slug]">
+        <div class="img">
+          <img
+            [src]="n.imagemCapa || 'https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?w=400&q=80'"
+            [alt]="n.titulo"
+            (error)="onImageError($event)"
+          >
+          <span class="tag" *ngIf="n.categoria">{{ n.categoria }}</span>
+          <span class="tag destaque" *ngIf="n.destaque">⭐ Destaque</span>
+        </div>
 
-      <div class="meta">
-        <span class="material-icons">event</span>
-        <span>{{ formatarData(n.dataPublicacao) }}</span>
-        <span class="dot">•</span>
-        <span class="material-icons">schedule</span>
-        <span>{{ calcularTempoLeitura(n.conteudo) }} MIN DE LEITURA</span>
-      </div>
+        <div class="meta">
+          <span class="material-icons">event</span>
+          <span>{{ formatarData(n.dataPublicacao) }}</span>
+          <span class="dot">•</span>
+          <span class="material-icons">schedule</span>
+          <span>{{ calcularTempoLeitura(n.conteudo) }} MIN DE LEITURA</span>
+        </div>
 
-      <h3>{{ n.titulo }}</h3>
-      <p>{{ n.resumo }}</p>
+        <h3>{{ n.titulo }}</h3>
+        <p>{{ n.resumo }}</p>
+      </a>
 
       <div class="footer" *ngIf="n.autorNome || n.visualizacoes > 0">
         <span *ngIf="n.autorNome">
@@ -52,7 +54,8 @@
           {{ n.visualizacoes }} visualizações
         </span>
       </div>
-    </a>
+
+    </div>
   </div>
 
   <!-- Vazio -->

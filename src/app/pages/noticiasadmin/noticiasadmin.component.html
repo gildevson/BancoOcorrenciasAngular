@@ -1,0 +1,45 @@
+<section class="admin-news-page">
+  <div class="admin-header">
+    <h2>Gerenciar Notícias</h2>
+    <a routerLink="/noticias/cadastrar" class="btn-cadastrar-noticia">
+      <span class="material-icons">add_circle</span> Cadastrar Notícia
+    </a>
+  </div>
+  <div *ngIf="loading" class="loading">Carregando...</div>
+  <div *ngIf="erro && !loading" class="erro">{{ erro }}</div>
+  <table *ngIf="!loading && noticias.length" class="noticias-table">
+    <thead>
+      <tr>
+        <th>Imagem</th>
+        <th>Título</th>
+        <th>Categoria</th>
+        <th>Status</th>
+        <th>Publicado</th>
+        <th>Data</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let n of noticias">
+        <td>
+          <img [src]="n.imagemCapa || 'https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?w=80&q=40'" alt="Imagem da notícia" class="img-admin-noticia" (error)="onImageError($event)">
+        </td>
+        <td>{{ n.titulo }}</td>
+        <td>{{ n.categoria }}</td>
+        <td>{{ n.status }}</td>
+        <td>{{ n.publicado ? 'Sim' : 'Não' }}</td>
+        <td>{{ n.dataPublicacao | date:'short' }}</td>
+        <td class="acoes">
+          <a [routerLink]="['/noticias/editar', n.id]" class="btn-editar" title="Editar notícia">
+            <span class="material-icons">edit</span>
+          </a>
+          <button (click)="confirmarExcluir(n)" [disabled]="excluindoId === n.id" class="btn-excluir" title="Excluir notícia">
+            <span *ngIf="excluindoId !== n.id">Excluir</span>
+            <span *ngIf="excluindoId === n.id">Excluindo...</span>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div *ngIf="!loading && !noticias.length" class="vazio">Nenhuma notícia encontrada.</div>
+</section>

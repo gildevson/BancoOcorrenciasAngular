@@ -1,0 +1,124 @@
+<section class="editar-noticia-page">
+  <h2>Editar Notícia</h2>
+
+  <div *ngIf="loading" class="loading">Carregando notícia...</div>
+
+  <form *ngIf="!loading" [formGroup]="noticiaForm" (ngSubmit)="onSubmit()">
+    <div *ngIf="errorMsg" class="error">{{ errorMsg }}</div>
+
+    <!-- Informações Principais -->
+    <div class="form-section">
+      <label>
+        Título *
+        <input formControlName="titulo" placeholder="Digite o título da notícia" required>
+      </label>
+
+      <label>
+        Slug *
+        <input formControlName="slug" placeholder="url-amigavel-da-noticia" required>
+      </label>
+
+      <div class="form-row">
+        <label>
+          Categoria *
+          <input formControlName="categoria" placeholder="Ex: Tecnologia" required>
+        </label>
+
+        <label>
+          Status *
+          <select formControlName="status">
+            <option value="publicado">Publicado</option>
+            <option value="rascunho">Rascunho</option>
+          </select>
+        </label>
+      </div>
+
+      <label>
+        Resumo *
+        <textarea formControlName="resumo" placeholder="Breve resumo da notícia" required></textarea>
+      </label>
+
+      <label>
+        Conteúdo *
+        <textarea formControlName="conteudo" placeholder="Conteúdo completo da notícia" required></textarea>
+      </label>
+    </div>
+
+    <!-- Publicação -->
+    <div class="form-section">
+      <h3>Informações de Publicação</h3>
+
+      <div class="form-row">
+        <label>
+          Autor *
+          <input formControlName="autorNome" placeholder="Nome do autor" required>
+        </label>
+
+        <label>
+          Data de Publicação *
+          <input type="datetime-local" formControlName="dataPublicacao" required>
+        </label>
+      </div>
+
+      <div class="form-row">
+        <label>
+          <input type="checkbox" formControlName="publicado">
+          Publicado
+        </label>
+
+        <label>
+          <input type="checkbox" formControlName="destaque">
+          Notícia em destaque
+        </label>
+      </div>
+    </div>
+
+    <!-- SEO e Imagem -->
+    <div class="form-section">
+      <h3>SEO e Mídia</h3>
+
+      <label>
+        URL da Imagem de Capa
+        <input formControlName="imagemCapa" placeholder="https://exemplo.com/imagem.jpg">
+      </label>
+
+      <label>
+        Meta Description (SEO)
+        <input formControlName="metaDescription" placeholder="Descrição para motores de busca">
+      </label>
+    </div>
+
+    <!-- Fonte -->
+    <div class="form-section">
+      <h3>Informações da Fonte</h3>
+
+      <div class="form-row">
+        <label>
+          Nome da Fonte
+          <input formControlName="fonteNome" placeholder="Ex: Portal de Notícias">
+        </label>
+
+        <label>
+          Autor da Fonte
+          <input formControlName="fonteAutor" placeholder="Nome do autor original">
+        </label>
+      </div>
+
+      <div class="form-row">
+        <label>
+          URL da Fonte
+          <input formControlName="fonteUrl" placeholder="https://fonte.com/noticia">
+        </label>
+
+        <label>
+          Data de Publicação da Fonte
+          <input type="datetime-local" formControlName="fontePublicadaEm">
+        </label>
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="loading || noticiaForm.invalid">
+      Salvar Alterações
+    </button>
+  </form>
+</section>

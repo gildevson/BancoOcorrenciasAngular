@@ -1,0 +1,123 @@
+<div class="iof-container">
+  <div class="iof-header">
+    <h2>Simulador de IOF</h2>
+    <p class="subtitle">Calcule o Imposto sobre Operações Financeiras</p>
+  </div>
+
+  <!-- Explicação das Fórmulas -->
+  <div class="formula-info">
+    <h3>Como funciona o cálculo?</h3>
+    <div class="formulas">
+      <div class="formula-item">
+        <span class="formula-label">IOF Fixo (Adicional):</span>
+        <code>Valor × 0,38%</code>
+      </div>
+      <div class="formula-item">
+        <span class="formula-label">IOF Diário (Variável):</span>
+        <code>(Valor × 0,0041%) × Dias</code>
+      </div>
+      <div class="formula-item total">
+        <span class="formula-label">IOF Total:</span>
+        <code>IOF Fixo + IOF Diário</code>
+      </div>
+    </div>
+  </div>
+
+  <!-- Formulário -->
+  <form [formGroup]="iofForm" (ngSubmit)="calcularIOF()">
+    <div class="form-group">
+      <label for="valor">
+        Valor Base (R$)
+        <span class="hint">Valor da operação de crédito</span>
+      </label>
+      <input
+        id="valor"
+        type="number"
+        formControlName="valor"
+        step="0.01"
+        min="0.01"
+        placeholder="Ex: 3.647,14"
+        required>
+      <div class="error-msg" *ngIf="iofForm.get('valor')?.invalid && iofForm.get('valor')?.touched">
+        Insira um valor válido maior que R$ 0,00
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="dias">
+        Número de Dias
+        <span class="hint">Prazo da operação (1 a 365 dias)</span>
+      </label>
+      <input
+        id="dias"
+        type="number"
+        formControlName="dias"
+        min="1"
+        max="365"
+        placeholder="Ex: 20"
+        required>
+      <div class="error-msg" *ngIf="iofForm.get('dias')?.invalid && iofForm.get('dias')?.touched">
+        Insira um período entre 1 e 365 dias
+      </div>
+    </div>
+
+    <div class="button-group">
+      <button type="submit" class="btn-calcular" [disabled]="iofForm.invalid">
+        <span class="material-icons">calculate</span>
+        Calcular IOF
+      </button>
+      <button type="button" class="btn-limpar" (click)="limparCalculo()" *ngIf="resultado">
+        <span class="material-icons">refresh</span>
+        Nova Simulação
+      </button>
+    </div>
+  </form>
+
+  <!-- Resultado -->
+  <div *ngIf="resultado" class="resultado" [@slideIn]>
+    <h3>Resultado da Simulação</h3>
+
+    <div class="resultado-detalhes">
+      <div class="input-summary">
+        <div class="summary-item">
+          <span class="label">Valor Base:</span>
+          <span class="value">{{ formatarMoeda(resultado.valorBase) }}</span>
+        </div>
+        <div class="summary-item">
+          <span class="label">Período:</span>
+          <span class="value">{{ resultado.dias }} {{ resultado.dias === 1 ? 'dia' : 'dias' }}</span>
+        </div>
+      </div>
+
+      <div class="calculo-breakdown">
+        <div class="breakdown-item">
+          <div class="breakdown-header">
+            <span class="breakdown-label">IOF Fixo (0,38%)</span>
+            <span class="breakdown-formula">{{ formatarMoeda(resultado.valorBase) }} × 0,38%</span>
+          </div>
+          <div class="breakdown-value">{{ formatarMoeda(resultado.iofFixo) }}</div>
+        </div>
+
+        <div class="breakdown-item">
+          <div class="breakdown-header">
+            <span class="breakdown-label">IOF Diário (0,0041% × {{ resultado.dias }} dias)</span>
+            <span class="breakdown-formula">{{ formatarMoeda(resultado.valorBase) }} × 0,0041% × {{ resultado.dias }}</span>
+          </div>
+          <div class="breakdown-value">{{ formatarMoeda(resultado.iofDiario) }}</div>
+        </div>
+
+        <div class="breakdown-item total">
+          <div class="breakdown-header">
+            <span class="breakdown-label">IOF Total</span>
+          </div>
+          <div class="breakdown-value-total">{{ formatarMoeda(resultado.iofTotal) }}</div>
+        </div>
+      </div>
+
+      <div class="valor-final">
+        <span class="label">Valor Total da Operação:</span>
+        <span class="value">{{ formatarMoeda(resultado.valorBase + resultado.iofTotal) }}</span>
+      </div>
+    </div>
+  </div>
+</div>

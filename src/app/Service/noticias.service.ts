@@ -8,6 +8,21 @@ import { Noticia } from '../models/noticia.model';
   providedIn: 'root'
 })
 export class NoticiasService {
+
+  // GET /api/noticias/{id} - Busca notícia por id
+  getById(id: string): Observable<Noticia> {
+    return this.http.get<Noticia>(`${this.apiUrl}/${id}`);
+  }
+
+  // PUT /api/noticias/{id} - Atualiza notícia
+  updateNoticia(id: string, noticia: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${id}`, noticia);
+  }
+
+    // GET /api/noticias/admin/all - Lista todas as notícias (admin)
+    getAll(): Observable<Noticia[]> {
+      return this.http.get<Noticia[]>(`${this.apiUrl}/admin/all`);
+    }
   private apiUrl = `${environment.apiUrl}/noticias`;
 
   constructor(private http: HttpClient) {}
@@ -45,5 +60,10 @@ export class NoticiasService {
     // POST /api/noticias - Cadastra nova notícia
     cadastrarNoticia(noticia: any): Observable<any> {
       return this.http.post<any>(this.apiUrl, noticia);
+    }
+
+    // DELETE /api/noticias/{id} - Remove notícia
+    deleteNoticia(id: string): Observable<void> {
+      return this.http.delete<void>(`${this.apiUrl}/${id}`);
     }
 }
