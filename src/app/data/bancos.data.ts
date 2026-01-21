@@ -30,9 +30,7 @@ export const BANCOS_DATA: BancoData[] = [
     nome: 'Banco do Brasil',
     logo: 'https://logopng.com.br/logos/banco-do-brasil-5.png',
     ativo: true,
-    validadores: [
-      { nome: 'Validador CNAB 240', routerLink: '/validador/bb-cnab240' }
-    ]
+    // Validadores em breve
   },
   {
     id: '0f3f2581-b572-4e7e-8b89-2068b1641190',
@@ -40,10 +38,7 @@ export const BANCOS_DATA: BancoData[] = [
     nome: 'Itaú Unibanco',
     logo: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Ita%C3%BA%20Unibanco%20S.A/itau-fundo-azul.svg',
     ativo: true,
-    validadores: [
-      { nome: 'Validador CNAB 400', routerLink: '/validador/itau-cnab400' },
-      { nome: 'Validador CNAB 240', routerLink: '/validador/itau-cnab240' }
-    ]
+    // Validadores em breve
   },
   {
     id: 'ae2a0308-abe3-4aa1-a9cb-9cf9b597636e',
@@ -51,7 +46,7 @@ export const BANCOS_DATA: BancoData[] = [
     nome: 'Caixa Econômica Federal',
     logo: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Caixa%20Econ%C3%B4mica%20Federal/caixa-economica-federal-1.svg',
     ativo: true,
-    // ...sem validadores...
+    // Validadores em breve
   },
   {
     id: 'b0118017-5e0b-41ba-97aa-7c9d0af94221',
@@ -59,10 +54,7 @@ export const BANCOS_DATA: BancoData[] = [
     nome: 'Santander',
     logo: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banco%20Santander%20Brasil%20S.A/banco-santander-logo.svg',
     ativo: true,
-    validadores: [
-      { nome: 'Validador CNAB 400', routerLink: '/validador/santander-cnab400' },
-      { nome: 'Validador CNAB 240', routerLink: '/validador/santander-cnab240' }
-    ]
+    // Validadores em breve
   },
   {
     id: '4aad7f3d-f26a-4cad-ab71-7fe86115a995',
@@ -70,7 +62,7 @@ export const BANCOS_DATA: BancoData[] = [
     nome: 'Banrisul',
     logo: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banrisul/banrisul-logo-2023.svg',
     ativo: true,
-    // ...sem validadores...
+    // Validadores em breve
   },
   {
     id: '38a11456-ee76-4861-8b8b-d86bc94038de',
@@ -78,7 +70,7 @@ export const BANCOS_DATA: BancoData[] = [
     nome: 'Banco Grafeno',
     logo: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Grafeno/grafeno.svg',
     ativo: true,
-    // ...sem validadores...
+    // Validadores em breve
   },
   {
     id: '8253727a-1b36-41e6-b16f-b3e19caf0804',
@@ -93,6 +85,7 @@ export const BANCOS_DATA: BancoData[] = [
     nome: 'Banco Sicoob',
     logo: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Sicoob/sicoob-vector-logo.svg',
     ativo: true,
+    // Validadores em breve
   },
   {
     id: 'e76f9df1-36e1-440a-be0b-6ba095321152',
@@ -100,6 +93,7 @@ export const BANCOS_DATA: BancoData[] = [
     nome: 'Banco LiveBank',
     logo: 'https://livework.com.vc/assets/app/media/img/gestor/logo-finanblue-livework.svg',
     ativo: true,
+    // Validadores em breve
   },
    {
     id: 'bc09c7e7-a68f-4f78-ba69-8e0bd37bdd66',
@@ -107,6 +101,7 @@ export const BANCOS_DATA: BancoData[] = [
     nome: 'Bic banco',
     logo: 'https://images.seeklogo.com/logo-png/27/1/banco-bic-logo-png_seeklogo-277058.png',
     ativo: true,
+    // Validadores em breve
   },
   {
     id: '37e09f1e-8d29-4827-baee-505079de5839',
@@ -114,6 +109,7 @@ export const BANCOS_DATA: BancoData[] = [
     nome: 'Banco arbi',
     logo: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banco%20Arbi/Banco_Arbi%20.svg',
     ativo: true,
+    // Validadores em breve
   },
    {
     id: '572a4b74-d565-4046-94cc-cd944364acdf',
@@ -121,6 +117,7 @@ export const BANCOS_DATA: BancoData[] = [
     nome: 'Banco Sicredi',
     logo: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Sicredi/logo-svg2.svg',
     ativo: true,
+    // Validadores em breve
   },
   {
     id: '1e967da2-8706-448e-9080-606bc455110f',

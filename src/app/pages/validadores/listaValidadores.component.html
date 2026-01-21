@@ -1,6 +1,6 @@
 <div class="validador-list">
   <h2>Validadores de Bancos</h2>
-  <div style="text-align:center; margin-bottom:18px; color:#1976d2; font-size:1.1em;">
+  <div class="subtitle-info">
     Clique no botão do validador desejado para simular a leitura e validação do arquivo remessa do banco correspondente.
   </div>
   <div class="bancos-grid">
@@ -15,7 +15,7 @@
           </a>
         </div>
         <div *ngIf="!banco.validadores || !banco.validadores.length">
-          <span class="no-validador">Nenhum validador disponível</span>
+          <span class="no-validador">Em breve</span>
         </div>
       </div>
     </div>

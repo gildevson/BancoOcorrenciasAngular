@@ -1,98 +1,620 @@
+/* ============================================
+   VALIDADOR DE BANCOS - EDIÇÃO EQUILIBRADA
+   Design Clean e Compacto
+   ============================================ */
+
+/* ===== CONTAINER PRINCIPAL ===== */
 .validador-list {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1250px;
   margin: 0 auto;
-  padding: 24px 0 32px 0;
+  padding: 40px 24px 48px 24px;
+  background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+  position: relative;
+  overflow: hidden;
+  margin-top: 10px;
 }
+
+/* Efeito de brilho sutil de fundo */
+.validador-list::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: radial-gradient(ellipse at top right, rgba(25, 118, 210, 0.02) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* ===== TÍTULO PRINCIPAL ===== */
 .validador-list h2 {
   text-align: center;
-  margin-bottom: 32px;
-  font-size: 2rem;
-  color: #1976d2;
-  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
+  position: relative;
+  animation: slideDown 0.6s ease-out;
+  filter: drop-shadow(0 2px 4px rgba(25, 118, 210, 0.08));
 }
+
+.validador-list h2::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, #1976d2, #42a5f5);
+  border-radius: 2px;
+  box-shadow: 0 2px 6px rgba(25, 118, 210, 0.2);
+}
+
+/* Estrelas decorativas no título */
+.validador-list h2::before {
+  content: '⭐';
+  position: absolute;
+  left: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.1rem;
+  opacity: 0.5;
+  animation: starFloat 3s ease-in-out infinite;
+}
+
+@keyframes starFloat {
+  0%, 100% { transform: translateY(-50%) translateX(0); }
+  50% { transform: translateY(-50%) translateX(-5px); }
+}
+
+/* ===== SUBTÍTULO ===== */
+.subtitle-info {
+  text-align: center;
+  margin-bottom: 35px;
+  color: #546e7a;
+  font-size: 1.05em;
+  line-height: 1.6;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 14px 22px;
+  background: linear-gradient(135deg, rgba(25, 118, 210, 0.04) 0%, rgba(33, 150, 243, 0.04) 100%);
+  border-radius: 10px;
+  border-left: 3px solid #1976d2;
+  animation: fadeIn 0.8s ease-out;
+  box-shadow: 0 2px 6px rgba(25, 118, 210, 0.06);
+}
+
+/* ===== GRID DE BANCOS ===== */
 .bancos-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 32px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+  padding: 8px;
 }
+
+/* ===== CARD DO BANCO - ESTILO COMPACTO ===== */
 .banco-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #fff;
-  border-radius: 10px;
-  padding: 28px 18px 20px 18px;
-  box-shadow: 0 2px 12px rgba(25, 118, 210, 0.07);
-  transition: box-shadow 0.2s, transform 0.2s;
-  min-height: 270px;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 24px 20px 20px 20px;
+  box-shadow:
+    0 3px 5px rgba(0, 0, 0, 0.05),
+    0 1px 2px rgba(0, 0, 0, 0.07);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 265px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  animation: cardAppear 0.5s ease-out backwards;
 }
+
+/* Animação escalonada dos cards */
+.banco-card:nth-child(1) { animation-delay: 0.1s; }
+.banco-card:nth-child(2) { animation-delay: 0.2s; }
+.banco-card:nth-child(3) { animation-delay: 0.3s; }
+.banco-card:nth-child(4) { animation-delay: 0.4s; }
+.banco-card:nth-child(5) { animation-delay: 0.5s; }
+.banco-card:nth-child(6) { animation-delay: 0.6s; }
+.banco-card:nth-child(7) { animation-delay: 0.7s; }
+.banco-card:nth-child(8) { animation-delay: 0.8s; }
+
+/* Efeito de brilho premium no fundo */
+.banco-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(25, 118, 210, 0.04) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.35s;
+}
+
+.banco-card:hover::before {
+  opacity: 1;
+}
+
+/* Borda superior com gradiente */
+.banco-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #1976d2 0%, #42a5f5 100%);
+  opacity: 0;
+  transition: opacity 0.35s;
+}
+
+.banco-card:hover::after {
+  opacity: 1;
+}
+
+/* Estado hover com elevação suave */
 .banco-card:hover {
-  box-shadow: 0 6px 24px rgba(25, 118, 210, 0.13);
-  transform: translateY(-4px) scale(1.03);
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.1),
+    0 4px 8px rgba(0, 0, 0, 0.06);
+  transform: translateY(-8px) scale(1.015);
+  border-color: rgba(25, 118, 210, 0.15);
 }
+
+/* ===== LOGO DO BANCO - ESTILO COMPACTO ===== */
 .banco-logo {
   width: 70px;
   height: 70px;
   object-fit: contain;
-  margin-bottom: 14px;
-  background: #f5f5f5;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   border-radius: 50%;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  box-shadow:
+    0 0 0 2px rgba(25, 118, 210, 0.08),
+    0 3px 8px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  padding: 11px;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 1;
+  border: 1.5px solid rgba(255, 255, 255, 0.8);
 }
+
+/* Anel externo decorativo */
+.banco-logo::before {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(25, 118, 210, 0.08), rgba(33, 150, 243, 0.08));
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.35s;
+}
+
+.banco-card:hover .banco-logo::before {
+  opacity: 1;
+}
+
+.banco-card:hover .banco-logo {
+  transform: scale(1.1) rotate(6deg);
+  box-shadow:
+    0 0 0 2px rgba(25, 118, 210, 0.15),
+    0 6px 16px rgba(25, 118, 210, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+/* ===== INFO DO BANCO ===== */
 .banco-info {
   text-align: center;
   width: 100%;
+  position: relative;
+  z-index: 1;
 }
+
 .banco-nome {
   font-weight: 700;
-  font-size: 1.15em;
-  margin-bottom: 2px;
+  font-size: 1.25em;
+  margin-bottom: 6px;
+  color: #212121;
+  letter-spacing: -0.3px;
+  transition: color 0.3s;
 }
-.banco-codigo {
+
+.banco-card:hover .banco-nome {
   color: #1976d2;
-  font-size: 0.98em;
-  margin-bottom: 10px;
 }
+
+/* Badge do código do banco */
+.banco-codigo {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #1976d2;
+  font-size: 0.88em;
+  font-weight: 600;
+  margin-bottom: 14px;
+  padding: 5px 12px;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  border-radius: 14px;
+  border: 1px solid rgba(25, 118, 210, 0.2);
+  box-shadow: 0 2px 4px rgba(25, 118, 210, 0.08);
+  transition: all 0.3s;
+}
+
+.banco-codigo::before {
+  content: '★';
+  font-size: 0.85em;
+  color: #2196f3;
+}
+
+.banco-card:hover .banco-codigo {
+  background: linear-gradient(135deg, #bbdefb 0%, #90caf9 100%);
+  border-color: rgba(25, 118, 210, 0.3);
+  box-shadow: 0 3px 6px rgba(25, 118, 210, 0.15);
+}
+
+/* ===== LINKS DE VALIDADORES ===== */
 .validador-links {
-  margin-top: 10px;
+  margin-top: 14px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
+  width: 100%;
 }
+
 .validador-btn {
-  display: inline-block;
-  padding: 8px 18px;
-  background: linear-gradient(90deg, #1976d2 60%, #2196f3 100%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 11px 18px;
+  background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%);
   color: #fff;
-  border-radius: 5px;
-  font-weight: 500;
-  font-size: 1em;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9em;
   text-decoration: none;
-  box-shadow: 0 1px 4px rgba(25, 118, 210, 0.08);
-  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+  box-shadow:
+    0 2px 8px rgba(25, 118, 210, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  border: none;
+  cursor: pointer;
 }
+
+/* Efeito shimmer suave */
+.validador-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.6s;
+}
+
+.validador-btn:hover::before {
+  left: 100%;
+}
+
+/* Ícone de seta animada */
+.validador-btn::after {
+  content: '→';
+  font-size: 1.1em;
+  transition: transform 0.3s;
+  margin-left: 3px;
+}
+
+.validador-btn:hover::after {
+  transform: translateX(3px);
+}
+
 .validador-btn:hover {
-  background: linear-gradient(90deg, #1565c0 60%, #1976d2 100%);
-  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.18);
-  transform: scale(1.04);
+  background: linear-gradient(135deg, #1565c0 0%, #1976d2 100%);
+  box-shadow:
+    0 5px 14px rgba(25, 118, 210, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
 }
+
+.validador-btn:active {
+  transform: translateY(0);
+  box-shadow:
+    0 2px 6px rgba(25, 118, 210, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* ===== SEM VALIDADOR - ESTADO BLOQUEADO ===== */
 .no-validador {
-  color: #888;
-  font-size: 0.97em;
-  margin-top: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #9e9e9e;
+  font-size: 0.88em;
+  margin-top: 14px;
+  padding: 11px 18px;
+  background: linear-gradient(135deg, #f5f5f5 0%, #eeeeee 100%);
+  border-radius: 8px;
+  border: 2px dashed #e0e0e0;
+  font-weight: 500;
+  position: relative;
 }
+
+.no-validador::before {
+  content: '⏳';
+  font-size: 1em;
+  animation: pendulumSwing 2s ease-in-out infinite;
+}
+
+@keyframes pendulumSwing {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-12deg); }
+  75% { transform: rotate(12deg); }
+}
+
+/* ===== ANIMAÇÕES ===== */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes cardAppear {
+  from {
+    opacity: 0;
+    transform: translateY(25px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 900px) {
+  .bancos-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+  }
+
+  .validador-list h2 {
+    font-size: 2rem;
+  }
+}
+
 @media (max-width: 700px) {
+  .validador-list {
+    padding: 24px 16px 32px 16px;
+    border-radius: 12px;
+  }
+
+  .validador-list h2 {
+    font-size: 1.8rem;
+    margin-bottom: 12px;
+  }
+
+  .validador-list h2::before {
+    left: -30px;
+    font-size: 1rem;
+  }
+
+  .subtitle-info {
+    font-size: 1em;
+    padding: 12px 16px;
+    margin-bottom: 24px;
+  }
+
   .bancos-grid {
     grid-template-columns: 1fr;
     gap: 18px;
+    padding: 4px;
   }
+
   .banco-card {
-    min-height: 200px;
-    padding: 18px 8px 14px 8px;
+    min-height: 245px;
+    padding: 20px 18px 18px 18px;
+    border-radius: 12px;
   }
+
   .banco-logo {
-    width: 54px;
-    height: 54px;
+    width: 60px;
+    height: 60px;
+    margin-bottom: 14px;
+    padding: 10px;
+  }
+
+  .banco-nome {
+    font-size: 1.15em;
+  }
+
+  .banco-codigo {
+    font-size: 0.85em;
+    padding: 4px 10px;
+  }
+
+  .validador-btn {
+    padding: 10px 16px;
+    font-size: 0.88em;
+  }
+
+  /* Reduzir animação de hover no mobile */
+  .banco-card:hover {
+    transform: translateY(-5px) scale(1.01);
+  }
+}
+
+@media (max-width: 480px) {
+  .validador-list h2 {
+    font-size: 1.6rem;
+  }
+
+  .banco-card {
+    padding: 18px 16px;
+    min-height: 230px;
+  }
+
+  .banco-logo {
+    width: 55px;
+    height: 55px;
+  }
+
+  .banco-nome {
+    font-size: 1.1em;
+  }
+
+  .validador-btn {
+    font-size: 0.85em;
+    padding: 9px 14px;
+  }
+}
+
+/* ===== ACESSIBILIDADE ===== */
+@media (prefers-reduced-motion: reduce) {
+  .banco-card,
+  .banco-logo,
+  .validador-btn,
+  .validador-list h2,
+  * {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ===== MODO ESCURO ===== */
+@media (prefers-color-scheme: dark) {
+  .validador-list {
+    background: linear-gradient(135deg, #1e2230 0%, #1a1d28 100%);
+  }
+
+  .validador-list::before {
+    background: radial-gradient(ellipse at top right, rgba(33, 150, 243, 0.06) 0%, transparent 50%);
+  }
+
+  .banco-card {
+    background: linear-gradient(135deg, #252b3d 0%, #1e2230 100%);
+    border-color: rgba(33, 150, 243, 0.15);
+  }
+
+  .banco-card:hover {
+    border-color: rgba(33, 150, 243, 0.3);
+    box-shadow:
+      0 10px 24px rgba(0, 0, 0, 0.4),
+      0 4px 8px rgba(33, 150, 243, 0.15);
+  }
+
+  .banco-logo {
+    background: linear-gradient(135deg, #2a3142 0%, #252b3d 100%);
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .banco-logo::before {
+    background: linear-gradient(135deg, rgba(33, 150, 243, 0.12), rgba(25, 118, 210, 0.12));
+  }
+
+  .banco-nome {
+    color: #e0e0e0;
+  }
+
+  .banco-card:hover .banco-nome {
+    color: #64b5f6;
+  }
+
+  .banco-codigo {
+    background: linear-gradient(135deg, rgba(33, 150, 243, 0.18) 0%, rgba(25, 118, 210, 0.18) 100%);
+    color: #64b5f6;
+    border-color: rgba(33, 150, 243, 0.25);
+  }
+
+  .banco-card:hover .banco-codigo {
+    background: linear-gradient(135deg, rgba(33, 150, 243, 0.25) 0%, rgba(25, 118, 210, 0.25) 100%);
+  }
+
+  .subtitle-info {
+    color: #b0bec5;
+    background: linear-gradient(135deg, rgba(33, 150, 243, 0.08) 0%, rgba(25, 118, 210, 0.08) 100%);
+    border-left-color: #42a5f5;
+  }
+
+  .no-validador {
+    background: linear-gradient(135deg, #2a3142 0%, #252b3d 100%);
+    color: #757575;
+    border-color: #3a4257;
+  }
+}
+
+/* ===== ESTADOS DE FOCO (ACESSIBILIDADE) ===== */
+.validador-btn:focus {
+  outline: 3px solid rgba(25, 118, 210, 0.4);
+  outline-offset: 2px;
+}
+
+.validador-btn:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ===== IMPRESSÃO ===== */
+@media print {
+  .validador-list {
+    box-shadow: none;
+    background: white;
+  }
+
+  .validador-list::before {
+    display: none;
+  }
+
+  .banco-card {
+    break-inside: avoid;
+    box-shadow: 0 0 0 1px #ddd;
+    background: white;
+  }
+
+  .banco-card::before,
+  .banco-card::after {
+    display: none;
+  }
+
+  .validador-btn {
+    background: #1976d2;
+    color: white;
+  }
+
+  .banco-logo::before {
+    display: none;
   }
 }
