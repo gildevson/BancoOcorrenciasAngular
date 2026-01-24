@@ -1,0 +1,126 @@
+/* ===================================
+   RETORNO CNAB 400 - BRADESCO
+   Cores diferenciadas para retorno
+   =================================== */
+
+.retorno-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.retorno-title {
+  color: #00796b;
+  margin-bottom: 20px;
+}
+
+/* Matrix de visualização */
+.cnab-matrix-header {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 2px;
+}
+
+.cnab-matrix-row {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 4px;
+}
+
+.cnab-matrix-cell {
+  display: inline-block;
+  height: 18px;
+  line-height: 18px;
+  text-align: center;
+  border: 1px solid #fff;
+  font-size: 13px;
+  font-family: monospace;
+}
+
+/* Campos do Retorno 400 */
+.cnab-tipo { background: #ce93d8; }           /* Tipo Registro - Roxo */
+.cnab-identificacao { background: #80cbc4; }  /* Identificação - Verde água */
+.cnab-agencia { background: #81d4fa; }         /* Agência - Azul claro */
+.cnab-conta { background: #a5d6a7; }           /* Conta - Verde */
+.cnab-empresa { background: #b39ddb; }         /* Empresa - Lilás */
+.cnab-controle { background: #f5f5f5; }        /* Controle - Cinza */
+.cnab-banco { background: #4fc3f7; }           /* Banco - Azul */
+.cnab-nosso { background: #ffab91; }           /* Nosso Número - Laranja */
+.cnab-doc { background: #c5e1a5; }             /* Documento - Verde limão */
+.cnab-venc { background: #fff59d; }            /* Vencimento - Amarelo */
+.cnab-valor { background: #ef9a9a; }           /* Valor - Vermelho claro */
+.cnab-valor-pago { background: #a5d6a7; }      /* Valor Pago - Verde */
+.cnab-ocorrencia { background: #80deea; }      /* Ocorrência - Ciano */
+.cnab-data-ocorrencia { background: #ffe082; } /* Data Ocorrência - Âmbar */
+.cnab-sacado { background: #ffcc80; }          /* Sacado - Laranja claro */
+.cnab-cpf { background: #90caf9; }             /* CPF/CNPJ - Azul */
+.cnab-tarifa { background: #bcaaa4; }          /* Tarifa - Marrom claro */
+.cnab-juros { background: #ffab91; }           /* Juros - Coral */
+.cnab-desconto { background: #80cbc4; }        /* Desconto - Teal */
+.cnab-abatimento { background: #a5d6a7; }      /* Abatimento - Verde */
+.cnab-erros { background: #ef5350; }           /* Erros/Rejeições - Vermelho */
+.cnab-seq { background: #b2ebf2; }             /* Sequencial - Ciano claro */
+.cnab-brancos { background: #eeeeee; }         /* Brancos - Cinza claro */
+
+/* Estatísticas */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.stat-card {
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid;
+}
+
+.stat-card.total {
+  background: #e3f2fd;
+  border-color: #90caf9;
+}
+
+.stat-card.header {
+  background: #f3e5f5;
+  border-color: #ce93d8;
+}
+
+.stat-card.detalhe {
+  background: #e8f5e9;
+  border-color: #a5d6a7;
+}
+
+.stat-card.trailer {
+  background: #fce4ec;
+  border-color: #f48fb1;
+}
+
+/* Legenda */
+.legenda-container {
+  margin-bottom: 18px;
+  padding: 14px;
+  background: #fafafa;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+}
+
+.legenda-item {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid rgba(0,0,0,0.1);
+  margin: 4px;
+}
+
+.legenda-item:hover {
+  transform: scale(1.05);
+}
+
+.legenda-item.selected {
+  box-shadow: 0 0 0 3px #00796b;
+  font-weight: bold;
+}

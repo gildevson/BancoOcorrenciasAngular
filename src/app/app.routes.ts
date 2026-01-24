@@ -72,6 +72,20 @@ export const routes: Routes = [
       import('./pages/validadores/bradesco/bradesco-cnab240-validador.component')
         .then(m => m.BradescoCnab240ValidadorComponent),
   },
+  {
+    path: 'validadores/bradesco/retorno400',
+    title: 'Validador Retorno Bradesco CNAB 400',
+    loadComponent: () =>
+      import('./pages/validadores/bradesco/bradesco-retorno400-validador.component')
+        .then(m => m.BradescoRetorno400ValidadorComponent),
+  },
+  {
+    path: 'validadores/bradesco/retorno240',
+    title: 'Validador Retorno Bradesco CNAB 240',
+    loadComponent: () =>
+      import('./pages/validadores/bradesco/bradesco-retorno240-validador.component')
+        .then(m => m.BradescoRetorno240ValidadorComponent),
+  },
 
   // ===============================
   // CALCULADORAS (Shell + Rotas Filhas)

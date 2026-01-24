@@ -1,0 +1,141 @@
+/* ===================================
+   RETORNO CNAB 240 - BRADESCO
+   Cores diferenciadas para retorno
+   =================================== */
+
+.retorno-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.retorno-title {
+  color: #00796b;
+  margin-bottom: 20px;
+}
+
+/* Matrix de visualização */
+.cnab-matrix-header {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 2px;
+}
+
+.cnab-matrix-row {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 4px;
+}
+
+.cnab-matrix-cell {
+  display: inline-block;
+  height: 18px;
+  line-height: 18px;
+  text-align: center;
+  border: 1px solid #fff;
+  font-size: 13px;
+  font-family: monospace;
+}
+
+/* Campos do Retorno 240 */
+.cnab-banco { background: #4fc3f7; }           /* Banco - Azul */
+.cnab-lote { background: #ffb74d; }            /* Lote - Laranja */
+.cnab-tipo { background: #ce93d8; }            /* Tipo Registro - Roxo */
+.cnab-segmento { background: #ba68c8; }        /* Segmento - Roxo escuro */
+.cnab-movimento { background: #4dd0e1; }       /* Movimento - Ciano */
+.cnab-agencia { background: #81d4fa; }         /* Agência - Azul claro */
+.cnab-conta { background: #a5d6a7; }           /* Conta - Verde */
+.cnab-empresa { background: #b39ddb; }         /* Empresa - Lilás */
+.cnab-convenio { background: #9fa8da; }        /* Convênio - Índigo */
+.cnab-nosso { background: #ffab91; }           /* Nosso Número - Laranja */
+.cnab-carteira { background: #ffcc80; }        /* Carteira - Âmbar */
+.cnab-doc { background: #c5e1a5; }             /* Documento - Verde limão */
+.cnab-venc { background: #fff59d; }            /* Vencimento - Amarelo */
+.cnab-valor { background: #ef9a9a; }           /* Valor - Vermelho claro */
+.cnab-valor-pago { background: #81c784; }      /* Valor Pago - Verde */
+.cnab-valor-liquido { background: #66bb6a; }   /* Valor Líquido - Verde escuro */
+.cnab-acrescimos { background: #ffab91; }      /* Acréscimos - Coral */
+.cnab-desconto { background: #80cbc4; }        /* Desconto - Teal */
+.cnab-abatimento { background: #a5d6a7; }      /* Abatimento - Verde */
+.cnab-iof { background: #bcaaa4; }             /* IOF - Marrom claro */
+.cnab-tarifa { background: #a1887f; }          /* Tarifa - Marrom */
+.cnab-data-ocorrencia { background: #ffe082; } /* Data Ocorrência - Âmbar */
+.cnab-data-credito { background: #dce775; }    /* Data Crédito - Lima */
+.cnab-sacado { background: #ffcc80; }          /* Sacado - Laranja claro */
+.cnab-cpf { background: #90caf9; }             /* CPF/CNPJ - Azul */
+.cnab-motivo { background: #ef5350; }          /* Motivo Rejeição - Vermelho */
+.cnab-seq { background: #b2ebf2; }             /* Sequencial - Ciano claro */
+.cnab-brancos { background: #eeeeee; }         /* Brancos - Cinza claro */
+
+/* Estatísticas */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.stat-card {
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid;
+}
+
+.stat-card.total {
+  background: #e3f2fd;
+  border-color: #90caf9;
+}
+
+.stat-card.header-arquivo {
+  background: #f3e5f5;
+  border-color: #ce93d8;
+}
+
+.stat-card.header-lote {
+  background: #fff3e0;
+  border-color: #ffcc80;
+}
+
+.stat-card.segmento-t {
+  background: #e8f5e9;
+  border-color: #a5d6a7;
+}
+
+.stat-card.segmento-u {
+  background: #e0f7fa;
+  border-color: #80deea;
+}
+
+.stat-card.trailer {
+  background: #fce4ec;
+  border-color: #f48fb1;
+}
+
+/* Legenda */
+.legenda-container {
+  margin-bottom: 18px;
+  padding: 14px;
+  background: #fafafa;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+}
+
+.legenda-item {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid rgba(0,0,0,0.1);
+  margin: 4px;
+}
+
+.legenda-item:hover {
+  transform: scale(1.05);
+}
+
+.legenda-item.selected {
+  box-shadow: 0 0 0 3px #00796b;
+  font-weight: bold;
+}

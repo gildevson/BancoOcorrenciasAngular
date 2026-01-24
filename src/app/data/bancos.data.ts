@@ -20,8 +20,10 @@ export const BANCOS_DATA: BancoData[] = [
     logo: 'https://img.icons8.com/?size=100&id=IQoGuxn2kFxM&format=png&color=000000',
     ativo: true,
     validadores: [
-      { nome: 'Validador CNAB 400', routerLink: '/validadores/bradesco/cnab400' },
-      { nome: 'Validador CNAB 240', routerLink: '/validadores/bradesco/cnab240' }
+      { nome: 'Remessa CNAB 400', routerLink: '/validadores/bradesco/cnab400' },
+      { nome: 'Remessa CNAB 240', routerLink: '/validadores/bradesco/cnab240' },
+      { nome: 'Retorno CNAB 400', routerLink: '/validadores/bradesco/retorno400' },
+      { nome: 'Retorno CNAB 240', routerLink: '/validadores/bradesco/retorno240' }
     ]
   },
   {
