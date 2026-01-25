@@ -156,4 +156,14 @@ export const BANCOS_DATA: BancoData[] = [
     logo: 'https://upload.wikimedia.org/wikipedia/commons/4/4e/Btg-logo.png',
     ativo: false,
   },
+  {
+    id: 'dfbf2f92-dc25-4ada-bc2b-967c1fc2903a',
+    codigo: '611',
+    nome: 'Banco Paulista/Frontis',
+    logo: 'https://www.bancopaulista.com.br/Imagens/logo_banco_paulista.png',
+    ativo: true,
+    validadores: [
+      { nome: 'Remessa CNAB 400/444', routerLink: '/validadores/paulista/cnab400' }
+    ]
+  },
 ];

@@ -1,0 +1,302 @@
+/* ===================================
+   CNAB 400 - BANCO PAULISTA
+   CSS para Alinhamento Perfeito da Matriz
+   =================================== */
+
+/* Reset para garantir alinhamento */
+* {
+  box-sizing: border-box;
+}
+
+/* Container Principal */
+.cnab-validador {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Linha da Matriz - CRITICAL: Fonte monoespaçada e sem quebra */
+.cnab-linha-matriz {
+  font-family: 'Courier New', Courier, monospace !important;
+  font-size: 11px;
+  line-height: 1;
+  white-space: nowrap !important;
+  overflow-x: auto;
+  background: #fff;
+  padding: 6px;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+  margin-bottom: 8px;
+}
+
+/* Célula Individual - Largura FIXA */
+.cnab-cell {
+  display: inline-block;
+  width: 13px;            /* Largura FIXA - não usar gap */
+  height: 18px;
+  line-height: 18px;
+  text-align: center;
+  vertical-align: top;
+  border: 1px solid rgba(0,0,0,0.08);
+  cursor: default;
+  user-select: none;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 11px;
+}
+
+/* Espaço visualizado como ponto */
+.cnab-cell.espaco::after {
+  content: '·';
+  opacity: 0.3;
+}
+
+/* Célula com Erro */
+.cnab-cell.erro {
+  border: 2px solid #d32f2f !important;
+  box-shadow: 0 0 3px rgba(211, 47, 47, 0.3);
+}
+
+/* Célula Selecionada */
+.cnab-cell.selecionado {
+  box-shadow: 0 0 0 2px #1565c0;
+  z-index: 10;
+  position: relative;
+  transform: scale(1.15);
+}
+
+/* Células Não Selecionadas (quando há seleção) */
+.cnab-cell.dim {
+  opacity: 0.3;
+}
+
+/* Header da Linha */
+.cnab-linha-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+  gap: 10px;
+  padding: 4px 0;
+}
+
+.cnab-linha-numero {
+  min-width: 80px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cnab-linha-badge {
+  padding: 3px 10px;
+  color: #fff;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.cnab-linha-badge.header { background: #7b1fa2; }
+.cnab-linha-badge.detalhe { background: #388e3c; }
+.cnab-linha-badge.trailer { background: #c2185b; }
+
+.cnab-linha-erro-badge {
+  padding: 3px 10px;
+  background: #d32f2f;
+  color: #fff;
+  border-radius: 4px;
+  font-size: 11px;
+  margin-left: auto;
+}
+
+/* Container de Linha */
+.cnab-linha-container {
+  margin-bottom: 12px;
+  padding: 8px;
+  background: #fafafa;
+  border-radius: 4px;
+}
+
+/* Cores de Fundo dos Campos */
+.bg-tipo { background: #f8bbd0; }
+.bg-ident { background: #ffe082; }
+.bg-literal { background: #b2dfdb; }
+.bg-servico { background: #c5cae9; }
+.bg-empresa { background: #b3e5fc; }
+.bg-nome-empresa { background: #ffecb3; }
+.bg-banco { background: #ffccbc; }
+.bg-nome-banco { background: #dcedc8; }
+.bg-data { background: #fff9c4; }
+.bg-branco { background: #f5f5f5; }
+.bg-sistema { background: #b2ebf2; }
+.bg-seq-arquivo { background: #ffcdd2; }
+.bg-sequencial { background: #b2ebf2; }
+
+/* Campos Detalhe */
+.bg-debito { background: #f5f5f5; }
+.bg-coobrigacao { background: #ffe082; }
+.bg-caracteristica { background: #fff9c4; }
+.bg-modalidade { background: #c5cae9; }
+.bg-natureza { background: #e1bee7; }
+.bg-origem { background: #d1c4e9; }
+.bg-classe { background: #ffcc80; }
+.bg-controle { background: #b3e5fc; }
+.bg-numero-banco { background: #81d4fa; }
+.bg-titulo { background: #ffccbc; }
+.bg-digito { background: #ffab91; }
+.bg-pago { background: #4db6ac; }
+.bg-liquidacao { background: #fff59d; }
+.bg-rateio { background: #c8e6c9; }
+.bg-ocorrencia { background: #80deea; }
+.bg-documento { background: #c5e1a5; }
+.bg-vencimento { background: #fff9c4; }
+.bg-valor { background: #ef9a9a; }
+.bg-especie { background: #bcaaa4; }
+.bg-emissao { background: #b2ebf2; }
+.bg-instrucao-1 { background: #b0bec5; }
+.bg-instrucao-2 { background: #90a4ae; }
+.bg-inscricao { background: #ffab91; }
+.bg-termo { background: #ff8a65; }
+.bg-presente { background: #80cbc4; }
+.bg-abatimento { background: #4db6ac; }
+.bg-tipo-insc { background: #e0f7fa; }
+.bg-cpf-cnpj { background: #90caf9; }
+.bg-sacado { background: #ffcc80; }
+.bg-endereco { background: #ffe0b2; }
+.bg-nf { background: #ce93d8; }
+.bg-serie { background: #ba68c8; }
+.bg-cep { background: #c8e6c9; }
+.bg-cedente { background: #aed581; }
+.bg-cnpj-cedente { background: #81c784; }
+
+/* Scrollbar Customizado */
+.cnab-linha-matriz::-webkit-scrollbar {
+  height: 8px;
+}
+
+.cnab-linha-matriz::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.cnab-linha-matriz::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.cnab-linha-matriz::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .cnab-cell {
+    width: 11px;
+    height: 16px;
+    line-height: 16px;
+    font-size: 10px;
+  }
+
+  .cnab-linha-numero {
+    min-width: 60px;
+    font-size: 11px;
+  }
+}
+
+/* Modo Escuro (opcional) */
+@media (prefers-color-scheme: dark) {
+  .cnab-linha-matriz {
+    background: #1e1e1e;
+    border-color: #404040;
+  }
+
+  .cnab-linha-container {
+    background: #2d2d2d;
+  }
+
+  .cnab-cell {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Print */
+@media print {
+  .cnab-cell {
+    border: 1px solid #000 !important;
+    width: 10px;
+    height: 14px;
+    font-size: 9px;
+  }
+
+  .cnab-linha-header {
+    page-break-inside: avoid;
+  }
+
+  .cnab-linha-container {
+    page-break-inside: avoid;
+    background: #fff !important;
+  }
+}
+
+/* Animações Suaves */
+@keyframes highlight {
+  0% { box-shadow: 0 0 0 0 rgba(21, 101, 192, 0.4); }
+  50% { box-shadow: 0 0 0 4px rgba(21, 101, 192, 0.2); }
+  100% { box-shadow: 0 0 0 2px rgba(21, 101, 192, 0.4); }
+}
+
+.cnab-cell.selecionado {
+  animation: highlight 0.3s ease-in-out;
+}
+
+/* Transições */
+.cnab-cell {
+  transition: all 0.15s ease;
+}
+
+/* Acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+  .cnab-cell,
+  .cnab-cell.selecionado {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Tooltip ao Hover */
+.cnab-cell:hover {
+  z-index: 5;
+  transform: scale(1.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.cnab-cell.selecionado:hover {
+  transform: scale(1.2);
+}
+
+/* Indicador de Posição */
+.cnab-cell[title]:hover::before {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  white-space: nowrap;
+  z-index: 1000;
+  pointer-events: none;
+  margin-bottom: 4px;
+}
+
+/* Sombra do Tooltip */
+.cnab-cell[title]:hover::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: #333;
+  z-index: 999;
+  pointer-events: none;
+}

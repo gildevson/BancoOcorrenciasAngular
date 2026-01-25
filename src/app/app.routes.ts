@@ -86,6 +86,13 @@ export const routes: Routes = [
       import('./pages/validadores/bradesco/bradesco-retorno240-validador.component')
         .then(m => m.BradescoRetorno240ValidadorComponent),
   },
+  {
+    path: 'validadores/paulista/cnab400',
+    title: 'Validador Banco Paulista/Frontis CNAB 400/444',
+    loadComponent: () =>
+      import('./pages/validadores/paulista/paulistacnab400-validador.component')
+        .then(m => m.PaulistaCnab400ValidadorComponent),
+  },
 
   // ===============================
   // CALCULADORAS (Shell + Rotas Filhas)

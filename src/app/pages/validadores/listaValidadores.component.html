@@ -1,23 +1,77 @@
 <div class="validador-list">
-  <h2>Validadores de Bancos</h2>
-  <div class="subtitle-info">
-    Clique no botão do validador desejado para simular a leitura e validação do arquivo remessa do banco correspondente.
+  <!-- Cabeçalho -->
+  <div class="list-header">
+    <h2>Layouts de Banco</h2>
+    <p class="subtitle-info">
+      Consulte por banco, número e tipo (CNAB240/CNAB400) com logos oficiais dos principais bancos brasileiros.
+    </p>
+    <span class="bancos-count">{{ bancos.length }} bancos cadastrados</span>
   </div>
+
+  <!-- Grid de Bancos -->
   <div class="bancos-grid">
-    <div *ngFor="let banco of bancos" class="banco-card">
-      <img [src]="banco.logo" [alt]="banco.nome + ' logo'" class="banco-logo" />
-      <div class="banco-info">
-        <div class="banco-nome">{{ banco.nome }}</div>
-        <div class="banco-codigo">{{ banco.codigo }}</div>
-        <div class="validador-links" *ngIf="banco.validadores && banco.validadores.length">
-          <a *ngFor="let validador of banco.validadores" [routerLink]="validador.routerLink" class="validador-btn">
+    <div *ngFor="let banco of bancos; let i = index"
+         class="banco-card"
+         [style.animation-delay]="(i * 0.05) + 's'">
+
+      <!-- Header do Card -->
+      <div class="card-header">
+        <div class="banco-logo-wrapper">
+          <img
+            [src]="banco.logo"
+            [alt]="banco.nome + ' logo'"
+            class="banco-logo"
+            loading="lazy"
+          />
+        </div>
+
+        <div class="banco-info">
+          <h3 class="banco-nome">{{ banco.nome }}</h3>
+          <div class="banco-tipo" *ngIf="banco.validadores && banco.validadores.length">
+            Tipo: <strong>{{ getTipoCnab(banco) }}</strong>
+          </div>
+        </div>
+
+        <span
+          class="status-badge"
+          [class.ativo]="banco.ativo"
+          [class.inativo]="!banco.ativo"
+          [attr.data-tooltip]="banco.ativo ? 'Validador disponível' : 'Em desenvolvimento'">
+          {{ banco.ativo ? 'ATIVO' : 'INATIVO' }}
+        </span>
+      </div>
+
+      <!-- Footer do Card -->
+      <div class="card-footer">
+        <span
+          class="banco-codigo-badge"
+          [attr.data-tooltip]="'Código Febraban: ' + banco.codigo">
+          Banco {{ banco.codigo }}
+        </span>
+
+        <!-- Links de Validadores -->
+        <div class="validador-links" *ngIf="banco.validadores && banco.validadores.length > 0">
+          <a
+            *ngFor="let validador of banco.validadores"
+            [routerLink]="validador.routerLink"
+            class="validador-btn"
+            [attr.aria-label]="'Acessar validador ' + validador.nome + ' do ' + banco.nome">
             {{ validador.nome }}
           </a>
         </div>
-        <div *ngIf="!banco.validadores || !banco.validadores.length">
-          <span class="no-validador">Em breve</span>
+
+        <!-- Sem Validadores -->
+        <div *ngIf="!banco.validadores || banco.validadores.length === 0">
+          <span class="no-validador" role="status">Em breve</span>
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Estado Vazio (caso não haja bancos) -->
+  <div *ngIf="bancos.length === 0" class="empty-state">
+    <div class="empty-state-icon">🏦</div>
+    <h3 class="empty-state-title">Nenhum banco cadastrado</h3>
+    <p class="empty-state-text">Aguarde enquanto adicionamos novos validadores.</p>
   </div>
 </div>

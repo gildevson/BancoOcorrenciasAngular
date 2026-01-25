@@ -460,6 +460,21 @@ export class ConsultarOcorrenciaComponent {
   }
 
   // ================================
+  // EVENTO DE MUDANÇA DE BANCO
+  // ================================
+
+  /**
+   * Chamado quando o banco é alterado.
+   * Para o Banco Paulista/Frontis (611), preenche automaticamente o motivo com "00".
+   */
+  onBancoChange(): void {
+    // Se selecionou o Banco Paulista/Frontis (código 611), preencher motivo com "00"
+    if (this.bancoSelecionado?.codigo === '611') {
+      this.codigoMotivo = '00';
+    }
+  }
+
+  // ================================
   // VALIDAÇÃO DO FORMULÁRIO
   // ================================
 

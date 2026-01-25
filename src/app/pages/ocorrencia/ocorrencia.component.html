@@ -38,6 +38,7 @@
           <select
             id="banco"
             [(ngModel)]="bancoSelecionado"
+            (ngModelChange)="onBancoChange()"
             [compareWith]="compareBanco"
             class="select-banco">
 
@@ -99,8 +100,8 @@
           <span class="hint">2 dígitos</span>
         </div>
 
-        <!-- ✅ Campo: Motivo (opcional) -->
-        <div class="form-field span-2">
+        <!-- ✅ Campo: Motivo (opcional) - oculto para Banco Paulista/Frontis -->
+        <div class="form-field span-2" *ngIf="bancoSelecionado?.codigo !== '611'">
           <label for="motivo">
             <span class="material-icons">info</span> Motivo
           </label>
