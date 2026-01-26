@@ -21,9 +21,7 @@ export const BANCOS_DATA: BancoData[] = [
     ativo: true,
     validadores: [
       { nome: 'Remessa CNAB 400', routerLink: '/validadores/bradesco/cnab400' },
-      { nome: 'Remessa CNAB 240', routerLink: '/validadores/bradesco/cnab240' },
-      { nome: 'Retorno CNAB 400', routerLink: '/validadores/bradesco/retorno400' },
-      { nome: 'Retorno CNAB 240', routerLink: '/validadores/bradesco/retorno240' }
+      { nome: 'Retorno CNAB 400', routerLink: '/validadores/bradesco/retorno400' }
     ]
   },
   {
@@ -164,6 +162,17 @@ export const BANCOS_DATA: BancoData[] = [
     ativo: true,
     validadores: [
       { nome: 'Remessa CNAB 400/444', routerLink: '/validadores/paulista/cnab400' }
+    ]
+  },
+  {
+    id: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+    codigo: '274',
+    nome: 'Banco BMP',
+    logo: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banco%20BMP/logo_bmp.svg',
+    ativo: true,
+    validadores: [
+      { nome: 'Remessa CNAB 400', routerLink: '/validadores/bmp/cnab400' },
+      { nome: 'Retorno CNAB 400', routerLink: '/validadores/bmp/retorno400' }
     ]
   },
 ];

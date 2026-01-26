@@ -93,6 +93,20 @@ export const routes: Routes = [
       import('./pages/validadores/paulista/paulistacnab400-validador.component')
         .then(m => m.PaulistaCnab400ValidadorComponent),
   },
+  {
+    path: 'validadores/bmp/cnab400',
+    title: 'Validador Banco BMP CNAB 400',
+    loadComponent: () =>
+      import('./pages/validadores/bmp/bmpcnab400validador.component')
+        .then(m => m.BmpCnab400ValidadorComponent),
+  },
+  {
+    path: 'validadores/bmp/retorno400',
+    title: 'Validador Retorno Banco BMP CNAB 400',
+    loadComponent: () =>
+      import('./pages/validadores/bmp/bmpretorno400validador.component')
+        .then(m => m.BmpCnab400RetornoValidadorComponent),
+  },
 
   // ===============================
   // CALCULADORAS (Shell + Rotas Filhas)

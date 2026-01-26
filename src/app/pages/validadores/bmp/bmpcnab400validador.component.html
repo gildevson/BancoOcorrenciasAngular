@@ -1,0 +1,90 @@
+<div class="cnab-validador">
+  <h2 class="titulo">🏦 Validador Remessa Banco BMP CNAB 400</h2>
+
+  <div class="upload-area">
+    <input type="file" accept=".rem,.txt,.REM,.TXT" (change)="onFileChange($event)" />
+  </div>
+
+  <div *ngIf="error" class="erro-container">
+    ❌ {{ error }}
+  </div>
+
+  <!-- Estatísticas -->
+  <div *ngIf="estatisticas && validado" class="estatisticas-grid">
+    <div class="stat-card stat-total">
+      <div class="stat-valor">{{ estatisticas.totalLinhas }}</div>
+      <div class="stat-label">Total Linhas</div>
+    </div>
+    <div class="stat-card stat-header">
+      <div class="stat-valor">{{ estatisticas.headers }}</div>
+      <div class="stat-label">Headers (0)</div>
+    </div>
+    <div class="stat-card stat-detalhe">
+      <div class="stat-valor">{{ estatisticas.tipo1 }}</div>
+      <div class="stat-label">Detalhes (1)</div>
+    </div>
+    <div class="stat-card stat-tipo2">
+      <div class="stat-valor">{{ estatisticas.tipo2 }}</div>
+      <div class="stat-label">Tipo 2 (Msg)</div>
+    </div>
+    <div class="stat-card stat-trailer">
+      <div class="stat-valor">{{ estatisticas.trailers }}</div>
+      <div class="stat-label">Trailers (9)</div>
+    </div>
+  </div>
+
+  <!-- Erros Críticos -->
+  <div *ngIf="getErrosPorSeveridade('erro').length > 0" class="erros-container erros-criticos">
+    <strong>🚫 {{ getErrosPorSeveridade('erro').length }} erro(s) crítico(s):</strong>
+    <ul>
+      <li *ngFor="let e of getErrosPorSeveridade('erro')">
+        <strong class="erro-linha">Linha {{ e.linha }}</strong> -
+        <span class="erro-campo">{{ e.campo }}</span>
+        <span class="erro-posicao">[{{ e.posicao }}]</span>:
+        <code class="erro-valor">{{ e.valor }}</code>
+        → <span class="erro-msg">{{ e.mensagem }}</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Avisos -->
+  <div *ngIf="getErrosPorSeveridade('aviso').length > 0" class="erros-container erros-avisos">
+    <strong>⚠️ {{ getErrosPorSeveridade('aviso').length }} aviso(s):</strong>
+    <ul>
+      <li *ngFor="let e of getErrosPorSeveridade('aviso')">
+        <strong>Linha {{ e.linha }}</strong> - {{ e.campo }}: {{ e.mensagem }}
+      </li>
+    </ul>
+  </div>
+
+  <!-- Sucesso -->
+  <div *ngIf="validado && getErrosPorSeveridade('erro').length === 0" class="sucesso-container">
+    <strong>✅ Arquivo válido!</strong>
+    <span *ngIf="getErrosPorSeveridade('aviso').length > 0" class="avisos-count">
+      ({{ getErrosPorSeveridade('aviso').length }} aviso(s))
+    </span>
+  </div>
+
+  <!-- Legenda -->
+  <div *ngIf="legendaCampos.length > 0" class="legenda-container">
+    <strong>📌 Clique em um campo para destacar:</strong>
+    <div class="legenda-campos">
+      <span *ngFor="let campo of legendaCampos"
+            (click)="selecionarCampo(campo.nome)"
+            class="legenda-item"
+            [class.selecionado]="campoSelecionado === campo.nome"
+            [style.background]="campo.cor"
+            [title]="campo.descricao || 'Clique para destacar'">
+        {{ campo.nome }} <span class="legenda-pos">[{{ campo.ini + 1 }}-{{ campo.fim }}]</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- Visualização da Matriz -->
+  <div *ngIf="visualHtml" class="matriz-container" [innerHTML]="visualHtml"></div>
+
+  <!-- Placeholder -->
+  <div *ngIf="!visualHtml && !error" class="placeholder">
+    📄 Anexe um arquivo .REM (Remessa CNAB 400 - Banco BMP) para iniciar a validação
+  </div>
+</div>

@@ -543,8 +543,8 @@ export class PaulistaCnab400ValidadorComponent {
 
     html += `</div>`;
 
-    // Container com fonte monoespaçada e sem wrap
-    html += `<div style="font-family:'Courier New',Courier,monospace;font-size:11px;line-height:1;white-space:nowrap;overflow-x:auto;background:#fff;padding:6px;border-radius:4px;border:1px solid #e0e0e0;">`;
+    // Container com fonte monoespaçada e sem wrap (sem overflow-x para evitar barra por linha)
+    html += `<div style="font-family:'Courier New',Courier,monospace;font-size:11px;line-height:1;white-space:nowrap;background:#fff;padding:6px;border-radius:4px;border:1px solid #e0e0e0;">`;
 
     // Renderizar 444 caracteres (suporta campos extras como Número da Nota Fiscal)
     for (let i = 0; i < 444; i++) {
