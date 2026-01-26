@@ -1,4 +1,4 @@
-/* calculadora-iof.component.css */
+/* calculadora-iof-variado.component.css */
 
 .iof-container {
   width: 100%;
@@ -15,9 +15,9 @@
   gap: 0.4rem;
   padding: 0.5rem 1rem;
   background: white;
-  border: 1px solid #ffe0b2;
+  border: 1px solid #d1c4e9;
   border-radius: 8px;
-  color: #e67e22;
+  color: #8e44ad;
   font-size: 0.875rem;
   font-weight: 500;
   text-decoration: none;
@@ -26,8 +26,8 @@
 }
 
 .btn-voltar:hover {
-  background: #fff8f0;
-  border-color: #f39c12;
+  background: #f5f0ff;
+  border-color: #9b59b6;
   transform: translateX(-4px);
 }
 
@@ -53,7 +53,7 @@
   color: #2c3e50;
   margin: 0 0 0.4rem 0;
   font-weight: 600;
-  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+  background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -67,15 +67,15 @@
 
 /* Informações das Fórmulas - Compacto */
 .formula-info {
-  background: linear-gradient(135deg, #fff9f5 0%, #fff4e6 100%);
+  background: linear-gradient(135deg, #f5f0ff 0%, #ede7f6 100%);
   padding: 1rem;
   border-radius: 10px;
   margin-bottom: 1.5rem;
-  border-left: 3px solid #f39c12;
+  border-left: 3px solid #9b59b6;
 }
 
 .formula-info h3 {
-  color: #e67e22;
+  color: #8e44ad;
   font-size: 0.95rem;
   margin: 0 0 0.75rem 0;
   font-weight: 600;
@@ -94,11 +94,11 @@
   padding: 0.6rem 0.8rem;
   background: white;
   border-radius: 6px;
-  border: 1px solid #ffd9b3;
+  border: 1px solid #d1c4e9;
 }
 
 .formula-item.total {
-  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+  background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
   color: white;
   font-weight: 600;
 }
@@ -126,9 +126,18 @@
   border-radius: 5px;
   font-family: 'Courier New', monospace;
   font-size: 0.8rem;
-  color: #e67e22;
-  border: 1px solid #ffd9b3;
+  color: #8e44ad;
+  border: 1px solid #d1c4e9;
   font-weight: 500;
+}
+
+.info-note {
+  margin-top: 0.8rem;
+  padding: 0.6rem 0.8rem;
+  background: rgba(155, 89, 182, 0.1);
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: #666;
 }
 
 /* Formulário - Compacto */
@@ -137,6 +146,12 @@ form {
   flex-direction: column;
   gap: 1.2rem;
   margin-bottom: 1.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
 }
 
 .form-group {
@@ -172,15 +187,82 @@ input[type="number"] {
 
 input[type="number"]:focus {
   outline: none;
-  border-color: #f39c12;
+  border-color: #9b59b6;
   background: white;
-  box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.1);
+  box-shadow: 0 0 0 3px rgba(155, 89, 182, 0.1);
 }
 
 .error-msg {
   color: #e74c3c;
   font-size: 0.8rem;
   margin-top: 0.2rem;
+}
+
+/* Seção de Alíquotas */
+.aliquotas-section {
+  background: linear-gradient(135deg, #faf8ff 0%, #f3e5f5 100%);
+  padding: 1rem;
+  border-radius: 10px;
+  border: 1px solid #e1bee7;
+}
+
+.aliquotas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.aliquotas-header h4 {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #8e44ad;
+  font-weight: 600;
+}
+
+.btn-restaurar {
+  padding: 0.4rem 0.8rem;
+  background: white;
+  border: 1px solid #d1c4e9;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  color: #8e44ad;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-restaurar:hover {
+  background: #8e44ad;
+  color: white;
+  border-color: #8e44ad;
+}
+
+.aliquota-group input {
+  border-color: #d1c4e9;
+}
+
+.aliquota-group input:focus {
+  border-color: #9b59b6;
+}
+
+/* Input com sufixo */
+.input-with-suffix {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-with-suffix input {
+  flex: 1;
+  padding-right: 2.5rem;
+}
+
+.input-with-suffix .suffix {
+  position: absolute;
+  right: 0.8rem;
+  color: #8e44ad;
+  font-weight: 600;
+  font-size: 0.9rem;
 }
 
 /* Botões - Compactos */
@@ -206,14 +288,14 @@ button {
 }
 
 .btn-calcular {
-  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+  background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
   color: white;
-  box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
+  box-shadow: 0 4px 12px rgba(155, 89, 182, 0.3);
 }
 
 .btn-calcular:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(243, 156, 18, 0.4);
+  box-shadow: 0 6px 16px rgba(155, 89, 182, 0.4);
 }
 
 .btn-calcular:disabled {
@@ -233,16 +315,16 @@ button {
   transform: translateY(-2px);
 }
 
-.material-icons {
-  font-size: 1.1rem;
+.btn-icon {
+  font-size: 1rem;
 }
 
 /* Resultado - Compacto */
 .resultado {
-  background: linear-gradient(135deg, #fffaf5 0%, #fff6eb 100%);
+  background: linear-gradient(135deg, #faf8ff 0%, #f3e5f5 100%);
   padding: 1.5rem;
   border-radius: 10px;
-  border: 2px solid #f39c12;
+  border: 2px solid #9b59b6;
   animation: slideIn 0.3s ease;
 }
 
@@ -258,7 +340,7 @@ button {
 }
 
 .resultado h3 {
-  color: #e67e22;
+  color: #8e44ad;
   font-size: 1.1rem;
   margin: 0 0 1.2rem 0;
   font-weight: 600;
@@ -274,12 +356,12 @@ button {
 /* Resumo dos inputs - Compacto */
 .input-summary {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 0.8rem;
   padding: 0.8rem;
   background: white;
   border-radius: 8px;
-  border: 1px solid #ffd9b3;
+  border: 1px solid #d1c4e9;
 }
 
 .summary-item {
@@ -302,6 +384,10 @@ button {
   font-weight: 600;
 }
 
+.summary-item.aliquota .value {
+  color: #8e44ad;
+}
+
 /* Breakdown do cálculo - Compacto */
 .calculo-breakdown {
   display: flex;
@@ -313,11 +399,11 @@ button {
   background: white;
   padding: 0.9rem;
   border-radius: 8px;
-  border: 1px solid #ffd9b3;
+  border: 1px solid #d1c4e9;
 }
 
 .breakdown-item.total {
-  background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+  background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
   border: none;
   color: white;
 }
@@ -349,7 +435,7 @@ button {
 .breakdown-value {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #f39c12;
+  color: #9b59b6;
 }
 
 .breakdown-value-total {
@@ -422,7 +508,17 @@ button {
   }
 
   .input-summary {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .form-row {
     grid-template-columns: 1fr;
+  }
+
+  .aliquotas-header {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
   }
 }
 
@@ -451,6 +547,10 @@ button {
 
   .breakdown-value-total {
     font-size: 1.2rem;
+  }
+
+  .input-summary {
+    grid-template-columns: 1fr;
   }
 }
 

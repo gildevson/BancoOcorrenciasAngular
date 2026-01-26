@@ -1,28 +1,133 @@
-<div class="calc-card">
-  <div class="top">
-    <a class="back" routerLink="/calculadora">← Voltar</a>
-    <h2>Cálculo de Juros</h2>
-    <small>Fórmula: (percentual/30) * dias_atraso * valor_face / 100</small>
+<div class="juros-container">
+  <!-- Botão Voltar -->
+  <a class="btn-voltar" routerLink="/calculadora">
+    ← Voltar
+  </a>
+
+  <div class="juros-header">
+    <h2>📊 Calculadora de Juros</h2>
+    <p class="subtitle">Calcule juros proporcionais por dias de atraso</p>
   </div>
 
-  <div class="form">
-    <label>Valor de Face (R$)</label>
-    <input type="number" [(ngModel)]="valorFace" />
-
-    <label>Percentual (%)</label>
-    <input type="number" [(ngModel)]="percentual" />
-
-    <label>Dias de atraso</label>
-    <input type="number" [(ngModel)]="diasAtraso" />
+  <!-- Explicação da Fórmula -->
+  <div class="formula-info">
+    <h3>Como funciona o cálculo?</h3>
+    <div class="formulas">
+      <div class="formula-item">
+        <span class="formula-label">Taxa Diária:</span>
+        <code>Percentual (%) ÷ 30 dias</code>
+      </div>
+      <div class="formula-item">
+        <span class="formula-label">Juros:</span>
+        <code>(Taxa Diária × Dias) × Valor ÷ 100</code>
+      </div>
+      <div class="formula-item total">
+        <span class="formula-label">Fórmula Completa:</span>
+        <code>(% ÷ 30) × Dias × Valor ÷ 100</code>
+      </div>
+    </div>
   </div>
 
-  <div class="actions">
-    <button (click)="calcular()">Calcular</button>
-    <button class="outline" (click)="limpar()">Limpar</button>
+  <!-- Formulário -->
+  <div class="form-section">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="valorFace">
+          Valor de Face (R$)
+          <span class="hint">Valor original do título</span>
+        </label>
+        <input
+          id="valorFace"
+          type="number"
+          [(ngModel)]="valorFace"
+          step="0.01"
+          min="0"
+          placeholder="Ex: 1.000,00">
+      </div>
+
+      <div class="form-group">
+        <label for="percentual">
+          Percentual (%)
+          <span class="hint">Taxa de juros mensal</span>
+        </label>
+        <div class="input-with-suffix">
+          <input
+            id="percentual"
+            type="number"
+            [(ngModel)]="percentual"
+            step="0.01"
+            min="0"
+            placeholder="Ex: 1,00">
+          <span class="suffix">%</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="diasAtraso">
+          Dias de Atraso
+          <span class="hint">Quantidade de dias em atraso</span>
+        </label>
+        <input
+          id="diasAtraso"
+          type="number"
+          [(ngModel)]="diasAtraso"
+          min="0"
+          placeholder="Ex: 15">
+      </div>
+    </div>
+
+    <div class="button-group">
+      <button type="button" class="btn-calcular" (click)="calcular()">
+        <span class="btn-icon">📊</span>
+        Calcular Juros
+      </button>
+      <button type="button" class="btn-limpar" (click)="limpar()" *ngIf="resultado">
+        <span class="btn-icon">🔄</span>
+        Nova Simulação
+      </button>
+    </div>
   </div>
 
-  <div class="result" *ngIf="resultado">
-    <p><strong>Juros:</strong> {{ formatarMoeda(resultado.juros) }}</p>
-    <p><strong>Total (Face + Juros):</strong> {{ formatarMoeda(resultado.total) }}</p>
+  <!-- Resultado -->
+  <div *ngIf="resultado" class="resultado">
+    <h3>📋 Resultado da Simulação</h3>
+
+    <div class="resultado-detalhes">
+      <div class="input-summary">
+        <div class="summary-item">
+          <span class="label">Valor de Face:</span>
+          <span class="value">{{ formatarMoeda(valorFace) }}</span>
+        </div>
+        <div class="summary-item">
+          <span class="label">Taxa Mensal:</span>
+          <span class="value">{{ percentual }}%</span>
+        </div>
+        <div class="summary-item">
+          <span class="label">Dias em Atraso:</span>
+          <span class="value">{{ diasAtraso }} {{ diasAtraso === 1 ? 'dia' : 'dias' }}</span>
+        </div>
+        <div class="summary-item">
+          <span class="label">Taxa Diária:</span>
+          <span class="value taxa">{{ (percentual / 30).toFixed(4) }}%</span>
+        </div>
+      </div>
+
+      <div class="calculo-breakdown">
+        <div class="breakdown-item">
+          <div class="breakdown-header">
+            <span class="breakdown-label">Juros Calculados</span>
+            <span class="breakdown-formula">({{ percentual }}% ÷ 30) × {{ diasAtraso }} × {{ formatarMoeda(valorFace) }} ÷ 100</span>
+          </div>
+          <div class="breakdown-value">{{ formatarMoeda(resultado.juros) }}</div>
+        </div>
+
+        <div class="breakdown-item total">
+          <div class="breakdown-header">
+            <span class="breakdown-label">Total (Face + Juros)</span>
+          </div>
+          <div class="breakdown-value-total">{{ formatarMoeda(resultado.total) }}</div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

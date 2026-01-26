@@ -161,6 +161,13 @@ export const routes: Routes = [
           import('./pages/calculadora/calculadoraIof/calculadoraiof.component')
             .then(m => m.CalculadoraIofComponent),
       },
+      {
+        path: 'iof-variado',
+        title: 'Simulador de IOF Variado',
+        loadComponent: () =>
+          import('./pages/calculadora/calculadoraIofVariado/calculadoraiofvariado.component')
+            .then(m => m.CalculadoraIofVariadoComponent),
+      },
     ],
   },
 

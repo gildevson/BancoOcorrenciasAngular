@@ -1,121 +1,133 @@
-<section class="calculadora-page">
-  <div class="container">
-    <!-- Header com Breadcrumb -->
-    <div class="breadcrumb">
-      <a routerLink="/calculadora">
-        <span class="material-icons">arrow_back</span>
-        Voltar para Calculadoras
-      </a>
+<div class="desagio-container">
+  <!-- Botão Voltar -->
+  <a class="btn-voltar" routerLink="/calculadora">
+    ← Voltar
+  </a>
+
+  <div class="desagio-header">
+    <h2>📉 Calculadora de Deságio</h2>
+    <p class="subtitle">Calcule o desconto para pagamento antecipado</p>
+  </div>
+
+  <!-- Explicação da Fórmula -->
+  <div class="formula-info">
+    <h3>Como funciona o cálculo?</h3>
+    <div class="formulas">
+      <div class="formula-item">
+        <span class="formula-label">Fator Diário:</span>
+        <code>Fator (%) ÷ 30 dias</code>
+      </div>
+      <div class="formula-item">
+        <span class="formula-label">Deságio:</span>
+        <code>(Fator ÷ 30) × Prazo × Valor ÷ 100</code>
+      </div>
+      <div class="formula-item total">
+        <span class="formula-label">Valor Líquido:</span>
+        <code>Valor de Face - Deságio</code>
+      </div>
+    </div>
+  </div>
+
+  <!-- Formulário -->
+  <div class="form-section">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="desagioValorFace">
+          Valor de Face (R$)
+          <span class="hint">Valor original do título</span>
+        </label>
+        <input
+          id="desagioValorFace"
+          type="number"
+          [(ngModel)]="desagioValorFace"
+          step="0.01"
+          min="0"
+          placeholder="Ex: 10.000,00">
+      </div>
+
+      <div class="form-group">
+        <label for="desagioFator">
+          Fator (%)
+          <span class="hint">Taxa de deságio mensal</span>
+        </label>
+        <div class="input-with-suffix">
+          <input
+            id="desagioFator"
+            type="number"
+            [(ngModel)]="desagioFator"
+            step="0.01"
+            min="0"
+            placeholder="Ex: 2,50">
+          <span class="suffix">%</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="desagioPrazo">
+          Prazo (dias)
+          <span class="hint">Dias até o vencimento</span>
+        </label>
+        <input
+          id="desagioPrazo"
+          type="number"
+          [(ngModel)]="desagioPrazo"
+          min="0"
+          placeholder="Ex: 30">
+      </div>
     </div>
 
-    <header class="header">
-      <div class="header-title-wrapper">
-        <div class="icon-wrapper">
-          <span class="material-icons">trending_down</span>
-        </div>
-        <h1>Calculadora de Deságio</h1>
-      </div>
-      <p>Calcule o desconto para pagamento antecipado</p>
-    </header>
+    <div class="button-group">
+      <button type="button" class="btn-calcular" (click)="calcularDesagio()">
+        <span class="btn-icon">📉</span>
+        Calcular Deságio
+      </button>
+      <button type="button" class="btn-limpar" (click)="limparDesagio()" *ngIf="resultadoDesagio">
+        <span class="btn-icon">🔄</span>
+        Nova Simulação
+      </button>
+    </div>
+  </div>
 
-    <!-- Conteúdo -->
-    <div class="calc-grid">
-      <!-- Formulário -->
-      <div class="form-card">
-        <h2>
-          <span class="material-icons">trending_down</span>
-          Dados do Cálculo
-        </h2>
+  <!-- Resultado -->
+  <div *ngIf="resultadoDesagio" class="resultado">
+    <h3>📋 Resultado da Simulação</h3>
 
-        <div class="form-group">
-          <label for="desagioValorFace">Valor de Face (R$)</label>
-          <input
-            type="number"
-            id="desagioValorFace"
-            [(ngModel)]="desagioValorFace"
-            placeholder="0,00"
-            min="0"
-            step="0.01"
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="desagioFator">Fator (%)</label>
-          <input
-            type="number"
-            id="desagioFator"
-            [(ngModel)]="desagioFator"
-            placeholder="0"
-            min="0"
-            step="0.01"
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="desagioPrazo">Prazo (dias)</label>
-          <input
-            type="number"
-            id="desagioPrazo"
-            [(ngModel)]="desagioPrazo"
-            placeholder="0"
-            min="0"
-          />
-        </div>
-
-        <div class="formula-info">
-          <strong>Fórmula:</strong> (fator / 30) × prazo / 100 × valor de face
-        </div>
-
-        <div class="buttons">
-          <button type="button" class="btn-calcular" (click)="calcularDesagio()">
-            <span class="material-icons">calculate</span>
-            Calcular
-          </button>
-          <button type="button" class="btn-limpar" (click)="limparDesagio()">
-            <span class="material-icons">refresh</span>
-            Limpar
-          </button>
-        </div>
-      </div>
-
-      <!-- Resultados -->
-      <div class="result-card" *ngIf="resultadoDesagio">
-        <h2>
-          <span class="material-icons">receipt_long</span>
-          Resultado
-        </h2>
-
-        <div class="result-item">
+    <div class="resultado-detalhes">
+      <div class="input-summary">
+        <div class="summary-item">
           <span class="label">Valor de Face:</span>
           <span class="value">{{ formatarMoeda(resultadoDesagio.valorFace) }}</span>
         </div>
-
-        <div class="result-item negative">
-          <span class="label">Deságio:</span>
-          <span class="value">- {{ formatarMoeda(resultadoDesagio.desagio) }}</span>
+        <div class="summary-item">
+          <span class="label">Fator Mensal:</span>
+          <span class="value">{{ resultadoDesagio.fator }}%</span>
         </div>
-
-        <div class="divider"></div>
-
-        <div class="result-item total">
-          <span class="label">Valor Líquido:</span>
-          <span class="value">{{ formatarMoeda(resultadoDesagio.valorLiquido) }}</span>
+        <div class="summary-item">
+          <span class="label">Prazo:</span>
+          <span class="value">{{ resultadoDesagio.prazo }} {{ resultadoDesagio.prazo === 1 ? 'dia' : 'dias' }}</span>
         </div>
-
-        <div class="info-message">
-          <span class="material-icons">info</span>
-          <p>Os valores são calculados com base na taxa mensal convertida para taxa diária (divisão por 30 dias).</p>
+        <div class="summary-item">
+          <span class="label">Fator Diário:</span>
+          <span class="value taxa">{{ (resultadoDesagio.fator / 30).toFixed(4) }}%</span>
         </div>
       </div>
 
-      <!-- Card vazio quando não há resultado -->
-      <div class="result-card empty" *ngIf="!resultadoDesagio">
-        <div class="empty-state">
-          <span class="material-icons">assessment</span>
-          <h3>Aguardando cálculo</h3>
-          <p>Preencha os campos ao lado e clique em "Calcular" para ver os resultados</p>
+      <div class="calculo-breakdown">
+        <div class="breakdown-item">
+          <div class="breakdown-header">
+            <span class="breakdown-label">Valor do Deságio</span>
+            <span class="breakdown-formula">({{ resultadoDesagio.fator }}% ÷ 30) × {{ resultadoDesagio.prazo }} × {{ formatarMoeda(resultadoDesagio.valorFace) }} ÷ 100</span>
+          </div>
+          <div class="breakdown-value negative">- {{ formatarMoeda(resultadoDesagio.desagio) }}</div>
+        </div>
+
+        <div class="breakdown-item total">
+          <div class="breakdown-header">
+            <span class="breakdown-label">Valor Líquido (Face - Deságio)</span>
+          </div>
+          <div class="breakdown-value-total">{{ formatarMoeda(resultadoDesagio.valorLiquido) }}</div>
         </div>
       </div>
     </div>
   </div>
-</section>
+</div>

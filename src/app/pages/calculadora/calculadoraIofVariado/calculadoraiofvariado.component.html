@@ -1,0 +1,198 @@
+<div class="iof-container">
+  <!-- Botão Voltar -->
+  <a class="btn-voltar" routerLink="/calculadora">
+    ← Voltar
+  </a>
+
+  <div class="iof-header">
+    <h2>🔧 Simulador de IOF Variado</h2>
+    <p class="subtitle">Calcule o IOF com alíquotas personalizadas</p>
+  </div>
+
+  <!-- Explicação das Fórmulas -->
+  <div class="formula-info">
+    <h3>Como funciona o cálculo?</h3>
+    <div class="formulas">
+      <div class="formula-item">
+        <span class="formula-label">IOF Fixo (Adicional):</span>
+        <code>Valor × Alíquota Fixa (%)</code>
+      </div>
+      <div class="formula-item">
+        <span class="formula-label">IOF Diário (Variável):</span>
+        <code>(Valor × Alíquota Diária %) × Dias</code>
+      </div>
+      <div class="formula-item total">
+        <span class="formula-label">IOF Total:</span>
+        <code>IOF Fixo + IOF Diário</code>
+      </div>
+    </div>
+    <p class="info-note">
+      💡 <strong>Dica:</strong> Os valores padrão são 0,38% (fixo) e 0,0041% (diário), mas você pode ajustá-los conforme a operação.
+    </p>
+  </div>
+
+  <!-- Formulário -->
+  <form [formGroup]="iofForm" (ngSubmit)="calcularIOF()">
+    <!-- Linha: Valor e Dias -->
+    <div class="form-row">
+      <div class="form-group">
+        <label for="valor">
+          Valor Base (R$)
+          <span class="hint">Valor da operação de crédito</span>
+        </label>
+        <input
+          id="valor"
+          type="number"
+          formControlName="valor"
+          step="0.01"
+          min="0.01"
+          placeholder="Ex: 3.647,14"
+          required>
+        <div class="error-msg" *ngIf="iofForm.get('valor')?.invalid && iofForm.get('valor')?.touched">
+          Insira um valor válido maior que R$ 0,00
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="dias">
+          Número de Dias
+          <span class="hint">Prazo da operação (1 a 365 dias)</span>
+        </label>
+        <input
+          id="dias"
+          type="number"
+          formControlName="dias"
+          min="1"
+          max="365"
+          placeholder="Ex: 20"
+          required>
+        <div class="error-msg" *ngIf="iofForm.get('dias')?.invalid && iofForm.get('dias')?.touched">
+          Insira um período entre 1 e 365 dias
+        </div>
+      </div>
+    </div>
+
+    <!-- Linha: Alíquotas Personalizadas -->
+    <div class="aliquotas-section">
+      <div class="aliquotas-header">
+        <h4>⚙️ Alíquotas Personalizadas</h4>
+        <button type="button" class="btn-restaurar" (click)="restaurarPadrao()">
+          🔄 Restaurar Padrão
+        </button>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group aliquota-group">
+          <label for="aliquotaFixa">
+            Alíquota Fixa (%)
+            <span class="hint">Padrão: 0,38%</span>
+          </label>
+          <div class="input-with-suffix">
+            <input
+              id="aliquotaFixa"
+              type="number"
+              formControlName="aliquotaFixa"
+              step="0.0001"
+              min="0"
+              max="100"
+              placeholder="0.38"
+              required>
+            <span class="suffix">%</span>
+          </div>
+          <div class="error-msg" *ngIf="iofForm.get('aliquotaFixa')?.invalid && iofForm.get('aliquotaFixa')?.touched">
+            Insira uma alíquota válida (0 a 100%)
+          </div>
+        </div>
+
+        <div class="form-group aliquota-group">
+          <label for="aliquotaDiaria">
+            Alíquota Diária (%)
+            <span class="hint">Padrão: 0,0041%</span>
+          </label>
+          <div class="input-with-suffix">
+            <input
+              id="aliquotaDiaria"
+              type="number"
+              formControlName="aliquotaDiaria"
+              step="0.0001"
+              min="0"
+              max="100"
+              placeholder="0.0041"
+              required>
+            <span class="suffix">%</span>
+          </div>
+          <div class="error-msg" *ngIf="iofForm.get('aliquotaDiaria')?.invalid && iofForm.get('aliquotaDiaria')?.touched">
+            Insira uma alíquota válida (0 a 100%)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="button-group">
+      <button type="submit" class="btn-calcular" [disabled]="iofForm.invalid">
+        <span class="btn-icon">📊</span>
+        Calcular IOF
+      </button>
+      <button type="button" class="btn-limpar" (click)="limparCalculo()" *ngIf="resultado">
+        <span class="btn-icon">🔄</span>
+        Nova Simulação
+      </button>
+    </div>
+  </form>
+
+  <!-- Resultado -->
+  <div *ngIf="resultado" class="resultado">
+    <h3>📋 Resultado da Simulação</h3>
+
+    <div class="resultado-detalhes">
+      <div class="input-summary">
+        <div class="summary-item">
+          <span class="label">Valor Base:</span>
+          <span class="value">{{ formatarMoeda(resultado.valorBase) }}</span>
+        </div>
+        <div class="summary-item">
+          <span class="label">Período:</span>
+          <span class="value">{{ resultado.dias }} {{ resultado.dias === 1 ? 'dia' : 'dias' }}</span>
+        </div>
+        <div class="summary-item aliquota">
+          <span class="label">Alíquota Fixa:</span>
+          <span class="value">{{ formatarPercentual(resultado.aliquotaFixa) }}</span>
+        </div>
+        <div class="summary-item aliquota">
+          <span class="label">Alíquota Diária:</span>
+          <span class="value">{{ formatarPercentual(resultado.aliquotaDiaria) }}</span>
+        </div>
+      </div>
+
+      <div class="calculo-breakdown">
+        <div class="breakdown-item">
+          <div class="breakdown-header">
+            <span class="breakdown-label">IOF Fixo ({{ formatarPercentual(resultado.aliquotaFixa) }})</span>
+            <span class="breakdown-formula">{{ formatarMoeda(resultado.valorBase) }} × {{ formatarPercentual(resultado.aliquotaFixa) }}</span>
+          </div>
+          <div class="breakdown-value">{{ formatarMoeda(resultado.iofFixo) }}</div>
+        </div>
+
+        <div class="breakdown-item">
+          <div class="breakdown-header">
+            <span class="breakdown-label">IOF Diário ({{ formatarPercentual(resultado.aliquotaDiaria) }} × {{ resultado.dias }} dias)</span>
+            <span class="breakdown-formula">{{ formatarMoeda(resultado.valorBase) }} × {{ formatarPercentual(resultado.aliquotaDiaria) }} × {{ resultado.dias }}</span>
+          </div>
+          <div class="breakdown-value">{{ formatarMoeda(resultado.iofDiario) }}</div>
+        </div>
+
+        <div class="breakdown-item total">
+          <div class="breakdown-header">
+            <span class="breakdown-label">IOF Total</span>
+          </div>
+          <div class="breakdown-value-total">{{ formatarMoeda(resultado.iofTotal) }}</div>
+        </div>
+      </div>
+
+      <div class="valor-final">
+        <span class="label">Valor Total da Operação:</span>
+        <span class="value">{{ formatarMoeda(resultado.valorBase + resultado.iofTotal) }}</span>
+      </div>
+    </div>
+  </div>
+</div>
