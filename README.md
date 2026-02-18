@@ -226,3 +226,11 @@ ng test
 
 Desenvolvido para gestão de remessas bancárias e cálculos financeiros.
 
+
+## 📝 Isso gera os arquivos em:
+
+- ng build 
+- dist/remessa-segura-portal/browser/
+- Depois é só pegar tudo que está dentro dessa pasta browser/ e subir para o public_html da Hostinger.
+ 
+
