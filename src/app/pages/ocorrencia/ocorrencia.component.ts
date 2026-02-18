@@ -473,11 +473,6 @@ export class ConsultarOcorrenciaComponent {
     }
   }
 
-  exportarPDF(): void {
-    alert('Funcionalidade de exportação PDF em desenvolvimento!');
-    // TODO: Implementar com jsPDF ou similar
-  }
-
   // ================================
   // EVENTO DE MUDANÇA DE BANCO
   // ================================
