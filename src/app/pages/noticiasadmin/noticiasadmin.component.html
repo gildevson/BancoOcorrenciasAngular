@@ -1,45 +1,209 @@
-<section class="admin-news-page">
-  <div class="admin-header">
-    <h2>Gerenciar Notícias</h2>
-    <a routerLink="/noticias/cadastrar" class="btn-cadastrar-noticia">
-      <span class="material-icons">add_circle</span> Cadastrar Notícia
+<section class="admin-page">
+
+  <!-- ==============================
+       HEADER
+  =============================== -->
+  <div class="page-header">
+    <div class="header-left">
+      <div class="header-icon">
+        <span class="material-icons">newspaper</span>
+      </div>
+      <div>
+        <h1>Gerenciar Notícias</h1>
+        <p>Gerencie, edite e publique o conteúdo do portal</p>
+      </div>
+    </div>
+    <a routerLink="/noticias/cadastrar" class="btn-new">
+      <span class="material-icons">add</span>
+      Nova Notícia
     </a>
   </div>
-  <div *ngIf="loading" class="loading">Carregando...</div>
-  <div *ngIf="erro && !loading" class="erro">{{ erro }}</div>
-  <table *ngIf="!loading && noticias.length" class="noticias-table">
-    <thead>
-      <tr>
-        <th>Imagem</th>
-        <th>Título</th>
-        <th>Categoria</th>
-        <th>Status</th>
-        <th>Publicado</th>
-        <th>Data</th>
-        <th>Ações</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let n of noticias">
-        <td>
-          <img [src]="n.imagemCapa || 'https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?w=80&q=40'" alt="Imagem da notícia" class="img-admin-noticia" (error)="onImageError($event)">
-        </td>
-        <td>{{ n.titulo }}</td>
-        <td>{{ n.categoria }}</td>
-        <td>{{ n.status }}</td>
-        <td>{{ n.publicado ? 'Sim' : 'Não' }}</td>
-        <td>{{ n.dataPublicacao | date:'short' }}</td>
-        <td class="acoes">
-          <a [routerLink]="['/noticias/editar', n.id]" class="btn-editar" title="Editar notícia">
-            <span class="material-icons">edit</span>
-          </a>
-          <button (click)="confirmarExcluir(n)" [disabled]="excluindoId === n.id" class="btn-excluir" title="Excluir notícia">
-            <span *ngIf="excluindoId !== n.id">Excluir</span>
-            <span *ngIf="excluindoId === n.id">Excluindo...</span>
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <div *ngIf="!loading && !noticias.length" class="vazio">Nenhuma notícia encontrada.</div>
+
+  <!-- ==============================
+       STATS
+  =============================== -->
+  <div class="stats-row" *ngIf="!loading && !erro">
+    <div class="stat-card">
+      <div class="stat-icon neutral">
+        <span class="material-icons">article</span>
+      </div>
+      <div class="stat-info">
+        <span class="stat-num">{{ totalNoticias }}</span>
+        <span class="stat-label">Total</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon success">
+        <span class="material-icons">check_circle</span>
+      </div>
+      <div class="stat-info">
+        <span class="stat-num">{{ noticiasPublicadas }}</span>
+        <span class="stat-label">Publicadas</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon warning">
+        <span class="material-icons">edit_note</span>
+      </div>
+      <div class="stat-info">
+        <span class="stat-num">{{ noticiasRascunho }}</span>
+        <span class="stat-label">Rascunhos</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon accent">
+        <span class="material-icons">star</span>
+      </div>
+      <div class="stat-info">
+        <span class="stat-num">{{ noticiasDestaque }}</span>
+        <span class="stat-label">Destaques</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==============================
+       LOADING
+  =============================== -->
+  <div class="loading-state" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Carregando notícias...</p>
+  </div>
+
+  <!-- ==============================
+       ERRO
+  =============================== -->
+  <div class="error-state" *ngIf="erro && !loading">
+    <span class="material-icons">error_outline</span>
+    <p>{{ erro }}</p>
+    <button class="btn-retry" (click)="carregarNoticias()">
+      <span class="material-icons">refresh</span>
+      Tentar novamente
+    </button>
+  </div>
+
+  <!-- ==============================
+       TOOLBAR
+  =============================== -->
+  <div class="toolbar" *ngIf="!loading && !erro && noticias.length">
+    <div class="search-wrap">
+      <span class="material-icons">search</span>
+      <input
+        type="text"
+        [(ngModel)]="termoBusca"
+        placeholder="Buscar por título ou categoria..."
+        class="search-input"
+      />
+      <button class="clear-search" *ngIf="termoBusca" (click)="termoBusca = ''">
+        <span class="material-icons">close</span>
+      </button>
+    </div>
+    <span class="results-count">
+      {{ noticiasFiltradas.length }} notícia{{ noticiasFiltradas.length !== 1 ? 's' : '' }}
+    </span>
+  </div>
+
+  <!-- ==============================
+       TABELA
+  =============================== -->
+  <div class="table-wrap" *ngIf="!loading && !erro && noticiasFiltradas.length">
+    <table class="news-table">
+      <thead>
+        <tr>
+          <th class="col-noticia-h">Notícia</th>
+          <th>Categoria</th>
+          <th>Status</th>
+          <th>Publicado</th>
+          <th>Data</th>
+          <th class="col-acoes-h">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let n of noticiasFiltradas">
+
+          <!-- Notícia (imagem + título + slug) -->
+          <td class="col-noticia">
+            <img
+              [src]="n.imagemCapa || 'https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?w=80&q=40'"
+              [alt]="n.titulo"
+              class="thumb"
+              (error)="onImageError($event)"
+            />
+            <div class="noticia-info">
+              <span class="noticia-titulo">{{ n.titulo }}</span>
+              <span class="noticia-slug">/{{ n.slug }}</span>
+            </div>
+          </td>
+
+          <!-- Categoria -->
+          <td>
+            <span class="badge badge-categoria" *ngIf="n.categoria">{{ n.categoria }}</span>
+            <span class="badge badge-muted" *ngIf="!n.categoria">—</span>
+          </td>
+
+          <!-- Status -->
+          <td>
+            <span class="badge" [ngClass]="getStatusClass(n.status)">{{ n.status || 'Sem status' }}</span>
+          </td>
+
+          <!-- Publicado -->
+          <td>
+            <span class="badge" [ngClass]="n.publicado ? 'badge-success' : 'badge-muted'">
+              <span class="material-icons">{{ n.publicado ? 'check_circle' : 'radio_button_unchecked' }}</span>
+              {{ n.publicado ? 'Sim' : 'Não' }}
+            </span>
+          </td>
+
+          <!-- Data -->
+          <td class="col-data">
+            <span *ngIf="n.dataPublicacao">{{ n.dataPublicacao | date:'dd/MM/yyyy' }}</span>
+            <span class="text-muted" *ngIf="!n.dataPublicacao">—</span>
+          </td>
+
+          <!-- Ações -->
+          <td class="col-acoes">
+            <a [routerLink]="['/noticias/editar', n.id]" class="btn-acao btn-edit" title="Editar notícia">
+              <span class="material-icons">edit</span>
+            </a>
+            <a [routerLink]="['/noticia', n.slug]" target="_blank" class="btn-acao btn-view" title="Ver notícia">
+              <span class="material-icons">open_in_new</span>
+            </a>
+            <button
+              (click)="confirmarExcluir(n)"
+              [disabled]="excluindoId === n.id"
+              class="btn-acao btn-delete"
+              title="Excluir notícia"
+            >
+              <span class="material-icons" *ngIf="excluindoId !== n.id">delete_outline</span>
+              <span class="material-icons spin" *ngIf="excluindoId === n.id">autorenew</span>
+            </button>
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ==============================
+       VAZIO
+  =============================== -->
+  <div class="empty-state" *ngIf="!loading && !erro && noticias.length && !noticiasFiltradas.length">
+    <span class="material-icons">search_off</span>
+    <h3>Nenhuma notícia encontrada</h3>
+    <p>Nenhum resultado para "<strong>{{ termoBusca }}</strong>"</p>
+    <button class="btn-retry" (click)="termoBusca = ''">Limpar busca</button>
+  </div>
+
+  <div class="empty-state" *ngIf="!loading && !erro && !noticias.length">
+    <span class="material-icons">article</span>
+    <h3>Nenhuma notícia cadastrada</h3>
+    <p>Comece publicando o primeiro conteúdo do portal.</p>
+    <a routerLink="/noticias/cadastrar" class="btn-new">
+      <span class="material-icons">add</span>
+      Nova Notícia
+    </a>
+  </div>
+
 </section>
