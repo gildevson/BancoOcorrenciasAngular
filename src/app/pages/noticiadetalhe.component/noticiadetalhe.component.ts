@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, HostListener } from '@angular/core';
+import { CommonModule, DecimalPipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NoticiasService } from '../../service/noticias.service';
 import { Noticia } from '../../models/noticia.model';
@@ -8,7 +8,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 @Component({
   selector: 'app-noticia-detalhe',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, DecimalPipe],
   templateUrl: './noticiadetalhe.component.html',
   styleUrls: ['./noticiadetalhe.component.css']
 })
@@ -17,6 +17,10 @@ export class NoticiaDetalheComponent implements OnInit {
   loading = true;
   erro = '';
   linkCopiado = false;
+  progressoLeitura = 0;
+
+  // Circunferência do círculo SVG (r=28): 2 * PI * 28 ≈ 175.93
+  private readonly RING_CIRCUNFERENCIA = 2 * Math.PI * 28;
 
   constructor(
     private route: ActivatedRoute,
@@ -32,6 +36,18 @@ export class NoticiaDetalheComponent implements OnInit {
       this.erro = 'Slug da notícia não encontrado.';
       this.loading = false;
     }
+  }
+
+  @HostListener('window:scroll')
+  onScroll(): void {
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    this.progressoLeitura = docHeight > 0 ? Math.min(100, (scrollTop / docHeight) * 100) : 0;
+  }
+
+  // Retorna o stroke-dashoffset para o círculo SVG de progresso
+  getRingOffset(): number {
+    return this.RING_CIRCUNFERENCIA * (1 - this.progressoLeitura / 100);
   }
 
   carregarNoticia(slug: string): void {
@@ -58,7 +74,6 @@ export class NoticiaDetalheComponent implements OnInit {
     });
   }
 
-  // ✅ HTML seguro no template
   getConteudoSeguro(): SafeHtml {
     const html = this.noticia?.conteudo || '';
     return this.sanitizer.bypassSecurityTrustHtml(html);
@@ -74,7 +89,6 @@ export class NoticiaDetalheComponent implements OnInit {
     });
   }
 
-  // ✅ tempo de leitura sem contar tags HTML
   calcularTempoLeitura(): number {
     if (!this.noticia?.conteudo) return 0;
 
@@ -97,7 +111,6 @@ export class NoticiaDetalheComponent implements OnInit {
     this.router.navigate(['/noticias']);
   }
 
-  // ✅ Compartilhamento nas redes sociais
   compartilhar(rede: string): void {
     if (!this.noticia) return;
 
@@ -133,7 +146,6 @@ export class NoticiaDetalheComponent implements OnInit {
     }
   }
 
-  // ✅ Copiar link para área de transferência
   copiarLink(): void {
     navigator.clipboard.writeText(window.location.href).then(() => {
       this.linkCopiado = true;

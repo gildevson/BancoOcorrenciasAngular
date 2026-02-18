@@ -385,13 +385,32 @@ export class ConsultarOcorrenciaComponent {
   copiarCodigo(): void {
     if (!this.resultado) return;
 
-    const texto = this.resultado.motivo
+    const cod = this.resultado.motivo
       ? `${this.resultado.codigo}-${this.resultado.motivo}`
       : this.resultado.codigo;
 
+    const banco = this.bancoSelecionado?.nome ?? '';
+    const linhas: string[] = [
+      '=== Ocorrência Bancária ===',
+      `Banco       : ${banco}`,
+      `Código      : ${cod}`,
+      `Descrição   : ${this.resultado.descricao}`,
+      `Categoria   : ${this.resultado.categoria}`,
+      `Tipo CNAB   : ${this.resultado.tipoCNAB}`,
+      `Requer Ação : ${this.resultado.requerAcao ? 'Sim' : 'Não'}`,
+      `Observações : ${this.resultado.observacoes}`,
+    ];
+
+    if (this.resultado.acoesSugeridas?.length) {
+      linhas.push('', 'Ações Sugeridas:');
+      this.resultado.acoesSugeridas.forEach((a, i) => linhas.push(`  ${i + 1}. ${a}`));
+    }
+
+    const texto = linhas.join('\n');
+
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(texto).then(() => {
-        alert('Código copiado: ' + texto);
+        alert('Ocorrência copiada com sucesso!');
       }).catch(err => {
         console.error('Erro ao copiar:', err);
         this.copiarFallback(texto);
@@ -411,7 +430,7 @@ export class ConsultarOcorrenciaComponent {
 
     try {
       document.execCommand('copy');
-      alert('Código copiado: ' + texto);
+      alert('Ocorrência copiada com sucesso!');
     } catch (err) {
       console.error('Erro ao copiar:', err);
     }

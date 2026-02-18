@@ -724,6 +724,8 @@
   letter-spacing: -0.6px;
   color: var(--color-text-primary);
   line-height: 1.3;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .categoria-badge {
@@ -1308,6 +1310,46 @@
   .result-header {
     flex-direction: column;
     align-items: flex-start;
+    gap: 12px;
+  }
+
+  /* No mobile, reorganiza o header-left em 2 linhas:
+     linha 1: banco + ícone | linha 2: codigo + título */
+  .header-left {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .bank-badge {
+    align-self: flex-start;
+    margin-right: 0;
+  }
+
+  /* Ícone + info ficam lado a lado no mobile */
+  .header-left .material-icons.large {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 36px;
+  }
+
+  .result-header {
+    position: relative;
+  }
+
+  .header-info {
+    width: 100%;
+    padding-right: 48px; /* espaço para o ícone absoluto */
+  }
+
+  .header-info h2 {
+    font-size: 20px;
+  }
+
+  .categoria-badge {
+    align-self: flex-start;
   }
 
   .examples-grid {
@@ -1329,12 +1371,16 @@
     padding: 20px;
   }
 
+  .result-header {
+    padding: 20px 16px;
+  }
+
   .result-body {
-    padding: 20px;
+    padding: 16px;
   }
 
   .result-actions {
-    padding: 16px 20px;
+    padding: 14px 16px;
     flex-direction: column;
   }
 
@@ -1348,6 +1394,20 @@
 
   .form-actions .btn {
     width: 100%;
+  }
+
+  .header-info h2 {
+    font-size: 18px;
+    letter-spacing: -0.3px;
+  }
+
+  .bank-badge-name {
+    font-size: 12px;
+  }
+
+  .codigo-badge {
+    font-size: 12px;
+    padding: 5px 12px;
   }
 }
 
