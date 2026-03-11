@@ -106,9 +106,9 @@
   </div>
 
   <!-- ==============================
-       TABELA
+       TABELA (desktop)
   =============================== -->
-  <div class="table-wrap" *ngIf="!loading && !erro && noticiasFiltradas.length">
+  <div class="table-wrap desktop-only" *ngIf="!loading && !erro && noticiasFiltradas.length">
     <table class="news-table">
       <thead>
         <tr>
@@ -184,6 +184,61 @@
         </tr>
       </tbody>
     </table>
+  </div>
+
+  <!-- ==============================
+       CARDS (mobile)
+  =============================== -->
+  <div class="cards-list mobile-only" *ngIf="!loading && !erro && noticiasFiltradas.length">
+    <div class="news-card" *ngFor="let n of noticiasFiltradas">
+
+      <div class="card-top">
+        <img
+          [src]="n.imagemCapa || 'https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?w=80&q=40'"
+          [alt]="n.titulo"
+          class="card-thumb"
+          (error)="onImageError($event)"
+        />
+        <div class="card-info">
+          <span class="card-titulo">{{ n.titulo }}</span>
+          <span class="card-slug">/{{ n.slug }}</span>
+        </div>
+      </div>
+
+      <div class="card-badges">
+        <span class="badge badge-categoria" *ngIf="n.categoria">{{ n.categoria }}</span>
+        <span class="badge" [ngClass]="getStatusClass(n.status)">{{ n.status || 'Sem status' }}</span>
+        <span class="badge" [ngClass]="n.publicado ? 'badge-success' : 'badge-muted'">
+          <span class="material-icons">{{ n.publicado ? 'check_circle' : 'radio_button_unchecked' }}</span>
+          {{ n.publicado ? 'Publicado' : 'Não publicado' }}
+        </span>
+        <span class="card-data" *ngIf="n.dataPublicacao">
+          <span class="material-icons">calendar_today</span>
+          {{ n.dataPublicacao | date:'dd/MM/yyyy' }}
+        </span>
+      </div>
+
+      <div class="card-acoes">
+        <a [routerLink]="['/noticias/editar', n.id]" class="btn-card btn-card-edit">
+          <span class="material-icons">edit</span>
+          Editar
+        </a>
+        <a [routerLink]="['/noticia', n.slug]" target="_blank" class="btn-card btn-card-view">
+          <span class="material-icons">open_in_new</span>
+          Ver
+        </a>
+        <button
+          (click)="confirmarExcluir(n)"
+          [disabled]="excluindoId === n.id"
+          class="btn-card btn-card-delete"
+        >
+          <span class="material-icons" *ngIf="excluindoId !== n.id">delete_outline</span>
+          <span class="material-icons spin" *ngIf="excluindoId === n.id">autorenew</span>
+          {{ excluindoId === n.id ? 'Excluindo...' : 'Excluir' }}
+        </button>
+      </div>
+
+    </div>
   </div>
 
   <!-- ==============================

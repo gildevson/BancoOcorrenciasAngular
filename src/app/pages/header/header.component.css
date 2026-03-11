@@ -554,6 +554,19 @@
   }
 }
 
+/* MOBILE ADMIN LINKS */
+.mobile-admin-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.12);
+  margin: 4px 0;
+  border-radius: 1px;
+}
+
+.mobile-admin-icon {
+  font-size: 18px;
+  opacity: 0.85;
+}
+
 /* SR ONLY */
 .sr-only{
   position: absolute !important;

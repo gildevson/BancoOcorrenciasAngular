@@ -120,7 +120,8 @@
       <span class="results-badge">{{ motivos.length }} {{ motivos.length === 1 ? 'registro' : 'registros' }}</span>
     </div>
 
-    <div class="table-wrapper">
+    <!-- Tabela (desktop) -->
+    <div class="table-wrapper desktop-only">
       <table>
         <thead>
           <tr>
@@ -146,6 +147,30 @@
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <!-- Cards (mobile) -->
+    <div class="motivos-cards mobile-only">
+      <div class="motivo-card" *ngFor="let m of motivos">
+        <div class="motivo-card-codes">
+          <div class="code-item">
+            <span class="code-label">Ocorrência</span>
+            <span class="badge-code">{{ m.ocorrencia }}</span>
+          </div>
+          <div class="code-item">
+            <span class="code-label">Motivo</span>
+            <span class="badge-code">{{ m.motivo }}</span>
+          </div>
+        </div>
+        <div class="motivo-card-desc">
+          <span class="motivo-descricao">{{ m.descricao }}</span>
+          <span class="motivo-obs" *ngIf="m.observacao">{{ m.observacao }}</span>
+        </div>
+        <button type="button" class="btn-editar-card" (click)="editar(m)">
+          <span class="material-icons">edit</span>
+          Editar
+        </button>
+      </div>
     </div>
   </div>
 

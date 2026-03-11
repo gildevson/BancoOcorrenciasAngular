@@ -81,6 +81,25 @@
           </a>
         </li>
 
+        <!-- Links Admin - apenas mobile e logado -->
+        <ng-container *ngIf="isMobile && ((isAdmin$ | async) || (isSupervisor$ | async))">
+          <li class="mobile-admin-divider" aria-hidden="true"></li>
+
+          <li routerLinkActive="active">
+            <a routerLink="/edicoes-ocorrencias" (click)="closeMenu()" aria-label="Editar ocorrências">
+              <span class="material-icons mobile-admin-icon" aria-hidden="true">edit_note</span>
+              Editar Ocorrências
+            </a>
+          </li>
+
+          <li routerLinkActive="active" *ngIf="isAdmin$ | async">
+            <a routerLink="/noticias-admin" (click)="closeMenu()" aria-label="Gerenciar notícias">
+              <span class="material-icons mobile-admin-icon" aria-hidden="true">newspaper</span>
+              Gerenciar Notícias
+            </a>
+          </li>
+        </ng-container>
+
 
         <!-- Dropdown: Relatórios
         <li class="dropdown" [class.active]="dropdownOpen === 'reports'">

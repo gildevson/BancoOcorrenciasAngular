@@ -436,6 +436,99 @@ tbody tr:last-child td { border-bottom: none; }
 .spin-icon { animation: spin 0.9s linear infinite; }
 
 /* ================================================================
+   DESKTOP/MOBILE TOGGLE
+================================================================ */
+.desktop-only { display: block; }
+.mobile-only  { display: none; }
+
+/* ================================================================
+   CARDS MOBILE
+================================================================ */
+.motivos-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.motivo-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 18px;
+  border-bottom: 1px solid rgba(11, 42, 58, 0.07);
+  transition: background 0.15s;
+}
+
+.motivo-card:last-child { border-bottom: none; }
+.motivo-card:hover { background: rgba(13, 75, 103, 0.02); }
+
+.motivo-card-codes {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.code-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  align-items: flex-start;
+}
+
+.code-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #aab4bd;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.motivo-card-desc {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.motivo-descricao {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0b2a3a;
+  line-height: 1.4;
+}
+
+.motivo-obs {
+  font-size: 12px;
+  color: #5a6a77;
+  line-height: 1.4;
+}
+
+.btn-editar-card {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 11px 16px;
+  border-radius: 10px;
+  background: rgba(242, 200, 75, 0.15);
+  border: 1.5px solid rgba(242, 200, 75, 0.4);
+  color: #8a6a00;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+  width: 100%;
+}
+
+.btn-editar-card .material-icons { font-size: 17px; }
+
+.btn-editar-card:hover {
+  background: rgba(242, 200, 75, 0.3);
+  border-color: rgba(242, 200, 75, 0.7);
+  color: #5a4200;
+}
+
+/* ================================================================
    RESPONSIVO
 ================================================================ */
 @media (max-width: 900px) {
@@ -456,7 +549,7 @@ tbody tr:last-child td { border-bottom: none; }
   .filter-actions { flex-direction: column-reverse; }
   .btn-limpar, .btn-buscar { width: 100%; justify-content: center; }
 
-  th, td { padding: 10px 12px; }
-
-  .td-obs { display: none; }
+  /* troca tabela por cards */
+  .desktop-only { display: none; }
+  .mobile-only  { display: block; }
 }
