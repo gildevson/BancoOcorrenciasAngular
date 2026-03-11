@@ -1,88 +1,159 @@
-<div class="container">
-  <h3>Pesquisar Ocorrências</h3>
+<div class="pesquisar-page">
 
-  <div class="form">
-    <div class="form-group">
-      <label>Banco</label>
-      <select [(ngModel)]="bancoId" [disabled]="loadingBancos">
-        <option value="">Selecione um banco</option>
-        <option *ngFor="let b of bancos" [value]="b.id">
-          {{ pad(b.numero_banco) }} - {{ b.nome }}
-        </option>
-      </select>
+  <!-- HEADER -->
+  <div class="page-header">
+    <div class="header-left">
+      <div class="header-icon">
+        <span class="material-icons">manage_search</span>
+      </div>
+      <div>
+        <h1>Motivos de Ocorrência</h1>
+        <p>Pesquise e gerencie os motivos cadastrados por banco</p>
+      </div>
+    </div>
+    <button type="button" class="btn-novo" (click)="novoCadastro()">
+      <span class="material-icons">add_circle_outline</span>
+      Novo Motivo
+    </button>
+  </div>
+
+  <!-- ALERTA ERRO -->
+  <div class="alert-error" *ngIf="erro">
+    <span class="material-icons">error_outline</span>
+    {{ erro }}
+  </div>
+
+  <!-- CARD DE FILTROS -->
+  <div class="search-card">
+    <div class="card-header">
+      <span class="material-icons">filter_list</span>
+      <h2>Filtros de Pesquisa</h2>
     </div>
 
-    <div class="form-group">
-      <label>Ocorrência</label>
-      <input
-        placeholder="Ex: 02"
-        [(ngModel)]="ocorrencia"
-        maxlength="2"
-      />
-    </div>
+    <div class="card-body">
+      <div class="filter-grid">
 
-    <div class="form-group">
-      <label>Motivo (opcional)</label>
-      <input
-        placeholder="Ex: 00 (deixe vazio para listar todos)"
-        [(ngModel)]="motivo"
-        maxlength="2"
-      />
-    </div>
+        <!-- Banco -->
+        <div class="field field-wide">
+          <label for="bancoId">
+            Banco <span class="required">*</span>
+          </label>
+          <select
+            id="bancoId"
+            [(ngModel)]="bancoId"
+            [disabled]="loadingBancos || loading">
+            <option value="">
+              {{ loadingBancos ? 'Carregando bancos...' : 'Selecione um banco' }}
+            </option>
+            <option *ngFor="let b of bancos" [value]="b.id">
+              {{ pad(b.numero_banco) }} - {{ b.nome }}
+            </option>
+          </select>
+        </div>
 
-    <div class="button-group">
-      <button
-        type="button"
-        class="btn-buscar"
-        (click)="buscar()"
-        [disabled]="loading || loadingBancos">
-        {{ loading ? 'Buscando...' : 'Buscar' }}
-      </button>
+        <!-- Ocorrência -->
+        <div class="field">
+          <label for="ocorrencia">
+            Ocorrência <span class="required">*</span>
+            <span class="label-hint">2 dígitos</span>
+          </label>
+          <input
+            id="ocorrencia"
+            type="text"
+            placeholder="Ex: 02"
+            maxlength="2"
+            [(ngModel)]="ocorrencia"
+            [disabled]="loading"
+          />
+        </div>
 
-      <button
-        type="button"
-        class="btn-limpar"
-        (click)="limpar()"
-        [disabled]="loading || loadingBancos">
-        Limpar
-      </button>
+        <!-- Motivo -->
+        <div class="field">
+          <label for="motivo">
+            Motivo
+            <span class="label-hint">Opcional</span>
+          </label>
+          <input
+            id="motivo"
+            type="text"
+            placeholder="Ex: 00 (todos)"
+            maxlength="2"
+            [(ngModel)]="motivo"
+            [disabled]="loading"
+          />
+        </div>
 
-      <button
-        type="button"
-        class="btn-novo"
-        (click)="novoCadastro()"
-        [disabled]="loadingBancos">
-        Nova Ocorrência/Motivo
-      </button>
+      </div>
+
+      <!-- Ações -->
+      <div class="filter-actions">
+        <button type="button" class="btn-limpar" (click)="limpar()" [disabled]="loading || loadingBancos">
+          <span class="material-icons">clear</span>
+          Limpar
+        </button>
+        <button type="button" class="btn-buscar" (click)="buscar()" [disabled]="loading || loadingBancos">
+          <span class="material-icons spin-icon" *ngIf="loading">autorenew</span>
+          <span class="material-icons" *ngIf="!loading">search</span>
+          {{ loading ? 'Buscando...' : 'Buscar' }}
+        </button>
+      </div>
     </div>
   </div>
 
-  <p class="erro" *ngIf="erro">{{ erro }}</p>
-  <p class="info" *ngIf="loadingBancos">Carregando bancos...</p>
-  <p class="info" *ngIf="loading">Buscando...</p>
+  <!-- ESTADO: Carregando bancos -->
+  <div class="state-card" *ngIf="loadingBancos">
+    <span class="material-icons spin-icon">autorenew</span>
+    <p>Carregando lista de bancos...</p>
+  </div>
 
-  <table *ngIf="motivos.length > 0">
-    <thead>
-      <tr>
-        <th>Ocorrência</th>
-        <th>Motivo</th>
-        <th>Descrição</th>
-        <th>Observação</th>
-        <th>Ações</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let m of motivos">
-        <td>{{ m.ocorrencia }}</td>
-        <td>{{ m.motivo }}</td>
-        <td>{{ m.descricao }}</td>
-        <td>{{ m.observacao || '-' }}</td>
-        <td>
-          <button type="button" class="btn-editar" (click)="editar(m)">
-            Editar
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <!-- ESTADO: Buscando -->
+  <div class="state-card" *ngIf="loading && !loadingBancos">
+    <span class="material-icons spin-icon">autorenew</span>
+    <p>Buscando motivos...</p>
+  </div>
+
+  <!-- RESULTADOS -->
+  <div class="results-card" *ngIf="motivos.length > 0 && !loading">
+    <div class="card-header">
+      <span class="material-icons">table_rows</span>
+      <h2>Resultados</h2>
+      <span class="results-badge">{{ motivos.length }} {{ motivos.length === 1 ? 'registro' : 'registros' }}</span>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Ocorrência</th>
+            <th>Motivo</th>
+            <th>Descrição</th>
+            <th>Observação</th>
+            <th class="th-actions">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let m of motivos">
+            <td><span class="badge-code">{{ m.ocorrencia }}</span></td>
+            <td><span class="badge-code">{{ m.motivo }}</span></td>
+            <td class="td-descricao">{{ m.descricao }}</td>
+            <td class="td-obs">{{ m.observacao || '—' }}</td>
+            <td class="td-actions">
+              <button type="button" class="btn-editar" (click)="editar(m)">
+                <span class="material-icons">edit</span>
+                Editar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ESTADO: Sem resultados (após busca) -->
+  <div class="empty-state" *ngIf="motivos.length === 0 && !loading && !loadingBancos && !erro && ocorrencia">
+    <span class="material-icons">inbox</span>
+    <p>Nenhum motivo encontrado</p>
+    <small>Tente ajustar os filtros ou cadastre um novo motivo</small>
+  </div>
+
 </div>

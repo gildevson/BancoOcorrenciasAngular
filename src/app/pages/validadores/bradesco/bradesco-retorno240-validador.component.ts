@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 interface CampoLayout {
@@ -36,9 +37,10 @@ interface EstatisticasArquivo {
 @Component({
   selector: 'app-bradesco-retorno240-validador',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   template: `
     <div style="max-width:1400px;margin:0 auto;padding:20px;">
+      <a routerLink="/validadores" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#e8f4fc;border:1px solid #cce0eb;border-radius:8px;color:#00253F;font-size:13px;font-weight:700;text-decoration:none;margin-bottom:20px;">← Voltar</a>
       <h2 style="color:#1976d2;margin-bottom:20px;">🏦 Validador Retorno Bradesco CNAB 240</h2>
 
       <div style="margin-bottom:20px;">

@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { NoticiasService } from '../../service/noticias.service';
 import { Noticia } from '../../models/noticia.model';
 
 @Component({
   selector: 'app-noticias-editar',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './noticiaseditar.component.html',
   styleUrls: ['./noticiaseditar.component.css']
 })

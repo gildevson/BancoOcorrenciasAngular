@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 interface CampoLayout {
@@ -35,9 +36,10 @@ interface EstatisticasArquivo {
 @Component({
   selector: 'app-bmp-cnab400-retorno-validador',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   template: `
     <div class="cnab-validador">
+      <a routerLink="/validadores" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#e8f4fc;border:1px solid #cce0eb;border-radius:8px;color:#00253F;font-size:13px;font-weight:700;text-decoration:none;margin-bottom:20px;">← Voltar</a>
       <h2 class="titulo">🏦 Validador Retorno Banco BMP CNAB 400</h2>
 
       <div class="upload-area">
