@@ -232,5 +232,12 @@ Desenvolvido para gestão de remessas bancárias e cálculos financeiros.
 - ng build 
 - dist/remessa-segura-portal/browser/
 - Depois é só pegar tudo que está dentro dessa pasta browser/ e subir para o public_html da Hostinger.
- 
+- É um bloqueio de política do PowerShell. Use um desses:
+- Opção 1 — npx (mais simples):
+- npx ng build --configuration=production
+- Opção 2 — liberar execução no PowerShell:
+- Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+- Depois rode normalmente:
+- ng build --configuration=production
+- Recomendo a Opção 1 por ser mais rápida e sem alterar configurações do sistema. 
 
