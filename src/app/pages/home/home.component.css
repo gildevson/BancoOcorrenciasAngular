@@ -8,6 +8,8 @@
 
 .home-center {
   min-width: 0;
+  grid-column: 2;
+  grid-row: 1;
 }
 
 @media (max-width: 1620px) {
