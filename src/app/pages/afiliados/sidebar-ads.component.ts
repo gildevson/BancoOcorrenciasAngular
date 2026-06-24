@@ -43,16 +43,16 @@ import { CommonModule } from '@angular/common';
   styles: [`
     .sidebar {
       position: fixed;
-      top: 80px;
-      width: 160px;
+      top: 68px;
+      width: 155px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 6px;
       z-index: 100;
     }
 
-    .sidebar-left  { left: 6px; }
-    .sidebar-right { right: 6px; }
+    .sidebar-left  { left: 4px; }
+    .sidebar-right { right: 4px; }
 
     @media (max-width: 1620px) {
       .sidebar { display: none; }
@@ -94,7 +94,7 @@ import { CommonModule } from '@angular/common';
 
     .ad-img {
       width: 100%;
-      height: 130px;
+      height: 110px;
       background: linear-gradient(135deg, #f0f4ff, #e8f0fe);
       display: flex;
       align-items: center;
