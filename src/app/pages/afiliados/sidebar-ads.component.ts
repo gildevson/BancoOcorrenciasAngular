@@ -60,46 +60,45 @@ import { CommonModule } from '@angular/common';
 
     .ad-card {
       background: #fff;
-      border: 1px solid #dde6f0;
-      border-radius: 12px;
+      border: 2px solid transparent;
+      border-radius: 14px;
       overflow: hidden;
       text-decoration: none;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
       position: relative;
     }
 
     .ad-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(0,43,73,0.13);
-      border-color: #002B49;
+      transform: translateY(-4px);
+      box-shadow: 0 10px 28px rgba(255,80,0,0.18);
+      border-color: #ff5000;
     }
 
     .ad-label {
       position: absolute;
-      top: 6px;
-      right: 6px;
-      background: #fff3cd;
-      color: #856404;
+      top: 7px;
+      right: 7px;
+      background: linear-gradient(135deg, #ff5000, #ff8c00);
+      color: #fff;
       font-size: 0.6rem;
-      font-weight: 700;
-      padding: 1px 6px;
+      font-weight: 800;
+      padding: 2px 7px;
       border-radius: 20px;
-      border: 1px solid #ffc107;
       text-transform: uppercase;
-      letter-spacing: 0.4px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 6px rgba(255,80,0,0.4);
     }
 
     .ad-img {
       width: 100%;
       height: 130px;
-      background: #f8f9fa;
+      background: linear-gradient(135deg, #f0f4ff, #e8f0fe);
       display: flex;
       align-items: center;
       justify-content: center;
-      border-bottom: 1px solid #f0f4f8;
     }
 
     .ad-img img {
@@ -117,8 +116,8 @@ import { CommonModule } from '@angular/common';
 
     .ad-nome {
       font-size: 0.72rem;
-      color: #002B49;
-      font-weight: 600;
+      color: #111;
+      font-weight: 700;
       padding: 8px 8px 4px;
       margin: 0;
       line-height: 1.3;
@@ -130,18 +129,20 @@ import { CommonModule } from '@angular/common';
 
     .ad-btn {
       margin: 4px 8px 8px;
-      background: #002B49;
+      background: linear-gradient(135deg, #ff5000, #ff8c00);
       color: #fff;
       font-size: 0.72rem;
-      font-weight: 700;
+      font-weight: 800;
       text-align: center;
-      padding: 6px;
-      border-radius: 6px;
-      transition: background 0.2s;
+      padding: 7px;
+      border-radius: 8px;
+      transition: opacity 0.2s;
+      box-shadow: 0 3px 10px rgba(255,80,0,0.35);
+      letter-spacing: 0.3px;
     }
 
     .ad-card:hover .ad-btn {
-      background: #003d6b;
+      opacity: 0.88;
     }
   `]
 })
