@@ -148,10 +148,10 @@ import { CommonModule } from '@angular/common';
 export class SidebarAdsComponent {
   esquerda = [
     {
-      nome: 'Creatina 250g Growth Supplements',
-      link: 'https://meli.la/157qc6t',
-      icon: 'fitness_center',
-      imagem: ''
+      nome: 'Aquecedor Doméstico Quartzo 800w',
+      link: 'https://meli.la/13aQZdD',
+      icon: 'fireplace',
+      imagem: 'https://http2.mlstatic.com/D_NQ_NP_2X_794742-MLB110800884863_042026-F.webp'
     },
     {
       nome: 'Controle Sem Fio 8BitDo Ultimate V2',
