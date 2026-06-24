@@ -25,14 +25,14 @@ jobs:
       - name: Build Angular
         run: npm run build
 
-      - name: Deploy via FTP para Hostinger
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftps
-          port: 21
-          local-dir: ./dist/remessa-segura-portal/browser/
-          server-dir: /public_html/
-          dangerous-clean-slate: false
+      - name: Deploy via LFTP para Hostinger
+        run: |
+          sudo apt-get install -y lftp
+          lftp -c "
+            set ftp:ssl-force true;
+            set ftp:ssl-protect-data true;
+            set ssl:verify-certificate false;
+            open -u '${{ secrets.FTP_USERNAME }}','${{ secrets.FTP_PASSWORD }}' ftp://${{ secrets.FTP_SERVER }};
+            mirror -R --delete --verbose ./dist/remessa-segura-portal/browser/ /public_html/;
+            bye
+          "
