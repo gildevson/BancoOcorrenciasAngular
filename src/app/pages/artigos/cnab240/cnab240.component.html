@@ -1,0 +1,231 @@
+<article class="artigo-page">
+  <div class="hero">
+    <span class="tag-cat">CNAB</span>
+    <h1>O que é CNAB 240? Guia Completo</h1>
+    <p class="subtitulo">Entenda o padrão FEBRABAN de 240 posições para remessa e retorno bancário</p>
+    <div class="meta">
+      <span><span class="material-icons">schedule</span> 8 min de leitura</span>
+      <span><span class="material-icons">event</span> 01 de jun. de 2026</span>
+      <span><span class="material-icons">category</span> CNAB</span>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="sumario">
+      <h4><span class="material-icons">list</span> Neste artigo</h4>
+      <ol>
+        <li><a href="#o-que-e">O que é o padrão CNAB?</a></li>
+        <li><a href="#cnab240">O que é CNAB 240?</a></li>
+        <li><a href="#estrutura">Estrutura do arquivo CNAB 240</a></li>
+        <li><a href="#segmentos">Tipos de segmentos</a></li>
+        <li><a href="#bancos">Bancos que utilizam CNAB 240</a></li>
+        <li><a href="#diferenca">Diferença entre CNAB 240 e CNAB 400</a></li>
+        <li><a href="#como-usar">Como validar um arquivo CNAB 240</a></li>
+      </ol>
+    </div>
+
+    <section id="o-que-e">
+      <h2>O que é o padrão CNAB?</h2>
+      <p>
+        O <strong>CNAB (Centro Nacional de Automação Bancária)</strong> é um padrão definido pela
+        <strong>FEBRABAN (Federação Brasileira de Bancos)</strong> para normatizar os arquivos de troca
+        de informações entre empresas e instituições financeiras no Brasil.
+      </p>
+      <p>
+        Esses arquivos são utilizados principalmente para processar cobranças bancárias — boletos, débitos em conta,
+        pagamentos de fornecedores e outros serviços financeiros automatizados. A padronização permite que
+        sistemas de diferentes empresas se comuniquem com qualquer banco usando o mesmo formato de arquivo.
+      </p>
+    </section>
+
+    <section id="cnab240">
+      <h2>O que é CNAB 240?</h2>
+      <p>
+        O <strong>CNAB 240</strong> é o padrão mais moderno definido pela FEBRABAN, onde cada linha do arquivo
+        possui exatamente <strong>240 caracteres (posições)</strong>. Foi criado para substituir gradualmente
+        o CNAB 400, oferecendo maior organização dos dados e suporte a mais tipos de transação.
+      </p>
+      <div class="destaque">
+        <span class="material-icons">lightbulb</span>
+        <p>
+          O número "240" se refere ao tamanho fixo de cada registro (linha) do arquivo, que deve ter
+          exatamente 240 caracteres — nem mais, nem menos.
+        </p>
+      </div>
+      <p>
+        O padrão CNAB 240 é o mais adotado atualmente por grandes bancos brasileiros como Itaú, Bradesco,
+        Caixa Econômica Federal, Banco do Brasil, Santander, Sicoob e Sicredi.
+      </p>
+    </section>
+
+    <section id="estrutura">
+      <h2>Estrutura do arquivo CNAB 240</h2>
+      <p>Um arquivo CNAB 240 é organizado em blocos hierárquicos chamados <strong>segmentos</strong>:</p>
+
+      <div class="tabela-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Registro</th>
+              <th>Código</th>
+              <th>Descrição</th>
+              <th>Obrigatório</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Header de Arquivo</td>
+              <td>0</td>
+              <td>Identificação da empresa e do banco</td>
+              <td>Sim</td>
+            </tr>
+            <tr>
+              <td>Header de Lote</td>
+              <td>1</td>
+              <td>Início de um grupo de transações</td>
+              <td>Sim</td>
+            </tr>
+            <tr>
+              <td>Registro Detalhe</td>
+              <td>3</td>
+              <td>Dados de cada título/transação</td>
+              <td>Sim</td>
+            </tr>
+            <tr>
+              <td>Trailer de Lote</td>
+              <td>5</td>
+              <td>Totalizador do lote</td>
+              <td>Sim</td>
+            </tr>
+            <tr>
+              <td>Trailer de Arquivo</td>
+              <td>9</td>
+              <td>Encerramento do arquivo com totais gerais</td>
+              <td>Sim</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="segmentos">
+      <h2>Tipos de segmentos no detalhe</h2>
+      <p>
+        O registro detalhe (tipo 3) é subdividido em <strong>segmentos</strong>, identificados por letras:
+      </p>
+      <div class="segmentos-grid">
+        <div class="seg">
+          <strong>Segmento A</strong>
+          <p>Dados do favorecido e valor do pagamento</p>
+        </div>
+        <div class="seg">
+          <strong>Segmento B</strong>
+          <p>Informações complementares do favorecido</p>
+        </div>
+        <div class="seg">
+          <strong>Segmento J</strong>
+          <p>Pagamento de boletos e código de barras</p>
+        </div>
+        <div class="seg">
+          <strong>Segmento O</strong>
+          <p>Pagamento de concessionárias (contas de consumo)</p>
+        </div>
+        <div class="seg">
+          <strong>Segmento P</strong>
+          <p>Cobrança — dados do título</p>
+        </div>
+        <div class="seg">
+          <strong>Segmento Q</strong>
+          <p>Cobrança — dados do sacado/pagador</p>
+        </div>
+        <div class="seg">
+          <strong>Segmento R</strong>
+          <p>Cobrança — descontos e abatimentos</p>
+        </div>
+        <div class="seg">
+          <strong>Segmento T</strong>
+          <p>Retorno — dados do título retornado</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="bancos">
+      <h2>Bancos que utilizam CNAB 240</h2>
+      <p>Os principais bancos brasileiros que adotam o padrão CNAB 240 são:</p>
+      <ul class="lista-bancos">
+        <li><span class="material-icons">account_balance</span> Banco do Brasil (001)</li>
+        <li><span class="material-icons">account_balance</span> Itaú Unibanco (341)</li>
+        <li><span class="material-icons">account_balance</span> Bradesco (237)</li>
+        <li><span class="material-icons">account_balance</span> Caixa Econômica Federal (104)</li>
+        <li><span class="material-icons">account_balance</span> Santander (033)</li>
+        <li><span class="material-icons">account_balance</span> Sicoob (756)</li>
+        <li><span class="material-icons">account_balance</span> Sicredi (748)</li>
+        <li><span class="material-icons">account_balance</span> Banrisul (041)</li>
+        <li><span class="material-icons">account_balance</span> HSBC (399)</li>
+      </ul>
+    </section>
+
+    <section id="diferenca">
+      <h2>Diferença entre CNAB 240 e CNAB 400</h2>
+      <div class="comparativo">
+        <div class="comp-col">
+          <h3>CNAB 240</h3>
+          <ul>
+            <li>240 caracteres por linha</li>
+            <li>Estrutura hierárquica (lotes e segmentos)</li>
+            <li>Suporta múltiplos tipos de pagamento</li>
+            <li>Padrão mais moderno e completo</li>
+            <li>Adotado pelos grandes bancos</li>
+          </ul>
+        </div>
+        <div class="comp-col">
+          <h3>CNAB 400</h3>
+          <ul>
+            <li>400 caracteres por linha</li>
+            <li>Estrutura mais simples (cabeçalho, detalhe, trailler)</li>
+            <li>Foco em cobrança bancária</li>
+            <li>Padrão mais antigo, ainda amplamente usado</li>
+            <li>Utilizado por bancos menores e fintechs</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="como-usar">
+      <h2>Como validar um arquivo CNAB 240</h2>
+      <p>
+        O portal <strong>Banco Ocorrências</strong> oferece validadores gratuitos para arquivos CNAB 240.
+        Para validar seu arquivo:
+      </p>
+      <ol class="passos">
+        <li>
+          <span class="num">1</span>
+          <div>Acesse a seção <a routerLink="/validadores">Validadores</a> do portal.</div>
+        </li>
+        <li>
+          <span class="num">2</span>
+          <div>Selecione o banco emissor do arquivo.</div>
+        </li>
+        <li>
+          <span class="num">3</span>
+          <div>Cole o conteúdo do arquivo ou faça o upload.</div>
+        </li>
+        <li>
+          <span class="num">4</span>
+          <div>O validador irá analisar a estrutura e apontar eventuais erros.</div>
+        </li>
+      </ol>
+    </section>
+
+    <div class="navegacao">
+      <a routerLink="/artigos" class="btn-voltar">
+        <span class="material-icons">arrow_back</span> Voltar para Artigos
+      </a>
+      <a routerLink="/artigos/cnab-400" class="btn-proximo">
+        Próximo: CNAB 400 <span class="material-icons">arrow_forward</span>
+      </a>
+    </div>
+
+  </div>
+</article>

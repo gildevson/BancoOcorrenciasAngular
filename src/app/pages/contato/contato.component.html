@@ -1,0 +1,106 @@
+<section class="contato-page">
+  <div class="hero">
+    <span class="material-icons hero-icon">contact_mail</span>
+    <h1>Entre em Contato</h1>
+    <p>Tem dúvidas, sugestões ou encontrou algum erro? Fale conosco!</p>
+  </div>
+
+  <div class="container">
+    <div class="grid">
+
+      <div class="info-col">
+        <h2>Informações de Contato</h2>
+
+        <div class="info-item">
+          <span class="material-icons">email</span>
+          <div>
+            <strong>E-mail</strong>
+            <p>contato&#64;bancosocorrencia.com</p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <span class="material-icons">language</span>
+          <div>
+            <strong>Site</strong>
+            <p>bancosocorrencia.com</p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <span class="material-icons">schedule</span>
+          <div>
+            <strong>Tempo de Resposta</strong>
+            <p>Respondemos em até 2 dias úteis</p>
+          </div>
+        </div>
+
+        <div class="topicos">
+          <h3>Podemos ajudar com:</h3>
+          <ul>
+            <li><span class="material-icons">check</span> Dúvidas sobre CNAB 240 e CNAB 400</li>
+            <li><span class="material-icons">check</span> Erros nos validadores de arquivo</li>
+            <li><span class="material-icons">check</span> Sugestão de novos bancos ou layouts</li>
+            <li><span class="material-icons">check</span> Códigos de ocorrências não encontrados</li>
+            <li><span class="material-icons">check</span> Problemas de acesso ou cadastro</li>
+            <li><span class="material-icons">check</span> Parcerias e colaborações</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="form-col">
+        <div class="sucesso" *ngIf="enviado">
+          <span class="material-icons">check_circle</span>
+          <h3>Mensagem enviada!</h3>
+          <p>Obrigado pelo contato. Responderemos em breve no e-mail informado.</p>
+        </div>
+
+        <form (ngSubmit)="enviar()" *ngIf="!enviado">
+          <h2>Enviar Mensagem</h2>
+
+          <div class="campo">
+            <label for="nome">Nome completo *</label>
+            <input
+              id="nome"
+              type="text"
+              [(ngModel)]="nome"
+              name="nome"
+              placeholder="Seu nome"
+              required
+            />
+          </div>
+
+          <div class="campo">
+            <label for="email">E-mail *</label>
+            <input
+              id="email"
+              type="email"
+              [(ngModel)]="email"
+              name="email"
+              placeholder="seu@email.com"
+              required
+            />
+          </div>
+
+          <div class="campo">
+            <label for="mensagem">Mensagem *</label>
+            <textarea
+              id="mensagem"
+              [(ngModel)]="mensagem"
+              name="mensagem"
+              placeholder="Descreva sua dúvida ou sugestão..."
+              rows="6"
+              required
+            ></textarea>
+          </div>
+
+          <button type="submit" [disabled]="!nome || !email || !mensagem">
+            <span class="material-icons">send</span>
+            Enviar Mensagem
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>

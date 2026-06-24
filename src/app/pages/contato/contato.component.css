@@ -1,0 +1,62 @@
+.contato-page { padding-bottom: 60px; }
+
+.hero {
+  background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+  color: #fff; text-align: center; padding: 60px 24px;
+}
+.hero-icon { font-size: 56px; opacity: .85; margin-bottom: 12px; display: block; }
+.hero h1 { font-size: 2rem; margin-bottom: 12px; }
+.hero p { opacity: .85; max-width: 500px; margin: 0 auto; }
+
+.container { max-width: 960px; margin: 0 auto; padding: 40px 24px; }
+
+.grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 40px; }
+@media (max-width: 700px) { .grid { grid-template-columns: 1fr; } }
+
+.info-col h2 { font-size: 1.3rem; color: #1a237e; margin-bottom: 24px; }
+
+.info-item {
+  display: flex; gap: 14px; align-items: flex-start;
+  margin-bottom: 24px;
+}
+.info-item .material-icons { color: #3949ab; font-size: 28px; flex-shrink: 0; margin-top: 2px; }
+.info-item strong { display: block; color: #1a237e; margin-bottom: 2px; }
+.info-item p { margin: 0; color: #666; font-size: .9rem; }
+
+.topicos { margin-top: 32px; background: #f8f9fa; padding: 20px; border-radius: 10px; }
+.topicos h3 { font-size: 1rem; color: #333; margin-bottom: 12px; }
+.topicos ul { list-style: none; padding: 0; }
+.topicos li { display: flex; align-items: center; gap: 8px; color: #555; padding: 6px 0; font-size: .9rem; }
+.topicos li .material-icons { color: #43a047; font-size: 18px; }
+
+.form-col h2 { font-size: 1.3rem; color: #1a237e; margin-bottom: 24px; }
+
+.campo { margin-bottom: 20px; }
+.campo label { display: block; font-size: .875rem; font-weight: 600; color: #444; margin-bottom: 6px; }
+.campo input, .campo textarea {
+  width: 100%; padding: 12px 14px;
+  border: 1px solid #ddd; border-radius: 8px;
+  font-size: .95rem; font-family: inherit;
+  transition: border-color .2s;
+  box-sizing: border-box;
+}
+.campo input:focus, .campo textarea:focus { outline: none; border-color: #3949ab; }
+.campo textarea { resize: vertical; }
+
+button[type=submit] {
+  display: flex; align-items: center; gap: 8px;
+  background: #1a237e; color: #fff;
+  border: none; padding: 14px 28px;
+  border-radius: 8px; font-size: 1rem; font-weight: 600;
+  cursor: pointer; transition: background .2s;
+}
+button[type=submit]:hover:not(:disabled) { background: #283593; }
+button[type=submit]:disabled { background: #9e9e9e; cursor: not-allowed; }
+
+.sucesso {
+  text-align: center; padding: 48px 24px;
+  background: #e8f5e9; border-radius: 12px;
+}
+.sucesso .material-icons { font-size: 56px; color: #43a047; display: block; margin-bottom: 16px; }
+.sucesso h3 { color: #2e7d32; font-size: 1.3rem; margin-bottom: 8px; }
+.sucesso p { color: #555; }

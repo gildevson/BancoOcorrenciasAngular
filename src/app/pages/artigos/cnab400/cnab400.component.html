@@ -1,0 +1,205 @@
+<article class="artigo-page">
+  <div class="hero">
+    <span class="tag-cat">CNAB</span>
+    <h1>O que é CNAB 400? Guia Completo</h1>
+    <p class="subtitulo">Conheça o padrão de 400 posições amplamente utilizado no mercado bancário brasileiro</p>
+    <div class="meta">
+      <span><span class="material-icons">schedule</span> 7 min de leitura</span>
+      <span><span class="material-icons">event</span> 05 de jun. de 2026</span>
+      <span><span class="material-icons">category</span> CNAB</span>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="sumario">
+      <h4><span class="material-icons">list</span> Neste artigo</h4>
+      <ol>
+        <li><a href="#o-que-e">O que é CNAB 400?</a></li>
+        <li><a href="#estrutura">Estrutura do arquivo CNAB 400</a></li>
+        <li><a href="#registros">Tipos de registros</a></li>
+        <li><a href="#bancos">Bancos que utilizam CNAB 400</a></li>
+        <li><a href="#remessa">Arquivo de Remessa</a></li>
+        <li><a href="#retorno">Arquivo de Retorno</a></li>
+        <li><a href="#como-usar">Como validar um arquivo CNAB 400</a></li>
+      </ol>
+    </div>
+
+    <section id="o-que-e">
+      <h2>O que é CNAB 400?</h2>
+      <p>
+        O <strong>CNAB 400</strong> é um padrão de arquivo texto onde cada linha possui exatamente
+        <strong>400 caracteres (posições)</strong>. É um dos formatos mais tradicionais utilizados
+        no mercado financeiro brasileiro para troca de informações de cobrança bancária entre empresas e bancos.
+      </p>
+      <p>
+        Criado antes do CNAB 240, o formato de 400 posições ainda é amplamente utilizado por diversas
+        instituições financeiras, especialmente bancos de menor porte, cooperativas de crédito e fintechs.
+        Sua estrutura mais simples facilita a implementação em sistemas legados.
+      </p>
+      <div class="destaque">
+        <span class="material-icons">lightbulb</span>
+        <p>
+          Cada linha de um arquivo CNAB 400 deve conter exatamente 400 caracteres.
+          Espaços em branco completam campos não utilizados (padding).
+        </p>
+      </div>
+    </section>
+
+    <section id="estrutura">
+      <h2>Estrutura do arquivo CNAB 400</h2>
+      <p>
+        O CNAB 400 possui uma estrutura mais simples que o CNAB 240, composta por apenas três tipos de registro:
+      </p>
+      <div class="tabela-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Registro</th>
+              <th>Identificador</th>
+              <th>Posição</th>
+              <th>Descrição</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Header</td>
+              <td>0</td>
+              <td>400 caracteres</td>
+              <td>Cabeçalho do arquivo — identifica a empresa e o banco</td>
+            </tr>
+            <tr>
+              <td>Detalhe</td>
+              <td>1</td>
+              <td>400 caracteres</td>
+              <td>Um registro por título/transação</td>
+            </tr>
+            <tr>
+              <td>Trailler</td>
+              <td>9</td>
+              <td>400 caracteres</td>
+              <td>Rodapé do arquivo com totais e quantidades</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="registros">
+      <h2>Tipos de registros de detalhe</h2>
+      <p>
+        No CNAB 400, o registro de detalhe (tipo 1) varia conforme o banco e o tipo de operação.
+        Alguns bancos utilizam sub-registros identificados pela posição 1 do campo de detalhe:
+      </p>
+      <div class="segmentos-grid">
+        <div class="seg">
+          <strong>Registro Tipo 1</strong>
+          <p>Dados principais do título — sacado, vencimento, valor e instruções</p>
+        </div>
+        <div class="seg">
+          <strong>Registro Tipo 2</strong>
+          <p>Dados complementares — endereço do sacado (nem todos os bancos usam)</p>
+        </div>
+        <div class="seg">
+          <strong>Registro Tipo 5</strong>
+          <p>Dados de sacador/avalista (quando aplicável)</p>
+        </div>
+        <div class="seg">
+          <strong>Registro Tipo 7</strong>
+          <p>Informações de multa e mora específicas por banco</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="bancos">
+      <h2>Bancos que utilizam CNAB 400</h2>
+      <p>Os principais bancos que adotam ou suportam o padrão CNAB 400:</p>
+      <ul class="lista-bancos">
+        <li><span class="material-icons">account_balance</span> Bradesco (237)</li>
+        <li><span class="material-icons">account_balance</span> Itaú Unibanco (341)</li>
+        <li><span class="material-icons">account_balance</span> Santander (033)</li>
+        <li><span class="material-icons">account_balance</span> Sicredi (748)</li>
+        <li><span class="material-icons">account_balance</span> Banrisul (041)</li>
+        <li><span class="material-icons">account_balance</span> Banco BMP (274)</li>
+        <li><span class="material-icons">account_balance</span> Banco ABC Brasil (246)</li>
+        <li><span class="material-icons">account_balance</span> Banco Inter (077)</li>
+        <li><span class="material-icons">account_balance</span> Banco Sofisa (637)</li>
+      </ul>
+    </section>
+
+    <section id="remessa">
+      <h2>Arquivo de Remessa CNAB 400</h2>
+      <p>
+        O <strong>arquivo de remessa</strong> é enviado pela empresa ao banco. Ele contém as instruções
+        para registrar cobranças, como:
+      </p>
+      <ul>
+        <li>Emissão de boletos bancários;</li>
+        <li>Alteração de vencimento ou valor;</li>
+        <li>Cancelamento de cobranças;</li>
+        <li>Concessão de desconto ou abatimento;</li>
+        <li>Protesto ou sustação de protesto.</li>
+      </ul>
+      <p>
+        Cada registro de detalhe do arquivo de remessa representa uma instrução para o banco,
+        identificada pelo <strong>código de ocorrência (campo específico)</strong>.
+      </p>
+    </section>
+
+    <section id="retorno">
+      <h2>Arquivo de Retorno CNAB 400</h2>
+      <p>
+        O <strong>arquivo de retorno</strong> é enviado pelo banco à empresa, informando o resultado
+        das operações processadas. Ele contém:
+      </p>
+      <ul>
+        <li>Confirmação de registro de boletos;</li>
+        <li>Liquidações (pagamentos recebidos);</li>
+        <li>Baixas por vencimento, devolução ou cancelamento;</li>
+        <li>Ocorrências de protesto;</li>
+        <li>Erros e rejeições de instruções.</li>
+      </ul>
+      <div class="destaque">
+        <span class="material-icons">warning</span>
+        <p>
+          Os <strong>códigos de ocorrências</strong> no arquivo de retorno variam por banco.
+          Use o <a routerLink="/ocorrencia">consultor de ocorrências</a> do portal para identificar
+          o significado de cada código.
+        </p>
+      </div>
+    </section>
+
+    <section id="como-usar">
+      <h2>Como validar um arquivo CNAB 400</h2>
+      <p>O portal Banco Ocorrências oferece validadores para os principais bancos. Siga os passos:</p>
+      <ol class="passos">
+        <li>
+          <span class="num">1</span>
+          <div>Acesse <a routerLink="/validadores">Validadores</a> e escolha o banco.</div>
+        </li>
+        <li>
+          <span class="num">2</span>
+          <div>Selecione se é arquivo de <strong>remessa</strong> ou <strong>retorno</strong>.</div>
+        </li>
+        <li>
+          <span class="num">3</span>
+          <div>Cole o conteúdo do arquivo no campo de texto.</div>
+        </li>
+        <li>
+          <span class="num">4</span>
+          <div>O validador verifica tamanho das linhas, campos obrigatórios e estrutura geral.</div>
+        </li>
+      </ol>
+    </section>
+
+    <div class="navegacao">
+      <a routerLink="/artigos/cnab-240" class="btn-voltar">
+        <span class="material-icons">arrow_back</span> Anterior: CNAB 240
+      </a>
+      <a routerLink="/artigos" class="btn-proximo">
+        Ver todos os artigos <span class="material-icons">arrow_forward</span>
+      </a>
+    </div>
+
+  </div>
+</article>

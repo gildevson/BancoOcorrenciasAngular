@@ -1,0 +1,28 @@
+<section class="artigos-page">
+  <div class="hero">
+    <span class="material-icons hero-icon">menu_book</span>
+    <h1>Artigos e Tutoriais</h1>
+    <p>Aprenda sobre CNAB, ocorrências bancárias e como usar as ferramentas do portal.</p>
+  </div>
+
+  <div class="container">
+    <div class="grid">
+      <article class="card" *ngFor="let artigo of artigos">
+        <a [routerLink]="['/artigos', artigo.slug]">
+          <div class="card-icon">
+            <span class="material-icons">{{ artigo.icone }}</span>
+          </div>
+          <div class="card-body">
+            <span class="tag">{{ artigo.categoria }}</span>
+            <h3>{{ artigo.titulo }}</h3>
+            <p>{{ artigo.resumo }}</p>
+            <div class="meta">
+              <span><span class="material-icons">schedule</span> {{ artigo.tempo }} min de leitura</span>
+              <span><span class="material-icons">event</span> {{ formatarData(artigo.data) }}</span>
+            </div>
+          </div>
+        </a>
+      </article>
+    </div>
+  </div>
+</section>

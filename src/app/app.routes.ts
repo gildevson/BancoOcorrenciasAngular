@@ -109,6 +109,56 @@ export const routes: Routes = [
   },
 
   // ===============================
+  // PÁGINAS INSTITUCIONAIS
+  // ===============================
+  {
+    path: 'sobre',
+    title: 'Sobre o Portal',
+    loadComponent: () =>
+      import('./pages/sobre/sobre.component')
+        .then(m => m.SobreComponent),
+  },
+  {
+    path: 'privacidade',
+    title: 'Política de Privacidade',
+    loadComponent: () =>
+      import('./pages/privacidade/privacidade.component')
+        .then(m => m.PrivacidadeComponent),
+  },
+  {
+    path: 'contato',
+    title: 'Contato',
+    loadComponent: () =>
+      import('./pages/contato/contato.component')
+        .then(m => m.ContatoComponent),
+  },
+
+  // ===============================
+  // ARTIGOS
+  // ===============================
+  {
+    path: 'artigos',
+    title: 'Artigos e Tutoriais',
+    loadComponent: () =>
+      import('./pages/artigos/artigos.component')
+        .then(m => m.ArtigosComponent),
+  },
+  {
+    path: 'artigos/cnab-240',
+    title: 'O que é CNAB 240? Guia Completo',
+    loadComponent: () =>
+      import('./pages/artigos/cnab240/cnab240.component')
+        .then(m => m.Cnab240Component),
+  },
+  {
+    path: 'artigos/cnab-400',
+    title: 'O que é CNAB 400? Guia Completo',
+    loadComponent: () =>
+      import('./pages/artigos/cnab400/cnab400.component')
+        .then(m => m.Cnab400Component),
+  },
+
+  // ===============================
   // CALCULADORAS (Shell + Rotas Filhas)
   // ===============================
   {
