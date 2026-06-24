@@ -1,5 +1,5 @@
 import { Component, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
@@ -37,7 +37,7 @@ interface EstatisticasArquivo {
 @Component({
   selector: 'app-bmp-cnab400-validador',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [FormsModule, RouterModule],
   templateUrl: './bmpcnab400validador.component.html',
   styleUrls: ['./bmpcnab400validador.component.css']
 })
@@ -50,6 +50,28 @@ export class BmpCnab400ValidadorComponent implements OnDestroy {
   conteudoArquivo: string = '';
   legendaCampos: CampoLayout[] = [];
   estatisticas: EstatisticasArquivo | null = null;
+
+  // Edição
+  linhasEditadas: string[] = [];
+  linhasOriginais: string[] = [];
+  statusBar: string = '';
+  campoAtivo: CampoLayout | null = null;
+  valorCampoAtivo: string = '';
+  linhaAtiva: number = -1;
+  aplicadoFeedback: boolean = false;
+  totalEdicoes: number = 0;
+  editorPos: { top: number; left: number } | null = null;
+  editorCarregando: boolean = false;
+
+  // Totais
+  totaisRemessa: {
+    totalBoletos: number;
+    valorFace: number;
+    valorDesconto: number;
+    valorAbatimento: number;
+    comMulta: number;
+    semMulta: number;
+  } | null = null;
 
   private _hlStyle: HTMLStyleElement | null = null;
 
@@ -205,6 +227,9 @@ export class BmpCnab400ValidadorComponent implements OnDestroy {
     this.campoSelecionado = null;
     this.conteudoArquivo = '';
     this.estatisticas = null;
+    this.statusBar = '';
+    this.campoAtivo = null;
+    this.linhaAtiva = -1;
 
     const input = event.target as HTMLInputElement;
     if (!input.files || input.files.length === 0) return;
@@ -216,9 +241,10 @@ export class BmpCnab400ValidadorComponent implements OnDestroy {
       try {
         const content = reader.result as string;
         this.conteudoArquivo = content;
-        const html = this.validarEHighlight(content);
-        this.visualHtml = this.sanitizer.bypassSecurityTrustHtml(html);
-        this.validado = true;
+        this.linhasEditadas = content.split(/\r?\n/).filter(l => l.length > 0);
+        this.linhasOriginais = [...this.linhasEditadas];
+        this.totalEdicoes = 0;
+        this.rerenderizar();
       } catch (e) {
         this.error = 'Erro ao processar o arquivo. Verifique se é um arquivo CNAB 400 válido.';
         console.error(e);
@@ -230,6 +256,160 @@ export class BmpCnab400ValidadorComponent implements OnDestroy {
     };
 
     reader.readAsText(file, 'ISO-8859-1');
+  }
+
+  rerenderizar(): void {
+    this.erros = [];
+    this.estatisticas = null;
+    const content = this.linhasEditadas.join('\r\n');
+    const html = this.validarEHighlight(content);
+    this.visualHtml = this.sanitizer.bypassSecurityTrustHtml(html);
+    this.validado = true;
+    this.calcularTotais();
+  }
+
+  calcularTotais(): void {
+    const detalhes = this.linhasEditadas.filter(l => l[0] === '1');
+    if (detalhes.length === 0) { this.totaisRemessa = null; return; }
+
+    let valorFace = 0, valorDesconto = 0, valorAbatimento = 0;
+    let comMulta = 0, semMulta = 0;
+
+    for (const l of detalhes) {
+      valorFace      += parseInt(l.substring(126, 139) || '0', 10);
+      valorDesconto  += parseInt(l.substring(179, 192) || '0', 10);
+      valorAbatimento+= parseInt(l.substring(205, 218) || '0', 10);
+      l[65] === '2' ? comMulta++ : semMulta++;
+    }
+
+    this.totaisRemessa = {
+      totalBoletos: detalhes.length,
+      valorFace, valorDesconto, valorAbatimento,
+      comMulta, semMulta
+    };
+  }
+
+  formatarReais(centavos: number): string {
+    return (centavos / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
+
+  readonly codigosInstrucao: { codigo: string; descricao: string }[] = [
+    { codigo: '00', descricao: 'Sem instrução' },
+    { codigo: '02', descricao: 'Devolver após X dias corridos do vencimento (não protestar)' },
+    { codigo: '06', descricao: 'Protestar após X dias corridos do vencimento' },
+    { codigo: '07', descricao: 'Negativar — encaminhar ao serviço de negativação' },
+    { codigo: '09', descricao: 'Cancelar instrução de protesto / negativação' },
+    { codigo: '18', descricao: 'Sustar protesto e dar baixa no título' },
+    { codigo: '19', descricao: 'Sustar protesto e manter título em carteira' },
+    { codigo: '20', descricao: 'Devolver o título ao cedente' },
+    { codigo: '23', descricao: 'Não cobrar juros de mora' },
+    { codigo: '24', descricao: 'Cobrar juros de mora (conforme instrução de mora)' },
+    { codigo: '43', descricao: 'Dispensar prazo para protesto' },
+    { codigo: '45', descricao: 'Cobrar multa conforme instrução' },
+    { codigo: '48', descricao: 'Dispensar cobrança de multa' },
+  ];
+
+  get campoEhInstrucao(): boolean {
+    return !!this.campoAtivo?.nome.toLowerCase().includes('instrução') ||
+           !!this.campoAtivo?.nome.toLowerCase().includes('instrucao');
+  }
+
+  selecionarInstrucao(codigo: string): void {
+    this.valorCampoAtivo = codigo;
+  }
+
+  fecharEditor(): void {
+    this.campoAtivo = null;
+    this.editorPos = null;
+    this.statusBar = '';
+    this._hlStyle?.remove();
+    this._hlStyle = null;
+    this.campoSelecionado = null;
+  }
+
+  private camposParaLinha(li: number): CampoLayout[] {
+    const tipo = this.linhasEditadas[li]?.[0];
+    if (tipo === '0') return this.camposHeader;
+    if (tipo === '1') return this.camposDetalhe;
+    if (tipo === '2') return this.camposTipo2;
+    if (tipo === '9') return this.camposTrailer;
+    return [];
+  }
+
+  onMatrizClick(event: MouseEvent): void {
+    const el = event.target as HTMLElement;
+    const liStr = el.dataset['li'];
+    const ciStr = el.dataset['ci'];
+    if (liStr === undefined || ciStr === undefined) return;
+
+    const li = parseInt(liStr);
+    const ci = parseInt(ciStr);
+
+    // 1. Mostra o editor imediatamente na posição do clique
+    const rect = el.getBoundingClientRect();
+    const editorW = 420;
+    const left = Math.min(rect.left, window.innerWidth - editorW - 12);
+    this.editorPos = { top: rect.bottom + 6 + window.scrollY, left: Math.max(left, 8) };
+    this.editorCarregando = true;
+    this.aplicadoFeedback = false;
+
+    // 2. Resolve campo e highlight no próximo frame (não bloqueia o render do editor)
+    requestAnimationFrame(() => {
+      const campos = this.camposParaLinha(li);
+      const campo = campos.find(c => ci >= c.ini && ci < c.fim) ?? null;
+
+      this.linhaAtiva = li;
+      this.campoAtivo = campo;
+      this.editorCarregando = false;
+
+      if (campo) {
+        this.valorCampoAtivo = this.linhasEditadas[li].substring(campo.ini, campo.fim);
+        this.statusBar = `Ln ${li + 1}    Col ${ci + 1}    |    ${campo.nome}    [${campo.ini + 1}–${campo.fim}]    Tipo: ${campo.tipo}    Tam: ${campo.tamanho}`;
+        this.selecionarCampo(campo.nome);
+      } else {
+        this.valorCampoAtivo = '';
+        this.statusBar = `Ln ${li + 1}    Col ${ci + 1}    |    (campo não mapeado)`;
+      }
+    });
+  }
+
+  aplicarEdicao(): void {
+    if (!this.campoAtivo || this.linhaAtiva < 0) return;
+    const campo = this.campoAtivo;
+    const tam = campo.fim - campo.ini;
+    let val = this.valorCampoAtivo;
+    if (campo.tipo === 'N') {
+      val = val.replace(/\D/g, '').padStart(tam, '0').substring(0, tam);
+    } else {
+      val = val.padEnd(tam, ' ').substring(0, tam);
+    }
+    const linhaAntes = this.linhasEditadas[this.linhaAtiva];
+    const linhaDepois = linhaAntes.substring(0, campo.ini) + val + linhaAntes.substring(campo.fim);
+    if (linhaAntes !== linhaDepois) {
+      this.totalEdicoes++;
+    }
+    this.linhasEditadas[this.linhaAtiva] = linhaDepois;
+    this.valorCampoAtivo = val;
+    this.aplicadoFeedback = true;
+    setTimeout(() => { this.aplicadoFeedback = false; }, 1800);
+    this.rerenderizar();
+    // Mantém o campo destacado após re-render
+    setTimeout(() => { if (campo) this.selecionarCampo(campo.nome); }, 0);
+  }
+
+  gerarRemessa(): void {
+    const conteudo = this.linhasEditadas.join('\r\n');
+    const bytes = new Uint8Array(conteudo.length);
+    for (let i = 0; i < conteudo.length; i++) {
+      bytes[i] = conteudo.charCodeAt(i) & 0xff;
+    }
+    const blob = new Blob([bytes], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'remessa_editada.REM';
+    a.click();
+    URL.revokeObjectURL(url);
   }
 
   validarEHighlight(content: string): string {
@@ -498,7 +678,7 @@ export class BmpCnab400ValidadorComponent implements OnDestroy {
         tipoColor = '#d32f2f';
     }
 
-    let html = `<div style="margin-bottom:12px;padding:8px;background:#fafafa;border-radius:4px;border:1px solid #e0e0e0;">`;
+    let html = `<div style="margin-bottom:12px;padding:8px;background:#fafafa;border-radius:4px;border:1px solid #e0e0e0;width:max-content;min-width:100%;">`;
     html += `<div style="display:flex;align-items:center;margin-bottom:6px;gap:10px;flex-wrap:wrap;">`;
     html += `<span style="min-width:80px;font-size:12px;font-weight:600;color:${tipoColor};">Linha ${lineIdx+1}</span>`;
     html += `<span style="padding:3px 10px;background:${tipoColor};color:#fff;border-radius:4px;font-size:11px;font-weight:600;text-transform:uppercase;">${tipoNome}</span>`;
@@ -533,7 +713,7 @@ export class BmpCnab400ValidadorComponent implements OnDestroy {
       const cls = campo ? `cnab-mc ${this.campoClass(campo.nome)}` : 'cnab-mc';
       const title = `${nomeCampo} - Pos ${i+1}${campo?.descricao ? '\n' + campo.descricao : ''}`;
 
-      html += `<span class="${cls}" style="display:inline-block;width:13px;height:18px;line-height:18px;text-align:center;vertical-align:top;background:${cor};${bordaErro}font-size:11px;font-family:monospace;cursor:default;user-select:none;" title="${this.escapeHtml(title)}">${char === ' ' ? '&nbsp;' : this.escapeHtml(char)}</span>`;
+      html += `<span class="${cls}" data-li="${lineIdx}" data-ci="${i}" style="display:inline-block;width:13px;height:18px;line-height:18px;text-align:center;vertical-align:top;background:${cor};${bordaErro}font-size:11px;font-family:monospace;cursor:pointer;user-select:none;" title="${this.escapeHtml(title)}">${char === ' ' ? '&nbsp;' : this.escapeHtml(char)}</span>`;
     }
 
     html += '</div></div>';

@@ -1,24 +1,11 @@
-/* Layout 3 colunas com sidebars */
 .home-layout {
-  display: grid;
-  grid-template-columns: 168px minmax(0, 1250px) 168px;
-  align-items: start;
-  gap: 0;
-  max-width: calc(1250px + 336px);
+  max-width: 1250px;
   margin: 0 auto;
 }
 
 .home-center {
   min-width: 0;
-  grid-column: 2;
-  grid-row: 1;
   padding: 0 8px;
-}
-
-@media (max-width: 1620px) {
-  .home-layout {
-    display: block;
-  }
 }
 
 /* NEWS estilo B3 - versão melhorada */

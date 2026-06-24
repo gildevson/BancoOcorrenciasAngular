@@ -92,6 +92,26 @@
 
 ---
 
+## Códigos de Instrução (1ª e 2ª instrução — campos 129-130 e 131-132)
+
+| Código | Descrição |
+| ------ | --------- |
+| 00 | Sem instrução |
+| 02 | Devolver após __ dias corridos do vencimento (não protestar) |
+| 06 | Protestar após __ dias corridos do vencimento |
+| 07 | Negativar — encaminhar ao serviço de negativação |
+| 09 | Cancelar instrução de protesto / negativação |
+| 18 | Sustar protesto e dar baixa no título |
+| 19 | Sustar protesto e manter título em carteira |
+| 20 | Devolver o título ao cedente |
+| 23 | Não cobrar juros de mora |
+| 24 | Cobrar juros de mora (conforme instrução de mora) |
+| 43 | Dispensar prazo para protesto |
+| 45 | Cobrar multa conforme instrução |
+| 48 | Dispensar cobrança de multa |
+
+---
+
 ## Tipo 2 - Mensagens / Endereco (Opcional)
 
 | # | Campo | Posicao | Tamanho | Tipo | Valor / Descricao |
