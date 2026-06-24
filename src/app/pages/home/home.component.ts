@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { FinanceHighlightsComponent } from '../financehighlights/financehighlights.component';
 import { MoedasComponent } from '../moeda/moedas.component';
 import { AfiliadosComponent } from '../afiliados/afiliados.component';
+import { SidebarAdsComponent } from '../afiliados/sidebar-ads.component';
 
 import { NoticiasService } from '../../service/noticias.service';
 import { Noticia } from '../../models/noticia.model';
@@ -12,7 +13,7 @@ import { Noticia } from '../../models/noticia.model';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterLink, FinanceHighlightsComponent, MoedasComponent, AfiliadosComponent],
+  imports: [CommonModule, RouterLink, FinanceHighlightsComponent, MoedasComponent, AfiliadosComponent, SidebarAdsComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
 })
