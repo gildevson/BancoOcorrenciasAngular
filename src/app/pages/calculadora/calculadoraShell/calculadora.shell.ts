@@ -1,36 +1,23 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterOutlet, NavigationStart, NavigationEnd } from '@angular/router';
-import { trigger, transition, style, animate, query } from '@angular/animations';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 const CALC_INFO: Record<string, { label: string; icon: string }> = {
-  desagio:    { label: 'Deságio',      icon: 'percent' },
-  iof:        { label: 'IOF',          icon: 'receipt_long' },
-  'iof-variado': { label: 'IOF Variado', icon: 'tune' },
-  mora:       { label: 'Mora',         icon: 'schedule' },
-  juros:      { label: 'Juros',        icon: 'trending_up' },
-  multa:      { label: 'Multa',        icon: 'gavel' },
+  desagio:       { label: 'Deságio',      icon: 'percent' },
+  iof:           { label: 'IOF',          icon: 'receipt_long' },
+  'iof-variado': { label: 'IOF Variado',  icon: 'tune' },
+  mora:          { label: 'Mora',         icon: 'schedule' },
+  juros:         { label: 'Juros',        icon: 'trending_up' },
+  multa:         { label: 'Multa',        icon: 'gavel' },
 };
-
-export const routeAnim = trigger('routeAnim', [
-  transition('* <=> *', [
-    query(':enter', [
-      style({ opacity: 0, transform: 'translateY(24px)' }),
-      animate('340ms cubic-bezier(.35,0,.25,1)',
-        style({ opacity: 1, transform: 'translateY(0)' }))
-    ], { optional: true }),
-  ])
-]);
 
 @Component({
   selector: 'app-calculadora-shell',
   standalone: true,
   imports: [CommonModule, RouterOutlet],
-  animations: [routeAnim],
   template: `
-    <!-- Overlay de transição -->
     <div class="calc-overlay" [class.visible]="loading">
       <div class="calc-overlay-card">
         <div class="calc-overlay-icon">
@@ -38,18 +25,27 @@ export const routeAnim = trigger('routeAnim', [
         </div>
         <p class="calc-overlay-label">{{ currentCalc.label }}</p>
         <div class="calc-overlay-bar">
-          <div class="calc-overlay-progress"></div>
+          <div class="calc-overlay-progress" [class.animate]="loading"></div>
         </div>
       </div>
     </div>
 
-    <!-- Conteúdo com animação -->
-    <section class="calc-shell" [@routeAnim]="routeKey">
+    <section class="calc-shell" [class.entering]="entering">
       <router-outlet (activate)="onActivate()"></router-outlet>
     </section>
   `,
   styles: [`
-    .calc-shell { padding: 0; }
+    .calc-shell {
+      padding: 0;
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 340ms ease, transform 340ms cubic-bezier(.35,0,.25,1);
+    }
+
+    .calc-shell.entering {
+      opacity: 0;
+      transform: translateY(20px);
+    }
 
     .calc-overlay {
       position: fixed;
@@ -111,14 +107,18 @@ export const routeAnim = trigger('routeAnim', [
 
     .calc-overlay-progress {
       height: 100%;
+      width: 0%;
       border-radius: 4px;
       background: linear-gradient(90deg, #4a55ff, #00d0ff);
+    }
+
+    .calc-overlay-progress.animate {
       animation: progress 500ms cubic-bezier(.4,0,.2,1) forwards;
     }
 
     @keyframes pulse {
-      from { transform: scale(1);     box-shadow: 0 20px 50px rgba(74,85,255,.35); }
-      to   { transform: scale(1.06);  box-shadow: 0 24px 60px rgba(74,85,255,.50); }
+      from { transform: scale(1);    box-shadow: 0 20px 50px rgba(74,85,255,.35); }
+      to   { transform: scale(1.06); box-shadow: 0 24px 60px rgba(74,85,255,.50); }
     }
 
     @keyframes progress {
@@ -129,7 +129,7 @@ export const routeAnim = trigger('routeAnim', [
 })
 export class CalculadoraShellComponent implements OnInit, OnDestroy {
   loading = false;
-  routeKey = '';
+  entering = false;
   currentCalc = { label: 'Calculadora', icon: 'calculate' };
 
   private sub!: Subscription;
@@ -144,10 +144,13 @@ export class CalculadoraShellComponent implements OnInit, OnDestroy {
         const seg = e.url.split('/').pop() ?? '';
         this.currentCalc = CALC_INFO[seg] ?? { label: 'Calculadora', icon: 'calculate' };
         this.loading = true;
+        this.entering = true;
       }
       if (e instanceof NavigationEnd) {
-        this.routeKey = e.urlAfterRedirects;
-        setTimeout(() => (this.loading = false), 520);
+        setTimeout(() => {
+          this.loading = false;
+          this.entering = false;
+        }, 520);
       }
     });
   }

@@ -1,7 +1,7 @@
 .sobre-page { padding-bottom: 60px; }
 
 .hero {
-  background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+  background: linear-gradient(180deg, #002B49 0%, #001f33 100%);
   color: #fff;
   text-align: center;
   padding: 60px 24px;
@@ -15,7 +15,7 @@
 .section { margin-bottom: 48px; }
 .section h2 {
   display: flex; align-items: center; gap: 8px;
-  font-size: 1.3rem; color: #1a237e; margin-bottom: 16px;
+  font-size: 1.3rem; color: #002B49; margin-bottom: 16px;
   border-bottom: 2px solid #e8eaf6; padding-bottom: 8px;
 }
 .section h2 .material-icons { color: #3949ab; }
@@ -38,7 +38,7 @@
 }
 .card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,.1); }
 .card .material-icons { font-size: 40px; color: #3949ab; margin-bottom: 12px; display: block; }
-.card h3 { font-size: 1rem; color: #1a237e; margin-bottom: 8px; }
+.card h3 { font-size: 1rem; color: #002B49; margin-bottom: 8px; }
 .card p { font-size: .875rem; color: #666; line-height: 1.6; }
 
 .lista { list-style: none; padding: 0; }
@@ -54,11 +54,11 @@
   background: #f8f9fa; padding: 20px; border-radius: 10px;
 }
 .dif .material-icons { color: #3949ab; font-size: 32px; flex-shrink: 0; }
-.dif strong { display: block; color: #1a237e; margin-bottom: 4px; }
+.dif strong { display: block; color: #002B49; margin-bottom: 4px; }
 .dif p { font-size: .875rem; color: #666; margin: 0; }
 
 .cta {
-  background: linear-gradient(135deg, #1a237e, #3949ab);
+  background: linear-gradient(135deg, #002B49, #3949ab);
   color: #fff; text-align: center;
   padding: 48px 24px; border-radius: 16px;
 }
@@ -66,7 +66,7 @@
 .cta p { opacity: .85; margin-bottom: 24px; }
 .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
 .btn-primary {
-  background: #fff; color: #1a237e;
+  background: #fff; color: #002B49;
   padding: 12px 28px; border-radius: 8px;
   font-weight: 600; text-decoration: none;
   transition: background .2s;
