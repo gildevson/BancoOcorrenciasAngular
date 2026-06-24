@@ -2,7 +2,15 @@
   "permissions": {
     "allow": [
       "Bash(git pull:*)",
-      "Bash(find c:ProjetosBancoOcorrenciasBancoOcorrenciasAngular -type f -name *edicoes*ocorrencias*)"
+      "Bash(find c:ProjetosBancoOcorrenciasBancoOcorrenciasAngular -type f -name *edicoes*ocorrencias*)",
+      "Bash(mkdir -p \"c:/CSharp/ProjetosEstudos/RemessaSeguraFullstack/remessa-segura-portal/.github/workflows\")",
+      "Bash(npm run *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git check-ignore *)"
+    ],
+    "additionalDirectories": [
+      "c:\\CSharp\\ProjetosEstudos\\RemessaSeguraFullstack\\remessa-segura-portal\\.github"
     ]
   }
 }
