@@ -27,6 +27,7 @@
               "src/favicon.ico",
               "src/assets",
               "src/.htaccess",
+              "src/ads.txt",
               {
                 "glob": "**/*",
                 "input": "src/app/assets",
