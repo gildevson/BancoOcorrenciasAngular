@@ -40,6 +40,6 @@ jobs:
           set net:reconnect-interval-base 5
           set ftp:ssl-allow false
           set ssl:verify-certificate false
-          mirror --reverse --delete --verbose dist/remessa-segura-portal/browser/ /public_html/
+          mirror --reverse --delete --verbose dist/remessa-segura-portal/browser/ ./
           bye
           LFTP_EOF
