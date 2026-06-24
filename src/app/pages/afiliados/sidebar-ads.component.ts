@@ -154,10 +154,10 @@ export class SidebarAdsComponent {
       imagem: ''
     },
     {
-      nome: 'Aquecedor Quartzo 800w',
+      nome: 'Controle Sem Fio 8BitDo Ultimate V2',
       link: 'https://meli.la/13aQZdD',
-      icon: 'fireplace',
-      imagem: ''
+      icon: 'sports_esports',
+      imagem: 'https://http2.mlstatic.com/D_Q_NP_635211-MLA99875592941_112025-R.webp'
     }
   ];
 
