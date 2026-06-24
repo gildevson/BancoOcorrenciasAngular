@@ -8,6 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout do código
@@ -25,22 +26,19 @@ jobs:
       - name: Build Angular
         run: npm run build
 
-      - name: Verificar credenciais FTP
-        env:
-          FTP_SERVER: ${{ secrets.FTP_SERVER }}
-          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
-        run: |
-          echo "Servidor: $FTP_SERVER"
-          echo "Usuario: $FTP_USERNAME"
-
-      - name: Deploy via CURL FTP
+      - name: Deploy via FTP para Hostinger
+        timeout-minutes: 8
         env:
           FTP_SERVER: ${{ secrets.FTP_SERVER }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: |
           sudo apt-get install -y lftp
-          lftp -d -u "$FTP_USERNAME","$FTP_PASSWORD" "ftps://$FTP_SERVER" <<'LFTP_EOF'
+          lftp -u "$FTP_USERNAME","$FTP_PASSWORD" "ftp://$FTP_SERVER" <<'LFTP_EOF'
+          set net:timeout 30
+          set net:max-retries 2
+          set net:reconnect-interval-base 5
+          set ftp:ssl-allow false
           set ssl:verify-certificate false
           ls
           bye
