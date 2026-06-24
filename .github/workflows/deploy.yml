@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
 
     steps:
       - name: Checkout do código
@@ -27,7 +27,7 @@ jobs:
         run: npm run build
 
       - name: Deploy via FTP para Hostinger
-        timeout-minutes: 8
+        timeout-minutes: 10
         env:
           FTP_SERVER: ${{ secrets.FTP_SERVER }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
@@ -40,6 +40,6 @@ jobs:
           set net:reconnect-interval-base 5
           set ftp:ssl-allow false
           set ssl:verify-certificate false
-          ls
+          mirror --reverse --delete --verbose dist/remessa-segura-portal/browser/ /public_html/
           bye
           LFTP_EOF
