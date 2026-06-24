@@ -35,11 +35,12 @@ jobs:
         run: |
           sudo apt-get install -y lftp
           lftp -u "$FTP_USERNAME","$FTP_PASSWORD" "ftp://$FTP_SERVER" <<'LFTP_EOF'
-          set net:timeout 30
-          set net:max-retries 2
-          set net:reconnect-interval-base 5
+          set net:timeout 60
+          set net:max-retries 5
+          set net:reconnect-interval-base 10
+          set ftp:passive-mode true
           set ftp:ssl-allow false
           set ssl:verify-certificate false
-          mirror --reverse --delete --verbose dist/remessa-segura-portal/browser/ ./
+          mirror --reverse --verbose dist/remessa-segura-portal/browser/ ./
           bye
           LFTP_EOF
