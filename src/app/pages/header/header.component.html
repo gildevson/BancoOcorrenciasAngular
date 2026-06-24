@@ -132,16 +132,22 @@
     <div class="b3-controls">
       <!-- Login Desktop -->
       <ng-container *ngIf="!isMobile">
-        <ng-container *ngIf="user$ | async as u; else loginDesktop">
+        <ng-container *ngIf="(user$ | async) as u; else checkRoles">
           <div class="user-area">
             <span class="material-icons" aria-hidden="true">account_circle</span>
             <span class="user-name">Olá, <strong>{{ u.nome }}</strong></span>
-
-            <button type="button" class="logout-btn" (click)="logout()">
-              Sair
-            </button>
+            <button type="button" class="logout-btn" (click)="logout()">Sair</button>
           </div>
         </ng-container>
+
+        <ng-template #checkRoles>
+          <ng-container *ngIf="(isAdmin$ | async) || (isSupervisor$ | async); else loginDesktop">
+            <div class="user-area">
+              <span class="material-icons" aria-hidden="true">account_circle</span>
+              <button type="button" class="logout-btn" (click)="logout()">Sair</button>
+            </div>
+          </ng-container>
+        </ng-template>
 
         <ng-template #loginDesktop>
           <div class="login-icon">
