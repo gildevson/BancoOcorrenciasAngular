@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -41,7 +41,7 @@ interface EstatisticasArquivo {
   templateUrl: './bmpcnab400validador.component.html',
   styleUrls: ['./bmpcnab400validador.component.css']
 })
-export class BmpCnab400ValidadorComponent {
+export class BmpCnab400ValidadorComponent implements OnDestroy {
   visualHtml: SafeHtml | null = null;
   error: string | null = null;
   erros: Erro[] = [];
@@ -51,7 +51,23 @@ export class BmpCnab400ValidadorComponent {
   legendaCampos: CampoLayout[] = [];
   estatisticas: EstatisticasArquivo | null = null;
 
+  private _hlStyle: HTMLStyleElement | null = null;
+
   constructor(private sanitizer: DomSanitizer) {}
+
+  ngOnDestroy() {
+    this._hlStyle?.remove();
+  }
+
+  private campoClass(nome: string): string {
+    return 'cmp-' + nome
+      .toLowerCase()
+      .replace(/[áàãâä]/g, 'a').replace(/[éèêë]/g, 'e')
+      .replace(/[íìîï]/g, 'i').replace(/[óòõôö]/g, 'o')
+      .replace(/[úùûü]/g, 'u').replace(/ç/g, 'c').replace(/ñ/g, 'n')
+      .replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')
+      .substring(0, 50);
+  }
 
   getErrosPorSeveridade(severidade: 'erro' | 'aviso'): Erro[] {
     return this.erros.filter(e => e.severidade === severidade);
@@ -59,10 +75,19 @@ export class BmpCnab400ValidadorComponent {
 
   selecionarCampo(nomeCampo: string): void {
     this.campoSelecionado = this.campoSelecionado === nomeCampo ? null : nomeCampo;
-    if (this.conteudoArquivo) {
-      const html = this.renderizarArquivo(this.conteudoArquivo);
-      this.visualHtml = this.sanitizer.bypassSecurityTrustHtml(html);
-    }
+
+    this._hlStyle?.remove();
+    this._hlStyle = null;
+
+    if (!this.campoSelecionado) return;
+
+    const cls = this.campoClass(this.campoSelecionado);
+    this._hlStyle = document.createElement('style');
+    this._hlStyle.textContent = `
+      .cnab-mw .cnab-mc { opacity: 0.18 !important; }
+      .cnab-mw .cnab-mc.${cls} { opacity: 1 !important; outline: 2px solid #1565c0 !important; outline-offset: -1px; }
+    `;
+    document.head.appendChild(this._hlStyle);
   }
 
   // ========================================
@@ -93,13 +118,13 @@ export class BmpCnab400ValidadorComponent {
   // ========================================
   camposDetalhe: CampoLayout[] = [
     { nome: 'Identificação do Registro', ini: 0, fim: 1, tamanho: 1, tipo: 'N', obrigatorio: true, valores: ['1'], cor: '#f8bbd0', descricao: 'Tipo 1 - Detalhe' },
-    { nome: 'Agência de Débito', ini: 1, fim: 6, tamanho: 5, tipo: 'N', obrigatorio: false, valores: ['00000'], cor: '#ffe082', descricao: 'Agência Débito (opcional)' },
+    { nome: 'Agência de Débito', ini: 1, fim: 6, tamanho: 5, tipo: 'N', obrigatorio: false, cor: '#ffe082', descricao: 'Agência Débito (opcional)' },
     { nome: 'Dígito da Agência de Débito', ini: 6, fim: 7, tamanho: 1, tipo: 'A', obrigatorio: false, cor: '#ffd54f', descricao: 'Branco' },
-    { nome: 'Razão da Conta Corrente', ini: 7, fim: 12, tamanho: 5, tipo: 'N', obrigatorio: false, valores: ['00000'], cor: '#b2dfdb', descricao: 'Razão CC (opcional)' },
-    { nome: 'Conta Corrente', ini: 12, fim: 19, tamanho: 7, tipo: 'N', obrigatorio: false, valores: ['0000000'], cor: '#80cbc4', descricao: 'Conta (opcional)' },
+    { nome: 'Razão da Conta Corrente', ini: 7, fim: 12, tamanho: 5, tipo: 'N', obrigatorio: false, cor: '#b2dfdb', descricao: 'Razão CC (opcional)' },
+    { nome: 'Conta Corrente', ini: 12, fim: 19, tamanho: 7, tipo: 'N', obrigatorio: false, cor: '#80cbc4', descricao: 'Conta (opcional)' },
     { nome: 'Dígito da Conta Corrente', ini: 19, fim: 20, tamanho: 1, tipo: 'A', obrigatorio: false, cor: '#4db6ac', descricao: 'Branco' },
     { nome: 'Identificação da Empresa Beneficiária no Banco', ini: 20, fim: 37, tamanho: 17, tipo: 'A', obrigatorio: true, cor: '#c5cae9', descricao: 'Detalhes página 11 (17 pos)' },
-    { nome: 'Nº Controle do Participante', ini: 37, fim: 52, tamanho: 15, tipo: 'A', obrigatorio: true, cor: '#b3e5fc', descricao: 'Uso da Empresa (15 pos)' },
+    { nome: 'Nº Controle do Participante', ini: 37, fim: 52, tamanho: 15, tipo: 'A', obrigatorio: false, cor: '#b3e5fc', descricao: 'Uso da Empresa (15 pos)' },
     { nome: 'Brancos (Uso Futuro)', ini: 52, fim: 62, tamanho: 10, tipo: 'A', obrigatorio: false, cor: '#f5f5f5', descricao: 'Brancos (10 pos)' },
     { nome: 'Código do Banco a ser debitado na Câmara', ini: 62, fim: 65, tamanho: 3, tipo: 'N', obrigatorio: true, valores: ['000'], cor: '#e1bee7', descricao: 'Código Banco Câmara = 000' },
     { nome: 'Campo de Multa', ini: 65, fim: 66, tamanho: 1, tipo: 'N', obrigatorio: false, valores: ['0', '2'], cor: '#ce93d8', descricao: '0=sem multa, 2=com multa' },
@@ -107,8 +132,8 @@ export class BmpCnab400ValidadorComponent {
     { nome: 'Identificação do Título no Banco (Nosso Número)', ini: 70, fim: 81, tamanho: 11, tipo: 'N', obrigatorio: true, cor: '#ffccbc', descricao: 'Nosso Número (11 pos)' },
     { nome: 'Dígito de Auto Conferência do Número Bancário', ini: 81, fim: 82, tamanho: 1, tipo: 'A', obrigatorio: false, cor: '#ffab91', descricao: 'Dígito N/N' },
     { nome: 'Desconto Bonificação por dia', ini: 82, fim: 92, tamanho: 10, tipo: 'N', obrigatorio: false, cor: '#a5d6a7', descricao: 'Valor desconto bonif./dia (10 pos)' },
-    { nome: 'Condição para Emissão da Papeleta de Cobrança', ini: 92, fim: 93, tamanho: 1, tipo: 'N', obrigatorio: true, valores: ['2'], cor: '#81c784', descricao: '2 = Cliente emite' },
-    { nome: 'Ident. se emite Boleto para Débito Automático', ini: 93, fim: 94, tamanho: 1, tipo: 'A', obrigatorio: true, valores: ['N'], cor: '#66bb6a', descricao: 'N = Não emite' },
+    { nome: 'Condição para Emissão da Papeleta de Cobrança', ini: 92, fim: 93, tamanho: 1, tipo: 'N', obrigatorio: false, valores: ['2'], cor: '#81c784', descricao: '2 = Cliente emite' },
+    { nome: 'Ident. se emite Boleto para Débito Automático', ini: 93, fim: 94, tamanho: 1, tipo: 'A', obrigatorio: false, valores: ['N'], cor: '#66bb6a', descricao: 'N = Não emite' },
     { nome: 'Identificação da Operação do Banco', ini: 94, fim: 104, tamanho: 10, tipo: 'A', obrigatorio: false, cor: '#f5f5f5', descricao: 'Brancos (10 pos)' },
     { nome: 'Indicador Rateio Crédito', ini: 104, fim: 105, tamanho: 1, tipo: 'A', obrigatorio: false, cor: '#c8e6c9', descricao: 'Branco (opcional)' },
     { nome: 'Endereçamento para Aviso do Débito Automático', ini: 105, fim: 106, tamanho: 1, tipo: 'N', obrigatorio: false, valores: ['0'], cor: '#aed581', descricao: '0 (opcional)' },
@@ -119,8 +144,8 @@ export class BmpCnab400ValidadorComponent {
     { nome: 'Valor do Título', ini: 126, fim: 139, tamanho: 13, tipo: 'N', obrigatorio: true, cor: '#ef9a9a', descricao: 'Valor (13 pos, 2 dec)' },
     { nome: 'Banco Encarregado da Cobrança', ini: 139, fim: 142, tamanho: 3, tipo: 'N', obrigatorio: false, valores: ['000'], cor: '#b3e5fc', descricao: 'Banco = 000' },
     { nome: 'Agência Depositária', ini: 142, fim: 147, tamanho: 5, tipo: 'N', obrigatorio: false, valores: ['00000'], cor: '#81d4fa', descricao: 'Agência = 00000' },
-    { nome: 'Espécie de Título', ini: 147, fim: 149, tamanho: 2, tipo: 'N', obrigatorio: true, cor: '#bcaaa4', descricao: 'Códigos Espécie (página 15)' },
-    { nome: 'Identificação', ini: 149, fim: 150, tamanho: 1, tipo: 'A', obrigatorio: true, valores: ['N'], cor: '#d7ccc8', descricao: 'Sempre = N' },
+    { nome: 'Espécie de Título', ini: 147, fim: 149, tamanho: 2, tipo: 'N', obrigatorio: false, cor: '#bcaaa4', descricao: 'Códigos Espécie (página 15)' },
+    { nome: 'Identificação', ini: 149, fim: 150, tamanho: 1, tipo: 'A', obrigatorio: false, valores: ['N'], cor: '#d7ccc8', descricao: 'N = Novo título' },
     { nome: 'Data da emissão do Título', ini: 150, fim: 156, tamanho: 6, tipo: 'N', obrigatorio: true, formato: 'DDMMAA', cor: '#b2ebf2', descricao: 'Emissão DDMMAA' },
     { nome: '1ª instrução', ini: 156, fim: 158, tamanho: 2, tipo: 'N', obrigatorio: false, valores: ['00'], cor: '#b0bec5', descricao: '00' },
     { nome: '2ª instrução', ini: 158, fim: 160, tamanho: 2, tipo: 'N', obrigatorio: false, valores: ['00'], cor: '#90a4ae', descricao: '00' },
@@ -136,9 +161,11 @@ export class BmpCnab400ValidadorComponent {
     { nome: '1ª Mensagem', ini: 314, fim: 326, tamanho: 12, tipo: 'A', obrigatorio: false, cor: '#ce93d8', descricao: 'Mensagem (12 pos)' },
     { nome: 'CEP', ini: 326, fim: 331, tamanho: 5, tipo: 'N', obrigatorio: true, cor: '#c8e6c9', descricao: 'CEP Pagador (5 pos)' },
     { nome: 'Sufixo do CEP', ini: 331, fim: 334, tamanho: 3, tipo: 'N', obrigatorio: true, cor: '#a5d6a7', descricao: 'Sufixo CEP (3 pos)' },
-    { nome: 'Tipo Sacador Avalista', ini: 334, fim: 335, tamanho: 1, tipo: 'N', obrigatorio: false, cor: '#9ccc65', descricao: 'Obs. página 16' },
-    { nome: 'Identificador Sacador Avalista', ini: 335, fim: 350, tamanho: 15, tipo: 'N', obrigatorio: false, cor: '#8bc34a', descricao: 'Obs. página 16 (15 pos)' },
-    { nome: 'Nome/Razão Social Sacador Avalista', ini: 350, fim: 394, tamanho: 44, tipo: 'A', obrigatorio: false, cor: '#aed581', descricao: 'Nome Sacador (44 pos)' },
+    { nome: 'Cidade do Pagador', ini: 334, fim: 349, tamanho: 15, tipo: 'A', obrigatorio: false, cor: '#9ccc65', descricao: 'Cidade Pagador (15 pos)' },
+    { nome: 'UF do Pagador', ini: 349, fim: 351, tamanho: 2, tipo: 'A', obrigatorio: false, cor: '#8bc34a', descricao: 'UF Pagador (2 pos)' },
+    { nome: 'Tipo Sacador Avalista', ini: 351, fim: 352, tamanho: 1, tipo: 'N', obrigatorio: false, cor: '#aed581', descricao: 'Obs. página 16' },
+    { nome: 'Identificador Sacador Avalista', ini: 352, fim: 367, tamanho: 15, tipo: 'A', obrigatorio: false, cor: '#c5e1a5', descricao: 'Obs. página 16 (15 pos)' },
+    { nome: 'Nome/Razão Social Sacador Avalista', ini: 367, fim: 394, tamanho: 27, tipo: 'A', obrigatorio: false, cor: '#dcedc8', descricao: 'Nome Sacador (27 pos)' },
     { nome: 'Nº Sequencial do Registro', ini: 394, fim: 400, tamanho: 6, tipo: 'N', obrigatorio: true, cor: '#b2ebf2', descricao: 'Sequencial Registro' },
   ];
 
@@ -276,7 +303,7 @@ export class BmpCnab400ValidadorComponent {
       }
 
       // Validar sequência
-      const seqCampo = campos.find(c => c.nome === 'Nº Sequencial do Registro' || c.nome === 'Nº Sequencial de Registro');
+      const seqCampo = campos.find(c => c.ini === 394 && c.fim === 400);
       if (seqCampo && line.length >= 400) {
         const valorSeq = line.slice(seqCampo.ini, seqCampo.fim).trim();
         const sequenciaAtual = parseInt(valorSeq, 10);
@@ -302,7 +329,7 @@ export class BmpCnab400ValidadorComponent {
       (campo, index, self) => self.findIndex(c => c.nome === campo.nome) === index
     );
 
-    return lines.map((line, idx) => this.lineToMatrix(line, idx)).join('');
+    return `<div class="cnab-mw">${lines.map((line, idx) => this.lineToMatrix(line, idx)).join('')}</div>`;
   }
 
   validarEstrutura(): void {
@@ -351,11 +378,6 @@ export class BmpCnab400ValidadorComponent {
         severidade: 'aviso'
       });
     }
-  }
-
-  renderizarArquivo(content: string): string {
-    const lines = content.split(/\r?\n/).filter(l => l.length > 0);
-    return lines.map((line, idx) => this.lineToMatrix(line, idx)).join('');
   }
 
   validarCampo(linha: number, campo: CampoLayout, valor: string): void {
@@ -508,19 +530,19 @@ export class BmpCnab400ValidadorComponent {
       const temErro = campo ? this.erros.some(e => e.linha === lineIdx + 1 && e.campo === campo.nome && e.severidade === 'erro') : false;
       const bordaErro = temErro ? 'border:2px solid #d32f2f;' : 'border:1px solid rgba(0,0,0,0.08);';
 
-      const estaSelecionado = this.campoSelecionado && campo && campo.nome === this.campoSelecionado;
-      const estiloDestaque = estaSelecionado
-        ? 'box-shadow:0 0 0 2px #0d47a1;z-index:10;position:relative;transform:scale(1.3);'
-        : '';
-      const opacidade = this.campoSelecionado && !estaSelecionado ? 'opacity:0.25;' : '';
-
+      const cls = campo ? `cnab-mc ${this.campoClass(campo.nome)}` : 'cnab-mc';
       const title = `${nomeCampo} - Pos ${i+1}${campo?.descricao ? '\n' + campo.descricao : ''}`;
 
-      html += `<span style="display:inline-block;width:13px;height:18px;line-height:18px;text-align:center;vertical-align:top;background:${cor};${bordaErro}font-size:11px;font-family:monospace;cursor:default;user-select:none;${estiloDestaque}${opacidade}" title="${this.escapeHtml(title)}">${char === ' ' ? '&nbsp;' : this.escapeHtml(char)}</span>`;
+      html += `<span class="${cls}" style="display:inline-block;width:13px;height:18px;line-height:18px;text-align:center;vertical-align:top;background:${cor};${bordaErro}font-size:11px;font-family:monospace;cursor:default;user-select:none;" title="${this.escapeHtml(title)}">${char === ' ' ? '&nbsp;' : this.escapeHtml(char)}</span>`;
     }
 
     html += '</div></div>';
     return html;
+  }
+
+  renderizarArquivo(content: string): string {
+    const lines = content.split(/\r?\n/).filter(l => l.length > 0);
+    return `<div class="cnab-mw">${lines.map((line, idx) => this.lineToMatrix(line, idx)).join('')}</div>`;
   }
 
   escapeHtml(text: string): string {

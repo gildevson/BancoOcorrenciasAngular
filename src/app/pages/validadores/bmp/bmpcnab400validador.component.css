@@ -316,9 +316,7 @@
 }
 
 .cnab-cell:hover {
-  transform: scale(1.1);
-  z-index: 5;
-  position: relative;
+  filter: brightness(0.88);
 }
 
 /* Espaço visualizado como ponto */
@@ -334,12 +332,10 @@
   box-shadow: 0 0 3px rgba(211, 47, 47, 0.3);
 }
 
-/* Célula Selecionada */
+/* Célula Selecionada - controlado via <style> injetado no DOM */
 .cnab-cell.selecionado {
-  box-shadow: 0 0 0 2px #0d47a1;
-  z-index: 10;
-  position: relative;
-  transform: scale(1.15);
+  outline: 2px solid #1565c0;
+  outline-offset: -1px;
 }
 
 /* Células Não Selecionadas (quando há seleção) */

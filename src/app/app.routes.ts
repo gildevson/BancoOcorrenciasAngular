@@ -107,6 +107,13 @@ export const routes: Routes = [
       import('./pages/validadores/bmp/bmpretorno400validador.component')
         .then(m => m.BmpCnab400RetornoValidadorComponent),
   },
+  {
+    path: 'validadores/xml',
+    title: 'Leitor / Validador de XML',
+    loadComponent: () =>
+      import('./pages/validadores/xml/xml-validador.component')
+        .then(m => m.XmlValidadorComponent),
+  },
 
   // ===============================
   // PÁGINAS INSTITUCIONAIS
@@ -318,6 +325,31 @@ export const routes: Routes = [
             .then(m => m.EdicoesOcorrenciasEditarComponent),
       },
     ],
+  },
+
+  // ===============================
+  // PÁGINAS INSTITUCIONAIS
+  // ===============================
+  {
+    path: 'sobre',
+    title: 'Sobre o Portal',
+    loadComponent: () =>
+      import('./pages/institucional/sobre.component')
+        .then(m => m.SobreComponent),
+  },
+  {
+    path: 'contato',
+    title: 'Contato',
+    loadComponent: () =>
+      import('./pages/institucional/contato.component')
+        .then(m => m.ContatoComponent),
+  },
+  {
+    path: 'privacidade',
+    title: 'Política de Privacidade',
+    loadComponent: () =>
+      import('./pages/institucional/privacidade.component')
+        .then(m => m.PrivacidadeComponent),
   },
 
   // ===============================

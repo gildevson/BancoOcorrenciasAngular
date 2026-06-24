@@ -108,6 +108,31 @@
     </div>
   </div>
 
+  <!-- Seção: Ferramentas XML -->
+  <div class="section-header" style="margin-top:32px;">
+    <h3 class="section-title">🗂️ Ferramentas XML</h3>
+  </div>
+  <div class="bancos-grid">
+    <div class="banco-card ativo-card">
+      <div class="card-header">
+        <div class="banco-logo-wrapper" style="font-size:32px;display:flex;align-items:center;justify-content:center;">📄</div>
+        <div class="banco-info">
+          <h3 class="banco-nome">Leitor de XML</h3>
+          <div class="banco-tipo">CT-e, NF-e e outros</div>
+        </div>
+        <span class="status-badge ativo" data-tooltip="Disponível">ATIVO</span>
+      </div>
+      <div class="card-footer">
+        <span class="banco-codigo-badge">Ferramenta</span>
+        <div class="validador-links">
+          <a routerLink="/validadores/xml" class="validador-btn" aria-label="Acessar Leitor de XML">
+            Leitor de XML
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Estado Vazio (caso não haja bancos) -->
   <div *ngIf="bancos.length === 0" class="empty-state">
     <div class="empty-state-icon">🏦</div>
