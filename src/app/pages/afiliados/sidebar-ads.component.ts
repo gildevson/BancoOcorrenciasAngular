@@ -41,20 +41,22 @@ import { CommonModule } from '@angular/common';
     </aside>
   `,
   styles: [`
+    :host {
+      display: contents;
+    }
+
     .sidebar {
-      position: fixed;
-      top: 68px;
-      width: 155px;
       display: flex;
       flex-direction: column;
       gap: 6px;
-      z-index: 100;
-      max-height: calc(100vh - 80px);
-      overflow: hidden;
+      padding: 8px 4px;
+      align-self: start;
+      position: sticky;
+      top: 68px;
     }
 
-    .sidebar-left  { left: 4px; }
-    .sidebar-right { right: 4px; }
+    .sidebar-left  { grid-column: 1; }
+    .sidebar-right { grid-column: 3; }
 
     @media (max-width: 1620px) {
       .sidebar { display: none; }
