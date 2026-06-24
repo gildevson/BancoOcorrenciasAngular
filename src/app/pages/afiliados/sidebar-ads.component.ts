@@ -49,6 +49,8 @@ import { CommonModule } from '@angular/common';
       flex-direction: column;
       gap: 6px;
       z-index: 100;
+      max-height: calc(100vh - 80px);
+      overflow: hidden;
     }
 
     .sidebar-left  { left: 4px; }
