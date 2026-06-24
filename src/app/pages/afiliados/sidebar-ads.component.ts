@@ -55,8 +55,8 @@ import { CommonModule } from '@angular/common';
       top: 68px;
     }
 
-    .sidebar-left  { grid-column: 1; }
-    .sidebar-right { grid-column: 3; }
+    .sidebar-left  { grid-column: 1; grid-row: 1; padding-top: 16px; }
+    .sidebar-right { grid-column: 3; grid-row: 1; padding-top: 16px; }
 
     @media (max-width: 1620px) {
       .sidebar { display: none; }
