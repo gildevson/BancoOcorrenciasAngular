@@ -209,6 +209,13 @@ export class AfiliadosComponent {
       link: 'https://meli.la/13aQZdD',
       icon: 'fireplace',
       badge: 'Parceiro'
+    },
+    {
+      nome: 'Creatina Monohidratada 250g Growth Supplements',
+      descricao: 'Sem sabor em pó. Aumenta força, resistência e performance nos treinos.',
+      link: 'https://meli.la/1zTwCX3',
+      icon: 'fitness_center',
+      badge: 'Parceiro'
     }
   ];
 }
