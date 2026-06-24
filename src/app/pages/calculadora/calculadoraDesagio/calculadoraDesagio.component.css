@@ -382,9 +382,9 @@ button {
 /* Responsividade */
 @media (max-width: 768px) {
   .desagio-container {
-    margin: 1rem auto;
-    padding: 1.25rem;
-    width: 92%;
+    margin: 0 auto;
+    padding: 0.75rem;
+    width: 100%;
   }
 
   .desagio-header h2 {
@@ -420,9 +420,9 @@ button {
 
 @media (max-width: 480px) {
   .desagio-container {
-    margin: 0.5rem auto;
-    padding: 1rem;
-    width: 95%;
+    margin: 0;
+    padding: 0.6rem;
+    width: 100%;
   }
 
   .desagio-header h2 {

@@ -1,97 +1,166 @@
-<!-- ✅ Toast de Sucesso (FORA do container) -->
+<!-- Toast de Sucesso -->
 <div class="toast-success" *ngIf="sucessoMsg">
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
     <polyline points="22 4 12 14.01 9 11.01"></polyline>
   </svg>
   <span>{{ sucessoMsg }}</span>
 </div>
 
-<div class="container">
-  <h3>Novo Motivo</h3>
+<div class="novo-page">
 
-  <div class="form-card">
-    <p class="erro" *ngIf="erro">{{ erro }}</p>
-    <p class="info" *ngIf="loading">Salvando...</p>
-
-    <form (ngSubmit)="salvar()" #f="ngForm">
-      <div class="form-group">
-        <label>Banco</label>
-        <select
-          name="bancoId"
-          [(ngModel)]="form.bancoId"
-          required
-          [disabled]="loading || loadingBancos">
-          <option value="" disabled>
-            {{ loadingBancos ? 'Carregando bancos...' : 'Selecione um banco' }}
-          </option>
-          <option *ngFor="let b of bancos" [value]="b.id">
-            {{ pad4(b.numero_banco) }} - {{ b.nome }}
-          </option>
-        </select>
+  <!-- HEADER -->
+  <div class="page-header">
+    <button type="button" class="btn-back" (click)="voltar()">
+      <span class="material-icons">arrow_back</span>
+      Voltar
+    </button>
+    <div class="header-center">
+      <div class="header-icon">
+        <span class="material-icons">add_circle_outline</span>
       </div>
-
-      <div class="form-group">
-        <label>Ocorrência</label>
-        <input
-          name="ocorrencia"
-          placeholder="Ex: 02"
-          maxlength="2"
-          [(ngModel)]="form.ocorrencia"
-          required
-          [disabled]="loading"
-        />
+      <div>
+        <h1>Novo Motivo</h1>
+        <p>Cadastre um novo motivo de ocorrência bancária</p>
       </div>
-
-      <div class="form-group">
-        <label>Motivo</label>
-        <input
-          name="motivo"
-          placeholder="Ex: 00"
-          maxlength="2"
-          [(ngModel)]="form.motivo"
-          required
-          [disabled]="loading"
-        />
-      </div>
-
-      <div class="form-group">
-        <label>Descrição</label>
-        <input
-          name="descricao"
-          placeholder="Descrição do motivo"
-          [(ngModel)]="form.descricao"
-          required
-          [disabled]="loading"
-        />
-      </div>
-
-      <div class="form-group">
-        <label class="optional">Observação</label>
-        <textarea
-          name="observacao"
-          rows="4"
-          placeholder="Informações adicionais (opcional)"
-          [(ngModel)]="form.observacao"
-          [disabled]="loading"
-        ></textarea>
-      </div>
-
-      <div class="button-group">
-        <button
-          type="button"
-          class="btn-voltar"
-          (click)="voltar()"
-          [disabled]="loading">
-          Voltar
-        </button>
-        <button
-          type="submit"
-          class="btn-salvar"
-          [disabled]="loading || f.invalid || loadingBancos">
-          {{ loading ? 'Salvando...' : 'Salvar' }}
-        </button>
-      </div>
-    </form>
+    </div>
   </div>
+
+  <!-- ALERTA ERRO -->
+  <div class="alert-error" *ngIf="erro">
+    <span class="material-icons">error_outline</span>
+    {{ erro }}
+  </div>
+
+  <!-- FORMULÁRIO -->
+  <form (ngSubmit)="salvar()" #f="ngForm" autocomplete="off">
+
+    <!-- SEÇÃO 1: Identificação -->
+    <div class="form-card">
+      <div class="card-header">
+        <span class="material-icons">account_balance</span>
+        <h2>Identificação</h2>
+      </div>
+
+      <div class="card-body">
+
+        <!-- Banco -->
+        <div class="field">
+          <label for="bancoId">
+            Banco <span class="required">*</span>
+          </label>
+          <select
+            id="bancoId"
+            name="bancoId"
+            [(ngModel)]="form.bancoId"
+            required
+            [disabled]="loading || loadingBancos">
+            <option value="" disabled>
+              {{ loadingBancos ? 'Carregando bancos...' : 'Selecione um banco' }}
+            </option>
+            <option *ngFor="let b of bancos" [value]="b.id">
+              {{ pad4(b.numero_banco) }} - {{ b.nome }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Ocorrência + Motivo -->
+        <div class="field-row">
+          <div class="field">
+            <label for="ocorrencia">
+              Ocorrência <span class="required">*</span>
+              <span class="label-hint">2 dígitos</span>
+            </label>
+            <input
+              id="ocorrencia"
+              name="ocorrencia"
+              type="text"
+              placeholder="Ex: 02"
+              maxlength="2"
+              [(ngModel)]="form.ocorrencia"
+              required
+              [disabled]="loading"
+            />
+          </div>
+
+          <div class="field">
+            <label for="motivo">
+              Motivo <span class="required">*</span>
+              <span class="label-hint">2 dígitos</span>
+            </label>
+            <input
+              id="motivo"
+              name="motivo"
+              type="text"
+              placeholder="Ex: 00"
+              maxlength="2"
+              [(ngModel)]="form.motivo"
+              required
+              [disabled]="loading"
+            />
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SEÇÃO 2: Detalhes -->
+    <div class="form-card">
+      <div class="card-header">
+        <span class="material-icons">description</span>
+        <h2>Detalhes</h2>
+      </div>
+
+      <div class="card-body">
+
+        <!-- Descrição -->
+        <div class="field">
+          <label for="descricao">
+            Descrição <span class="required">*</span>
+          </label>
+          <input
+            id="descricao"
+            name="descricao"
+            type="text"
+            placeholder="Descrição do motivo de ocorrência"
+            [(ngModel)]="form.descricao"
+            required
+            [disabled]="loading"
+          />
+        </div>
+
+        <!-- Observação -->
+        <div class="field">
+          <label for="observacao">
+            Observação
+            <span class="label-hint">Opcional</span>
+          </label>
+          <textarea
+            id="observacao"
+            name="observacao"
+            rows="4"
+            placeholder="Informações adicionais sobre este motivo..."
+            [(ngModel)]="form.observacao"
+            [disabled]="loading"
+          ></textarea>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- FOOTER ACTIONS -->
+    <div class="form-footer">
+      <button type="button" class="btn-cancel" (click)="voltar()" [disabled]="loading">
+        <span class="material-icons">close</span>
+        Cancelar
+      </button>
+
+      <button type="submit" class="btn-submit" [disabled]="loading || f.invalid || loadingBancos">
+        <span class="material-icons" *ngIf="!loading">check_circle</span>
+        <span class="material-icons spin" *ngIf="loading">autorenew</span>
+        {{ loading ? 'Salvando...' : 'Salvar Motivo' }}
+      </button>
+    </div>
+
+  </form>
 </div>

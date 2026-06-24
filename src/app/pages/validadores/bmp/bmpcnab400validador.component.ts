@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 interface CampoLayout {
@@ -36,7 +37,7 @@ interface EstatisticasArquivo {
 @Component({
   selector: 'app-bmp-cnab400-validador',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './bmpcnab400validador.component.html',
   styleUrls: ['./bmpcnab400validador.component.css']
 })

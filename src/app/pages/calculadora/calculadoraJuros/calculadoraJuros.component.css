@@ -391,9 +391,9 @@ button {
 /* Responsividade */
 @media (max-width: 768px) {
   .juros-container {
-    margin: 1rem auto;
-    padding: 1.25rem;
-    width: 92%;
+    margin: 0 auto;
+    padding: 0.75rem;
+    width: 100%;
   }
 
   .juros-header h2 {
@@ -429,9 +429,9 @@ button {
 
 @media (max-width: 480px) {
   .juros-container {
-    margin: 0.5rem auto;
-    padding: 1rem;
-    width: 95%;
+    margin: 0;
+    padding: 0.6rem;
+    width: 100%;
   }
 
   .juros-header h2 {
@@ -739,8 +739,8 @@ button {
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .calc-card {
-    margin: 20px auto;
-    padding: 24px;
+    margin: 0 auto;
+    padding: 16px;
   }
 
   .calc-card h2 {
@@ -758,8 +758,8 @@ button {
 
 @media (max-width: 480px) {
   .calc-card {
-    margin: 16px;
-    padding: 20px;
+    margin: 0;
+    padding: 12px;
   }
 
   .calc-card h2 {

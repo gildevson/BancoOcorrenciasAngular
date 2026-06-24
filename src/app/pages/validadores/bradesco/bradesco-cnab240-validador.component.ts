@@ -1,16 +1,20 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-bradesco-cnab240-validador',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   template: `
+    <div style="max-width:1400px;margin:0 auto;padding:20px;">
+    <a routerLink="/validadores" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#e8f4fc;border:1px solid #cce0eb;border-radius:8px;color:#00253F;font-size:13px;font-weight:700;text-decoration:none;margin-bottom:20px;">← Voltar</a>
     <h2>Validador Bradesco CNAB 240</h2>
     <input type="file" accept=".rem,.txt" (change)="onFileChange($event)" />
     <div *ngIf="error" style="color:#b71c1c; margin-top:18px;">{{ error }}</div>
     <div *ngIf="visualHtml" [innerHTML]="visualHtml" style="margin-top:24px;"></div>
     <div *ngIf="!visualHtml && !error" style="margin-top:24px; color:#888;">Anexe um arquivo CNAB240 para simular a leitura e validação.</div>
+    </div>
   `
 })
 export class BradescoCnab240ValidadorComponent {

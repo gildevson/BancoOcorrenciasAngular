@@ -1,59 +1,140 @@
-<div class="calc-card">
-  <div class="top">
-    <a class="back" routerLink="/calculadora">← Voltar</a>
-    <h2>Cálculo de Mora</h2>
-    <small><strong>Fórmula:</strong> (percentual/30) × dias_atraso × valor_face / 100</small>
+<div class="mora-container">
+  <!-- Botão Voltar -->
+  <a class="btn-voltar" routerLink="/calculadora">
+    ← Voltar
+  </a>
+
+  <div class="mora-header">
+    <h2>⏱️ Calculadora de Mora</h2>
+    <p class="subtitle">Calcule os juros de mora por atraso no pagamento</p>
   </div>
 
-  <div class="form">
-    <label>Valor de Face (R$)</label>
-    <input
-      type="number"
-      [(ngModel)]="valorFace"
-      placeholder="Ex: 1.000,00"
-      min="0"
-      step="0.01"
-    />
-
-    <label>Percentual (%)</label>
-    <input
-      type="number"
-      [(ngModel)]="percentual"
-      placeholder="Ex: 1%"
-      min="0"
-      step="0.01"
-    />
-
-    <label>Dias de atraso</label>
-    <input
-      type="number"
-      [(ngModel)]="diasAtraso"
-      placeholder="Ex: 30"
-      min="0"
-    />
+  <!-- Explicação da Fórmula -->
+  <div class="formula-info">
+    <h3>Como funciona o cálculo?</h3>
+    <div class="formulas">
+      <div class="formula-item">
+        <span class="formula-label">Fator Diário:</span>
+        <code>Percentual (%) ÷ 30 dias</code>
+      </div>
+      <div class="formula-item">
+        <span class="formula-label">Mora:</span>
+        <code>(Percentual ÷ 30) × Dias de Atraso × Valor ÷ 100</code>
+      </div>
+      <div class="formula-item total">
+        <span class="formula-label">Valor Total:</span>
+        <code>Valor de Face + Mora</code>
+      </div>
+    </div>
   </div>
 
-  <div class="actions">
-    <button (click)="calcular()">Calcular</button>
-    <button class="outline" (click)="limpar()">Limpar</button>
+  <!-- Formulário -->
+  <div class="form-section">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="moraValorFace">
+          Valor de Face (R$)
+          <span class="hint">Valor original do título</span>
+        </label>
+        <input
+          id="moraValorFace"
+          type="number"
+          [(ngModel)]="valorFace"
+          step="0.01"
+          min="0"
+          placeholder="Ex: 10.000,00">
+      </div>
+
+      <div class="form-group">
+        <label for="moraPercentual">
+          Percentual (%)
+          <span class="hint">Taxa de mora mensal</span>
+        </label>
+        <div class="input-with-suffix">
+          <input
+            id="moraPercentual"
+            type="number"
+            [(ngModel)]="percentual"
+            step="0.01"
+            min="0"
+            placeholder="Ex: 1,00">
+          <span class="suffix">%</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="moraDiasAtraso">
+          Dias de Atraso
+          <span class="hint">Quantidade de dias em atraso</span>
+        </label>
+        <input
+          id="moraDiasAtraso"
+          type="number"
+          [(ngModel)]="diasAtraso"
+          min="0"
+          placeholder="Ex: 30">
+      </div>
+    </div>
+
+    <div class="button-group">
+      <button type="button" class="btn-calcular" (click)="calcular()">
+        <span class="btn-icon">⏱️</span>
+        Calcular Mora
+      </button>
+      <button type="button" class="btn-limpar" (click)="limpar()" *ngIf="resultado">
+        <span class="btn-icon">🔄</span>
+        Nova Simulação
+      </button>
+    </div>
   </div>
 
   <!-- Resultado -->
-  <div class="result" *ngIf="resultado">
-    <p>
-      <strong>Mora:</strong>
-      <span class="result-value">{{ formatarMoeda(resultado.mora) }}</span>
-    </p>
-    <p>
-      <strong>Total (Face + Mora):</strong>
-      <span class="result-value">{{ formatarMoeda(resultado.valorTotal) }}</span>
-    </p>
+  <div *ngIf="resultado" class="resultado">
+    <h3>📋 Resultado da Simulação</h3>
+
+    <div class="resultado-detalhes">
+      <div class="input-summary">
+        <div class="summary-item">
+          <span class="label">Valor de Face:</span>
+          <span class="value">{{ formatarMoeda(resultado.valorFace) }}</span>
+        </div>
+        <div class="summary-item">
+          <span class="label">Percentual Mensal:</span>
+          <span class="value">{{ resultado.percentual }}%</span>
+        </div>
+        <div class="summary-item">
+          <span class="label">Dias de Atraso:</span>
+          <span class="value">{{ resultado.diasAtraso }} {{ resultado.diasAtraso === 1 ? 'dia' : 'dias' }}</span>
+        </div>
+        <div class="summary-item">
+          <span class="label">Fator Diário:</span>
+          <span class="value taxa">{{ (resultado.percentual / 30).toFixed(4) }}%</span>
+        </div>
+      </div>
+
+      <div class="calculo-breakdown">
+        <div class="breakdown-item">
+          <div class="breakdown-header">
+            <span class="breakdown-label">Valor da Mora</span>
+            <span class="breakdown-formula">({{ resultado.percentual }}% ÷ 30) × {{ resultado.diasAtraso }} × {{ formatarMoeda(resultado.valorFace) }} ÷ 100</span>
+          </div>
+          <div class="breakdown-value positive">+ {{ formatarMoeda(resultado.mora) }}</div>
+        </div>
+
+        <div class="breakdown-item total">
+          <div class="breakdown-header">
+            <span class="breakdown-label">Valor Total (Face + Mora)</span>
+          </div>
+          <div class="breakdown-value-total">{{ formatarMoeda(resultado.valorTotal) }}</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Estado vazio -->
   <div class="empty-result" *ngIf="!resultado">
     <div class="icon">⏱️</div>
     <h3>Aguardando cálculo</h3>
-    <p>Preencha os campos acima e clique em "Calcular"</p>
+    <p>Preencha os campos acima e clique em "Calcular Mora"</p>
   </div>
 </div>

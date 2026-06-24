@@ -1,124 +1,218 @@
-<section class="editar-noticia-page">
-  <h2>Editar Notícia</h2>
+<div class="editar-page">
 
-  <div *ngIf="loading" class="loading">Carregando notícia...</div>
-
-  <form *ngIf="!loading" [formGroup]="noticiaForm" (ngSubmit)="onSubmit()">
-    <div *ngIf="errorMsg" class="error">{{ errorMsg }}</div>
-
-    <!-- Informações Principais -->
-    <div class="form-section">
-      <label>
-        Título *
-        <input formControlName="titulo" placeholder="Digite o título da notícia" required>
-      </label>
-
-      <label>
-        Slug *
-        <input formControlName="slug" placeholder="url-amigavel-da-noticia" required>
-      </label>
-
-      <div class="form-row">
-        <label>
-          Categoria *
-          <input formControlName="categoria" placeholder="Ex: Tecnologia" required>
-        </label>
-
-        <label>
-          Status *
-          <select formControlName="status">
-            <option value="publicado">Publicado</option>
-            <option value="rascunho">Rascunho</option>
-          </select>
-        </label>
+  <!-- HEADER -->
+  <div class="page-header">
+    <a routerLink="/noticias-admin" class="btn-back">
+      <span class="material-icons">arrow_back</span>
+      Voltar
+    </a>
+    <div class="header-center">
+      <div class="header-icon">
+        <span class="material-icons">edit</span>
       </div>
-
-      <label>
-        Resumo *
-        <textarea formControlName="resumo" placeholder="Breve resumo da notícia" required></textarea>
-      </label>
-
-      <label>
-        Conteúdo *
-        <textarea formControlName="conteudo" placeholder="Conteúdo completo da notícia" required></textarea>
-      </label>
-    </div>
-
-    <!-- Publicação -->
-    <div class="form-section">
-      <h3>Informações de Publicação</h3>
-
-      <div class="form-row">
-        <label>
-          Autor *
-          <input formControlName="autorNome" placeholder="Nome do autor" required>
-        </label>
-
-        <label>
-          Data de Publicação *
-          <input type="datetime-local" formControlName="dataPublicacao" required>
-        </label>
-      </div>
-
-      <div class="form-row">
-        <label>
-          <input type="checkbox" formControlName="publicado">
-          Publicado
-        </label>
-
-        <label>
-          <input type="checkbox" formControlName="destaque">
-          Notícia em destaque
-        </label>
+      <div>
+        <h1>Editar Notícia</h1>
+        <p>Atualize as informações da notícia selecionada</p>
       </div>
     </div>
+  </div>
 
-    <!-- SEO e Imagem -->
-    <div class="form-section">
-      <h3>SEO e Mídia</h3>
+  <!-- LOADING -->
+  <div *ngIf="loading && !noticiaForm" class="loading-state">
+    <span class="material-icons spin">autorenew</span>
+    Carregando notícia...
+  </div>
 
-      <label>
-        URL da Imagem de Capa
-        <input formControlName="imagemCapa" placeholder="https://exemplo.com/imagem.jpg">
-      </label>
+  <!-- ERRO -->
+  <div class="alert-error" *ngIf="errorMsg">
+    <span class="material-icons">error_outline</span>
+    {{ errorMsg }}
+  </div>
 
-      <label>
-        Meta Description (SEO)
-        <input formControlName="metaDescription" placeholder="Descrição para motores de busca">
-      </label>
-    </div>
+  <!-- FORMULÁRIO -->
+  <form *ngIf="noticiaForm" [formGroup]="noticiaForm" (ngSubmit)="onSubmit()" autocomplete="off">
 
-    <!-- Fonte -->
-    <div class="form-section">
-      <h3>Informações da Fonte</h3>
-
-      <div class="form-row">
-        <label>
-          Nome da Fonte
-          <input formControlName="fonteNome" placeholder="Ex: Portal de Notícias">
-        </label>
-
-        <label>
-          Autor da Fonte
-          <input formControlName="fonteAutor" placeholder="Nome do autor original">
-        </label>
+    <!-- SEÇÃO 1: Informações principais -->
+    <div class="form-card">
+      <div class="card-header">
+        <span class="material-icons">article</span>
+        <h2>Informações Principais</h2>
       </div>
 
-      <div class="form-row">
-        <label>
-          URL da Fonte
-          <input formControlName="fonteUrl" placeholder="https://fonte.com/noticia">
-        </label>
+      <div class="card-body">
+        <div class="field">
+          <label for="titulo">
+            Título <span class="required">*</span>
+          </label>
+          <input id="titulo" type="text" formControlName="titulo" placeholder="Título da notícia" />
+        </div>
 
-        <label>
-          Data de Publicação da Fonte
-          <input type="datetime-local" formControlName="fontePublicadaEm">
-        </label>
+        <div class="field">
+          <label for="slug">
+            Slug (URL amigável) <span class="required">*</span>
+          </label>
+          <div class="input-prefix">
+            <span class="prefix">/noticia/</span>
+            <input id="slug" type="text" formControlName="slug" placeholder="url-da-noticia-aqui" />
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="categoria">
+              Categoria <span class="required">*</span>
+            </label>
+            <input id="categoria" type="text" formControlName="categoria" placeholder="Ex: Mundo, Economia, Tecnologia" />
+          </div>
+
+          <div class="field">
+            <label for="status">
+              Status <span class="required">*</span>
+            </label>
+            <select id="status" formControlName="status">
+              <option value="publicado">Publicado</option>
+              <option value="rascunho">Rascunho</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="resumo">
+            Resumo <span class="required">*</span>
+          </label>
+          <textarea id="resumo" formControlName="resumo" placeholder="Breve descrição da notícia (aparece como subtítulo)" rows="3"></textarea>
+        </div>
+
+        <div class="field">
+          <label for="conteudo">
+            Conteúdo completo <span class="required">*</span>
+          </label>
+          <textarea id="conteudo" formControlName="conteudo" placeholder="Conteúdo da notícia (suporta HTML básico)" rows="10"></textarea>
+        </div>
       </div>
     </div>
 
-    <button type="submit" [disabled]="loading || noticiaForm.invalid">
-      Salvar Alterações
-    </button>
+    <!-- SEÇÃO 2: Publicação -->
+    <div class="form-card">
+      <div class="card-header">
+        <span class="material-icons">manage_accounts</span>
+        <h2>Publicação</h2>
+      </div>
+
+      <div class="card-body">
+        <div class="field-row">
+          <div class="field">
+            <label for="autorNome">
+              Autor <span class="required">*</span>
+            </label>
+            <input id="autorNome" type="text" formControlName="autorNome" placeholder="Nome do autor ou redação" />
+          </div>
+
+          <div class="field">
+            <label for="dataPublicacao">
+              Data de Publicação <span class="required">*</span>
+            </label>
+            <input id="dataPublicacao" type="datetime-local" formControlName="dataPublicacao" />
+          </div>
+        </div>
+
+        <div class="checkboxes-row">
+          <label class="toggle-label">
+            <div class="toggle-wrap">
+              <input type="checkbox" formControlName="publicado" id="publicado" />
+              <span class="toggle"></span>
+            </div>
+            <div class="toggle-info">
+              <span class="toggle-title">Publicado</span>
+              <span class="toggle-desc">Notícia visível para os leitores</span>
+            </div>
+          </label>
+
+          <label class="toggle-label">
+            <div class="toggle-wrap">
+              <input type="checkbox" formControlName="destaque" id="destaque" />
+              <span class="toggle"></span>
+            </div>
+            <div class="toggle-info">
+              <span class="toggle-title">Destaque</span>
+              <span class="toggle-desc">Exibir na seção de destaques</span>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEÇÃO 3: Imagem e SEO -->
+    <div class="form-card">
+      <div class="card-header">
+        <span class="material-icons">image</span>
+        <h2>Imagem e SEO</h2>
+      </div>
+
+      <div class="card-body">
+        <div class="field">
+          <label for="imagemCapa">URL da Imagem de Capa</label>
+          <input id="imagemCapa" type="text" formControlName="imagemCapa" placeholder="https://exemplo.com/imagem.jpg" />
+        </div>
+
+        <div class="field">
+          <label for="metaDescription">
+            Meta Description (SEO)
+            <span class="label-hint">Recomendado: 150–160 caracteres</span>
+          </label>
+          <textarea id="metaDescription" formControlName="metaDescription" placeholder="Descrição que aparece nos resultados de busca do Google..." rows="3"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEÇÃO 4: Fonte -->
+    <div class="form-card">
+      <div class="card-header">
+        <span class="material-icons">public</span>
+        <h2>Informações da Fonte</h2>
+        <span class="card-badge">Opcional</span>
+      </div>
+
+      <div class="card-body">
+        <div class="field-row">
+          <div class="field">
+            <label for="fonteNome">Veículo / Portal</label>
+            <input id="fonteNome" type="text" formControlName="fonteNome" placeholder="Ex: G1, Folha de S.Paulo, InfoMoney" />
+          </div>
+
+          <div class="field">
+            <label for="fonteAutor">Autor original</label>
+            <input id="fonteAutor" type="text" formControlName="fonteAutor" placeholder="Nome do autor na fonte original" />
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="fonteUrl">URL da matéria original</label>
+            <input id="fonteUrl" type="text" formControlName="fonteUrl" placeholder="https://fonte.com/materia-original" />
+          </div>
+
+          <div class="field">
+            <label for="fontePublicadaEm">Data de publicação na fonte</label>
+            <input id="fontePublicadaEm" type="datetime-local" formControlName="fontePublicadaEm" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER ACTIONS -->
+    <div class="form-footer">
+      <a routerLink="/noticias-admin" class="btn-cancel">
+        <span class="material-icons">close</span>
+        Cancelar
+      </a>
+
+      <button type="submit" class="btn-submit" [disabled]="loading || noticiaForm.invalid">
+        <span class="material-icons" *ngIf="!loading">check_circle</span>
+        <span class="material-icons spin" *ngIf="loading">autorenew</span>
+        {{ loading ? 'Salvando...' : 'Salvar Alterações' }}
+      </button>
+    </div>
+
   </form>
-</section>
+</div>
