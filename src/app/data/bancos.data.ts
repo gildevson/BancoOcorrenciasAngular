@@ -62,6 +62,7 @@ export const BANCOS_DATA: BancoData[] = [
       { nome: 'Retorno CNAB 400', routerLink: '/validadores/santander/retorno400', grupo: 'CNAB 400' },
       { nome: 'Remessa CNAB 240', routerLink: '/validadores/santander/cnab240', grupo: 'CNAB 240' },
       { nome: 'Retorno CNAB 240', routerLink: '/validadores/santander/retorno240', grupo: 'CNAB 240' },
+      { nome: 'CNAB 240 — 2 Seg (T·U)', routerLink: '/validadores/santander/cnab240-2seg', grupo: 'CNAB 240' },
     ]
   },
   {

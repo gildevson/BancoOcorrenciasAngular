@@ -122,6 +122,13 @@ export const routes: Routes = [
         .then(m => m.SantanderCnab240RetornoValidadorComponent),
   },
   {
+    path: 'validadores/santander/cnab240-2seg',
+    title: 'Validador Santander CNAB 240 — 2 Segmentos (T+U)',
+    loadComponent: () =>
+      import('./pages/validadores/santander/santander-cnab240-2seg-validador.component')
+        .then(m => m.SantanderCnab2402SegValidadorComponent),
+  },
+  {
     path: 'validadores/bmp/cnab400',
     title: 'Validador Banco BMP CNAB 400',
     loadComponent: () =>
