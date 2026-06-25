@@ -107,6 +107,18 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
 
   // ── 033 · Santander ───────────────────────────────────────────────────────
   {
+    id: '033-cnab400-jul2025',
+    bancoNumero: '033',
+    bancoNome: 'Santander',
+    tipoLayout: 'CNAB400',
+    imagemURL: SANT,
+    versao: 'jul/2025',
+    status: 'Ativo',
+    descricao: 'Layout de cobrança CNAB 400 — 400 posições (julho 2025)',
+    atualizadoEm: '01/07/2025',
+    pdfUrl: 'assets/pdfs/layouts/Layout-Cobranca-400-posicoes-jul-2025-Portugues.pdf',
+  },
+  {
     id: '033-cnab400-a38469',
     bancoNumero: '033',
     bancoNome: 'Santander',
