@@ -318,6 +318,33 @@ export class BmpCnab400ValidadorComponent implements OnDestroy {
     this.valorCampoAtivo = codigo;
   }
 
+  readonly codigosOcorrencia: { codigo: string; descricao: string }[] = [
+    { codigo: '01', descricao: 'Remessa — Entrada de Título' },
+    { codigo: '02', descricao: 'Pedido de Baixa' },
+    { codigo: '04', descricao: 'Concessão de Abatimento' },
+    { codigo: '05', descricao: 'Cancelamento de Abatimento' },
+    { codigo: '06', descricao: 'Alteração de Vencimento' },
+    { codigo: '07', descricao: 'Alteração de Dados' },
+    { codigo: '09', descricao: 'Protestar' },
+    { codigo: '10', descricao: 'Sustar Protesto e Baixar' },
+    { codigo: '11', descricao: 'Sustar Protesto e Manter em Carteira' },
+    { codigo: '12', descricao: 'Alteração de Juros de Mora' },
+    { codigo: '31', descricao: 'Alteração de Outros Dados' },
+  ];
+
+  get campoEhOcorrencia(): boolean {
+    const nome = this.campoAtivo?.nome.toLowerCase() ?? '';
+    return nome.includes('ocorr');
+  }
+
+  get descricaoOcorrencia(): string {
+    return this.codigosOcorrencia.find(o => o.codigo === this.valorCampoAtivo.trim())?.descricao ?? '';
+  }
+
+  selecionarOcorrencia(codigo: string): void {
+    this.valorCampoAtivo = codigo;
+  }
+
   fecharEditor(): void {
     this.campoAtivo = null;
     this.editorPos = null;
@@ -325,6 +352,38 @@ export class BmpCnab400ValidadorComponent implements OnDestroy {
     this._hlStyle?.remove();
     this._hlStyle = null;
     this.campoSelecionado = null;
+  }
+
+  editarErro(erro: Erro, event?: MouseEvent): void {
+    const li = erro.linha - 1;
+    if (li < 0 || li >= this.linhasEditadas.length) return;
+    const campos = this.camposParaLinha(li);
+    const campo = campos.find(c => c.nome === erro.campo) ?? null;
+    const clickEl = event?.currentTarget as HTMLElement;
+    const rect = clickEl?.getBoundingClientRect();
+    const editorW = 420;
+    const top = rect ? rect.bottom + 6 + window.scrollY : window.scrollY + 200;
+    const left = rect ? Math.max(8, Math.min(rect.left, window.innerWidth - editorW - 12)) : 100;
+    this.editorPos = { top, left };
+    this.editorCarregando = true;
+    this.aplicadoFeedback = false;
+    requestAnimationFrame(() => {
+      this.linhaAtiva = li;
+      this.campoAtivo = campo;
+      this.editorCarregando = false;
+      if (campo) {
+        this.valorCampoAtivo = this.linhasEditadas[li].substring(campo.ini, campo.fim);
+        this.statusBar = `Ln ${li + 1}    Col ${campo.ini + 1}    |    ${campo.nome}    [${campo.ini + 1}–${campo.fim}]    Tipo: ${campo.tipo}    Tam: ${campo.tamanho}`;
+        setTimeout(() => this.selecionarCampo(campo.nome), 0);
+      } else {
+        this.valorCampoAtivo = '';
+        this.statusBar = `Ln ${li + 1}    |    (campo não mapeado)`;
+      }
+      setTimeout(() => {
+        const cell = document.querySelector(`[data-li="${li}"]`);
+        if (cell) cell.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 50);
+    });
   }
 
   private camposParaLinha(li: number): CampoLayout[] {

@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnDestroy } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
@@ -36,106 +36,11 @@ interface EstatisticasArquivo {
 @Component({
   selector: 'app-bmp-cnab400-retorno-validador',
   standalone: true,
-  imports: [CommonModule, RouterModule],
-  template: `
-    <div class="cnab-validador">
-      <a routerLink="/validadores" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#e8f4fc;border:1px solid #cce0eb;border-radius:8px;color:#00253F;font-size:13px;font-weight:700;text-decoration:none;margin-bottom:20px;">← Voltar</a>
-      <h2 class="titulo">🏦 Validador Retorno Banco BMP CNAB 400</h2>
-
-      <div class="upload-area">
-        <label class="upload-label">📁 Selecione o arquivo de retorno (.RET ou .TXT)</label>
-        <input type="file" accept=".ret,.txt,.RET,.TXT" (change)="onFileChange($event)" />
-      </div>
-
-      <div *ngIf="error" class="erro-container">
-        ❌ {{ error }}
-      </div>
-
-      <!-- Estatísticas -->
-      <div *ngIf="estatisticas && validado" class="estatisticas-grid">
-        <div class="stat-card stat-total">
-          <div class="stat-valor">{{ estatisticas.totalLinhas }}</div>
-          <div class="stat-label">Total Linhas</div>
-        </div>
-        <div class="stat-card stat-header">
-          <div class="stat-valor">{{ estatisticas.headers }}</div>
-          <div class="stat-label">Headers (0)</div>
-        </div>
-        <div class="stat-card stat-detalhe">
-          <div class="stat-valor">{{ estatisticas.detalhes }}</div>
-          <div class="stat-label">Detalhes (1)</div>
-        </div>
-        <div class="stat-card stat-trailer">
-          <div class="stat-valor">{{ estatisticas.trailers }}</div>
-          <div class="stat-label">Trailers (9)</div>
-        </div>
-      </div>
-
-      <!-- Erros Críticos -->
-      <div *ngIf="getErrosPorSeveridade('erro').length > 0" class="erros-container erros-criticos">
-        <strong>🚫 {{ getErrosPorSeveridade('erro').length }} erro(s) crítico(s):</strong>
-        <ul>
-          <li *ngFor="let e of getErrosPorSeveridade('erro')">
-            <strong class="erro-linha">Linha {{ e.linha }}</strong> -
-            <span class="erro-campo">{{ e.campo }}</span>
-            <span class="erro-posicao">[{{ e.posicao }}]</span>:
-            <code class="erro-valor">{{ e.valor }}</code>
-            → <span class="erro-msg">{{ e.mensagem }}</span>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Avisos -->
-      <div *ngIf="getErrosPorSeveridade('aviso').length > 0" class="erros-container erros-avisos">
-        <strong>⚠️ {{ getErrosPorSeveridade('aviso').length }} aviso(s):</strong>
-        <ul>
-          <li *ngFor="let e of getErrosPorSeveridade('aviso')">
-            <strong>Linha {{ e.linha }}</strong> - {{ e.campo }}: {{ e.mensagem }}
-          </li>
-        </ul>
-      </div>
-
-      <!-- Sucesso -->
-      <div *ngIf="validado && getErrosPorSeveridade('erro').length === 0" class="sucesso-container">
-        <strong>✅ Arquivo válido!</strong>
-        <span *ngIf="getErrosPorSeveridade('aviso').length > 0" class="avisos-count">
-          ({{ getErrosPorSeveridade('aviso').length }} aviso(s))
-        </span>
-      </div>
-
-      <!-- Legenda -->
-      <div *ngIf="legendaCampos.length > 0" class="legenda-container">
-        <strong>📌 Clique em um campo para destacar:</strong>
-        <div class="legenda-campos">
-          <span *ngFor="let campo of legendaCampos"
-                (click)="selecionarCampo(campo.nome)"
-                class="legenda-item"
-                [class.selecionado]="campoSelecionado === campo.nome"
-                [style.background]="campo.cor"
-                [title]="campo.descricao || 'Clique para destacar'">
-            {{ campo.nome }} <span class="legenda-pos">[{{ campo.ini + 1 }}-{{ campo.fim }}]</span>
-          </span>
-        </div>
-        <div *ngIf="campoSelecionado" class="campo-selecionado-info">
-          <strong>Campo selecionado:</strong> {{ campoSelecionado }}
-          <button (click)="selecionarCampo(campoSelecionado!)">Limpar seleção</button>
-        </div>
-      </div>
-
-      <!-- Visualização da Matriz -->
-      <div *ngIf="visualHtml" class="matriz-container" [innerHTML]="visualHtml"></div>
-
-      <!-- Placeholder -->
-      <div *ngIf="!visualHtml && !error" class="placeholder">
-        <div class="placeholder-icon">📄</div>
-        <div class="placeholder-text">Nenhum arquivo carregado</div>
-        <div class="placeholder-hint">Selecione um arquivo .RET (Retorno CNAB 400 - Banco BMP) para iniciar a validação</div>
-      </div>
-    </div>
-  `,
+  imports: [FormsModule, RouterModule],
+  templateUrl: './bmpretorno400validador.component.html',
   styleUrls: ['./bmpcnab400retornovalidador.component.css']
 })
-export class BmpCnab400RetornoValidadorComponent {
+export class BmpCnab400RetornoValidadorComponent implements OnDestroy {
   visualHtml: SafeHtml | null = null;
   error: string | null = null;
   erros: Erro[] = [];
@@ -145,7 +50,45 @@ export class BmpCnab400RetornoValidadorComponent {
   legendaCampos: CampoLayout[] = [];
   estatisticas: EstatisticasArquivo | null = null;
 
+  // Rastreamento de posição e edição
+  linhasEditadas: string[] = [];
+  linhasOriginais: string[] = [];
+  statusBar: string = '';
+  campoAtivo: CampoLayout | null = null;
+  valorCampoAtivo: string = '';
+  linhaAtiva: number = -1;
+  editorPos: { top: number; left: number } | null = null;
+  editorCarregando: boolean = false;
+  aplicadoFeedback: boolean = false;
+  totalEdicoes: number = 0;
+
+  // Totais
+  totaisRetorno: {
+    totalDetalhes: number;
+    liquidacoes: number;
+    valorTotalPago: number;
+    entradasConfirmadas: number;
+    baixas: number;
+    rejeitadas: number;
+  } | null = null;
+
+  private _hlStyle: HTMLStyleElement | null = null;
+
   constructor(private sanitizer: DomSanitizer) {}
+
+  ngOnDestroy() {
+    this._hlStyle?.remove();
+  }
+
+  private campoClass(nome: string): string {
+    return 'cmp-' + nome
+      .toLowerCase()
+      .replace(/[áàãâä]/g, 'a').replace(/[éèêë]/g, 'e')
+      .replace(/[íìîï]/g, 'i').replace(/[óòõôö]/g, 'o')
+      .replace(/[úùûü]/g, 'u').replace(/ç/g, 'c').replace(/ñ/g, 'n')
+      .replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')
+      .substring(0, 50);
+  }
 
   getErrosPorSeveridade(severidade: 'erro' | 'aviso'): Erro[] {
     return this.erros.filter(e => e.severidade === severidade);
@@ -153,14 +96,141 @@ export class BmpCnab400RetornoValidadorComponent {
 
   selecionarCampo(nomeCampo: string): void {
     this.campoSelecionado = this.campoSelecionado === nomeCampo ? null : nomeCampo;
-    if (this.conteudoArquivo) {
-      const html = this.renderizarArquivo(this.conteudoArquivo);
-      this.visualHtml = this.sanitizer.bypassSecurityTrustHtml(html);
-    }
+
+    this._hlStyle?.remove();
+    this._hlStyle = null;
+
+    if (!this.campoSelecionado) return;
+
+    const cls = this.campoClass(this.campoSelecionado);
+    this._hlStyle = document.createElement('style');
+    this._hlStyle.textContent = `
+      .cnab-mw .cnab-mc { opacity: 0.18 !important; }
+      .cnab-mw .cnab-mc.${cls} { opacity: 1 !important; outline: 2px solid #1565c0 !important; outline-offset: -1px; }
+    `;
+    document.head.appendChild(this._hlStyle);
+  }
+
+  readonly codigosOcorrencia: { codigo: string; descricao: string }[] = [
+    { codigo: '02', descricao: 'Entrada Confirmada' },
+    { codigo: '03', descricao: 'Entrada Rejeitada' },
+    { codigo: '06', descricao: 'Liquidação Normal' },
+    { codigo: '09', descricao: 'Baixa por comando do cliente' },
+    { codigo: '10', descricao: 'Baixado conforme instruções da agência' },
+    { codigo: '11', descricao: 'Em ser (títulos em aberto)' },
+    { codigo: '12', descricao: 'Abatimento concedido' },
+    { codigo: '13', descricao: 'Abatimento cancelado' },
+    { codigo: '14', descricao: 'Vencimento alterado' },
+    { codigo: '17', descricao: 'Liquidação após baixa' },
+    { codigo: '18', descricao: 'Acerto de depósito' },
+    { codigo: '21', descricao: 'Confirmação de instrução para protestar' },
+    { codigo: '22', descricao: 'Confirmação de sustação de protesto' },
+    { codigo: '24', descricao: 'Instrução rejeitada' },
+    { codigo: '27', descricao: 'Confirmação de alteração de dados' },
+    { codigo: '28', descricao: 'Débito de tarifas' },
+    { codigo: '29', descricao: 'Ocorrências do pagador' },
+    { codigo: '32', descricao: 'Registro de Nota de Débito' },
+    { codigo: '40', descricao: 'Liquidação em cartório' },
+  ];
+
+  get campoEhOcorrencia(): boolean {
+    const nome = this.campoAtivo?.nome.toLowerCase() ?? '';
+    return nome.includes('ocorr');
+  }
+
+  get descricaoOcorrencia(): string {
+    const cod = this.valorCampoAtivo?.trim();
+    return this.codigosOcorrencia.find(o => o.codigo === cod)?.descricao ?? '';
+  }
+
+  fecharEditor(): void {
+    this.campoAtivo = null;
+    this.editorPos = null;
+    this.statusBar = '';
+    this._hlStyle?.remove();
+    this._hlStyle = null;
+    this.campoSelecionado = null;
+  }
+
+  editarErro(erro: Erro, event?: MouseEvent): void {
+    const li = erro.linha - 1;
+    if (li < 0 || li >= this.linhasEditadas.length) return;
+    const campos = this.camposParaLinha(li);
+    const campo = campos.find(c => c.nome === erro.campo) ?? null;
+    const clickEl = event?.currentTarget as HTMLElement;
+    const rect = clickEl?.getBoundingClientRect();
+    const editorW = 420;
+    const top = rect ? rect.bottom + 6 + window.scrollY : window.scrollY + 200;
+    const left = rect ? Math.max(8, Math.min(rect.left, window.innerWidth - editorW - 12)) : 100;
+    this.editorPos = { top, left };
+    this.editorCarregando = true;
+    this.aplicadoFeedback = false;
+    requestAnimationFrame(() => {
+      this.linhaAtiva = li;
+      this.campoAtivo = campo;
+      this.editorCarregando = false;
+      if (campo) {
+        this.valorCampoAtivo = this.linhasEditadas[li].substring(campo.ini, campo.fim);
+        this.statusBar = `Ln ${li + 1}    Col ${campo.ini + 1}    |    ${campo.nome}    [${campo.ini + 1}–${campo.fim}]    Tipo: ${campo.tipo}    Tam: ${campo.tamanho}`;
+        setTimeout(() => this.selecionarCampo(campo.nome), 0);
+      } else {
+        this.valorCampoAtivo = '';
+        this.statusBar = `Ln ${li + 1}    |    (campo não mapeado)`;
+      }
+      setTimeout(() => {
+        const cell = document.querySelector(`[data-li="${li}"]`);
+        if (cell) cell.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 50);
+    });
+  }
+
+  private camposParaLinha(li: number): CampoLayout[] {
+    const line = this.linhasEditadas[li];
+    if (!line) return [];
+    const tipo = line[0];
+    const ident = line.length > 1 ? line[1] : '';
+    if (tipo === '0' && ident === '2') return this.camposHeaderRetorno;
+    if (tipo === '1') return this.camposDetalheRetorno;
+    if (tipo === '9' && ident === '2') return this.camposTrailerRetorno;
+    return [];
+  }
+
+  onMatrizClick(event: MouseEvent): void {
+    const el = event.target as HTMLElement;
+    const liStr = el.dataset['li'];
+    const ciStr = el.dataset['ci'];
+    if (liStr === undefined || ciStr === undefined) return;
+
+    const li = parseInt(liStr);
+    const ci = parseInt(ciStr);
+
+    const rect = el.getBoundingClientRect();
+    const editorW = 420;
+    const left = Math.min(rect.left, window.innerWidth - editorW - 12);
+    this.editorPos = { top: rect.bottom + 6 + window.scrollY, left: Math.max(left, 8) };
+    this.editorCarregando = true;
+
+    requestAnimationFrame(() => {
+      const campos = this.camposParaLinha(li);
+      const campo = campos.find(c => ci >= c.ini && ci < c.fim) ?? null;
+
+      this.linhaAtiva = li;
+      this.campoAtivo = campo;
+      this.editorCarregando = false;
+
+      if (campo) {
+        this.valorCampoAtivo = this.linhasEditadas[li].substring(campo.ini, campo.fim);
+        this.statusBar = `Ln ${li + 1}    Col ${ci + 1}    |    ${campo.nome}    [${campo.ini + 1}–${campo.fim}]    Tipo: ${campo.tipo}    Tam: ${campo.tamanho}`;
+        this.selecionarCampo(campo.nome);
+      } else {
+        this.valorCampoAtivo = '';
+        this.statusBar = `Ln ${li + 1}    Col ${ci + 1}    |    (campo não mapeado)`;
+      }
+    });
   }
 
   // ========================================
-  // LAYOUT HEADER RETORNO (TIPO 0) - Posições 1-400
+  // LAYOUT HEADER RETORNO (TIPO 0)
   // ========================================
   camposHeaderRetorno: CampoLayout[] = [
     { nome: 'Tipo Registro', ini: 0, fim: 1, tamanho: 1, tipo: 'N', obrigatorio: true, valores: ['0'], cor: '#f8bbd0', descricao: 'Identificação Registro Header (0)' },
@@ -182,7 +252,7 @@ export class BmpCnab400RetornoValidadorComponent {
   ];
 
   // ========================================
-  // LAYOUT DETALHE RETORNO (TIPO 1) - Posições 1-400
+  // LAYOUT DETALHE RETORNO (TIPO 1)
   // ========================================
   camposDetalheRetorno: CampoLayout[] = [
     { nome: 'Tipo Registro', ini: 0, fim: 1, tamanho: 1, tipo: 'N', obrigatorio: true, valores: ['1'], cor: '#f8bbd0', descricao: 'Identificação Registro (1)' },
@@ -199,7 +269,7 @@ export class BmpCnab400RetornoValidadorComponent {
     { nome: 'Uso do Banco 4', ini: 104, fim: 105, tamanho: 1, tipo: 'A', obrigatorio: false, cor: '#e0e0e0', descricao: 'Branco' },
     { nome: 'Uso do Banco 5', ini: 105, fim: 107, tamanho: 2, tipo: 'N', obrigatorio: false, valores: ['00'], cor: '#e0e0e0', descricao: 'Zeros' },
     { nome: 'Uso do Banco 6', ini: 107, fim: 108, tamanho: 1, tipo: 'N', obrigatorio: false, valores: ['0'], cor: '#e0e0e0', descricao: 'Zero' },
-    { nome: 'Ident. Ocorrência', ini: 108, fim: 110, tamanho: 2, tipo: 'N', obrigatorio: true, cor: '#80deea', descricao: '02,03,06,09,10,11,12,13,17,18,21,22,24,27,28,29,32,40' },
+    { nome: 'Ident. Ocorrência', ini: 108, fim: 110, tamanho: 2, tipo: 'N', obrigatorio: true, cor: '#80deea', descricao: '02=Entrada, 06=Liquidação, 09/10=Baixa…' },
     { nome: 'Data Ocorrência', ini: 110, fim: 116, tamanho: 6, tipo: 'N', obrigatorio: true, formato: 'DDMMAA', cor: '#fff9c4', descricao: 'Data Ocorrência - DDMMAA' },
     { nome: 'Número Documento', ini: 116, fim: 126, tamanho: 10, tipo: 'A', obrigatorio: false, cor: '#c5e1a5', descricao: 'Nº do Documento' },
     { nome: 'Nosso Número 2', ini: 126, fim: 146, tamanho: 20, tipo: 'N', obrigatorio: true, cor: '#ffab91', descricao: 'Nº Banco (20 pos)' },
@@ -211,7 +281,7 @@ export class BmpCnab400RetornoValidadorComponent {
     { nome: 'Despesas Cobrança', ini: 175, fim: 188, tamanho: 13, tipo: 'N', obrigatorio: false, cor: '#ffb74d', descricao: 'Despesas (ocor. 02 e 28)' },
     { nome: 'Outras Despesas', ini: 188, fim: 201, tamanho: 13, tipo: 'N', obrigatorio: false, cor: '#ff9800', descricao: 'Outras despesas (zeros)' },
     { nome: 'Juros Operação Atraso', ini: 201, fim: 214, tamanho: 13, tipo: 'N', obrigatorio: false, cor: '#ff8a65', descricao: 'Juros (zeros)' },
-    { nome: 'Brancos 1', ini: 214, fim: 227, tamanho: 13, tipo: 'N', obrigatorio: false, cor: '#f5f5f5', descricao: 'Zeros' },
+    { nome: 'Zeros 3', ini: 214, fim: 227, tamanho: 13, tipo: 'N', obrigatorio: false, cor: '#f5f5f5', descricao: 'Zeros' },
     { nome: 'Abatimento Concedido', ini: 227, fim: 240, tamanho: 13, tipo: 'N', obrigatorio: false, cor: '#a5d6a7', descricao: 'Valor Abatimento' },
     { nome: 'Desconto Concedido', ini: 240, fim: 253, tamanho: 13, tipo: 'N', obrigatorio: false, cor: '#80cbc4', descricao: 'Valor Desconto' },
     { nome: 'Valor Pago', ini: 253, fim: 266, tamanho: 13, tipo: 'N', obrigatorio: false, cor: '#66bb6a', descricao: 'Valor Pago (13 pos, 2 dec)' },
@@ -229,7 +299,7 @@ export class BmpCnab400RetornoValidadorComponent {
   ];
 
   // ========================================
-  // LAYOUT TRAILER RETORNO (TIPO 9) - Posições 1-400
+  // LAYOUT TRAILER RETORNO (TIPO 9)
   // ========================================
   camposTrailerRetorno: CampoLayout[] = [
     { nome: 'Tipo Registro', ini: 0, fim: 1, tamanho: 1, tipo: 'N', obrigatorio: true, valores: ['9'], cor: '#f8bbd0', descricao: 'Identificação Registro (9)' },
@@ -264,6 +334,11 @@ export class BmpCnab400RetornoValidadorComponent {
     this.campoSelecionado = null;
     this.conteudoArquivo = '';
     this.estatisticas = null;
+    this.statusBar = '';
+    this.campoAtivo = null;
+    this.linhaAtiva = -1;
+    this.editorPos = null;
+    this.totaisRetorno = null;
 
     const input = event.target as HTMLInputElement;
     if (!input.files || input.files.length === 0) return;
@@ -275,9 +350,10 @@ export class BmpCnab400RetornoValidadorComponent {
       try {
         const content = reader.result as string;
         this.conteudoArquivo = content;
-        const html = this.validarEHighlight(content);
-        this.visualHtml = this.sanitizer.bypassSecurityTrustHtml(html);
-        this.validado = true;
+        this.linhasEditadas = content.split(/\r?\n/).filter(l => l.length > 0);
+        this.linhasOriginais = [...this.linhasEditadas];
+        this.totalEdicoes = 0;
+        this.rerenderizar();
       } catch (e) {
         this.error = 'Erro ao processar o arquivo. Verifique se é um arquivo CNAB 400 de Retorno válido.';
         console.error(e);
@@ -291,6 +367,78 @@ export class BmpCnab400RetornoValidadorComponent {
     reader.readAsText(file, 'ISO-8859-1');
   }
 
+  rerenderizar(): void {
+    this.erros = [];
+    this.estatisticas = null;
+    const content = this.linhasEditadas.join('\r\n');
+    const html = this.validarEHighlight(content);
+    this.visualHtml = this.sanitizer.bypassSecurityTrustHtml(html);
+    this.validado = true;
+    this.calcularTotaisRetorno();
+  }
+
+  aplicarEdicao(): void {
+    if (!this.campoAtivo || this.linhaAtiva < 0) return;
+    const campo = this.campoAtivo;
+    const tam = campo.fim - campo.ini;
+    let val = this.valorCampoAtivo;
+    if (campo.tipo === 'N') {
+      val = val.replace(/\D/g, '').padStart(tam, '0').substring(0, tam);
+    } else {
+      val = val.padEnd(tam, ' ').substring(0, tam);
+    }
+    const linhaAntes = this.linhasEditadas[this.linhaAtiva];
+    const linhaDepois = linhaAntes.substring(0, campo.ini) + val + linhaAntes.substring(campo.fim);
+    if (linhaAntes !== linhaDepois) {
+      this.totalEdicoes++;
+    }
+    this.linhasEditadas[this.linhaAtiva] = linhaDepois;
+    this.valorCampoAtivo = val;
+    this.aplicadoFeedback = true;
+    setTimeout(() => { this.aplicadoFeedback = false; }, 1800);
+    this.rerenderizar();
+    setTimeout(() => { if (campo) this.selecionarCampo(campo.nome); }, 0);
+  }
+
+  gerarRetorno(): void {
+    const conteudo = this.linhasEditadas.join('\r\n');
+    const bytes = new Uint8Array(conteudo.length);
+    for (let i = 0; i < conteudo.length; i++) {
+      bytes[i] = conteudo.charCodeAt(i) & 0xff;
+    }
+    const blob = new Blob([bytes], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'retorno_editado.RET';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  calcularTotaisRetorno(): void {
+    const detalhes = this.linhasEditadas.filter(l => l[0] === '1');
+    if (detalhes.length === 0) { this.totaisRetorno = null; return; }
+
+    let liquidacoes = 0, valorTotalPago = 0, entradasConfirmadas = 0, baixas = 0, rejeitadas = 0;
+
+    for (const l of detalhes) {
+      const ocor = l.substring(108, 110);
+      if (ocor === '06') {
+        liquidacoes++;
+        valorTotalPago += parseInt(l.substring(253, 266) || '0', 10);
+      }
+      if (ocor === '02') entradasConfirmadas++;
+      if (ocor === '09' || ocor === '10') baixas++;
+      if (ocor === '03') rejeitadas++;
+    }
+
+    this.totaisRetorno = { totalDetalhes: detalhes.length, liquidacoes, valorTotalPago, entradasConfirmadas, baixas, rejeitadas };
+  }
+
+  formatarReais(centavos: number): string {
+    return (centavos / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
+
   validarEHighlight(content: string): string {
     const lines = content.split(/\r?\n/).filter(l => l.length > 0);
     if (lines.length === 0) {
@@ -298,74 +446,54 @@ export class BmpCnab400RetornoValidadorComponent {
       return '';
     }
 
-    this.estatisticas = {
-      totalLinhas: lines.length,
-      headers: 0,
-      detalhes: 0,
-      trailers: 0,
-      desconhecidos: 0
-    };
-
+    this.estatisticas = { totalLinhas: lines.length, headers: 0, detalhes: 0, trailers: 0, desconhecidos: 0 };
     let sequenciaEsperada = 1;
 
     for (let idx = 0; idx < lines.length; idx++) {
       const line = lines[idx];
       const tipo = line[0];
-      const identArquivo = line.length > 1 ? line[1] : '';
+      const ident = line.length > 1 ? line[1] : '';
       let campos: CampoLayout[];
 
-      // Para Retorno, verificar se é tipo 0 ou 9 pela segunda posição (deve ser '2')
-      if (tipo === '0' && identArquivo === '2') {
+      if (tipo === '0' && ident === '2') {
         campos = this.camposHeaderRetorno;
         this.estatisticas.headers++;
       } else if (tipo === '1') {
         campos = this.camposDetalheRetorno;
         this.estatisticas.detalhes++;
-      } else if (tipo === '9' && identArquivo === '2') {
+      } else if (tipo === '9' && ident === '2') {
         campos = this.camposTrailerRetorno;
         this.estatisticas.trailers++;
       } else {
         campos = [];
         this.estatisticas.desconhecidos++;
         this.erros.push({
-          linha: idx + 1,
-          campo: 'Tipo Registro',
-          posicao: '1-2',
-          valor: tipo + identArquivo,
-          mensagem: `Tipo de registro desconhecido: "${tipo}${identArquivo}". Para Retorno espera-se: 02 (Header), 1 (Detalhe), 92 (Trailer)`,
+          linha: idx + 1, campo: 'Tipo Registro', posicao: '1-2', valor: tipo + ident,
+          mensagem: `Tipo desconhecido: "${tipo}${ident}". Esperado: 02 (Header), 1 (Detalhe), 92 (Trailer)`,
           severidade: 'erro'
         });
       }
 
-      // Validação: espera exatamente 400 caracteres
       if (line.length !== 400) {
         this.erros.push({
-          linha: idx + 1,
-          campo: 'Linha',
-          posicao: `1-${line.length}`,
-          valor: `${line.length} caracteres`,
+          linha: idx + 1, campo: 'Linha', posicao: `1-${line.length}`, valor: `${line.length} caracteres`,
           mensagem: `Tamanho inválido. Esperado: 400, Encontrado: ${line.length}`,
           severidade: 'erro'
         });
       }
 
       for (const campo of campos) {
-        const valor = line.slice(campo.ini, campo.fim);
-        this.validarCampo(idx + 1, campo, valor);
+        this.validarCampo(idx + 1, campo, line.slice(campo.ini, campo.fim));
       }
 
-      // Validar sequência
       const seqCampo = campos.find(c => c.nome === 'Nº Sequencial');
       if (seqCampo && line.length >= 400) {
         const valorSeq = line.slice(seqCampo.ini, seqCampo.fim).trim();
         const sequenciaAtual = parseInt(valorSeq, 10);
-
         if (!isNaN(sequenciaAtual) && sequenciaAtual !== sequenciaEsperada) {
           this.erros.push({
-            linha: idx + 1,
-            campo: 'Nº Sequencial',
-            posicao: `${seqCampo.ini + 1}-${seqCampo.fim}`,
-            valor: valorSeq,
+            linha: idx + 1, campo: 'Nº Sequencial',
+            posicao: `${seqCampo.ini + 1}-${seqCampo.fim}`, valor: valorSeq,
             mensagem: `Sequência incorreta. Esperado: ${String(sequenciaEsperada).padStart(6, '0')}, Encontrado: ${valorSeq}`,
             severidade: 'erro'
           });
@@ -381,114 +509,47 @@ export class BmpCnab400RetornoValidadorComponent {
       (campo, index, self) => self.findIndex(c => c.nome === campo.nome) === index
     );
 
-    return lines.map((line, idx) => this.lineToMatrix(line, idx)).join('');
+    return `<div class="cnab-mw">${lines.map((line, idx) => this.lineToMatrix(line, idx)).join('')}</div>`;
   }
 
   validarEstrutura(): void {
     if (!this.estatisticas) return;
-
     if (this.estatisticas.headers === 0) {
-      this.erros.push({
-        linha: 0,
-        campo: 'Estrutura',
-        posicao: '-',
-        valor: '-',
-        mensagem: 'Arquivo deve conter pelo menos um registro Header de Retorno (Tipo 02)',
-        severidade: 'erro'
-      });
+      this.erros.push({ linha: 0, campo: 'Estrutura', posicao: '-', valor: '-', mensagem: 'Arquivo deve conter pelo menos um Header de Retorno (Tipo 02)', severidade: 'erro' });
     }
-
     if (this.estatisticas.trailers === 0) {
-      this.erros.push({
-        linha: 0,
-        campo: 'Estrutura',
-        posicao: '-',
-        valor: '-',
-        mensagem: 'Arquivo deve conter pelo menos um registro Trailer de Retorno (Tipo 92)',
-        severidade: 'erro'
-      });
+      this.erros.push({ linha: 0, campo: 'Estrutura', posicao: '-', valor: '-', mensagem: 'Arquivo deve conter pelo menos um Trailer de Retorno (Tipo 92)', severidade: 'erro' });
     }
-
     if (this.estatisticas.detalhes === 0) {
-      this.erros.push({
-        linha: 0,
-        campo: 'Estrutura',
-        posicao: '-',
-        valor: '-',
-        mensagem: 'Aviso: Arquivo não contém registros de Detalhe (Tipo 1)',
-        severidade: 'aviso'
-      });
+      this.erros.push({ linha: 0, campo: 'Estrutura', posicao: '-', valor: '-', mensagem: 'Aviso: Arquivo não contém registros de Detalhe (Tipo 1)', severidade: 'aviso' });
     }
-
     if (this.estatisticas.headers > 1) {
-      this.erros.push({
-        linha: 0,
-        campo: 'Estrutura',
-        posicao: '-',
-        valor: '-',
-        mensagem: `Aviso: Arquivo contém ${this.estatisticas.headers} Headers (normalmente 1)`,
-        severidade: 'aviso'
-      });
+      this.erros.push({ linha: 0, campo: 'Estrutura', posicao: '-', valor: '-', mensagem: `Aviso: Arquivo contém ${this.estatisticas.headers} Headers (normalmente 1)`, severidade: 'aviso' });
     }
-  }
-
-  renderizarArquivo(content: string): string {
-    const lines = content.split(/\r?\n/).filter(l => l.length > 0);
-    return lines.map((line, idx) => this.lineToMatrix(line, idx)).join('');
   }
 
   validarCampo(linha: number, campo: CampoLayout, valor: string): void {
     const valorTrim = valor.trim();
 
     if (campo.obrigatorio && valorTrim === '') {
-      this.erros.push({
-        linha,
-        campo: campo.nome,
-        posicao: `${campo.ini + 1}-${campo.fim}`,
-        valor: valor,
-        mensagem: 'Campo obrigatório está vazio',
-        severidade: 'erro'
-      });
+      this.erros.push({ linha, campo: campo.nome, posicao: `${campo.ini + 1}-${campo.fim}`, valor, mensagem: 'Campo obrigatório está vazio', severidade: 'erro' });
       return;
     }
 
     if (!campo.obrigatorio && valorTrim === '') return;
 
-    // Validação: campos numéricos NÃO devem ter espaços (exceto brancos preenchidos com zeros)
-    if (campo.tipo === 'N' && valorTrim !== '' && !campo.nome.includes('Branco')) {
+    if (campo.tipo === 'N' && valorTrim !== '' && !campo.nome.includes('Branco') && !campo.nome.startsWith('Zeros')) {
       if (valor.includes(' ')) {
-        this.erros.push({
-          linha,
-          campo: campo.nome,
-          posicao: `${campo.ini + 1}-${campo.fim}`,
-          valor: valor,
-          mensagem: 'Campo numérico contém espaços. Deve ser preenchido com zeros à esquerda.',
-          severidade: 'erro'
-        });
+        this.erros.push({ linha, campo: campo.nome, posicao: `${campo.ini + 1}-${campo.fim}`, valor, mensagem: 'Campo numérico contém espaços. Deve ser preenchido com zeros à esquerda.', severidade: 'erro' });
       }
-
       if (!/^\d+$/.test(valor)) {
-        this.erros.push({
-          linha,
-          campo: campo.nome,
-          posicao: `${campo.ini + 1}-${campo.fim}`,
-          valor: valor,
-          mensagem: 'Deve conter apenas números (0-9)',
-          severidade: 'erro'
-        });
+        this.erros.push({ linha, campo: campo.nome, posicao: `${campo.ini + 1}-${campo.fim}`, valor, mensagem: 'Deve conter apenas números (0-9)', severidade: 'erro' });
       }
     }
 
     if (campo.valores && valorTrim !== '') {
       if (!campo.valores.includes(valorTrim)) {
-        this.erros.push({
-          linha,
-          campo: campo.nome,
-          posicao: `${campo.ini + 1}-${campo.fim}`,
-          valor: valor,
-          mensagem: `Valor inválido. Valores permitidos: ${campo.valores.join(', ')}`,
-          severidade: 'erro'
-        });
+        this.erros.push({ linha, campo: campo.nome, posicao: `${campo.ini + 1}-${campo.fim}`, valor, mensagem: `Valor inválido. Valores permitidos: ${campo.valores.join(', ')}`, severidade: 'erro' });
       }
     }
 
@@ -496,27 +557,11 @@ export class BmpCnab400RetornoValidadorComponent {
       if (valor.length === 6 && /^\d{6}$/.test(valor)) {
         const dia = parseInt(valor.slice(0, 2), 10);
         const mes = parseInt(valor.slice(2, 4), 10);
-
         if (dia < 1 || dia > 31) {
-          this.erros.push({
-            linha,
-            campo: campo.nome,
-            posicao: `${campo.ini + 1}-${campo.fim}`,
-            valor: valor,
-            mensagem: `Dia inválido: ${dia} (deve estar entre 01 e 31)`,
-            severidade: 'erro'
-          });
+          this.erros.push({ linha, campo: campo.nome, posicao: `${campo.ini + 1}-${campo.fim}`, valor, mensagem: `Dia inválido: ${dia} (deve estar entre 01 e 31)`, severidade: 'erro' });
         }
-
         if (mes < 1 || mes > 12) {
-          this.erros.push({
-            linha,
-            campo: campo.nome,
-            posicao: `${campo.ini + 1}-${campo.fim}`,
-            valor: valor,
-            mensagem: `Mês inválido: ${mes} (deve estar entre 01 e 12)`,
-            severidade: 'erro'
-          });
+          this.erros.push({ linha, campo: campo.nome, posicao: `${campo.ini + 1}-${campo.fim}`, valor, mensagem: `Mês inválido: ${mes} (deve estar entre 01 e 12)`, severidade: 'erro' });
         }
       }
     }
@@ -524,12 +569,12 @@ export class BmpCnab400RetornoValidadorComponent {
 
   lineToMatrix(line: string, lineIdx: number): string {
     const tipo = line[0];
-    const identArquivo = line.length > 1 ? line[1] : '';
+    const ident = line.length > 1 ? line[1] : '';
     let campos: CampoLayout[];
     let tipoNome = '';
     let tipoColor = '';
 
-    if (tipo === '0' && identArquivo === '2') {
+    if (tipo === '0' && ident === '2') {
       campos = this.camposHeaderRetorno;
       tipoNome = 'Header Retorno';
       tipoColor = '#7b1fa2';
@@ -537,7 +582,7 @@ export class BmpCnab400RetornoValidadorComponent {
       campos = this.camposDetalheRetorno;
       tipoNome = 'Detalhe Retorno';
       tipoColor = '#388e3c';
-    } else if (tipo === '9' && identArquivo === '2') {
+    } else if (tipo === '9' && ident === '2') {
       campos = this.camposTrailerRetorno;
       tipoNome = 'Trailer Retorno';
       tipoColor = '#c2185b';
@@ -547,30 +592,36 @@ export class BmpCnab400RetornoValidadorComponent {
       tipoColor = '#d32f2f';
     }
 
-    // Linha simples apenas com as células - sem labels para manter alinhamento
-    let html = `<div style="display:flex;flex-wrap:nowrap;gap:0;height:22px;margin-bottom:2px;">`;
+    let html = `<div style="margin-bottom:12px;padding:8px;background:#fafafa;border-radius:4px;border:1px solid #e0e0e0;width:max-content;min-width:100%;">`;
+    html += `<div style="display:flex;align-items:center;margin-bottom:6px;gap:10px;flex-wrap:wrap;">`;
+    html += `<span style="min-width:80px;font-size:12px;font-weight:600;color:${tipoColor};">Linha ${lineIdx + 1}</span>`;
+    html += `<span style="padding:3px 10px;background:${tipoColor};color:#fff;border-radius:4px;font-size:11px;font-weight:600;text-transform:uppercase;">${tipoNome}</span>`;
+    html += `<span style="padding:3px 8px;background:#757575;color:#fff;border-radius:4px;font-size:10px;font-weight:500;">${line.length} chars</span>`;
 
-    // Renderizar 400 caracteres
-    for (let i = 0; i < Math.min(line.length, 400); i++) {
-      const char = line[i] || ' ';
+    const errosLinha = this.erros.filter(e => e.linha === lineIdx + 1 && e.severidade === 'erro');
+    if (errosLinha.length > 0) {
+      html += `<span style="padding:3px 10px;background:#d32f2f;color:#fff;border-radius:4px;font-size:11px;margin-left:auto;font-weight:600;">⚠️ ${errosLinha.length} erro(s)</span>`;
+    }
+    html += `</div>`;
+
+    html += `<div style="font-family:'Courier New',Courier,monospace;font-size:11px;line-height:1;white-space:nowrap;background:#fff;padding:6px;border-radius:4px;border:1px solid #e0e0e0;">`;
+
+    for (let i = 0; i < 400; i++) {
+      const char = i < line.length ? line[i] : ' ';
       const campo = campos.find(c => i >= c.ini && i < c.fim);
+
       const cor = campo ? campo.cor : '#f5f5f5';
       const nomeCampo = campo ? campo.nome : 'N/D';
       const temErro = campo ? this.erros.some(e => e.linha === lineIdx + 1 && e.campo === campo.nome && e.severidade === 'erro') : false;
-      const bordaErro = temErro ? 'border:2px solid #d32f2f;box-shadow:0 0 4px rgba(211,47,47,0.5);' : 'border:1px solid rgba(0,0,0,0.1);';
+      const bordaErro = temErro ? 'border:2px solid #d32f2f;' : 'border:1px solid rgba(0,0,0,0.08);';
 
-      const estaSelecionado = this.campoSelecionado && campo && campo.nome === this.campoSelecionado;
-      const estiloDestaque = estaSelecionado
-        ? 'box-shadow:0 0 0 2px #1976d2;z-index:10;position:relative;transform:scale(1.3);'
-        : '';
-      const opacidade = this.campoSelecionado && !estaSelecionado ? 'opacity:0.3;' : '';
+      const cls = campo ? `cnab-mc ${this.campoClass(campo.nome)}` : 'cnab-mc';
+      const title = `${nomeCampo} - Pos ${i + 1}${campo?.descricao ? '\n' + campo.descricao : ''}`;
 
-      const title = `${nomeCampo} - Posição ${i+1}${campo?.descricao ? '\n' + campo.descricao : ''}`;
-
-      html += `<span style="display:inline-block;width:14px;height:20px;line-height:20px;text-align:center;background:${cor};${bordaErro}font-size:11px;font-family:'Courier New',monospace;${estiloDestaque}${opacidade}transition:all 0.2s;" title="${this.escapeHtml(title)}">${char === ' ' ? '&nbsp;' : this.escapeHtml(char)}</span>`;
+      html += `<span class="${cls}" data-li="${lineIdx}" data-ci="${i}" style="display:inline-block;width:13px;height:18px;line-height:18px;text-align:center;vertical-align:top;background:${cor};${bordaErro}font-size:11px;font-family:monospace;cursor:pointer;user-select:none;" title="${this.escapeHtml(title)}">${char === ' ' ? '&nbsp;' : this.escapeHtml(char)}</span>`;
     }
 
-    html += '</div>';
+    html += '</div></div>';
     return html;
   }
 

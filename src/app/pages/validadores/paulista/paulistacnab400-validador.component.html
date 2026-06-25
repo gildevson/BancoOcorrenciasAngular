@@ -1,0 +1,272 @@
+<div class="cnab-validador">
+  <a routerLink="/validadores" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#e8f4fc;border:1px solid #cce0eb;border-radius:8px;color:#00253F;font-size:13px;font-weight:700;text-decoration:none;margin-bottom:20px;">← Voltar</a>
+  <h2 class="titulo">🏦 Validador Remessa Banco Paulista / Frontis CNAB 400</h2>
+
+  <div class="upload-area">
+    <input type="file" accept=".rem,.txt,.REM,.TXT" (change)="onFileChange($event)" />
+  </div>
+
+  @if (linhasEditadas.length > 0) {
+    <div class="toolbar-edicao">
+      <button class="btn-gerar" (click)="gerarRemessa()">
+        ⬇ Gerar Remessa (.REM)
+        @if (totalEdicoes > 0) {
+          <span class="edicoes-badge">{{ totalEdicoes }} edição{{ totalEdicoes > 1 ? 'ões' : '' }}</span>
+        }
+      </button>
+      <span class="toolbar-hint">💡 Clique em qualquer célula da matriz para editar</span>
+    </div>
+  }
+
+  @if (error) {
+    <div class="erro-container">❌ {{ error }}</div>
+  }
+
+  @if (estatisticas && validado) {
+    <div class="estatisticas-grid">
+      <div class="stat-card stat-total">
+        <div class="stat-valor">{{ estatisticas.totalLinhas }}</div>
+        <div class="stat-label">Total Linhas</div>
+      </div>
+      <div class="stat-card stat-header">
+        <div class="stat-valor">{{ estatisticas.headers }}</div>
+        <div class="stat-label">Header (0)</div>
+      </div>
+      <div class="stat-card stat-detalhe">
+        <div class="stat-valor">{{ estatisticas.detalhes }}</div>
+        <div class="stat-label">Detalhes (1)</div>
+      </div>
+      <div class="stat-card stat-trailer">
+        <div class="stat-valor">{{ estatisticas.trailers }}</div>
+        <div class="stat-label">Trailer (9)</div>
+      </div>
+    </div>
+  }
+
+  @if (totaisPaulista) {
+    <div class="totais-panel">
+      <div class="totais-titulo">📊 Resumo Financeiro da Remessa</div>
+      <div class="totais-grid">
+        <div class="total-item">
+          <span class="total-label">Total de Detalhes</span>
+          <span class="total-val total-count">{{ totaisPaulista.totalDetalhes }}</span>
+        </div>
+        <div class="total-item destaque">
+          <span class="total-label">Valor Total Títulos</span>
+          <span class="total-val total-pago">{{ formatarReais(totaisPaulista.valorTotalTitulos) }}</span>
+        </div>
+        <div class="total-item destaque">
+          <span class="total-label">Valor Total Presente</span>
+          <span class="total-val total-liq">{{ formatarReais(totaisPaulista.valorTotalPresente) }}</span>
+        </div>
+        <div class="total-item">
+          <span class="total-label">Abatimentos</span>
+          <span class="total-val total-ok">{{ formatarReais(totaisPaulista.valorTotalAbatimento) }}</span>
+        </div>
+        <div class="total-item">
+          <span class="total-label">Duplicatas (01)</span>
+          <span class="total-val">{{ totaisPaulista.duplicatas }}</span>
+        </div>
+        <div class="total-item">
+          <span class="total-label">Notas Prom. (02)</span>
+          <span class="total-val">{{ totaisPaulista.notasPromissorias }}</span>
+        </div>
+        <div class="total-item">
+          <span class="total-label">Remessas (Oc.01)</span>
+          <span class="total-val">{{ totaisPaulista.ocorrencia01 }}</span>
+        </div>
+        <div class="total-item">
+          <span class="total-label">Cheques (51)</span>
+          <span class="total-val">{{ totaisPaulista.cheques }}</span>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (getErrosPorSeveridade('erro').length > 0) {
+    <div class="erros-container erros-criticos">
+      <strong>🚫 {{ getErrosPorSeveridade('erro').length }} erro(s) crítico(s):</strong>
+      <ul>
+        @for (e of getErrosPorSeveridade('erro'); track e.posicao) {
+          <li class="erro-item-clicavel" (click)="editarErro(e, $event)" title="Clique para abrir o editor neste campo">
+            <strong class="erro-linha">Linha {{ e.linha }}</strong> -
+            <span class="erro-campo">{{ e.campo }}</span>
+            <span class="erro-posicao">[{{ e.posicao }}]</span>:
+            <code class="erro-valor">{{ e.valor }}</code>
+            → <span class="erro-msg">{{ e.mensagem }}</span>
+            <span class="erro-editar-hint">✏ editar</span>
+          </li>
+        }
+      </ul>
+    </div>
+  }
+
+  @if (getErrosPorSeveridade('aviso').length > 0) {
+    <div class="erros-container erros-avisos">
+      <strong>⚠️ {{ getErrosPorSeveridade('aviso').length }} aviso(s):</strong>
+      <ul>
+        @for (e of getErrosPorSeveridade('aviso'); track e.posicao) {
+          <li><strong>Linha {{ e.linha }}</strong> - {{ e.campo }}: {{ e.mensagem }}</li>
+        }
+      </ul>
+    </div>
+  }
+
+  @if (validado && getErrosPorSeveridade('erro').length === 0) {
+    <div class="sucesso-container">
+      <strong>✅ Arquivo válido!</strong>
+      @if (getErrosPorSeveridade('aviso').length > 0) {
+        <span class="avisos-count">({{ getErrosPorSeveridade('aviso').length }} aviso(s))</span>
+      }
+    </div>
+  }
+
+  @if (legendaCampos.length > 0) {
+    <div class="legenda-container">
+      <strong>📌 Clique em um campo para destacar:</strong>
+      <div class="legenda-campos">
+        @for (campo of legendaCampos; track campo.nome) {
+          <span
+            (click)="selecionarCampo(campo.nome)"
+            class="legenda-item"
+            [class.selecionado]="campoSelecionado === campo.nome"
+            [style.background]="campo.cor"
+            [title]="campo.descricao || 'Clique para destacar'">
+            {{ campo.nome }} <span class="legenda-pos">[{{ campo.ini + 1 }}-{{ campo.fim }}]</span>
+          </span>
+        }
+      </div>
+    </div>
+  }
+
+  @if (visualHtml) {
+    <div class="matriz-container" [innerHTML]="visualHtml" (click)="onMatrizClick($event)"></div>
+    @if (statusBar) {
+      <div class="status-bar">{{ statusBar }}</div>
+    }
+  }
+
+  @if (!visualHtml && !error) {
+    <div class="placeholder">
+      📄 Anexe um arquivo .REM ou .TXT (Remessa CNAB 400 — Banco Paulista / Frontis) para iniciar a validação
+    </div>
+  }
+</div>
+
+@if (editorPos) {
+  <div class="editor-flutuante"
+       [style.top.px]="editorPos.top"
+       [style.left.px]="editorPos.left"
+       (click)="$event.stopPropagation()">
+
+    @if (editorCarregando) {
+      <div class="editor-header editor-header-loading">
+        <div class="editor-skeleton editor-skeleton-titulo"></div>
+        <div class="editor-skeleton editor-skeleton-meta"></div>
+      </div>
+      <div class="editor-body">
+        <div class="editor-spinner"></div>
+        <span class="editor-loading-txt">Identificando campo…</span>
+      </div>
+    } @else if (campoAtivo) {
+      <div class="editor-header">
+        <div class="editor-campo-info">
+          <span class="editor-campo-nome">{{ campoAtivo.nome }}</span>
+          <span class="editor-meta">Pos {{ campoAtivo.ini + 1 }}–{{ campoAtivo.fim }} · Tipo {{ campoAtivo.tipo }} · {{ campoAtivo.tamanho }} char{{ campoAtivo.tamanho > 1 ? 's' : '' }}</span>
+          @if (campoAtivo.descricao) {
+            <span class="editor-desc">{{ campoAtivo.descricao }}</span>
+          }
+        </div>
+        <button class="editor-close" (click)="fecharEditor()" title="Fechar">×</button>
+      </div>
+      <div class="editor-body">
+        <span class="editor-ln">Ln {{ linhaAtiva + 1 }}</span>
+        <div class="editor-input-wrap">
+          <input
+            class="editor-input"
+            [(ngModel)]="valorCampoAtivo"
+            [maxlength]="campoAtivo.tamanho"
+            [placeholder]="campoAtivo.tipo === 'N' ? 'Somente números' : 'Texto livre'"
+            (keydown.enter)="aplicarEdicao()"
+            (keydown.escape)="fecharEditor()"
+          />
+          <span class="editor-contador"
+                [class.editor-contador-cheio]="valorCampoAtivo.length === campoAtivo.tamanho"
+                [class.editor-contador-quase]="valorCampoAtivo.length > campoAtivo.tamanho * 0.8 && valorCampoAtivo.length < campoAtivo.tamanho">
+            {{ valorCampoAtivo.length }}/{{ campoAtivo.tamanho }}
+          </span>
+        </div>
+        <button class="editor-btn-aplicar" [class.editor-btn-ok]="aplicadoFeedback" (click)="aplicarEdicao()">
+          {{ aplicadoFeedback ? '✓' : 'Aplicar' }}
+        </button>
+      </div>
+
+      @if (campoAtivo.valores && campoAtivo.valores.length > 0 && !campoEhOcorrencia && !campoTemLookup) {
+        <div class="editor-valores-validos">
+          Valores válidos:
+          @for (v of campoAtivo.valores; track v) {
+            <code class="editor-valor-chip" (click)="valorCampoAtivo = v" style="cursor:pointer">{{ v }}</code>
+          }
+        </div>
+      }
+
+      @if (campoTemLookup) {
+        <div class="editor-ocorrencia-info">
+          @if (descricaoLookupAtual) {
+            <span class="ocor-cod">{{ valorCampoAtivo.trim() }}</span>
+            <span class="ocor-desc">{{ descricaoLookupAtual }}</span>
+          } @else if (valorCampoAtivo.trim()) {
+            <span class="ocor-cod ocor-desconhecido">{{ valorCampoAtivo.trim() }}</span>
+            <span class="ocor-desc">Código não encontrado</span>
+          }
+        </div>
+        <div class="editor-instrucao-tabela">
+          <div class="editor-instrucao-titulo">📋 Valores válidos — clique para selecionar</div>
+          <div class="editor-instrucao-lista">
+            @for (item of lookupAtivo; track item.codigo) {
+              <button
+                class="editor-instrucao-item"
+                [class.editor-instrucao-ativo]="valorCampoAtivo.trim() === item.codigo"
+                (click)="selecionarLookupItem(item.codigo)">
+                <span class="instr-cod">{{ item.codigo }}</span>
+                <span class="instr-desc">{{ item.descricao }}</span>
+              </button>
+            }
+          </div>
+        </div>
+      }
+
+      @if (campoEhOcorrencia) {
+        <div class="editor-ocorrencia-info">
+          @if (descricaoOcorrencia) {
+            <span class="ocor-cod">{{ valorCampoAtivo.trim() }}</span>
+            <span class="ocor-desc">{{ descricaoOcorrencia }}</span>
+          } @else if (valorCampoAtivo.trim()) {
+            <span class="ocor-cod ocor-desconhecido">{{ valorCampoAtivo.trim() }}</span>
+            <span class="ocor-desc">Código não encontrado na tabela</span>
+          }
+        </div>
+        <div class="editor-instrucao-tabela">
+          <div class="editor-instrucao-titulo">📋 Códigos de Ocorrência — clique para selecionar</div>
+          <div class="editor-instrucao-lista">
+            @for (item of codigosOcorrencia; track item.codigo) {
+              <button
+                class="editor-instrucao-item"
+                [class.editor-instrucao-ativo]="valorCampoAtivo.trim() === item.codigo"
+                (click)="selecionarOcorrencia(item.codigo)">
+                <span class="instr-cod">{{ item.codigo }}</span>
+                <span class="instr-desc">{{ item.descricao }}</span>
+              </button>
+            }
+          </div>
+        </div>
+      }
+    } @else {
+      <div class="editor-header editor-header-sem-campo">
+        <span class="editor-campo-nome">Campo não mapeado</span>
+        <button class="editor-close" (click)="fecharEditor()">×</button>
+      </div>
+      <div class="editor-body" style="color:#888;font-size:12px;">Esta posição não pertence a nenhum campo definido.</div>
+    }
+  </div>
+}

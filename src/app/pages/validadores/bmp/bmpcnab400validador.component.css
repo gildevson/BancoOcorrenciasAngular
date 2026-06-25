@@ -137,6 +137,11 @@
   font-size: 13px;
 }
 
+.erro-item-clicavel { cursor: pointer; transition: background 0.15s, border-color 0.15s; }
+.erro-item-clicavel:hover { background: #ffd7d7 !important; border-color: #c62828 !important; }
+.erro-editar-hint { float: right; font-size: 11px; color: #999; opacity: 0.5; margin-left: 8px; font-style: italic; pointer-events: none; }
+.erro-item-clicavel:hover .erro-editar-hint { opacity: 1; color: #c62828; }
+
 .erros-criticos {
   background: #ffebee;
   border: 1px solid #ef9a9a;
@@ -428,18 +433,44 @@
   font-family: monospace;
 }
 
-.editor-input {
+.editor-input-wrap {
   flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.editor-input {
+  width: 100%;
   padding: 7px 10px;
   border: 1px solid #c5d8f6;
-  border-radius: 6px;
+  border-radius: 6px 6px 0 0;
   font-size: 13px;
   font-family: 'Courier New', Courier, monospace;
   background: #f8faff;
   outline: none;
   transition: border-color 0.2s;
+  box-sizing: border-box;
 }
 .editor-input:focus { border-color: #1565c0; background: #fff; }
+
+.editor-contador {
+  display: block;
+  text-align: right;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 600;
+  background: #eef3fb;
+  border: 1px solid #c5d8f6;
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  color: #5c85c7;
+  transition: background 0.2s, color 0.2s;
+}
+.editor-contador-quase { background: #fff8e1; border-color: #ffc107; color: #e65100; }
+.editor-contador-cheio { background: #fce4ec; border-color: #e91e63; color: #b71c1c; font-weight: 800; }
 
 .editor-btn-aplicar {
   padding: 7px 16px;
@@ -546,6 +577,31 @@
 }
 .editor-instrucao-item:hover { background: #e8f0fe; }
 .editor-instrucao-ativo { background: #e3f2fd !important; }
+
+.editor-ocorrencia-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 12px 8px;
+  background: #e3f2fd;
+  border-top: 1px solid #e8f0f7;
+}
+
+.ocor-cod {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+  font-weight: 800;
+  color: #0d47a1;
+  min-width: 28px;
+}
+
+.ocor-desc {
+  font-size: 12px;
+  color: #1565c0;
+  font-weight: 600;
+}
+
+.ocor-desconhecido { color: #b71c1c; }
 
 .instr-cod {
   font-family: 'Courier New', Courier, monospace;

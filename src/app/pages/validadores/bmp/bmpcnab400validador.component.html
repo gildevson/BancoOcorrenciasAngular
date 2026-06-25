@@ -96,12 +96,13 @@
       <strong>🚫 {{ getErrosPorSeveridade('erro').length }} erro(s) crítico(s):</strong>
       <ul>
         @for (e of getErrosPorSeveridade('erro'); track e.posicao) {
-          <li>
+          <li class="erro-item-clicavel" (click)="editarErro(e, $event)" title="Clique para abrir o editor neste campo">
             <strong class="erro-linha">Linha {{ e.linha }}</strong> -
             <span class="erro-campo">{{ e.campo }}</span>
             <span class="erro-posicao">[{{ e.posicao }}]</span>:
             <code class="erro-valor">{{ e.valor }}</code>
             → <span class="erro-msg">{{ e.mensagem }}</span>
+            <span class="erro-editar-hint">✏ editar</span>
           </li>
         }
       </ul>
@@ -195,24 +196,57 @@
       </div>
       <div class="editor-body">
         <span class="editor-ln">Ln {{ linhaAtiva + 1 }}</span>
-        <input
-          class="editor-input"
-          [(ngModel)]="valorCampoAtivo"
-          [maxlength]="campoAtivo.tamanho"
-          [placeholder]="campoAtivo.tipo === 'N' ? 'Somente números' : 'Texto livre'"
-          (keydown.enter)="aplicarEdicao()"
-          (keydown.escape)="fecharEditor()"
-        />
+        <div class="editor-input-wrap">
+          <input
+            class="editor-input"
+            [(ngModel)]="valorCampoAtivo"
+            [maxlength]="campoAtivo.tamanho"
+            [placeholder]="campoAtivo.tipo === 'N' ? 'Somente números' : 'Texto livre'"
+            (keydown.enter)="aplicarEdicao()"
+            (keydown.escape)="fecharEditor()"
+          />
+          <span class="editor-contador"
+                [class.editor-contador-cheio]="valorCampoAtivo.length === campoAtivo.tamanho"
+                [class.editor-contador-quase]="valorCampoAtivo.length > campoAtivo.tamanho * 0.8 && valorCampoAtivo.length < campoAtivo.tamanho">
+            {{ valorCampoAtivo.length }}/{{ campoAtivo.tamanho }}
+          </span>
+        </div>
         <button class="editor-btn-aplicar" [class.editor-btn-ok]="aplicadoFeedback" (click)="aplicarEdicao()">
           {{ aplicadoFeedback ? '✓' : 'Aplicar' }}
         </button>
       </div>
-      @if (campoAtivo.valores && campoAtivo.valores.length > 0 && !campoEhInstrucao) {
+      @if (campoAtivo.valores && campoAtivo.valores.length > 0 && !campoEhInstrucao && !campoEhOcorrencia) {
         <div class="editor-valores-validos">
           Valores válidos:
           @for (v of campoAtivo.valores; track v) {
             <code class="editor-valor-chip" (click)="selecionarInstrucao(v)" style="cursor:pointer">{{ v }}</code>
           }
+        </div>
+      }
+
+      @if (campoEhOcorrencia) {
+        <div class="editor-ocorrencia-info">
+          @if (descricaoOcorrencia) {
+            <span class="ocor-cod">{{ valorCampoAtivo.trim() }}</span>
+            <span class="ocor-desc">{{ descricaoOcorrencia }}</span>
+          } @else if (valorCampoAtivo.trim()) {
+            <span class="ocor-cod ocor-desconhecido">{{ valorCampoAtivo.trim() }}</span>
+            <span class="ocor-desc">Código não encontrado</span>
+          }
+        </div>
+        <div class="editor-instrucao-tabela">
+          <div class="editor-instrucao-titulo">📋 Códigos de Ocorrência — clique para selecionar</div>
+          <div class="editor-instrucao-lista">
+            @for (item of codigosOcorrencia; track item.codigo) {
+              <button
+                class="editor-instrucao-item"
+                [class.editor-instrucao-ativo]="valorCampoAtivo.trim() === item.codigo"
+                (click)="selecionarOcorrencia(item.codigo)">
+                <span class="instr-cod">{{ item.codigo }}</span>
+                <span class="instr-desc">{{ item.descricao }}</span>
+              </button>
+            }
+          </div>
         </div>
       }
 

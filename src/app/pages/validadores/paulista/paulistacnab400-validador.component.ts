@@ -1,18 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+
+interface LookupItem {
+  codigo: string;
+  descricao: string;
+}
 
 interface CampoLayout {
   nome: string;
   ini: number;
   fim: number;
+  tamanho: number;
   tipo: 'A' | 'N';
   obrigatorio: boolean;
   valores?: string[];
   formato?: string;
   cor: string;
   descricao?: string;
+  lookup?: LookupItem[];
 }
 
 interface Erro {
@@ -32,103 +40,27 @@ interface EstatisticasArquivo {
   desconhecidos: number;
 }
 
+interface TotaisPaulista {
+  totalDetalhes: number;
+  valorTotalTitulos: number;
+  valorTotalPresente: number;
+  valorTotalAbatimento: number;
+  ocorrencia01: number;
+  ocorrencia04: number;
+  ocorrencia06: number;
+  duplicatas: number;
+  notasPromissorias: number;
+  cheques: number;
+}
+
 @Component({
   selector: 'app-paulista-cnab400-validador',
   standalone: true,
-  imports: [CommonModule, RouterModule],
-  template: `
-    <div style="max-width:1400px;margin:0 auto;padding:20px;">
-      <a routerLink="/validadores" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#e8f4fc;border:1px solid #cce0eb;border-radius:8px;color:#00253F;font-size:13px;font-weight:700;text-decoration:none;margin-bottom:20px;">← Voltar</a>
-      <h2 style="color:#1565c0;margin-bottom:20px;">🏦 Validador Remessa Banco Paulista CNAB 400 (até 444 chars)</h2>
-
-      <div style="margin-bottom:20px;">
-        <input type="file" accept=".rem,.txt,.REM,.TXT" (change)="onFileChange($event)"
-               style="padding:10px;border:2px solid #1565c0;border-radius:6px;cursor:pointer;" />
-      </div>
-
-      <div *ngIf="error" style="color:#b71c1c;background:#ffebee;padding:12px;border-radius:6px;border:1px solid #ef5350;margin-bottom:18px;">
-        ❌ {{ error }}
-      </div>
-
-      <!-- Estatísticas -->
-      <div *ngIf="estatisticas && validado" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px;">
-        <div style="background:#e3f2fd;padding:12px;border-radius:6px;border:1px solid #90caf9;">
-          <div style="font-size:24px;font-weight:bold;color:#1565c0;">{{ estatisticas.totalLinhas }}</div>
-          <div style="font-size:12px;color:#555;">Total de Linhas</div>
-        </div>
-        <div style="background:#f3e5f5;padding:12px;border-radius:6px;border:1px solid #ce93d8;">
-          <div style="font-size:24px;font-weight:bold;color:#7b1fa2;">{{ estatisticas.headers }}</div>
-          <div style="font-size:12px;color:#555;">Headers (Tipo 0)</div>
-        </div>
-        <div style="background:#e8f5e9;padding:12px;border-radius:6px;border:1px solid #a5d6a7;">
-          <div style="font-size:24px;font-weight:bold;color:#388e3c;">{{ estatisticas.detalhes }}</div>
-          <div style="font-size:12px;color:#555;">Detalhes (Tipo 1)</div>
-        </div>
-        <div style="background:#fce4ec;padding:12px;border-radius:6px;border:1px solid #f48fb1;">
-          <div style="font-size:24px;font-weight:bold;color:#c2185b;">{{ estatisticas.trailers }}</div>
-          <div style="font-size:12px;color:#555;">Trailers (Tipo 9)</div>
-        </div>
-      </div>
-
-      <!-- Erros -->
-      <div *ngIf="erros.length > 0" style="margin-bottom:18px;">
-        <div *ngIf="getErrosPorSeveridade('erro').length > 0" style="padding:14px;background:#ffebee;border-radius:6px;border:1px solid #ef9a9a;margin-bottom:12px;">
-          <strong style="color:#c62828;font-size:16px;">🚫 {{ getErrosPorSeveridade('erro').length }} erro(s) crítico(s):</strong>
-          <ul style="margin:10px 0 0 0;padding-left:20px;max-height:250px;overflow-y:auto;">
-            <li *ngFor="let e of getErrosPorSeveridade('erro')" style="margin-bottom:6px;font-size:13px;">
-              <strong style="color:#d32f2f;">Linha {{ e.linha }}</strong> -
-              <span style="color:#1565c0;">{{ e.campo }}</span>
-              <span style="color:#666;">[{{ e.posicao }}]</span>:
-              <code style="background:#f5f5f5;padding:2px 6px;border-radius:3px;">{{ e.valor }}</code>
-              → <span style="color:#c62828;">{{ e.mensagem }}</span>
-            </li>
-          </ul>
-        </div>
-        <div *ngIf="getErrosPorSeveridade('aviso').length > 0" style="padding:14px;background:#fff3e0;border-radius:6px;border:1px solid #ffb74d;">
-          <strong style="color:#e65100;font-size:16px;">⚠️ {{ getErrosPorSeveridade('aviso').length }} aviso(s):</strong>
-          <ul style="margin:10px 0 0 0;padding-left:20px;">
-            <li *ngFor="let e of getErrosPorSeveridade('aviso')" style="margin-bottom:6px;font-size:13px;">
-              <strong>Linha {{ e.linha }}</strong> - {{ e.campo }}: {{ e.mensagem }}
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Sucesso -->
-      <div *ngIf="validado && getErrosPorSeveridade('erro').length === 0" style="margin-bottom:18px;padding:14px;background:#e8f5e9;border-radius:6px;border:1px solid #a5d6a7;">
-        <strong style="color:#2e7d32;font-size:16px;">✅ Arquivo válido!</strong>
-        <span *ngIf="getErrosPorSeveridade('aviso').length > 0" style="color:#f57c00;margin-left:8px;">
-          ({{ getErrosPorSeveridade('aviso').length }} aviso(s))
-        </span>
-      </div>
-
-      <!-- Legenda -->
-      <div *ngIf="legendaCampos.length > 0" style="margin-bottom:18px;padding:14px;background:#fafafa;border-radius:6px;border:1px solid #e0e0e0;">
-        <strong style="display:block;margin-bottom:12px;color:#333;">📌 Clique em um campo para destacar:</strong>
-        <div style="display:flex;flex-wrap:wrap;gap:8px;">
-          <span *ngFor="let campo of legendaCampos"
-                (click)="selecionarCampo(campo.nome)"
-                [style.background]="campo.cor"
-                [style.boxShadow]="campoSelecionado === campo.nome ? '0 0 0 3px #1565c0' : 'none'"
-                [style.transform]="campoSelecionado === campo.nome ? 'scale(1.05)' : 'scale(1)'"
-                [style.fontWeight]="campoSelecionado === campo.nome ? 'bold' : 'normal'"
-                style="display:inline-block;padding:6px 10px;border-radius:4px;font-size:11px;cursor:pointer;transition:all 0.2s;border:1px solid rgba(0,0,0,0.1);"
-                [title]="campo.descricao || 'Clique para destacar'">
-            {{ campo.nome }} <span style="opacity:0.7;">[{{ campo.ini + 1 }}-{{ campo.fim }}]</span>
-          </span>
-        </div>
-      </div>
-
-      <!-- Visualização -->
-      <div *ngIf="visualHtml" [innerHTML]="visualHtml" style="overflow-x:auto;background:#fff;padding:10px;border-radius:6px;border:1px solid #e0e0e0;"></div>
-
-      <div *ngIf="!visualHtml && !error" style="margin-top:24px;padding:40px;text-align:center;color:#888;background:#fafafa;border-radius:6px;border:2px dashed #ddd;">
-        📄 Anexe um arquivo .REM (Remessa CNAB 400 - Banco Paulista) para iniciar a validação
-      </div>
-    </div>
-  `
+  imports: [CommonModule, RouterModule, FormsModule],
+  templateUrl: './paulistacnab400-validador.component.html',
+  styleUrls: ['./paulistacnab400-validador.component.css']
 })
-export class PaulistaCnab400ValidadorComponent {
+export class PaulistaCnab400ValidadorComponent implements OnDestroy {
   visualHtml: SafeHtml | null = null;
   error: string | null = null;
   erros: Erro[] = [];
@@ -138,7 +70,189 @@ export class PaulistaCnab400ValidadorComponent {
   legendaCampos: CampoLayout[] = [];
   estatisticas: EstatisticasArquivo | null = null;
 
+  // Edição
+  editorPos: { top: number; left: number } | null = null;
+  campoAtivo: CampoLayout | null = null;
+  linhaAtiva: number = -1;
+  valorCampoAtivo: string = '';
+  statusBar: string = '';
+  editorCarregando = false;
+  aplicadoFeedback = false;
+  totalEdicoes = 0;
+  linhasEditadas: string[] = [];
+  linhasOriginais: string[] = [];
+  private _hlStyle: HTMLStyleElement | null = null;
+
+  // Totais
+  totaisPaulista: TotaisPaulista | null = null;
+
   constructor(private sanitizer: DomSanitizer) {}
+
+  ngOnDestroy() {
+    this._hlStyle?.remove();
+  }
+
+  // ========================================
+  // LAYOUT HEADER (TIPO 0) - CONFORME DOCUMENTAÇÃO OFICIAL
+  // ========================================
+  camposHeader: CampoLayout[] = [
+    { nome: 'Tipo Registro', ini: 0, fim: 1, tamanho: 1, tipo: 'N', obrigatorio: true, valores: ['0'], cor: '#f8bbd0', descricao: 'Identificação do Registro (0)' },
+    { nome: 'Ident. Arquivo', ini: 1, fim: 2, tamanho: 1, tipo: 'N', obrigatorio: true, valores: ['1'], cor: '#ffe082', descricao: 'Identificação Arquivo Remessa (1)' },
+    { nome: 'Literal Remessa', ini: 2, fim: 9, tamanho: 7, tipo: 'A', obrigatorio: true, valores: ['REMESSA'], cor: '#b2dfdb', descricao: 'Literal REMESSA (7 pos)' },
+    { nome: 'Cód. Serviço', ini: 9, fim: 11, tamanho: 2, tipo: 'N', obrigatorio: true, valores: ['01'], cor: '#c5cae9', descricao: 'Código Serviço - 01=Cobrança' },
+    { nome: 'Literal Serviço', ini: 11, fim: 26, tamanho: 15, tipo: 'A', obrigatorio: true, valores: ['COBRANCA'], cor: '#e1bee7', descricao: 'Literal COBRANCA (15 pos)' },
+    { nome: 'Cód. Originador', ini: 26, fim: 46, tamanho: 20, tipo: 'N', obrigatorio: true, cor: '#b3e5fc', descricao: 'Código Originador fornecido pelo banco (20 pos)' },
+    { nome: 'Nome Originador', ini: 46, fim: 76, tamanho: 30, tipo: 'A', obrigatorio: true, cor: '#ffecb3', descricao: 'Razão Social do Originador (30 pos)' },
+    { nome: 'Nº Banco', ini: 76, fim: 79, tamanho: 3, tipo: 'N', obrigatorio: true, valores: ['611'], cor: '#ffccbc', descricao: 'Número Banco Paulista - 611' },
+    { nome: 'Nome Banco', ini: 79, fim: 94, tamanho: 15, tipo: 'A', obrigatorio: true, valores: ['PAULISTA S.A.'], cor: '#dcedc8', descricao: 'Nome do Banco (15 pos)' },
+    { nome: 'Data Gravação', ini: 94, fim: 100, tamanho: 6, tipo: 'N', obrigatorio: true, formato: 'DDMMAA', cor: '#fff9c4', descricao: 'Data da Gravação - DDMMAA' },
+    { nome: 'Branco', ini: 100, fim: 108, tamanho: 8, tipo: 'A', obrigatorio: false, cor: '#f5f5f5', descricao: 'Branco (8 pos)' },
+    { nome: 'Ident. Sistema', ini: 108, fim: 110, tamanho: 2, tipo: 'A', obrigatorio: true, valores: ['MX'], cor: '#b2ebf2', descricao: 'Identificação Sistema - MX' },
+    { nome: 'Nº Seq. Arquivo', ini: 110, fim: 117, tamanho: 7, tipo: 'N', obrigatorio: true, cor: '#ffcdd2', descricao: 'Número Sequencial Arquivo (7 pos)' },
+    { nome: 'Branco', ini: 117, fim: 394, tamanho: 277, tipo: 'A', obrigatorio: false, cor: '#f5f5f5', descricao: 'Branco (277 pos)' },
+    { nome: 'Seq. Registro', ini: 394, fim: 400, tamanho: 6, tipo: 'N', obrigatorio: true, valores: ['000001'], cor: '#b2ebf2', descricao: 'Sequencial Registro - 000001' },
+  ];
+
+  // ========================================
+  // LAYOUT DETALHE (TIPO 1) - CONFORME DOCUMENTAÇÃO OFICIAL
+  // TODOS OS 47 CAMPOS MAPEADOS CORRETAMENTE
+  // ========================================
+  camposDetalhe: CampoLayout[] = [
+    { nome: 'Tipo Registro', ini: 0, fim: 1, tamanho: 1, tipo: 'N', obrigatorio: true, valores: ['1'], cor: '#f8bbd0', descricao: 'Identificação Registro (1)' },
+    { nome: 'Déb. Auto C/C', ini: 1, fim: 20, tamanho: 19, tipo: 'A', obrigatorio: false, cor: '#f5f5f5', descricao: 'Débito Automático C/C - Branco (19 pos)' },
+    { nome: 'Coobrigação', ini: 20, fim: 22, tamanho: 2, tipo: 'N', obrigatorio: false, valores: ['01', '02'], cor: '#ffe082', descricao: '01=Com, 02=Sem Coobrigação',
+      lookup: [
+        { codigo: '01', descricao: 'Com Coobrigação' },
+        { codigo: '02', descricao: 'Sem Coobrigação' },
+      ]
+    },
+    { nome: 'Caract. Especial', ini: 22, fim: 24, tamanho: 2, tipo: 'N', obrigatorio: false, cor: '#fff9c4', descricao: 'Característica Especial - Anexo 8 SRC3040' },
+    { nome: 'Modal. Operação', ini: 24, fim: 28, tamanho: 4, tipo: 'N', obrigatorio: false, cor: '#c5cae9', descricao: 'Modalidade Operação - Anexo 3 SRC3040 (4 pos)' },
+    { nome: 'Nat. Operação', ini: 28, fim: 30, tamanho: 2, tipo: 'N', obrigatorio: false, cor: '#e1bee7', descricao: 'Natureza Operação - Anexo 2 SRC3040' },
+    { nome: 'Origem Recurso', ini: 30, fim: 34, tamanho: 4, tipo: 'N', obrigatorio: false, cor: '#d1c4e9', descricao: 'Origem Recurso - Anexo 4 SRC3040 (4 pos)' },
+    { nome: 'Classe Risco', ini: 34, fim: 36, tamanho: 2, tipo: 'A', obrigatorio: false, cor: '#ffcc80', descricao: 'Classe Risco Operação - Anexo 17 SRC3040' },
+    { nome: 'Zeros', ini: 36, fim: 37, tamanho: 1, tipo: 'N', obrigatorio: false, cor: '#f5f5f5', descricao: 'Zeros (1 pos)' },
+    { nome: 'Nº Controle', ini: 37, fim: 62, tamanho: 25, tipo: 'A', obrigatorio: true, cor: '#b3e5fc', descricao: 'Nº Controle Participante - Ident. título (25 pos)' },
+    { nome: 'Nº Banco', ini: 62, fim: 65, tamanho: 3, tipo: 'N', obrigatorio: true, cor: '#81d4fa', descricao: 'Número Banco (obrig. se Espécie=Cheque, senão 000)' },
+    { nome: 'Zeros', ini: 65, fim: 70, tamanho: 5, tipo: 'N', obrigatorio: true, cor: '#f5f5f5', descricao: 'Zeros (5 pos)' },
+    { nome: 'Ident. Título', ini: 70, fim: 81, tamanho: 11, tipo: 'N', obrigatorio: false, cor: '#ffccbc', descricao: 'Identificação Título no Banco - Branco (11 pos)' },
+    { nome: 'Dígito N/N', ini: 81, fim: 82, tamanho: 1, tipo: 'A', obrigatorio: false, cor: '#ffab91', descricao: 'Dígito Nosso Número - Branco' },
+    { nome: 'Valor Pago', ini: 82, fim: 92, tamanho: 10, tipo: 'N', obrigatorio: false, cor: '#4db6ac', descricao: 'Valor pago na liquidação/baixa (10 pos, 2 dec)' },
+    { nome: 'Cond. Papeleta', ini: 92, fim: 93, tamanho: 1, tipo: 'N', obrigatorio: false, cor: '#f5f5f5', descricao: 'Condição Emissão Papeleta - Branco' },
+    { nome: 'Ident. Papeleta', ini: 93, fim: 94, tamanho: 1, tipo: 'A', obrigatorio: false, cor: '#f5f5f5', descricao: 'Se emite papeleta Débito Auto - Branco' },
+    { nome: 'Data Liquidação', ini: 94, fim: 100, tamanho: 6, tipo: 'N', obrigatorio: false, formato: 'DDMMAA', cor: '#fff59d', descricao: 'Data Liquidação - DDMMAA (somente p/ liquidação)' },
+    { nome: 'Ident. Operação', ini: 100, fim: 104, tamanho: 4, tipo: 'A', obrigatorio: false, cor: '#f5f5f5', descricao: 'Identificação Operação Banco - Branco (4 pos)' },
+    { nome: 'Indic. Rateio', ini: 104, fim: 105, tamanho: 1, tipo: 'A', obrigatorio: false, cor: '#c8e6c9', descricao: 'Indicador Rateio Crédito - Branco' },
+    { nome: 'Endereço Aviso', ini: 105, fim: 106, tamanho: 1, tipo: 'N', obrigatorio: false, cor: '#f5f5f5', descricao: 'Endereçamento Aviso Débito - Branco' },
+    { nome: 'Branco', ini: 106, fim: 108, tamanho: 2, tipo: 'A', obrigatorio: false, cor: '#f5f5f5', descricao: 'Branco (2 pos)' },
+    { nome: 'Cód. Ocorrência', ini: 108, fim: 110, tamanho: 2, tipo: 'N', obrigatorio: true, cor: '#80deea', descricao: 'Identificação Ocorrência (01,04,06,14,71-77,80,81,84,87)' },
+    { nome: 'Nº Documento', ini: 110, fim: 120, tamanho: 10, tipo: 'A', obrigatorio: true, cor: '#c5e1a5', descricao: 'Número do Documento (10 pos)' },
+    { nome: 'Vencimento', ini: 120, fim: 126, tamanho: 6, tipo: 'N', obrigatorio: true, formato: 'DDMMAA', cor: '#fff9c4', descricao: 'Data Vencimento Título - DDMMAA' },
+    { nome: 'Valor Título', ini: 126, fim: 139, tamanho: 13, tipo: 'N', obrigatorio: true, cor: '#ef9a9a', descricao: 'Valor do Título (13 pos, 2 dec) - sem ponto/vírgula' },
+    { nome: 'Banco Cobrança', ini: 139, fim: 142, tamanho: 3, tipo: 'N', obrigatorio: false, cor: '#b3e5fc', descricao: 'Banco Encarregado Cobrança - ou 000 (3 pos)' },
+    { nome: 'Ag. Depositária', ini: 142, fim: 147, tamanho: 5, tipo: 'N', obrigatorio: false, cor: '#81d4fa', descricao: 'Agência Depositária - ou 00000 (5 pos)' },
+    { nome: 'Espécie Título', ini: 147, fim: 149, tamanho: 2, tipo: 'N', obrigatorio: true, valores: ['01', '02', '51'], cor: '#bcaaa4', descricao: '01=Duplicata, 02=NP, 51=Cheque',
+      lookup: [
+        { codigo: '01', descricao: 'Duplicata Mercantil' },
+        { codigo: '02', descricao: 'Nota Promissória' },
+        { codigo: '51', descricao: 'Cheque' },
+      ]
+    },
+    { nome: 'Identificação', ini: 149, fim: 150, tamanho: 1, tipo: 'A', obrigatorio: false, cor: '#f5f5f5', descricao: 'Identificação - Branco' },
+    { nome: 'Data Emissão', ini: 150, fim: 156, tamanho: 6, tipo: 'N', obrigatorio: true, formato: 'DDMMAA', cor: '#b2ebf2', descricao: 'Data Emissão Título - DDMMAA' },
+    { nome: '1ª Instrução', ini: 156, fim: 158, tamanho: 2, tipo: 'N', obrigatorio: false, valores: ['00'], cor: '#b0bec5', descricao: '1ª Instrução - 00 (2 pos)' },
+    { nome: '2ª Instrução', ini: 158, fim: 159, tamanho: 1, tipo: 'N', obrigatorio: false, valores: ['0'], cor: '#90a4ae', descricao: '2ª Instrução - 0 (1 pos)' },
+    { nome: 'Insc. Est. Sacado', ini: 159, fim: 173, tamanho: 14, tipo: 'A', obrigatorio: false, cor: '#ffab91', descricao: 'Inscrição Estadual Sacado (14 pos) - Obrig. p/ Duplicata' },
+    { nome: 'Nº Termo Cessão', ini: 173, fim: 192, tamanho: 19, tipo: 'A', obrigatorio: false, cor: '#ff8a65', descricao: 'Número Termo Cessão (19 pos) - Obrig. p/ Duplicata' },
+    { nome: 'Valor Presente', ini: 192, fim: 205, tamanho: 13, tipo: 'N', obrigatorio: true, cor: '#80cbc4', descricao: 'Valor Presente Parcela (13 pos, 2 dec)' },
+    { nome: 'Valor Abatimento', ini: 205, fim: 218, tamanho: 13, tipo: 'N', obrigatorio: false, cor: '#4db6ac', descricao: 'Valor Abatimento (13 pos, 2 dec)' },
+    { nome: 'Tipo Insc. Sacado', ini: 218, fim: 220, tamanho: 2, tipo: 'N', obrigatorio: true, valores: ['01', '02'], cor: '#e0f7fa', descricao: '01=CPF, 02=CNPJ',
+      lookup: [
+        { codigo: '01', descricao: 'CPF (Pessoa Física)' },
+        { codigo: '02', descricao: 'CNPJ (Pessoa Jurídica)' },
+      ]
+    },
+    { nome: 'CPF/CNPJ Sacado', ini: 220, fim: 234, tamanho: 14, tipo: 'N', obrigatorio: true, cor: '#90caf9', descricao: 'Nº Inscrição Sacado (14 pos) - alinhado à direita' },
+    { nome: 'Nome Sacado', ini: 234, fim: 274, tamanho: 40, tipo: 'A', obrigatorio: true, cor: '#ffcc80', descricao: 'Nome do Sacado (40 pos)' },
+    { nome: 'Endereço Sacado', ini: 274, fim: 314, tamanho: 40, tipo: 'A', obrigatorio: true, cor: '#ffe0b2', descricao: 'Endereço Completo Sacado (40 pos)' },
+    { nome: 'Nº NF Duplicata', ini: 314, fim: 323, tamanho: 9, tipo: 'A', obrigatorio: false, cor: '#ce93d8', descricao: 'Número NF Duplicata (9 pos) - Obrig. p/ Duplicata' },
+    { nome: 'Série NF', ini: 323, fim: 326, tamanho: 3, tipo: 'A', obrigatorio: false, cor: '#ba68c8', descricao: 'Número Série NF Duplicata (3 pos) - Obrig. p/ Duplicata' },
+    { nome: 'CEP', ini: 326, fim: 334, tamanho: 8, tipo: 'N', obrigatorio: true, cor: '#c8e6c9', descricao: 'CEP do Sacado (8 pos)' },
+    { nome: 'Nome Cedente', ini: 334, fim: 380, tamanho: 46, tipo: 'A', obrigatorio: true, cor: '#aed581', descricao: 'Nome do Cedente (46 pos) - 335 a 380' },
+    { nome: 'CNPJ Cedente', ini: 380, fim: 394, tamanho: 14, tipo: 'N', obrigatorio: true, cor: '#81c784', descricao: 'CNPJ do Cedente (14 pos) - 381 a 394' },
+    { nome: 'Seq. Registro', ini: 394, fim: 400, tamanho: 6, tipo: 'N', obrigatorio: true, cor: '#b2ebf2', descricao: 'Número Sequencial Registro' },
+  ];
+
+  // ========================================
+  // LAYOUT TRAILER (TIPO 9) - CONFORME DOCUMENTAÇÃO OFICIAL
+  // ========================================
+  camposTrailer: CampoLayout[] = [
+    { nome: 'Tipo Registro', ini: 0, fim: 1, tamanho: 1, tipo: 'N', obrigatorio: true, valores: ['9'], cor: '#f8bbd0', descricao: 'Identificação Registro Trailer (9)' },
+    { nome: 'Branco', ini: 1, fim: 394, tamanho: 393, tipo: 'A', obrigatorio: false, cor: '#f5f5f5', descricao: 'Branco (393 pos)' },
+    { nome: 'Seq. Registro', ini: 394, fim: 400, tamanho: 6, tipo: 'N', obrigatorio: true, cor: '#b2ebf2', descricao: 'Número Sequencial Último Registro' },
+  ];
+
+  // ========================================
+  // CÓDIGOS DE OCORRÊNCIA
+  // ========================================
+  codigosOcorrencia = [
+    { codigo: '01', descricao: 'Remessa — Entrada de título' },
+    { codigo: '04', descricao: 'Abatimento — mediante justificativa' },
+    { codigo: '06', descricao: 'Alteração de Vencimento' },
+    { codigo: '14', descricao: 'Pagamento Parcial' },
+    { codigo: '71', descricao: 'Baixa por Recompra Paulista (liq. consultoria)' },
+    { codigo: '72', descricao: 'Recompra Parcial sem Adiantamento' },
+    { codigo: '73', descricao: 'Recompra Parcial com Adiantamento' },
+    { codigo: '74', descricao: 'Baixa por Recompra (liq. cedente)' },
+    { codigo: '75', descricao: 'Baixa por Depósito Cedente' },
+    { codigo: '76', descricao: 'Baixa por Depósito Consultoria' },
+    { codigo: '77', descricao: 'Baixa por Depósito Sacado' },
+    { codigo: '80', descricao: 'Remessa Paulista (liq. consultoria)' },
+    { codigo: '81', descricao: 'Entrada por Recompra — troca de títulos' },
+    { codigo: '84', descricao: 'Entrada por Recompra (liq. cedente)' },
+    { codigo: '87', descricao: 'Reativação' },
+  ];
+
+  get campoEhOcorrencia(): boolean {
+    const nome = this.campoAtivo?.nome?.toLowerCase() ?? '';
+    return nome.includes('ocorrência') || nome.includes('ocorrencia') || nome.includes('ocorr');
+  }
+
+  get descricaoOcorrencia(): string {
+    const item = this.codigosOcorrencia.find(o => o.codigo === this.valorCampoAtivo.trim());
+    return item?.descricao ?? '';
+  }
+
+  selecionarOcorrencia(codigo: string): void {
+    this.valorCampoAtivo = codigo;
+  }
+
+  get campoTemLookup(): boolean {
+    return !!this.campoAtivo?.lookup?.length && !this.campoEhOcorrencia;
+  }
+
+  get descricaoLookupAtual(): string {
+    if (!this.campoAtivo?.lookup) return '';
+    return this.campoAtivo.lookup.find(l => l.codigo === this.valorCampoAtivo.trim())?.descricao ?? '';
+  }
+
+  get lookupAtivo(): LookupItem[] {
+    return this.campoAtivo?.lookup ?? [];
+  }
+
+  selecionarLookupItem(codigo: string): void {
+    this.valorCampoAtivo = codigo;
+  }
+
+  private campoClass(nome: string): string {
+    return 'cmp-' + nome
+      .toLowerCase()
+      .replace(/[áàãâä]/g, 'a').replace(/[éèêë]/g, 'e')
+      .replace(/[íìîï]/g, 'i').replace(/[óòõôö]/g, 'o')
+      .replace(/[úùûü]/g, 'u').replace(/ç/g, 'c').replace(/ñ/g, 'n')
+      .replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')
+      .substring(0, 50);
+  }
 
   getErrosPorSeveridade(severidade: 'erro' | 'aviso'): Erro[] {
     return this.erros.filter(e => e.severidade === severidade);
@@ -146,95 +260,69 @@ export class PaulistaCnab400ValidadorComponent {
 
   selecionarCampo(nomeCampo: string): void {
     this.campoSelecionado = this.campoSelecionado === nomeCampo ? null : nomeCampo;
-    if (this.conteudoArquivo) {
-      const html = this.renderizarArquivo(this.conteudoArquivo);
-      this.visualHtml = this.sanitizer.bypassSecurityTrustHtml(html);
-    }
+
+    this._hlStyle?.remove();
+    this._hlStyle = null;
+
+    if (!this.campoSelecionado) return;
+
+    const cls = this.campoClass(this.campoSelecionado);
+    this._hlStyle = document.createElement('style');
+    this._hlStyle.textContent = `
+      .cnab-mw .cnab-mc { opacity: 0.18 !important; }
+      .cnab-mw .cnab-mc.${cls} { opacity: 1 !important; outline: 2px solid #1565c0 !important; outline-offset: -1px; }
+    `;
+    document.head.appendChild(this._hlStyle);
   }
 
-  // ========================================
-  // LAYOUT HEADER (TIPO 0) - CONFORME DOCUMENTAÇÃO OFICIAL
-  // ========================================
-  camposHeader: CampoLayout[] = [
-    { nome: 'Tipo Registro', ini: 0, fim: 1, tipo: 'N', obrigatorio: true, valores: ['0'], cor: '#f8bbd0', descricao: 'Identificação do Registro (0)' },
-    { nome: 'Ident. Arquivo', ini: 1, fim: 2, tipo: 'N', obrigatorio: true, valores: ['1'], cor: '#ffe082', descricao: 'Identificação Arquivo Remessa (1)' },
-    { nome: 'Literal Remessa', ini: 2, fim: 9, tipo: 'A', obrigatorio: true, valores: ['REMESSA'], cor: '#b2dfdb', descricao: 'Literal REMESSA (7 pos)' },
-    { nome: 'Cód. Serviço', ini: 9, fim: 11, tipo: 'N', obrigatorio: true, valores: ['01'], cor: '#c5cae9', descricao: 'Código Serviço - 01=Cobrança' },
-    { nome: 'Literal Serviço', ini: 11, fim: 26, tipo: 'A', obrigatorio: true, valores: ['COBRANCA'], cor: '#e1bee7', descricao: 'Literal COBRANCA (15 pos)' },
-    { nome: 'Cód. Originador', ini: 26, fim: 46, tipo: 'N', obrigatorio: true, cor: '#b3e5fc', descricao: 'Código Originador fornecido pelo banco (20 pos)' },
-    { nome: 'Nome Originador', ini: 46, fim: 76, tipo: 'A', obrigatorio: true, cor: '#ffecb3', descricao: 'Razão Social do Originador (30 pos)' },
-    { nome: 'Nº Banco', ini: 76, fim: 79, tipo: 'N', obrigatorio: true, valores: ['611'], cor: '#ffccbc', descricao: 'Número Banco Paulista - 611' },
-    { nome: 'Nome Banco', ini: 79, fim: 94, tipo: 'A', obrigatorio: true, valores: ['PAULISTA S.A.'], cor: '#dcedc8', descricao: 'Nome do Banco (15 pos)' },
-    { nome: 'Data Gravação', ini: 94, fim: 100, tipo: 'N', obrigatorio: true, formato: 'DDMMAA', cor: '#fff9c4', descricao: 'Data da Gravação - DDMMAA' },
-    { nome: 'Branco', ini: 100, fim: 108, tipo: 'A', obrigatorio: true, cor: '#f5f5f5', descricao: 'Branco (8 pos)' },
-    { nome: 'Ident. Sistema', ini: 108, fim: 110, tipo: 'A', obrigatorio: true, valores: ['MX'], cor: '#b2ebf2', descricao: 'Identificação Sistema - MX' },
-    { nome: 'Nº Seq. Arquivo', ini: 110, fim: 117, tipo: 'N', obrigatorio: true, cor: '#ffcdd2', descricao: 'Número Sequencial Arquivo (7 pos)' },
-    { nome: 'Branco', ini: 117, fim: 394, tipo: 'A', obrigatorio: true, cor: '#f5f5f5', descricao: 'Branco (277 pos)' },
-    { nome: 'Seq. Registro', ini: 394, fim: 400, tipo: 'N', obrigatorio: true, valores: ['000001'], cor: '#b2ebf2', descricao: 'Sequencial Registro - 000001' },
-  ];
+  fecharEditor(): void {
+    this.campoAtivo = null;
+    this.editorPos = null;
+    this.statusBar = '';
+    this._hlStyle?.remove();
+    this._hlStyle = null;
+    this.campoSelecionado = null;
+  }
 
-  // ========================================
-  // LAYOUT DETALHE (TIPO 1) - CONFORME DOCUMENTAÇÃO OFICIAL
-  // TODOS OS 46 CAMPOS MAPEADOS CORRETAMENTE
-  // ========================================
-  camposDetalhe: CampoLayout[] = [
-    { nome: 'Tipo Registro', ini: 0, fim: 1, tipo: 'N', obrigatorio: true, valores: ['1'], cor: '#f8bbd0', descricao: 'Identificação Registro (1)' },
-    { nome: 'Déb. Auto C/C', ini: 1, fim: 20, tipo: 'A', obrigatorio: false, cor: '#f5f5f5', descricao: 'Débito Automático C/C - Branco (19 pos)' },
-    { nome: 'Coobrigação', ini: 20, fim: 22, tipo: 'N', obrigatorio: false, valores: ['01', '02'], cor: '#ffe082', descricao: '01=Com, 02=Sem Coobrigação' },
-    { nome: 'Caract. Especial', ini: 22, fim: 24, tipo: 'N', obrigatorio: false, cor: '#fff9c4', descricao: 'Característica Especial - Anexo 8 SRC3040' },
-    { nome: 'Modal. Operação', ini: 24, fim: 28, tipo: 'N', obrigatorio: false, cor: '#c5cae9', descricao: 'Modalidade Operação - Anexo 3 SRC3040 (4 pos)' },
-    { nome: 'Nat. Operação', ini: 28, fim: 30, tipo: 'N', obrigatorio: false, cor: '#e1bee7', descricao: 'Natureza Operação - Anexo 2 SRC3040' },
-    { nome: 'Origem Recurso', ini: 30, fim: 34, tipo: 'N', obrigatorio: false, cor: '#d1c4e9', descricao: 'Origem Recurso - Anexo 4 SRC3040 (4 pos)' },
-    { nome: 'Classe Risco', ini: 34, fim: 36, tipo: 'A', obrigatorio: false, cor: '#ffcc80', descricao: 'Classe Risco Operação - Anexo 17 SRC3040' },
-    { nome: 'Zeros', ini: 36, fim: 37, tipo: 'N', obrigatorio: false, cor: '#f5f5f5', descricao: 'Zeros (1 pos)' },
-    { nome: 'Nº Controle', ini: 37, fim: 62, tipo: 'A', obrigatorio: true, cor: '#b3e5fc', descricao: 'Nº Controle Participante - Ident. título (25 pos)' },
-    { nome: 'Nº Banco', ini: 62, fim: 65, tipo: 'N', obrigatorio: true, cor: '#81d4fa', descricao: 'Número Banco (obrig. se Espécie=Cheque, senão 000)' },
-    { nome: 'Zeros', ini: 65, fim: 70, tipo: 'N', obrigatorio: true, cor: '#f5f5f5', descricao: 'Zeros (5 pos)' },
-    { nome: 'Ident. Título', ini: 70, fim: 81, tipo: 'N', obrigatorio: false, cor: '#ffccbc', descricao: 'Identificação Título no Banco - Branco (11 pos)' },
-    { nome: 'Dígito N/N', ini: 81, fim: 82, tipo: 'A', obrigatorio: false, cor: '#ffab91', descricao: 'Dígito Nosso Número - Branco' },
-    { nome: 'Valor Pago', ini: 82, fim: 92, tipo: 'N', obrigatorio: false, cor: '#4db6ac', descricao: 'Valor pago na liquidação/baixa (10 pos, 2 dec)' },
-    { nome: 'Cond. Papeleta', ini: 92, fim: 93, tipo: 'N', obrigatorio: false, cor: '#f5f5f5', descricao: 'Condição Emissão Papeleta - Branco' },
-    { nome: 'Ident. Papeleta', ini: 93, fim: 94, tipo: 'A', obrigatorio: false, cor: '#f5f5f5', descricao: 'Se emite papeleta Débito Auto - Branco' },
-    { nome: 'Data Liquidação', ini: 94, fim: 100, tipo: 'N', obrigatorio: true, formato: 'DDMMAA', cor: '#fff59d', descricao: 'Data Liquidação - DDMMAA (somente p/ liquidação)' },
-    { nome: 'Ident. Operação', ini: 100, fim: 104, tipo: 'A', obrigatorio: false, cor: '#f5f5f5', descricao: 'Identificação Operação Banco - Branco (4 pos)' },
-    { nome: 'Indic. Rateio', ini: 104, fim: 105, tipo: 'A', obrigatorio: false, cor: '#c8e6c9', descricao: 'Indicador Rateio Crédito - Branco' },
-    { nome: 'Endereço Aviso', ini: 105, fim: 106, tipo: 'N', obrigatorio: false, cor: '#f5f5f5', descricao: 'Endereçamento Aviso Débito - Branco' },
-    { nome: 'Branco', ini: 106, fim: 108, tipo: 'A', obrigatorio: false, cor: '#f5f5f5', descricao: 'Branco (2 pos)' },
-    { nome: 'Cód. Ocorrência', ini: 108, fim: 110, tipo: 'N', obrigatorio: true, cor: '#80deea', descricao: 'Identificação Ocorrência (01,04,06,14,71-77,80,81,84,87)' },
-    { nome: 'Nº Documento', ini: 110, fim: 120, tipo: 'A', obrigatorio: true, cor: '#c5e1a5', descricao: 'Número do Documento (10 pos)' },
-    { nome: 'Vencimento', ini: 120, fim: 126, tipo: 'N', obrigatorio: true, formato: 'DDMMAA', cor: '#fff9c4', descricao: 'Data Vencimento Título - DDMMAA' },
-    { nome: 'Valor Título', ini: 126, fim: 139, tipo: 'N', obrigatorio: true, cor: '#ef9a9a', descricao: 'Valor do Título (13 pos, 2 dec) - sem ponto/vírgula' },
-    { nome: 'Banco Cobrança', ini: 139, fim: 142, tipo: 'N', obrigatorio: false, cor: '#b3e5fc', descricao: 'Banco Encarregado Cobrança - ou 000 (3 pos)' },
-    { nome: 'Ag. Depositária', ini: 142, fim: 147, tipo: 'N', obrigatorio: false, cor: '#81d4fa', descricao: 'Agência Depositária - ou 00000 (5 pos)' },
-    { nome: 'Espécie Título', ini: 147, fim: 149, tipo: 'N', obrigatorio: true, valores: ['01', '02', '51'], cor: '#bcaaa4', descricao: '01=Duplicata, 02=NP, 51=Cheque' },
-    { nome: 'Identificação', ini: 149, fim: 150, tipo: 'A', obrigatorio: false, cor: '#f5f5f5', descricao: 'Identificação - Branco' },
-    { nome: 'Data Emissão', ini: 150, fim: 156, tipo: 'N', obrigatorio: true, formato: 'DDMMAA', cor: '#b2ebf2', descricao: 'Data Emissão Título - DDMMAA' },
-    { nome: '1ª Instrução', ini: 156, fim: 158, tipo: 'N', obrigatorio: false, valores: ['00'], cor: '#b0bec5', descricao: '1ª Instrução - 00 (2 pos)' },
-    { nome: '2ª Instrução', ini: 158, fim: 159, tipo: 'N', obrigatorio: false, valores: ['0'], cor: '#90a4ae', descricao: '2ª Instrução - 0 (1 pos)' },
-    { nome: 'Insc. Est. Sacado', ini: 159, fim: 173, tipo: 'A', obrigatorio: false, cor: '#ffab91', descricao: 'Inscrição Estadual Sacado (14 pos) - Obrig. p/ Duplicata' },
-    { nome: 'Nº Termo Cessão', ini: 173, fim: 192, tipo: 'A', obrigatorio: false, cor: '#ff8a65', descricao: 'Número Termo Cessão (19 pos) - Obrig. p/ Duplicata' },
-    { nome: 'Valor Presente', ini: 192, fim: 205, tipo: 'N', obrigatorio: true, cor: '#80cbc4', descricao: 'Valor Presente Parcela (13 pos, 2 dec)' },
-    { nome: 'Valor Abatimento', ini: 205, fim: 218, tipo: 'N', obrigatorio: false, cor: '#4db6ac', descricao: 'Valor Abatimento (13 pos, 2 dec)' },
-    { nome: 'Tipo Insc. Sacado', ini: 218, fim: 220, tipo: 'N', obrigatorio: true, valores: ['01', '02'], cor: '#e0f7fa', descricao: '01=CPF, 02=CNPJ' },
-    { nome: 'CPF/CNPJ Sacado', ini: 220, fim: 234, tipo: 'N', obrigatorio: true, cor: '#90caf9', descricao: 'Nº Inscrição Sacado (14 pos) - alinhado à direita' },
-    { nome: 'Nome Sacado', ini: 234, fim: 274, tipo: 'A', obrigatorio: true, cor: '#ffcc80', descricao: 'Nome do Sacado (40 pos)' },
-    { nome: 'Endereço Sacado', ini: 274, fim: 314, tipo: 'A', obrigatorio: true, cor: '#ffe0b2', descricao: 'Endereço Completo Sacado (40 pos)' },
-    { nome: 'Nº NF Duplicata', ini: 314, fim: 323, tipo: 'A', obrigatorio: false, cor: '#ce93d8', descricao: 'Número NF Duplicata (9 pos) - Obrig. p/ Duplicata' },
-    { nome: 'Série NF', ini: 323, fim: 326, tipo: 'A', obrigatorio: false, cor: '#ba68c8', descricao: 'Número Série NF Duplicata (3 pos) - Obrig. p/ Duplicata' },
-    { nome: 'CEP', ini: 326, fim: 334, tipo: 'N', obrigatorio: true, cor: '#c8e6c9', descricao: 'CEP do Sacado (8 pos)' },
-    { nome: 'Nome Cedente', ini: 334, fim: 380, tipo: 'A', obrigatorio: true, cor: '#aed581', descricao: 'Nome do Cedente (46 pos) - 335 a 380' },
-    { nome: 'CNPJ Cedente', ini: 380, fim: 394, tipo: 'N', obrigatorio: true, cor: '#81c784', descricao: 'CNPJ do Cedente (14 pos) - 381 a 394' },
-    { nome: 'Seq. Registro', ini: 394, fim: 400, tipo: 'N', obrigatorio: true, cor: '#b2ebf2', descricao: 'Número Sequencial Registro' },
-  ];
+  editarErro(erro: Erro, event?: MouseEvent): void {
+    const li = erro.linha - 1;
+    if (li < 0 || li >= this.linhasEditadas.length) return;
+    const campos = this.camposParaLinha(li);
+    const campo = campos.find(c => c.nome === erro.campo) ?? null;
+    const clickEl = event?.currentTarget as HTMLElement;
+    const rect = clickEl?.getBoundingClientRect();
+    const editorW = 420;
+    const top = rect ? rect.bottom + 6 + window.scrollY : window.scrollY + 200;
+    const left = rect ? Math.max(8, Math.min(rect.left, window.innerWidth - editorW - 12)) : 100;
+    this.editorPos = { top, left };
+    this.editorCarregando = true;
+    this.aplicadoFeedback = false;
+    requestAnimationFrame(() => {
+      this.linhaAtiva = li;
+      this.campoAtivo = campo;
+      this.editorCarregando = false;
+      if (campo) {
+        this.valorCampoAtivo = this.linhasEditadas[li].substring(campo.ini, campo.fim);
+        this.statusBar = `Ln ${li + 1}    Col ${campo.ini + 1}    |    ${campo.nome}    [${campo.ini + 1}–${campo.fim}]    Tipo: ${campo.tipo}    Tam: ${campo.tamanho}`;
+        setTimeout(() => this.selecionarCampo(campo.nome), 0);
+      } else {
+        this.valorCampoAtivo = '';
+        this.statusBar = `Ln ${li + 1}    |    (campo não mapeado)`;
+      }
+      setTimeout(() => {
+        const cell = document.querySelector(`[data-li="${li}"]`);
+        if (cell) cell.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 50);
+    });
+  }
 
-  // ========================================
-  // LAYOUT TRAILER (TIPO 9) - CONFORME DOCUMENTAÇÃO OFICIAL
-  // ========================================
-  camposTrailer: CampoLayout[] = [
-    { nome: 'Tipo Registro', ini: 0, fim: 1, tipo: 'N', obrigatorio: true, valores: ['9'], cor: '#f8bbd0', descricao: 'Identificação Registro Trailer (9)' },
-    { nome: 'Branco', ini: 1, fim: 394, tipo: 'A', obrigatorio: true, cor: '#f5f5f5', descricao: 'Branco (393 pos)' },
-    { nome: 'Seq. Registro', ini: 394, fim: 400, tipo: 'N', obrigatorio: true, cor: '#b2ebf2', descricao: 'Número Sequencial Último Registro' },
-  ];
+  private camposParaLinha(li: number): CampoLayout[] {
+    const tipo = this.linhasEditadas[li]?.[0];
+    if (tipo === '0') return this.camposHeader;
+    if (tipo === '1') return this.camposDetalhe;
+    if (tipo === '9') return this.camposTrailer;
+    return [];
+  }
 
   onFileChange(event: Event) {
     this.error = null;
@@ -244,6 +332,11 @@ export class PaulistaCnab400ValidadorComponent {
     this.campoSelecionado = null;
     this.conteudoArquivo = '';
     this.estatisticas = null;
+    this.statusBar = '';
+    this.campoAtivo = null;
+    this.linhaAtiva = -1;
+    this.editorPos = null;
+    this.totaisPaulista = null;
 
     const input = event.target as HTMLInputElement;
     if (!input.files || input.files.length === 0) return;
@@ -255,9 +348,10 @@ export class PaulistaCnab400ValidadorComponent {
       try {
         const content = reader.result as string;
         this.conteudoArquivo = content;
-        const html = this.validarEHighlight(content);
-        this.visualHtml = this.sanitizer.bypassSecurityTrustHtml(html);
-        this.validado = true;
+        this.linhasEditadas = content.split(/\r?\n/).filter(l => l.length > 0);
+        this.linhasOriginais = [...this.linhasEditadas];
+        this.totalEdicoes = 0;
+        this.rerenderizar();
       } catch (e) {
         this.error = 'Erro ao processar o arquivo. Verifique se é um arquivo CNAB 400 válido.';
         console.error(e);
@@ -269,6 +363,133 @@ export class PaulistaCnab400ValidadorComponent {
     };
 
     reader.readAsText(file, 'ISO-8859-1');
+  }
+
+  rerenderizar(): void {
+    this.erros = [];
+    this.estatisticas = null;
+    const content = this.linhasEditadas.join('\r\n');
+    const html = this.validarEHighlight(content);
+    this.visualHtml = this.sanitizer.bypassSecurityTrustHtml(html);
+    this.validado = true;
+    this.calcularTotais();
+  }
+
+  calcularTotais(): void {
+    const detalhes = this.linhasEditadas.filter(l => l[0] === '1');
+    if (detalhes.length === 0) { this.totaisPaulista = null; return; }
+
+    let valorTotalTitulos = 0;
+    let valorTotalPresente = 0;
+    let valorTotalAbatimento = 0;
+    let ocorrencia01 = 0, ocorrencia04 = 0, ocorrencia06 = 0;
+    let duplicatas = 0, notasPromissorias = 0, cheques = 0;
+
+    for (const l of detalhes) {
+      valorTotalTitulos   += parseInt(l.substring(126, 139) || '0', 10);
+      valorTotalPresente  += parseInt(l.substring(192, 205) || '0', 10);
+      valorTotalAbatimento += parseInt(l.substring(205, 218) || '0', 10);
+
+      const ocorr = l.substring(108, 110).trim();
+      if (ocorr === '01') ocorrencia01++;
+      if (ocorr === '04') ocorrencia04++;
+      if (ocorr === '06') ocorrencia06++;
+
+      const especie = l.substring(147, 149).trim();
+      if (especie === '01') duplicatas++;
+      if (especie === '02') notasPromissorias++;
+      if (especie === '51') cheques++;
+    }
+
+    this.totaisPaulista = {
+      totalDetalhes: detalhes.length,
+      valorTotalTitulos,
+      valorTotalPresente,
+      valorTotalAbatimento,
+      ocorrencia01,
+      ocorrencia04,
+      ocorrencia06,
+      duplicatas,
+      notasPromissorias,
+      cheques,
+    };
+  }
+
+  formatarReais(centavos: number): string {
+    return (centavos / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
+
+  onMatrizClick(event: MouseEvent): void {
+    const el = event.target as HTMLElement;
+    const liStr = el.dataset['li'];
+    const ciStr = el.dataset['ci'];
+    if (liStr === undefined || ciStr === undefined) return;
+
+    const li = parseInt(liStr);
+    const ci = parseInt(ciStr);
+
+    const rect = el.getBoundingClientRect();
+    const editorW = 420;
+    const left = Math.min(rect.left, window.innerWidth - editorW - 12);
+    this.editorPos = { top: rect.bottom + 6 + window.scrollY, left: Math.max(left, 8) };
+    this.editorCarregando = true;
+    this.aplicadoFeedback = false;
+
+    requestAnimationFrame(() => {
+      const campos = this.camposParaLinha(li);
+      const campo = campos.find(c => ci >= c.ini && ci < c.fim) ?? null;
+
+      this.linhaAtiva = li;
+      this.campoAtivo = campo;
+      this.editorCarregando = false;
+
+      if (campo) {
+        this.valorCampoAtivo = this.linhasEditadas[li].substring(campo.ini, campo.fim);
+        this.statusBar = `Ln ${li + 1}    Col ${ci + 1}    |    ${campo.nome}    [${campo.ini + 1}–${campo.fim}]    Tipo: ${campo.tipo}    Tam: ${campo.tamanho}`;
+        this.selecionarCampo(campo.nome);
+      } else {
+        this.valorCampoAtivo = '';
+        this.statusBar = `Ln ${li + 1}    Col ${ci + 1}    |    (campo não mapeado)`;
+      }
+    });
+  }
+
+  aplicarEdicao(): void {
+    if (!this.campoAtivo || this.linhaAtiva < 0) return;
+    const campo = this.campoAtivo;
+    const tam = campo.fim - campo.ini;
+    let val = this.valorCampoAtivo;
+    if (campo.tipo === 'N') {
+      val = val.replace(/\D/g, '').padStart(tam, '0').substring(0, tam);
+    } else {
+      val = val.padEnd(tam, ' ').substring(0, tam);
+    }
+    const linhaAntes = this.linhasEditadas[this.linhaAtiva];
+    const linhaDepois = linhaAntes.substring(0, campo.ini) + val + linhaAntes.substring(campo.fim);
+    if (linhaAntes !== linhaDepois) {
+      this.totalEdicoes++;
+    }
+    this.linhasEditadas[this.linhaAtiva] = linhaDepois;
+    this.valorCampoAtivo = val;
+    this.aplicadoFeedback = true;
+    setTimeout(() => { this.aplicadoFeedback = false; }, 1800);
+    this.rerenderizar();
+    setTimeout(() => { if (campo) this.selecionarCampo(campo.nome); }, 0);
+  }
+
+  gerarRemessa(): void {
+    const conteudo = this.linhasEditadas.join('\r\n');
+    const bytes = new Uint8Array(conteudo.length);
+    for (let i = 0; i < conteudo.length; i++) {
+      bytes[i] = conteudo.charCodeAt(i) & 0xff;
+    }
+    const blob = new Blob([bytes], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'remessa_paulista_editada.REM';
+    a.click();
+    URL.revokeObjectURL(url);
   }
 
   validarEHighlight(content: string): string {
@@ -319,7 +540,7 @@ export class PaulistaCnab400ValidadorComponent {
           });
       }
 
-      // Validação flexível: aceita 400 ou 444 caracteres
+      // Aceita 400 ou 444 caracteres (extensão Frontis)
       if (line.length !== 400 && line.length !== 444) {
         this.erros.push({
           linha: idx + 1,
@@ -336,7 +557,6 @@ export class PaulistaCnab400ValidadorComponent {
         this.validarCampo(idx + 1, campo, valor);
       }
 
-      // Validar sequência
       const seqCampo = campos.find(c => c.nome === 'Seq. Registro');
       if (seqCampo && line.length >= 400) {
         const valorSeq = line.slice(seqCampo.ini, seqCampo.fim).trim();
@@ -363,7 +583,7 @@ export class PaulistaCnab400ValidadorComponent {
       (campo, index, self) => self.findIndex(c => c.nome === campo.nome) === index
     );
 
-    return lines.map((line, idx) => this.lineToMatrix(line, idx)).join('');
+    return `<div class="cnab-mw">${lines.map((line, idx) => this.lineToMatrix(line, idx)).join('')}</div>`;
   }
 
   validarEstrutura(): void {
@@ -371,10 +591,7 @@ export class PaulistaCnab400ValidadorComponent {
 
     if (this.estatisticas.headers === 0) {
       this.erros.push({
-        linha: 0,
-        campo: 'Estrutura',
-        posicao: '-',
-        valor: '-',
+        linha: 0, campo: 'Estrutura', posicao: '-', valor: '-',
         mensagem: 'Arquivo deve conter pelo menos um registro Header (Tipo 0)',
         severidade: 'erro'
       });
@@ -382,10 +599,7 @@ export class PaulistaCnab400ValidadorComponent {
 
     if (this.estatisticas.trailers === 0) {
       this.erros.push({
-        linha: 0,
-        campo: 'Estrutura',
-        posicao: '-',
-        valor: '-',
+        linha: 0, campo: 'Estrutura', posicao: '-', valor: '-',
         mensagem: 'Arquivo deve conter pelo menos um registro Trailer (Tipo 9)',
         severidade: 'erro'
       });
@@ -393,10 +607,7 @@ export class PaulistaCnab400ValidadorComponent {
 
     if (this.estatisticas.detalhes === 0) {
       this.erros.push({
-        linha: 0,
-        campo: 'Estrutura',
-        posicao: '-',
-        valor: '-',
+        linha: 0, campo: 'Estrutura', posicao: '-', valor: '-',
         mensagem: 'Aviso: Arquivo não contém registros de Detalhe (Tipo 1)',
         severidade: 'aviso'
       });
@@ -404,19 +615,11 @@ export class PaulistaCnab400ValidadorComponent {
 
     if (this.estatisticas.headers > 1) {
       this.erros.push({
-        linha: 0,
-        campo: 'Estrutura',
-        posicao: '-',
-        valor: '-',
+        linha: 0, campo: 'Estrutura', posicao: '-', valor: '-',
         mensagem: `Aviso: Arquivo contém ${this.estatisticas.headers} Headers (normalmente 1)`,
         severidade: 'aviso'
       });
     }
-  }
-
-  renderizarArquivo(content: string): string {
-    const lines = content.split(/\r?\n/).filter(l => l.length > 0);
-    return lines.map((line, idx) => this.lineToMatrix(line, idx)).join('');
   }
 
   validarCampo(linha: number, campo: CampoLayout, valor: string): void {
@@ -424,10 +627,7 @@ export class PaulistaCnab400ValidadorComponent {
 
     if (campo.obrigatorio && valorTrim === '') {
       this.erros.push({
-        linha,
-        campo: campo.nome,
-        posicao: `${campo.ini + 1}-${campo.fim}`,
-        valor: valor,
+        linha, campo: campo.nome, posicao: `${campo.ini + 1}-${campo.fim}`, valor,
         mensagem: 'Campo obrigatório está vazio',
         severidade: 'erro'
       });
@@ -436,25 +636,18 @@ export class PaulistaCnab400ValidadorComponent {
 
     if (!campo.obrigatorio && valorTrim === '') return;
 
-    // Validação RIGOROSA: campos numéricos NÃO devem ter espaços
     if (campo.tipo === 'N' && valorTrim !== '') {
       if (valor.includes(' ')) {
         this.erros.push({
-          linha,
-          campo: campo.nome,
-          posicao: `${campo.ini + 1}-${campo.fim}`,
-          valor: valor,
-          mensagem: 'Campo numérico contém espaços. Deve ser preenchido com zeros à direita.',
+          linha, campo: campo.nome, posicao: `${campo.ini + 1}-${campo.fim}`, valor,
+          mensagem: 'Campo numérico contém espaços. Deve ser preenchido com zeros à esquerda.',
           severidade: 'erro'
         });
       }
 
       if (!/^\d+$/.test(valor)) {
         this.erros.push({
-          linha,
-          campo: campo.nome,
-          posicao: `${campo.ini + 1}-${campo.fim}`,
-          valor: valor,
+          linha, campo: campo.nome, posicao: `${campo.ini + 1}-${campo.fim}`, valor,
           mensagem: 'Deve conter apenas números (0-9)',
           severidade: 'erro'
         });
@@ -464,10 +657,7 @@ export class PaulistaCnab400ValidadorComponent {
     if (campo.valores && valorTrim !== '') {
       if (!campo.valores.includes(valorTrim)) {
         this.erros.push({
-          linha,
-          campo: campo.nome,
-          posicao: `${campo.ini + 1}-${campo.fim}`,
-          valor: valor,
+          linha, campo: campo.nome, posicao: `${campo.ini + 1}-${campo.fim}`, valor,
           mensagem: `Valor inválido. Valores permitidos: ${campo.valores.join(', ')}`,
           severidade: 'erro'
         });
@@ -481,10 +671,7 @@ export class PaulistaCnab400ValidadorComponent {
 
         if (dia < 1 || dia > 31) {
           this.erros.push({
-            linha,
-            campo: campo.nome,
-            posicao: `${campo.ini + 1}-${campo.fim}`,
-            valor: valor,
+            linha, campo: campo.nome, posicao: `${campo.ini + 1}-${campo.fim}`, valor,
             mensagem: `Dia inválido: ${dia} (deve estar entre 01 e 31)`,
             severidade: 'erro'
           });
@@ -492,10 +679,7 @@ export class PaulistaCnab400ValidadorComponent {
 
         if (mes < 1 || mes > 12) {
           this.erros.push({
-            linha,
-            campo: campo.nome,
-            posicao: `${campo.ini + 1}-${campo.fim}`,
-            valor: valor,
+            linha, campo: campo.nome, posicao: `${campo.ini + 1}-${campo.fim}`, valor,
             mensagem: `Mês inválido: ${mes} (deve estar entre 01 e 12)`,
             severidade: 'erro'
           });
@@ -532,62 +716,49 @@ export class PaulistaCnab400ValidadorComponent {
         tipoColor = '#d32f2f';
     }
 
-    let html = `<div style="margin-bottom:12px;padding:8px;background:#fafafa;border-radius:4px;">`;
-    html += `<div style="display:flex;align-items:center;margin-bottom:6px;gap:10px;">`;
-    html += `<span style="min-width:80px;font-size:12px;color:${tipoColor};font-weight:600;">Linha ${lineIdx+1}</span>`;
-    html += `<span style="padding:3px 10px;background:${tipoColor};color:#fff;border-radius:4px;font-size:11px;font-weight:600;">${tipoNome}</span>`;
+    const maxLen = Math.max(line.length, 400);
+    const renderLen = Math.min(maxLen, 444);
+
+    let html = `<div style="margin-bottom:12px;padding:8px;background:#fafafa;border-radius:4px;border:1px solid #e0e0e0;width:max-content;min-width:100%;">`;
+    html += `<div style="display:flex;align-items:center;margin-bottom:6px;gap:10px;flex-wrap:wrap;">`;
+    html += `<span style="min-width:80px;font-size:12px;font-weight:600;color:${tipoColor};">Linha ${lineIdx + 1}</span>`;
+    html += `<span style="padding:3px 10px;background:${tipoColor};color:#fff;border-radius:4px;font-size:11px;font-weight:600;text-transform:uppercase;">${tipoNome}</span>`;
     html += `<span style="padding:3px 8px;background:#757575;color:#fff;border-radius:4px;font-size:10px;font-weight:500;">${line.length} chars</span>`;
 
     const errosLinha = this.erros.filter(e => e.linha === lineIdx + 1 && e.severidade === 'erro');
     if (errosLinha.length > 0) {
-      html += `<span style="padding:3px 10px;background:#d32f2f;color:#fff;border-radius:4px;font-size:11px;margin-left:auto;">⚠️ ${errosLinha.length} erro(s)</span>`;
+      html += `<span style="padding:3px 10px;background:#d32f2f;color:#fff;border-radius:4px;font-size:11px;margin-left:auto;font-weight:600;">⚠️ ${errosLinha.length} erro(s)</span>`;
     }
 
     html += `</div>`;
-
-    // Container com fonte monoespaçada e sem wrap (sem overflow-x para evitar barra por linha)
     html += `<div style="font-family:'Courier New',Courier,monospace;font-size:11px;line-height:1;white-space:nowrap;background:#fff;padding:6px;border-radius:4px;border:1px solid #e0e0e0;">`;
 
-    // Renderizar 444 caracteres (suporta campos extras como Número da Nota Fiscal)
-    for (let i = 0; i < 444; i++) {
-      const char = i < line.length ? line[i] : ' ';
+    for (let i = 0; i < renderLen; i++) {
+      const currentLine = this.linhasEditadas[lineIdx] ?? line;
+      const char = i < currentLine.length ? currentLine[i] : ' ';
       const campo = campos.find(c => i >= c.ini && i < c.fim);
 
-      // Campos após posição 400 terão cor de extensão
-      let cor = '#f5f5f5';
-      let nomeCampo = 'N/D';
+      let cor: string;
+      let nomeCampo: string;
 
       if (campo) {
         cor = campo.cor;
         nomeCampo = campo.nome;
       } else if (i >= 400) {
-        cor = '#e8f5e9'; // Verde claro para campos de extensão
+        cor = '#e8f5e9'; // Verde claro — extensão Frontis
         nomeCampo = `Campo Extra (pos ${i + 1})`;
+      } else {
+        cor = '#f5f5f5';
+        nomeCampo = 'N/D';
       }
 
       const temErro = campo ? this.erros.some(e => e.linha === lineIdx + 1 && e.campo === campo.nome && e.severidade === 'erro') : false;
+      const bordaErro = temErro ? 'border:2px solid #d32f2f;' : 'border:1px solid rgba(0,0,0,0.08);';
 
-      // Estilo de borda
-      let bordaStyle = 'border:1px solid rgba(0,0,0,0.08);';
-      if (temErro) {
-        bordaStyle = 'border:2px solid #d32f2f;box-shadow:0 0 3px rgba(211,47,47,0.3);';
-      }
+      const cls = campo ? `cnab-mc ${this.campoClass(campo.nome)}` : 'cnab-mc';
+      const title = `${nomeCampo} - Pos ${i + 1}${campo?.descricao ? '\n' + campo.descricao : ''}`;
 
-      // Estilo de seleção
-      const estaSelecionado = this.campoSelecionado && campo && campo.nome === this.campoSelecionado;
-      let estiloDestaque = '';
-      let opacidade = '';
-
-      if (estaSelecionado) {
-        estiloDestaque = 'box-shadow:0 0 0 2px #1565c0;z-index:10;position:relative;transform:scale(1.15);';
-      } else if (this.campoSelecionado) {
-        opacidade = 'opacity:0.3;';
-      }
-
-      const title = `${nomeCampo} - Pos ${i+1}${campo?.descricao ? '\n' + campo.descricao : ''}`;
-
-      // Célula com largura fixa para alinhamento perfeito
-      html += `<span style="display:inline-block;width:13px;height:18px;line-height:18px;text-align:center;vertical-align:top;background:${cor};${bordaStyle}${estiloDestaque}${opacidade}cursor:default;user-select:none;" title="${this.escapeHtml(title)}">${char === ' ' ? '·' : this.escapeHtml(char)}</span>`;
+      html += `<span class="${cls}" data-li="${lineIdx}" data-ci="${i}" style="display:inline-block;width:13px;height:18px;line-height:18px;text-align:center;vertical-align:top;background:${cor};${bordaErro}font-size:11px;font-family:monospace;cursor:pointer;user-select:none;" title="${this.escapeHtml(title)}">${char === ' ' ? '&nbsp;' : this.escapeHtml(char)}</span>`;
     }
 
     html += '</div></div>';

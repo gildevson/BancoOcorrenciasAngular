@@ -11,7 +11,18 @@
       "PowerShell(git add src/app/pages/calculadora/calculadoraShell/calculadora.shell.ts)",
       "PowerShell(git add .github/workflows/deploy.yml src/app/pages/calculadora/)",
       "PowerShell(git push origin main)",
-      "PowerShell(git add .github/workflows/deploy.yml)"
+      "PowerShell(git add .github/workflows/deploy.yml)",
+      "PowerShell(cd \"C:\\\\Projetos\\\\BancoOcorrencias\\\\BancoOcorrenciasAngular\"; Start-Process powershell -ArgumentList \"-NoProfile -Command `\"cd 'C:\\\\Projetos\\\\BancoOcorrencias\\\\BancoOcorrenciasAngular'; npm start 2>&1 | Tee-Object -FilePath '$env:TEMP\\\\ng-serve.log'`\"\"; Start-Sleep -Seconds 20; Get-Content \"$env:TEMP\\\\ng-serve.log\" -ErrorAction SilentlyContinue)",
+      "PowerShell(python -c \"import pdfplumber; pdf = pdfplumber.open\\(r'C:\\\\Projetos\\\\BancoOcorrencias\\\\BancoOcorrenciasAngular\\\\src\\\\assets\\\\pdfs\\\\layouts\\\\mpo_arquivos_layout_400P.pdf'\\); print\\(f'Total p�ginas: {len\\(pdf.pages\\)}'\\); [print\\(f'--- P�G {i+1} ---\\\\n{p.extract_text\\(\\)}'\\) for i,p in enumerate\\(pdf.pages[:15]\\)]\" 2>&1)",
+      "PowerShell(Get-Command java -ErrorAction SilentlyContinue)",
+      "PowerShell(Get-Command node -ErrorAction SilentlyContinue)",
+      "Bash(Get-ChildItem \"C:\\\\Projetos\\\\BancoOcorrencias\\\\BancoOcorrenciasAngular\\\\src\\\\app\\\\pages\\\\validadores\\\\bradesco\")",
+      "Bash(Select-Object Name, Length, LastWriteTime)",
+      "Bash(npx ng *)",
+      "PowerShell(cd \"c:\\\\Projetos\\\\BancoOcorrencias\\\\BancoOcorrenciasAngular\"; Get-Process node -ErrorAction SilentlyContinue | Where-Object { $_.MainWindowTitle -eq \"\" } | Select-Object Id, CPU, WorkingSet)",
+      "PowerShell(Stop-Process -Id 23144 -Force -ErrorAction SilentlyContinue)",
+      "PowerShell(Stop-Process -Id 25900 -Force -ErrorAction SilentlyContinue)",
+      "PowerShell(cd \"c:\\\\Projetos\\\\BancoOcorrencias\\\\BancoOcorrenciasAngular\"; Start-Process powershell -ArgumentList \"-NoProfile -Command `\"cd 'c:\\\\Projetos\\\\BancoOcorrencias\\\\BancoOcorrenciasAngular'; ng serve --open 2>&1 | Tee-Object -FilePath 'C:\\\\Users\\\\gilso\\\\AppData\\\\Local\\\\Temp\\\\ngserve.log'`\"\" -WindowStyle Normal; Write-Host \"ng serve iniciado em nova janela\")"
     ],
     "additionalDirectories": [
       "c:\\CSharp\\ProjetosEstudos\\RemessaSeguraFullstack\\remessa-segura-portal\\.github"
