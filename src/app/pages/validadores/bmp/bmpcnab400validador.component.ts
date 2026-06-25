@@ -11,6 +11,7 @@ interface CampoLayout {
   tipo: 'A' | 'N';
   obrigatorio: boolean;
   valores?: string[];
+  valoresDescricao?: { [key: string]: string };
   formato?: string;
   cor: string;
   descricao?: string;
@@ -154,7 +155,7 @@ export class BmpCnab400ValidadorComponent implements OnDestroy {
     { nome: 'Identificação do Título no Banco (Nosso Número)', ini: 70, fim: 81, tamanho: 11, tipo: 'N', obrigatorio: true, cor: '#ffccbc', descricao: 'Nosso Número (11 pos)' },
     { nome: 'Dígito de Auto Conferência do Número Bancário', ini: 81, fim: 82, tamanho: 1, tipo: 'A', obrigatorio: false, cor: '#ffab91', descricao: 'Dígito N/N' },
     { nome: 'Desconto Bonificação por dia', ini: 82, fim: 92, tamanho: 10, tipo: 'N', obrigatorio: false, cor: '#a5d6a7', descricao: 'Valor desconto bonif./dia (10 pos)' },
-    { nome: 'Condição para Emissão da Papeleta de Cobrança', ini: 92, fim: 93, tamanho: 1, tipo: 'N', obrigatorio: false, valores: ['2'], cor: '#81c784', descricao: '2 = Cliente emite' },
+    { nome: 'Condição para Emissão da Papeleta de Cobrança', ini: 92, fim: 93, tamanho: 1, tipo: 'N', obrigatorio: false, valores: ['2'], valoresDescricao: { '1': 'Banco emite o boleto', '2': 'Cliente (cedente) emite o boleto', '4': 'Banco emite pré-datado' }, cor: '#81c784', descricao: '1=Banco emite · 2=Cliente emite · 4=Banco pré-datado' },
     { nome: 'Ident. se emite Boleto para Débito Automático', ini: 93, fim: 94, tamanho: 1, tipo: 'A', obrigatorio: false, valores: ['N'], cor: '#66bb6a', descricao: 'N = Não emite' },
     { nome: 'Identificação da Operação do Banco', ini: 94, fim: 104, tamanho: 10, tipo: 'A', obrigatorio: false, cor: '#f5f5f5', descricao: 'Brancos (10 pos)' },
     { nome: 'Indicador Rateio Crédito', ini: 104, fim: 105, tamanho: 1, tipo: 'A', obrigatorio: false, cor: '#c8e6c9', descricao: 'Branco (opcional)' },
@@ -166,7 +167,20 @@ export class BmpCnab400ValidadorComponent implements OnDestroy {
     { nome: 'Valor do Título', ini: 126, fim: 139, tamanho: 13, tipo: 'N', obrigatorio: true, cor: '#ef9a9a', descricao: 'Valor (13 pos, 2 dec)' },
     { nome: 'Banco Encarregado da Cobrança', ini: 139, fim: 142, tamanho: 3, tipo: 'N', obrigatorio: false, valores: ['000'], cor: '#b3e5fc', descricao: 'Banco = 000' },
     { nome: 'Agência Depositária', ini: 142, fim: 147, tamanho: 5, tipo: 'N', obrigatorio: false, valores: ['00000'], cor: '#81d4fa', descricao: 'Agência = 00000' },
-    { nome: 'Espécie de Título', ini: 147, fim: 149, tamanho: 2, tipo: 'N', obrigatorio: false, cor: '#bcaaa4', descricao: 'Códigos Espécie (página 15)' },
+    { nome: 'Espécie de Título', ini: 147, fim: 149, tamanho: 2, tipo: 'N', obrigatorio: false, cor: '#bcaaa4', descricao: 'Códigos Espécie — clique para selecionar',
+      valoresDescricao: {
+        '01': 'Duplicata Mercantil',
+        '02': 'Nota Promissória',
+        '03': 'Nota de Seguro',
+        '08': 'Letra de Câmbio',
+        '09': 'Warrant',
+        '13': 'Cheque',
+        '15': 'Recibo',
+        '16': 'Triplicata Mercantil',
+        '17': 'Duplicata de Serviço',
+        '99': 'Outros',
+      }
+    },
     { nome: 'Identificação', ini: 149, fim: 150, tamanho: 1, tipo: 'A', obrigatorio: false, valores: ['N'], cor: '#d7ccc8', descricao: 'N = Novo título' },
     { nome: 'Data da emissão do Título', ini: 150, fim: 156, tamanho: 6, tipo: 'N', obrigatorio: true, formato: 'DDMMAA', cor: '#b2ebf2', descricao: 'Emissão DDMMAA' },
     { nome: '1ª instrução', ini: 156, fim: 158, tamanho: 2, tipo: 'N', obrigatorio: false, valores: ['00'], cor: '#b0bec5', descricao: '00' },
@@ -176,7 +190,7 @@ export class BmpCnab400ValidadorComponent implements OnDestroy {
     { nome: 'Valor do Desconto', ini: 179, fim: 192, tamanho: 13, tipo: 'N', obrigatorio: false, cor: '#80cbc4', descricao: 'Desconto (13 pos, 2 dec)' },
     { nome: 'Valor do IOF', ini: 192, fim: 205, tamanho: 13, tipo: 'N', obrigatorio: false, valores: ['0000000000000'], cor: '#4db6ac', descricao: 'IOF = zeros' },
     { nome: 'Valor do Abatimento a ser concedido ou cancelado', ini: 205, fim: 218, tamanho: 13, tipo: 'N', obrigatorio: false, cor: '#a5d6a7', descricao: 'Abatimento (13 pos, 2 dec)' },
-    { nome: 'Identificação do Tipo de Inscrição do Pagador', ini: 218, fim: 220, tamanho: 2, tipo: 'N', obrigatorio: true, valores: ['01', '02'], cor: '#e0f7fa', descricao: '01=CPF, 02=CNPJ' },
+    { nome: 'Identificação do Tipo de Inscrição do Pagador', ini: 218, fim: 220, tamanho: 2, tipo: 'N', obrigatorio: true, valores: ['01', '02'], valoresDescricao: { '01': 'CPF — Pessoa Física', '02': 'CNPJ — Pessoa Jurídica' }, cor: '#e0f7fa', descricao: '01=CPF · 02=CNPJ' },
     { nome: 'Nº Inscrição do Pagador', ini: 220, fim: 234, tamanho: 14, tipo: 'N', obrigatorio: true, cor: '#90caf9', descricao: 'CNPJ/CPF (14 pos)' },
     { nome: 'Nome do Pagador', ini: 234, fim: 274, tamanho: 40, tipo: 'A', obrigatorio: true, cor: '#ffcc80', descricao: 'Nome Pagador (40 pos)' },
     { nome: 'Endereço Completo', ini: 274, fim: 314, tamanho: 40, tipo: 'A', obrigatorio: true, cor: '#ffe0b2', descricao: 'Endereço Pagador (40 pos)' },
@@ -343,6 +357,30 @@ export class BmpCnab400ValidadorComponent implements OnDestroy {
 
   selecionarOcorrencia(codigo: string): void {
     this.valorCampoAtivo = codigo;
+  }
+
+  get campoTemLookup(): boolean {
+    return !!(this.campoAtivo?.valoresDescricao) && !this.campoEhOcorrencia && !this.campoEhInstrucao;
+  }
+
+  get descricaoValorLookupAtivo(): string {
+    const vd = this.campoAtivo?.valoresDescricao;
+    if (!vd) return '';
+    return vd[this.valorCampoAtivo.trim()] ?? '';
+  }
+
+  get valoresLookup(): { valor: string; descricao: string }[] {
+    const vd = this.campoAtivo?.valoresDescricao;
+    if (!vd) return [];
+    return Object.keys(vd).map(k => ({ valor: k, descricao: vd[k] }));
+  }
+
+  selecionarValorLookup(v: string): void {
+    if (!this.campoAtivo) return;
+    const tam = this.campoAtivo.fim - this.campoAtivo.ini;
+    this.valorCampoAtivo = this.campoAtivo.tipo === 'N'
+      ? v.padStart(tam, '0').substring(0, tam)
+      : v.padEnd(tam, ' ').substring(0, tam);
   }
 
   fecharEditor(): void {

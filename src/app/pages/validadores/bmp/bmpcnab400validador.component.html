@@ -215,12 +215,39 @@
           {{ aplicadoFeedback ? '✓' : 'Aplicar' }}
         </button>
       </div>
-      @if (campoAtivo.valores && campoAtivo.valores.length > 0 && !campoEhInstrucao && !campoEhOcorrencia) {
+      @if (campoAtivo.valores && campoAtivo.valores.length > 0 && !campoEhInstrucao && !campoEhOcorrencia && !campoTemLookup) {
         <div class="editor-valores-validos">
           Valores válidos:
           @for (v of campoAtivo.valores; track v) {
             <code class="editor-valor-chip" (click)="selecionarInstrucao(v)" style="cursor:pointer">{{ v }}</code>
           }
+        </div>
+      }
+
+      @if (campoTemLookup) {
+        @if (descricaoValorLookupAtivo) {
+          <div class="editor-ocorrencia-info">
+            <span class="ocor-cod">{{ valorCampoAtivo.trim() }}</span>
+            <span class="ocor-desc">{{ descricaoValorLookupAtivo }}</span>
+          </div>
+        } @else if (valorCampoAtivo.trim()) {
+          <div class="editor-ocorrencia-info">
+            <span class="ocor-cod ocor-desconhecido">{{ valorCampoAtivo.trim() }}</span>
+            <span class="ocor-desc">Valor não reconhecido</span>
+          </div>
+        }
+        <div class="editor-instrucao-tabela">
+          <div class="editor-instrucao-titulo">📋 Valores válidos — clique para selecionar</div>
+          <div class="editor-instrucao-lista">
+            @for (item of valoresLookup; track item.valor) {
+              <button class="editor-instrucao-item"
+                      [class.editor-instrucao-ativo]="valorCampoAtivo.trim() === item.valor.trim()"
+                      (click)="selecionarValorLookup(item.valor)">
+                <span class="instr-cod">{{ item.valor }}</span>
+                <span class="instr-desc">{{ item.descricao }}</span>
+              </button>
+            }
+          </div>
         </div>
       }
 
