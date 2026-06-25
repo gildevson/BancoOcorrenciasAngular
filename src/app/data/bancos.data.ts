@@ -54,7 +54,10 @@ export const BANCOS_DATA: BancoData[] = [
     nome: 'Santander',
     logo: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banco%20Santander%20Brasil%20S.A/banco-santander-logo.svg',
     ativo: true,
-    // Validadores em breve
+    validadores: [
+      { nome: 'Remessa CNAB 400', routerLink: '/validadores/santander/cnab400' },
+      { nome: 'Retorno CNAB 400', routerLink: '/validadores/santander/retorno400' },
+    ]
   },
   {
     id: '4aad7f3d-f26a-4cad-ab71-7fe86115a995',
