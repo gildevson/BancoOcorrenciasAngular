@@ -51,15 +51,36 @@
         </span>
 
         <!-- Links de Validadores -->
-        <div class="validador-links">
-          <a
-            *ngFor="let validador of banco.validadores"
-            [routerLink]="validador.routerLink"
-            class="validador-btn"
-            [attr.aria-label]="'Acessar validador ' + validador.nome + ' do ' + banco.nome">
-            {{ validador.nome }}
-          </a>
-        </div>
+        @if (temGrupos(banco)) {
+          <div class="validador-grupos">
+            @for (grupo of getValidadoresAgrupados(banco); track grupo.grupo) {
+              <div class="validador-grupo">
+                <span class="grupo-label">{{ grupo.grupo }}</span>
+                <div class="validador-links">
+                  @for (v of grupo.items; track v.routerLink) {
+                    <a
+                      [routerLink]="v.routerLink"
+                      class="validador-btn"
+                      [attr.aria-label]="'Acessar validador ' + v.nome + ' do ' + banco.nome">
+                      {{ v.nomeExibido }}
+                    </a>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="validador-links">
+            @for (validador of (banco.validadores ?? []); track validador.routerLink) {
+              <a
+                [routerLink]="validador.routerLink"
+                class="validador-btn"
+                [attr.aria-label]="'Acessar validador ' + validador.nome + ' do ' + banco.nome">
+                {{ validador.nome }}
+              </a>
+            }
+          </div>
+        }
       </div>
     </div>
   </div>

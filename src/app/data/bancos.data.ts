@@ -9,6 +9,7 @@ export interface BancoData {
   validadores?: Array<{
     nome: string;
     routerLink: string;
+    grupo?: string;
   }>;
 }
 
@@ -20,8 +21,10 @@ export const BANCOS_DATA: BancoData[] = [
     logo: 'https://img.icons8.com/?size=100&id=IQoGuxn2kFxM&format=png&color=000000',
     ativo: true,
     validadores: [
-      { nome: 'Remessa CNAB 400', routerLink: '/validadores/bradesco/cnab400' },
-      { nome: 'Retorno CNAB 400', routerLink: '/validadores/bradesco/retorno400' }
+      { nome: 'Remessa CNAB 400', routerLink: '/validadores/bradesco/cnab400', grupo: 'CNAB 400' },
+      { nome: 'Retorno CNAB 400', routerLink: '/validadores/bradesco/retorno400', grupo: 'CNAB 400' },
+      { nome: 'Remessa CNAB 240', routerLink: '/validadores/bradesco/cnab240', grupo: 'CNAB 240' },
+      { nome: 'Retorno CNAB 240', routerLink: '/validadores/bradesco/retorno240', grupo: 'CNAB 240' },
     ]
   },
   {
@@ -55,10 +58,10 @@ export const BANCOS_DATA: BancoData[] = [
     logo: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banco%20Santander%20Brasil%20S.A/banco-santander-logo.svg',
     ativo: true,
     validadores: [
-      { nome: 'Remessa CNAB 400', routerLink: '/validadores/santander/cnab400' },
-      { nome: 'Retorno CNAB 400', routerLink: '/validadores/santander/retorno400' },
-      { nome: 'Remessa CNAB 240', routerLink: '/validadores/santander/cnab240' },
-      { nome: 'Retorno CNAB 240', routerLink: '/validadores/santander/retorno240' },
+      { nome: 'Remessa CNAB 400', routerLink: '/validadores/santander/cnab400', grupo: 'CNAB 400' },
+      { nome: 'Retorno CNAB 400', routerLink: '/validadores/santander/retorno400', grupo: 'CNAB 400' },
+      { nome: 'Remessa CNAB 240', routerLink: '/validadores/santander/cnab240', grupo: 'CNAB 240' },
+      { nome: 'Retorno CNAB 240', routerLink: '/validadores/santander/retorno240', grupo: 'CNAB 240' },
     ]
   },
   {
@@ -176,8 +179,8 @@ export const BANCOS_DATA: BancoData[] = [
     logo: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Banco%20BMP/logo_bmp.svg',
     ativo: true,
     validadores: [
-      { nome: 'Remessa CNAB 400', routerLink: '/validadores/bmp/cnab400' },
-      { nome: 'Retorno CNAB 400', routerLink: '/validadores/bmp/retorno400' }
+      { nome: 'Remessa CNAB 400', routerLink: '/validadores/bmp/cnab400', grupo: 'CNAB 400' },
+      { nome: 'Retorno CNAB 400', routerLink: '/validadores/bmp/retorno400', grupo: 'CNAB 400' },
     ]
   },
 ];

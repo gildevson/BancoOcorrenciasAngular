@@ -56,4 +56,22 @@ export class ListaValidadoresComponent {
     });
     return [...new Set(tipos)].join(', ');
   }
+
+  temGrupos(banco: BancoData): boolean {
+    return !!(banco.validadores?.some(v => v.grupo));
+  }
+
+  getValidadoresAgrupados(banco: BancoData): { grupo: string; items: { nome: string; routerLink: string; nomeExibido: string }[] }[] {
+    if (!banco.validadores) return [];
+    const map = new Map<string, { nome: string; routerLink: string; nomeExibido: string }[]>();
+    for (const v of banco.validadores) {
+      const key = v.grupo ?? '';
+      if (!map.has(key)) map.set(key, []);
+      const nomeExibido = v.grupo
+        ? v.nome.replace(new RegExp(v.grupo, 'i'), '').trim()
+        : v.nome;
+      map.get(key)!.push({ nome: v.nome, routerLink: v.routerLink, nomeExibido });
+    }
+    return Array.from(map.entries()).map(([grupo, items]) => ({ grupo, items }));
+  }
 }
