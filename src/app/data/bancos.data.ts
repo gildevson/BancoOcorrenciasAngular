@@ -57,6 +57,8 @@ export const BANCOS_DATA: BancoData[] = [
     validadores: [
       { nome: 'Remessa CNAB 400', routerLink: '/validadores/santander/cnab400' },
       { nome: 'Retorno CNAB 400', routerLink: '/validadores/santander/retorno400' },
+      { nome: 'Remessa CNAB 240', routerLink: '/validadores/santander/cnab240' },
+      { nome: 'Retorno CNAB 240', routerLink: '/validadores/santander/retorno240' },
     ]
   },
   {

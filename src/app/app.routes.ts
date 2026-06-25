@@ -108,6 +108,20 @@ export const routes: Routes = [
         .then(m => m.SantanderRetorno400ValidadorComponent),
   },
   {
+    path: 'validadores/santander/cnab240',
+    title: 'Validador Remessa Santander CNAB 240',
+    loadComponent: () =>
+      import('./pages/validadores/santander/santander-cnab240-validador.component')
+        .then(m => m.SantanderCnab240ValidadorComponent),
+  },
+  {
+    path: 'validadores/santander/retorno240',
+    title: 'Validador Retorno Santander CNAB 240',
+    loadComponent: () =>
+      import('./pages/validadores/santander/santander-cnab240-retorno-validador.component')
+        .then(m => m.SantanderCnab240RetornoValidadorComponent),
+  },
+  {
     path: 'validadores/bmp/cnab400',
     title: 'Validador Banco BMP CNAB 400',
     loadComponent: () =>
