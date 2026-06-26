@@ -29,15 +29,35 @@ interface ResumoXml {
   tagMenor: TagInfo | null;
 }
 
+interface TagAusente {
+  tag: string;
+  mensagem: string;
+  dica: string;
+}
+
 interface ArquivoXml {
   nome: string;
   tags: TagInfo[];
   resumo: ResumoXml;
   alertas: Alerta[];
+  tagsFaltantes: TagAusente[];
   filtro: string;
   apenasComValor: boolean;
   erro: string | null;
 }
+
+const TAGS_OBRIGATORIAS: TagAusente[] = [
+  {
+    tag: 'nDup',
+    mensagem: 'Tag <nDup> não encontrada no XML',
+    dica: 'Esperada em cobr > dup > nDup — número da duplicata da cobrança'
+  },
+  {
+    tag: 'nFat',
+    mensagem: 'Tag <nFat> não encontrada no XML',
+    dica: 'Esperada em cobr > fat > nFat — número da fatura'
+  }
+];
 
 const REGRAS_ALERTA: { tags: string[]; limite: number; mensagem: string }[] = [
   {
@@ -120,8 +140,14 @@ const REGRAS_ALERTA: { tags: string[]; limite: number; mensagem: string }[] = [
               📄 {{ arq.nome }}
               @if (arq.alertas.length > 0) {
                 <span style="margin-left:6px;background:#f44336;color:#fff;border-radius:10px;padding:1px 6px;font-size:10px;font-weight:700;"
-                      title="{{ arq.alertas.length }} alerta(s)">
+                      title="{{ arq.alertas.length }} alerta(s) de limite">
                   {{ arq.alertas.length }}
+                </span>
+              }
+              @if (arq.tagsFaltantes.length > 0) {
+                <span style="margin-left:4px;background:#ff9800;color:#fff;border-radius:10px;padding:1px 6px;font-size:10px;font-weight:700;"
+                      title="{{ arq.tagsFaltantes.length }} tag(s) ausente(s)">
+                  {{ arq.tagsFaltantes.length }} ausente(s)
                 </span>
               }
               <span
@@ -177,6 +203,33 @@ const REGRAS_ALERTA: { tags: string[]; limite: number; mensagem: string }[] = [
                           Excesso:
                           <strong style="color:#f44336;">+{{ alerta.caracteres - alerta.limite }} chars</strong>
                         </span>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+
+            <!-- Alertas de tags ausentes -->
+            @if (arquivoAtivo.tagsFaltantes.length > 0) {
+              <div style="margin-bottom:20px;padding:16px;background:#fff3e0;border:2px solid #ff9800;border-radius:8px;">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+                  <span style="font-size:20px;">🔍</span>
+                  <strong style="color:#e65100;font-size:15px;">
+                    {{ arquivoAtivo.tagsFaltantes.length }} tag(s) ausente(s) no XML
+                  </strong>
+                </div>
+                @for (ausente of arquivoAtivo.tagsFaltantes; track ausente.tag) {
+                  <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:#fff;border-left:4px solid #ff9800;border-radius:4px;margin-bottom:8px;">
+                    <span style="font-size:16px;margin-top:1px;">🟡</span>
+                    <div style="flex:1;">
+                      <div style="font-size:13px;font-weight:700;color:#bf360c;margin-bottom:4px;">
+                        {{ ausente.mensagem }}
+                      </div>
+                      <div style="font-size:12px;color:#666;display:flex;align-items:center;gap:6px;">
+                        <code style="background:#fff8e1;padding:1px 7px;border-radius:3px;color:#e65100;font-size:11px;border:1px solid #ffe082;">
+                          {{ ausente.dica }}
+                        </code>
                       </div>
                     </div>
                   </div>
@@ -366,6 +419,7 @@ export class XmlValidadorComponent {
           tags: [],
           resumo: { totalTags: 0, totalTagsFolha: 0, totalCaracteres: 0, tagMaior: null, tagMenor: null },
           alertas: [],
+          tagsFaltantes: [],
           filtro: '',
           apenasComValor: false,
           erro: 'Erro ao ler o arquivo.'
@@ -400,6 +454,7 @@ export class XmlValidadorComponent {
         nome,
         tags: [],
         alertas: [],
+        tagsFaltantes: [],
         resumo: { totalTags: 0, totalTagsFolha: 0, totalCaracteres: 0, tagMaior: null, tagMenor: null },
         filtro: '',
         apenasComValor: false,
@@ -433,10 +488,14 @@ export class XmlValidadorComponent {
     const tagMaior = folhas.length ? folhas.reduce((a, b) => a.caracteres >= b.caracteres ? a : b) : null;
     const tagMenor = folhas.length ? folhas.reduce((a, b) => a.caracteres <= b.caracteres ? a : b) : null;
 
+    const nomesPresentes = new Set(tags.map(t => t.tag));
+    const tagsFaltantes = TAGS_OBRIGATORIAS.filter(to => !nomesPresentes.has(to.tag));
+
     return {
       nome,
       tags,
       alertas,
+      tagsFaltantes,
       resumo: { totalTags: tags.length, totalTagsFolha: folhas.length, totalCaracteres, tagMaior, tagMenor },
       filtro: '',
       apenasComValor: false,
