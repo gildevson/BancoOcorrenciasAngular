@@ -174,6 +174,11 @@ const REGRAS_ALERTA: { tags: string[]; limite: number; mensagem: string }[] = [
                       <span style="display:inline-flex;align-items:center;gap:4px;background:#e8f5e9;color:#2e7d32;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;">
                         ✓ Presente
                       </span>
+                      @if (getCaracteresTag(arq, 'nFat') !== null) {
+                        <span style="display:block;font-size:11px;color:#1976d2;margin-top:3px;font-weight:600;">
+                          {{ getCaracteresTag(arq, 'nFat') }} char(s)
+                        </span>
+                      }
                     } @else {
                       <span style="display:inline-flex;align-items:center;gap:4px;background:#fff3e0;color:#e65100;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;border:1px solid #ffcc80;">
                         ✕ Ausente
@@ -465,6 +470,11 @@ export class XmlValidadorComponent {
 
   temTag(arq: ArquivoXml, tag: string): boolean {
     return !arq.tagsFaltantes.some(t => t.tag === tag);
+  }
+
+  getCaracteresTag(arq: ArquivoXml, tag: string): number | null {
+    const found = arq.tags.find(t => t.tag === tag && !t.temFilhos);
+    return found ? found.caracteres : null;
   }
 
   getTagsFiltradas(arq: ArquivoXml): TagInfo[] {
