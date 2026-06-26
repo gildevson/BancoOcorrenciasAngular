@@ -666,6 +666,18 @@ export const LAYOUTS_BANCO: BancoLayout[] = [
     pdfUrl: 'assets/pdfs/layouts/mpo_arquivos_layout_400P.pdf',
   },
 
+  // ── VORTX ─────────────────────────────────────────────────────────────────
+  {
+    id: '310-cnab400-vortx01',
+    bancoNumero: '310',
+    bancoNome: 'VORTX',
+    tipoLayout: 'CNAB400',
+    imagemURL: '',
+    status: 'Ativo',
+    descricao: 'Layout de remessa CNAB 400',
+    pdfUrl: 'assets/pdfs/layouts/VORTX_400_REMESSA 2.pdf',
+  },
+
   // ── Documentos genéricos ──────────────────────────────────────────────────
   {
     id: '???-outro-18e504',

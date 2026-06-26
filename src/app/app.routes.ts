@@ -143,6 +143,20 @@ export const routes: Routes = [
         .then(m => m.BmpCnab400RetornoValidadorComponent),
   },
   {
+    path: 'validadores/vortx/cnab400',
+    title: 'Validador VORTX CNAB 400 Remessa',
+    loadComponent: () =>
+      import('./pages/validadores/vortx/vortx-cnab400-validador.component')
+        .then(m => m.VortxCnab400ValidadorComponent),
+  },
+  {
+    path: 'validadores/vortx/retorno400',
+    title: 'Validador VORTX CNAB 400 Retorno',
+    loadComponent: () =>
+      import('./pages/validadores/vortx/vortx-retorno400-validador.component')
+        .then(m => m.VortxRetorno400ValidadorComponent),
+  },
+  {
     path: 'validadores/xml',
     title: 'Leitor / Validador de XML',
     loadComponent: () =>

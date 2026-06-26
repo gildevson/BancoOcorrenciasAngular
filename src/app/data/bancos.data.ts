@@ -174,6 +174,17 @@ export const BANCOS_DATA: BancoData[] = [
     ]
   },
   {
+    id: 'f7e8d9c0-b1a2-4321-8765-fedcba654321',
+    codigo: '310',
+    nome: 'VORTX DTVM',
+    logo: '',
+    ativo: true,
+    validadores: [
+      { nome: 'Remessa CNAB 400', routerLink: '/validadores/vortx/cnab400', grupo: 'CNAB 400' },
+      { nome: 'Retorno CNAB 400', routerLink: '/validadores/vortx/retorno400', grupo: 'CNAB 400' },
+    ]
+  },
+  {
     id: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
     codigo: '274',
     nome: 'Banco BMP',
