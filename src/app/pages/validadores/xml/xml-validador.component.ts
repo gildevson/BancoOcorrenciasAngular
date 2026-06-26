@@ -126,6 +126,74 @@ const REGRAS_ALERTA: { tags: string[]; limite: number; mensagem: string }[] = [
         </div>
       }
 
+      <!-- Painel de status nDup / nFat por arquivo -->
+      @if (arquivos.length > 0) {
+        <div style="margin-bottom:20px;border-radius:10px;overflow:hidden;border:1px solid #e0e0e0;">
+          <div style="padding:12px 16px;background:#37474f;display:flex;align-items:center;gap:8px;">
+            <span style="font-size:16px;">🔍</span>
+            <strong style="color:#fff;font-size:13px;">Verificação de tags obrigatórias — nDup e nFat</strong>
+            @if (arquivosComFalha.length > 0) {
+              <span style="margin-left:auto;background:#ff9800;color:#fff;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;">
+                {{ arquivosComFalha.length }} arquivo(s) com problema
+              </span>
+            } @else {
+              <span style="margin-left:auto;background:#43a047;color:#fff;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;">
+                ✓ Todos OK
+              </span>
+            }
+          </div>
+          <table style="width:100%;border-collapse:collapse;font-size:13px;background:#fff;">
+            <thead>
+              <tr style="background:#f5f5f5;border-bottom:2px solid #e0e0e0;">
+                <th style="padding:9px 14px;text-align:left;color:#555;font-weight:700;">Arquivo</th>
+                <th style="padding:9px 14px;text-align:center;color:#555;font-weight:700;min-width:90px;">nDup</th>
+                <th style="padding:9px 14px;text-align:center;color:#555;font-weight:700;min-width:90px;">nFat</th>
+                <th style="padding:9px 14px;text-align:center;color:#555;font-weight:700;min-width:80px;">Ação</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (arq of arquivos; track arq.nome; let i = $index) {
+                <tr [style.background]="temFalha(arq) ? '#fff8e1' : '#fff'"
+                    style="border-bottom:1px solid #f0f0f0;">
+                  <td style="padding:9px 14px;">
+                    <span style="font-weight:600;color:#333;">{{ arq.nome }}</span>
+                  </td>
+                  <td style="padding:9px 14px;text-align:center;">
+                    @if (temTag(arq, 'nDup')) {
+                      <span style="display:inline-flex;align-items:center;gap:4px;background:#e8f5e9;color:#2e7d32;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;">
+                        ✓ Presente
+                      </span>
+                    } @else {
+                      <span style="display:inline-flex;align-items:center;gap:4px;background:#fff3e0;color:#e65100;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;border:1px solid #ffcc80;">
+                        ✕ Ausente
+                      </span>
+                    }
+                  </td>
+                  <td style="padding:9px 14px;text-align:center;">
+                    @if (temTag(arq, 'nFat')) {
+                      <span style="display:inline-flex;align-items:center;gap:4px;background:#e8f5e9;color:#2e7d32;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;">
+                        ✓ Presente
+                      </span>
+                    } @else {
+                      <span style="display:inline-flex;align-items:center;gap:4px;background:#fff3e0;color:#e65100;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;border:1px solid #ffcc80;">
+                        ✕ Ausente
+                      </span>
+                    }
+                  </td>
+                  <td style="padding:9px 14px;text-align:center;">
+                    <button
+                      (click)="abaAtiva = i"
+                      style="padding:4px 12px;background:#1976d2;color:#fff;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;">
+                      Ver
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+
       <!-- Abas dos arquivos -->
       @if (arquivos.length > 0) {
         <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:0;border-bottom:2px solid #1976d2;">
@@ -385,6 +453,18 @@ export class XmlValidadorComponent {
 
   get totalGeralCaracteres(): number {
     return this.arquivos.reduce((s, a) => s + a.resumo.totalCaracteres, 0);
+  }
+
+  get arquivosComFalha(): ArquivoXml[] {
+    return this.arquivos.filter(a => this.temFalha(a));
+  }
+
+  temFalha(arq: ArquivoXml): boolean {
+    return arq.tagsFaltantes.length > 0;
+  }
+
+  temTag(arq: ArquivoXml, tag: string): boolean {
+    return !arq.tagsFaltantes.some(t => t.tag === tag);
   }
 
   getTagsFiltradas(arq: ArquivoXml): TagInfo[] {
