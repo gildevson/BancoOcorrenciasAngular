@@ -177,7 +177,7 @@ export const BANCOS_DATA: BancoData[] = [
     id: 'f7e8d9c0-b1a2-4321-8765-fedcba654321',
     codigo: '310',
     nome: 'VORTX DTVM',
-    logo: '',
+    logo: 'https://ftvcapital.com/wp-content/uploads/2021/03/Vortx.jpg',
     ativo: true,
     validadores: [
       { nome: 'Remessa CNAB 400', routerLink: '/validadores/vortx/cnab400', grupo: 'CNAB 400' },
@@ -193,6 +193,16 @@ export const BANCOS_DATA: BancoData[] = [
     validadores: [
       { nome: 'Remessa CNAB 400', routerLink: '/validadores/bmp/cnab400', grupo: 'CNAB 400' },
       { nome: 'Retorno CNAB 400', routerLink: '/validadores/bmp/retorno400', grupo: 'CNAB 400' },
+    ]
+  },
+  {
+    id: 'c7d8e9f0-1234-5678-90ab-cdef12345678',
+    codigo: '457',
+    nome: 'UY3 DTVM',
+    logo: 'https://i.imgur.com/placeholder.png',
+    ativo: true,
+    validadores: [
+      { nome: 'Remessa CNAB 400', routerLink: '/validadores/uy3/cnab400', grupo: 'CNAB 400' },
     ]
   },
 ];

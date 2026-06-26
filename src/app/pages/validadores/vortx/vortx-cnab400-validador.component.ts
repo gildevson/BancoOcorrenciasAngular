@@ -158,7 +158,9 @@ export class VortxCnab400ValidadorComponent implements OnDestroy {
     { nome: 'Cidade do Pagador',                       ini: 304, fim: 319, tamanho: 15,  tipo: 'A', obrigatorio: false,                          cor: '#9ccc65', descricao: 'Cidade Pagador (15 pos)' },
     { nome: 'UF do Pagador',                           ini: 319, fim: 321, tamanho: 2,   tipo: 'A', obrigatorio: false,                          cor: '#8bc34a', descricao: 'UF Pagador (2 pos)' },
     { nome: 'Identificação da Ocorrência',             ini: 321, fim: 323, tamanho: 2,   tipo: 'N', obrigatorio: true,                           cor: '#80deea', descricao: 'Código ocorrência remessa' },
-    { nome: 'Branco 2',                                ini: 323, fim: 394, tamanho: 71,  tipo: 'A', obrigatorio: false,                          cor: '#f5f5f5', descricao: 'Branco (71 pos)' },
+    { nome: 'CNPJ/CPF do Sacador',                    ini: 323, fim: 337, tamanho: 14,  tipo: 'N', obrigatorio: false,                          cor: '#e8eaf6', descricao: 'CNPJ ou CPF do Sacador/Avalista (14 pos)' },
+    { nome: 'Nome do Sacador',                         ini: 337, fim: 377, tamanho: 40,  tipo: 'A', obrigatorio: false,                          cor: '#fce4ec', descricao: 'Nome/Razão Social do Sacador (40 pos)' },
+    { nome: 'Complemento do Sacador',                  ini: 377, fim: 394, tamanho: 17,  tipo: 'A', obrigatorio: false,                          cor: '#f3e5f5', descricao: 'Endereço ou info adicional do Sacador (17 pos)' },
     { nome: 'Nº Sequencial do Registro',               ini: 394, fim: 400, tamanho: 6,   tipo: 'N', obrigatorio: true,                           cor: '#b2ebf2', descricao: 'Sequencial Registro' },
   ];
 

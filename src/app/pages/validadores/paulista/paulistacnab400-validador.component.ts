@@ -119,7 +119,10 @@ export class PaulistaCnab400ValidadorComponent implements OnDestroy {
   // ========================================
   camposDetalhe: CampoLayout[] = [
     { nome: 'Tipo Registro', ini: 0, fim: 1, tamanho: 1, tipo: 'N', obrigatorio: true, valores: ['1'], cor: '#f8bbd0', descricao: 'Identificação Registro (1)' },
-    { nome: 'Déb. Auto C/C', ini: 1, fim: 20, tamanho: 19, tipo: 'A', obrigatorio: false, cor: '#f5f5f5', descricao: 'Débito Automático C/C - Branco (19 pos)' },
+    { nome: 'Déb. Auto — Banco', ini: 1, fim: 4, tamanho: 3, tipo: 'N', obrigatorio: false, cor: '#e3f2fd', descricao: 'Débito Automático: Código do Banco do sacado (3 pos) — Branco para cobrança normal' },
+    { nome: 'Déb. Auto — Agência', ini: 4, fim: 9, tamanho: 5, tipo: 'N', obrigatorio: false, cor: '#e8f5e9', descricao: 'Débito Automático: Agência do sacado (5 pos) — Branco para cobrança normal' },
+    { nome: 'Déb. Auto — Conta C/C', ini: 9, fim: 19, tamanho: 10, tipo: 'N', obrigatorio: false, cor: '#fff8e1', descricao: 'Débito Automático: Conta Corrente do sacado (10 pos) — Branco para cobrança normal' },
+    { nome: 'Déb. Auto — Dígito', ini: 19, fim: 20, tamanho: 1, tipo: 'N', obrigatorio: false, cor: '#fce4ec', descricao: 'Débito Automático: Dígito verificador da conta (1 pos) — Branco para cobrança normal' },
     { nome: 'Coobrigação', ini: 20, fim: 22, tamanho: 2, tipo: 'N', obrigatorio: false, valores: ['01', '02'], cor: '#ffe082', descricao: '01=Com, 02=Sem Coobrigação',
       lookup: [
         { codigo: '01', descricao: 'Com Coobrigação' },
@@ -130,22 +133,69 @@ export class PaulistaCnab400ValidadorComponent implements OnDestroy {
     { nome: 'Modal. Operação', ini: 24, fim: 28, tamanho: 4, tipo: 'N', obrigatorio: false, cor: '#c5cae9', descricao: 'Modalidade Operação - Anexo 3 SRC3040 (4 pos)' },
     { nome: 'Nat. Operação', ini: 28, fim: 30, tamanho: 2, tipo: 'N', obrigatorio: false, cor: '#e1bee7', descricao: 'Natureza Operação - Anexo 2 SRC3040' },
     { nome: 'Origem Recurso', ini: 30, fim: 34, tamanho: 4, tipo: 'N', obrigatorio: false, cor: '#d1c4e9', descricao: 'Origem Recurso - Anexo 4 SRC3040 (4 pos)' },
-    { nome: 'Classe Risco', ini: 34, fim: 36, tamanho: 2, tipo: 'A', obrigatorio: false, cor: '#ffcc80', descricao: 'Classe Risco Operação - Anexo 17 SRC3040' },
-    { nome: 'Zeros', ini: 36, fim: 37, tamanho: 1, tipo: 'N', obrigatorio: false, cor: '#f5f5f5', descricao: 'Zeros (1 pos)' },
+    { nome: 'Classe Risco', ini: 34, fim: 36, tamanho: 2, tipo: 'A', obrigatorio: false, valores: ['AA','A ','B ','C ','D ','E ','F ','G ','H '], cor: '#ffcc80', descricao: 'Classificação de risco de crédito do título (Resolução CMN 2.682/99 — Anexo 17 SRC3040). AA=menor risco, H=maior risco.',
+      lookup: [
+        { codigo: 'AA', descricao: 'AA — Risco mínimo (melhor classificação)' },
+        { codigo: 'A ', descricao: 'A  — Risco muito baixo' },
+        { codigo: 'B ', descricao: 'B  — Risco baixo' },
+        { codigo: 'C ', descricao: 'C  — Risco médio' },
+        { codigo: 'D ', descricao: 'D  — Risco médio-alto (provisão 10%)' },
+        { codigo: 'E ', descricao: 'E  — Risco alto (provisão 30%)' },
+        { codigo: 'F ', descricao: 'F  — Risco muito alto (provisão 50%)' },
+        { codigo: 'G ', descricao: 'G  — Risco muito alto (provisão 70%)' },
+        { codigo: 'H ', descricao: 'H  — Risco máximo (provisão 100%)' },
+      ]
+    },
+    { nome: 'Zeros', ini: 36, fim: 37, tamanho: 1, tipo: 'N', obrigatorio: false, cor: '#f5f5f5', descricao: 'Separador de alinhamento (1 pos) — byte fixo entre Classe Risco e Nº Controle. Sempre 0, sem significado de negócio.' },
     { nome: 'Nº Controle', ini: 37, fim: 62, tamanho: 25, tipo: 'A', obrigatorio: true, cor: '#b3e5fc', descricao: 'Nº Controle Participante - Ident. título (25 pos)' },
     { nome: 'Nº Banco', ini: 62, fim: 65, tamanho: 3, tipo: 'N', obrigatorio: true, cor: '#81d4fa', descricao: 'Número Banco (obrig. se Espécie=Cheque, senão 000)' },
     { nome: 'Zeros', ini: 65, fim: 70, tamanho: 5, tipo: 'N', obrigatorio: true, cor: '#f5f5f5', descricao: 'Zeros (5 pos)' },
     { nome: 'Ident. Título', ini: 70, fim: 81, tamanho: 11, tipo: 'N', obrigatorio: false, cor: '#ffccbc', descricao: 'Identificação Título no Banco - Branco (11 pos)' },
     { nome: 'Dígito N/N', ini: 81, fim: 82, tamanho: 1, tipo: 'A', obrigatorio: false, cor: '#ffab91', descricao: 'Dígito Nosso Número - Branco' },
     { nome: 'Valor Pago', ini: 82, fim: 92, tamanho: 10, tipo: 'N', obrigatorio: false, cor: '#4db6ac', descricao: 'Valor pago na liquidação/baixa (10 pos, 2 dec)' },
-    { nome: 'Cond. Papeleta', ini: 92, fim: 93, tamanho: 1, tipo: 'N', obrigatorio: false, cor: '#f5f5f5', descricao: 'Condição Emissão Papeleta - Branco' },
-    { nome: 'Ident. Papeleta', ini: 93, fim: 94, tamanho: 1, tipo: 'A', obrigatorio: false, cor: '#f5f5f5', descricao: 'Se emite papeleta Débito Auto - Branco' },
+    { nome: 'Cond. Papeleta', ini: 92, fim: 93, tamanho: 1, tipo: 'N', obrigatorio: false, valores: ['1', '2', '3'], cor: '#e8eaf6', descricao: 'Condição de Emissão da Papeleta/Boleto (1 pos) — indica quem emite e envia o boleto ao sacado.',
+      lookup: [
+        { codigo: '1', descricao: 'Banco emite e envia ao sacado' },
+        { codigo: '2', descricao: 'Banco emite mas não envia ao sacado' },
+        { codigo: '3', descricao: 'Cedente emite (auto-despacho)' },
+      ]
+    },
+    { nome: 'Ident. Papeleta', ini: 93, fim: 94, tamanho: 1, tipo: 'A', obrigatorio: false, valores: ['S', 'N'], cor: '#f3e5f5', descricao: 'Identifica se emite papeleta para títulos com Débito Automático (1 pos).',
+      lookup: [
+        { codigo: 'S', descricao: 'Sim — emite papeleta para Débito Automático' },
+        { codigo: 'N', descricao: 'Não — não emite papeleta' },
+      ]
+    },
     { nome: 'Data Liquidação', ini: 94, fim: 100, tamanho: 6, tipo: 'N', obrigatorio: false, formato: 'DDMMAA', cor: '#fff59d', descricao: 'Data Liquidação - DDMMAA (somente p/ liquidação)' },
-    { nome: 'Ident. Operação', ini: 100, fim: 104, tamanho: 4, tipo: 'A', obrigatorio: false, cor: '#f5f5f5', descricao: 'Identificação Operação Banco - Branco (4 pos)' },
+    { nome: 'Ident. Operação', ini: 100, fim: 104, tamanho: 4, tipo: 'A', obrigatorio: false, cor: '#e0f2f1', descricao: 'Número/código interno da operação no banco (4 pos) — identifica o tipo de operação para fins de controle bancário. Branco no Paulista para cobrança padrão.' },
     { nome: 'Indic. Rateio', ini: 104, fim: 105, tamanho: 1, tipo: 'A', obrigatorio: false, cor: '#c8e6c9', descricao: 'Indicador Rateio Crédito - Branco' },
-    { nome: 'Endereço Aviso', ini: 105, fim: 106, tamanho: 1, tipo: 'N', obrigatorio: false, cor: '#f5f5f5', descricao: 'Endereçamento Aviso Débito - Branco' },
+    { nome: 'Endereço Aviso', ini: 105, fim: 106, tamanho: 1, tipo: 'N', obrigatorio: false, valores: ['1', '2', '3'], cor: '#fff9c4', descricao: 'Endereçamento do Aviso de Débito ao sacado (1 pos).',
+      lookup: [
+        { codigo: '1', descricao: 'Correio — aviso enviado pelo banco via correio' },
+        { codigo: '2', descricao: 'Eletrônico — aviso enviado via e-mail/EDI' },
+        { codigo: '3', descricao: 'Não enviar aviso ao sacado' },
+      ]
+    },
     { nome: 'Branco', ini: 106, fim: 108, tamanho: 2, tipo: 'A', obrigatorio: false, cor: '#f5f5f5', descricao: 'Branco (2 pos)' },
-    { nome: 'Cód. Ocorrência', ini: 108, fim: 110, tamanho: 2, tipo: 'N', obrigatorio: true, cor: '#80deea', descricao: 'Identificação Ocorrência (01,04,06,14,71-77,80,81,84,87)' },
+    { nome: 'Cód. Ocorrência', ini: 108, fim: 110, tamanho: 2, tipo: 'N', obrigatorio: true, valores: ['01','04','06','14','71','72','73','74','75','76','77','80','81','84','87'], cor: '#80deea', descricao: 'Código de ocorrência da remessa — instrução que o cedente envia ao banco.',
+      lookup: [
+        { codigo: '01', descricao: 'Remessa — entrada de título no banco' },
+        { codigo: '04', descricao: 'Abatimento — redução de valor (mediante justificativa)' },
+        { codigo: '06', descricao: 'Alteração de vencimento — para conciliação' },
+        { codigo: '14', descricao: 'Pagamento Parcial' },
+        { codigo: '71', descricao: 'Baixa por Recompra Paulista — com liquidação consultoria' },
+        { codigo: '72', descricao: 'Recompra Parcial sem Adiantamento' },
+        { codigo: '73', descricao: 'Recompra Parcial com Adiantamento' },
+        { codigo: '74', descricao: 'Baixa por Recompra — com liquidação cedente' },
+        { codigo: '75', descricao: 'Baixa por Depósito Cedente' },
+        { codigo: '76', descricao: 'Baixa por Depósito Consultoria' },
+        { codigo: '77', descricao: 'Baixa por Depósito Sacado' },
+        { codigo: '80', descricao: 'Remessa Paulista — com liquidação consultoria' },
+        { codigo: '81', descricao: 'Entrada por Recompra — troca de títulos' },
+        { codigo: '84', descricao: 'Entrada por Recompra — com liquidação cedente' },
+        { codigo: '87', descricao: 'Reativação de título' },
+      ]
+    },
     { nome: 'Nº Documento', ini: 110, fim: 120, tamanho: 10, tipo: 'A', obrigatorio: true, cor: '#c5e1a5', descricao: 'Número do Documento (10 pos)' },
     { nome: 'Vencimento', ini: 120, fim: 126, tamanho: 6, tipo: 'N', obrigatorio: true, formato: 'DDMMAA', cor: '#fff9c4', descricao: 'Data Vencimento Título - DDMMAA' },
     { nome: 'Valor Título', ini: 126, fim: 139, tamanho: 13, tipo: 'N', obrigatorio: true, cor: '#ef9a9a', descricao: 'Valor do Título (13 pos, 2 dec) - sem ponto/vírgula' },
@@ -158,10 +208,29 @@ export class PaulistaCnab400ValidadorComponent implements OnDestroy {
         { codigo: '51', descricao: 'Cheque' },
       ]
     },
-    { nome: 'Identificação', ini: 149, fim: 150, tamanho: 1, tipo: 'A', obrigatorio: false, cor: '#f5f5f5', descricao: 'Identificação - Branco' },
+    { nome: 'Aceite', ini: 149, fim: 150, tamanho: 1, tipo: 'A', obrigatorio: false, valores: ['A', 'N'], cor: '#fce4ec', descricao: 'Aceite do Título (1 pos): A=Sacado aceitou/assinou o título, N=Não aceite. Branco no Paulista (não utilizado).',
+      lookup: [
+        { codigo: 'A', descricao: 'Aceite — sacado assinou/aceitou o título' },
+        { codigo: 'N', descricao: 'Não Aceite — título sem aceite formal do sacado' },
+      ]
+    },
     { nome: 'Data Emissão', ini: 150, fim: 156, tamanho: 6, tipo: 'N', obrigatorio: true, formato: 'DDMMAA', cor: '#b2ebf2', descricao: 'Data Emissão Título - DDMMAA' },
-    { nome: '1ª Instrução', ini: 156, fim: 158, tamanho: 2, tipo: 'N', obrigatorio: false, valores: ['00'], cor: '#b0bec5', descricao: '1ª Instrução - 00 (2 pos)' },
-    { nome: '2ª Instrução', ini: 158, fim: 159, tamanho: 1, tipo: 'N', obrigatorio: false, valores: ['0'], cor: '#90a4ae', descricao: '2ª Instrução - 0 (1 pos)' },
+    { nome: '1ª Instrução', ini: 156, fim: 158, tamanho: 2, tipo: 'N', obrigatorio: false, valores: ['00', '02', '06', '07'], cor: '#b0bec5', descricao: 'Instrução de cobrança ao banco (2 pos) — o que o banco deve fazer caso o título não seja pago.',
+      lookup: [
+        { codigo: '00', descricao: 'Sem instrução — banco mantém o título em carteira' },
+        { codigo: '02', descricao: 'Devolver após N dias do vencimento' },
+        { codigo: '06', descricao: 'Protestar após N dias corridos do vencimento' },
+        { codigo: '07', descricao: 'Não protestar' },
+      ]
+    },
+    { nome: '2ª Instrução', ini: 158, fim: 159, tamanho: 1, tipo: 'N', obrigatorio: false, valores: ['0', '1', '2', '3'], cor: '#90a4ae', descricao: 'Instrução complementar ao banco (1 pos) — complementa a 1ª Instrução indicando tipo de prazo ou ação adicional.',
+      lookup: [
+        { codigo: '0', descricao: 'Sem instrução complementar' },
+        { codigo: '1', descricao: 'Prazo em dias corridos (complementa instrução com prazo)' },
+        { codigo: '2', descricao: 'Prazo em dias úteis (complementa instrução com prazo)' },
+        { codigo: '3', descricao: 'Não cobrar mora/multa após vencimento' },
+      ]
+    },
     { nome: 'Insc. Est. Sacado', ini: 159, fim: 173, tamanho: 14, tipo: 'A', obrigatorio: false, cor: '#ffab91', descricao: 'Inscrição Estadual Sacado (14 pos) - Obrig. p/ Duplicata' },
     { nome: 'Nº Termo Cessão', ini: 173, fim: 192, tamanho: 19, tipo: 'A', obrigatorio: false, cor: '#ff8a65', descricao: 'Número Termo Cessão (19 pos) - Obrig. p/ Duplicata' },
     { nome: 'Valor Presente', ini: 192, fim: 205, tamanho: 13, tipo: 'N', obrigatorio: true, cor: '#80cbc4', descricao: 'Valor Presente Parcela (13 pos, 2 dec)' },
@@ -181,6 +250,7 @@ export class PaulistaCnab400ValidadorComponent implements OnDestroy {
     { nome: 'Nome Cedente', ini: 334, fim: 380, tamanho: 46, tipo: 'A', obrigatorio: true, cor: '#aed581', descricao: 'Nome do Cedente (46 pos) - 335 a 380' },
     { nome: 'CNPJ Cedente', ini: 380, fim: 394, tamanho: 14, tipo: 'N', obrigatorio: true, cor: '#81c784', descricao: 'CNPJ do Cedente (14 pos) - 381 a 394' },
     { nome: 'Seq. Registro', ini: 394, fim: 400, tamanho: 6, tipo: 'N', obrigatorio: true, cor: '#b2ebf2', descricao: 'Número Sequencial Registro' },
+    { nome: 'Chave NFe', ini: 400, fim: 444, tamanho: 44, tipo: 'N', obrigatorio: false, cor: '#c8e6c9', descricao: 'Chave de Acesso da NF-e (44 dígitos) — extensão Frontis pos 401-444' },
   ];
 
   // ========================================
@@ -464,7 +534,11 @@ export class PaulistaCnab400ValidadorComponent implements OnDestroy {
     } else {
       val = val.padEnd(tam, ' ').substring(0, tam);
     }
-    const linhaAntes = this.linhasEditadas[this.linhaAtiva];
+    // Garante que a linha tem pelo menos campo.ini chars antes de inserir (extensão 444)
+    let linhaAntes = this.linhasEditadas[this.linhaAtiva];
+    if (linhaAntes.length < campo.ini) {
+      linhaAntes = linhaAntes.padEnd(campo.ini, ' ');
+    }
     const linhaDepois = linhaAntes.substring(0, campo.ini) + val + linhaAntes.substring(campo.fim);
     if (linhaAntes !== linhaDepois) {
       this.totalEdicoes++;
