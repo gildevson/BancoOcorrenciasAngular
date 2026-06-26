@@ -349,7 +349,7 @@
   align-items: center;
   justify-content: center;
   padding: 9px 18px;
-  background: #1d4ed8;
+  background: #1E3B65;
   color: #ffffff;
   border-radius: 8px;
   font-weight: 600;
@@ -363,8 +363,8 @@
 }
 
 .validador-btn:hover {
-  background: #1e40af;
-  box-shadow: 0 4px 14px rgba(29, 78, 216, 0.38);
+  background: #162d4e;
+  box-shadow: 0 4px 14px rgba(30, 59, 101, 0.38);
   transform: translateY(-1px);
 }
 
