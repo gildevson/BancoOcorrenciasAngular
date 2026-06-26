@@ -1,82 +1,219 @@
 /* ============================================
-   LAYOUTS DE BANCO - ESTILO CLARO E MODERNO
-   Design Clean Inspirado em Cards Modernos
+   VALIDADORES - DESIGN MODERNO PROFISSIONAL
    ============================================ */
 
 /* ===== CONTAINER PRINCIPAL ===== */
 .validador-list {
   width: 100%;
-  max-width: 1250px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 40px 24px 48px 24px;
-  background: #ffffff;
-  border-radius: 16px;
+  padding: 32px 24px 64px;
+}
+
+/* ===== HEADER DA PÁGINA ===== */
+.list-header {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 55%, #1d4ed8 100%);
+  border-radius: 20px;
+  padding: 44px 52px;
+  margin-bottom: 40px;
   position: relative;
-  margin-top: 10px;
+  overflow: hidden;
 }
 
-/* ===== TÍTULO PRINCIPAL ===== */
+.list-header::before {
+  content: '';
+  position: absolute;
+  top: -60%;
+  right: -5%;
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.06) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.list-header::after {
+  content: '';
+  position: absolute;
+  bottom: -40%;
+  left: 15%;
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle, rgba(29, 78, 216, 0.25) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
 .validador-list h2 {
-  text-align: left;
-  margin-bottom: 8px;
-  font-size: 2rem;
-  font-weight: 700;
-  color: #1a1a1a;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 12px 0;
   letter-spacing: -0.5px;
+  position: relative;
+  z-index: 1;
 }
 
-/* ===== SUBTÍTULO ===== */
 .subtitle-info {
-  text-align: left;
-  margin-bottom: 32px;
-  color: #666;
+  color: rgba(255, 255, 255, 0.72);
   font-size: 1rem;
-  line-height: 1.5;
+  margin: 0 0 28px 0;
+  max-width: 580px;
+  line-height: 1.65;
+  position: relative;
+  z-index: 1;
+}
+
+.bancos-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  padding: 8px 20px;
+  border-radius: 100px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(6px);
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== SEÇÃO HEADERS ===== */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 20px 0;
+  padding: 14px 18px;
+  background: #f0fdf4;
+  border-radius: 10px;
+  border: 1px solid #bbf7d0;
+  border-left: 4px solid #16a34a;
+}
+
+.section-header.em-breve {
+  background: #fffbeb;
+  border-color: #fde68a;
+  border-left-color: #d97706;
+  margin-top: 48px;
+}
+
+.section-title {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #14532d;
+  margin: 0;
+  letter-spacing: 0.1px;
+}
+
+.section-header.em-breve .section-title {
+  color: #92400e;
+}
+
+.section-count {
+  background: rgba(255, 255, 255, 0.85);
+  color: #6b7280;
+  padding: 4px 13px;
+  border-radius: 100px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border: 1px solid #e5e7eb;
 }
 
 /* ===== GRID DE BANCOS ===== */
 .bancos-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
   gap: 20px;
+  margin-bottom: 8px;
 }
 
-/* ===== CARD DO BANCO - ESTILO CLARO ===== */
+/* ===== CARD DO BANCO ===== */
 .banco-card {
   display: flex;
   flex-direction: column;
   background: #ffffff;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-  border: 1px solid #e5e5e5;
-  transition: all 0.2s ease;
-  min-height: 180px;
+  border-radius: 16px;
+  padding: 22px 24px 20px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.banco-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #e5e7eb;
+  transition: background 0.25s;
+}
+
+.banco-card.ativo-card::after {
+  background: linear-gradient(90deg, #16a34a 0%, #4ade80 100%);
 }
 
 .banco-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-color: #d0d0d0;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border-color: #d1d5db;
+  transform: translateY(-3px);
+}
+
+.banco-card.ativo-card {
+  border-color: #e5e7eb;
+}
+
+.banco-card.ativo-card:hover {
+  border-color: #86efac;
+  box-shadow: 0 8px 32px rgba(22, 163, 74, 0.13);
+}
+
+.banco-card.inativo-card {
+  background: #f9fafb;
+  opacity: 0.78;
+}
+
+.banco-card.inativo-card::after {
+  background: linear-gradient(90deg, #d97706 0%, #fbbf24 100%);
+}
+
+.banco-card.inativo-card:hover {
+  opacity: 1;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
 }
 
 /* ===== HEADER DO CARD ===== */
 .card-header {
   display: flex;
   align-items: flex-start;
-  gap: 16px;
-  margin-bottom: 16px;
+  gap: 14px;
+  margin-bottom: 14px;
 }
 
 /* ===== LOGO DO BANCO ===== */
+.banco-logo-wrapper {
+  flex-shrink: 0;
+}
+
 .banco-logo {
-  width: 56px;
-  height: 56px;
-  min-width: 56px;
+  width: 52px;
+  height: 52px;
+  min-width: 52px;
   object-fit: contain;
-  background: #f8f9fa;
+  background: #f8fafc;
   border-radius: 12px;
   padding: 8px;
-  border: 1px solid #eee;
+  border: 1px solid #e5e7eb;
+  transition: border-color 0.2s;
+}
+
+.banco-card:hover .banco-logo {
+  border-color: #d1d5db;
 }
 
 /* ===== INFO DO BANCO ===== */
@@ -86,20 +223,20 @@
 }
 
 .banco-nome {
-  font-weight: 600;
-  font-size: 1.1rem;
-  color: #1a1a1a;
-  margin-bottom: 4px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #111827;
+  margin: 0 0 4px 0;
   line-height: 1.3;
 }
 
 .banco-tipo {
-  font-size: 0.875rem;
-  color: #666;
+  font-size: 0.82rem;
+  color: #6b7280;
 }
 
 .banco-tipo strong {
-  color: #333;
+  color: #1d4ed8;
   font-weight: 600;
 }
 
@@ -107,65 +244,69 @@
 .status-badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 600;
+  gap: 5px;
+  padding: 5px 11px;
+  border-radius: 100px;
+  font-size: 0.68rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.6px;
   white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.status-badge::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
 
 .status-badge.ativo {
-  background: #e8f5e9;
-  color: #2e7d32;
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
 }
 
 .status-badge.ativo::before {
-  content: '';
-  width: 6px;
-  height: 6px;
-  background: #4caf50;
-  border-radius: 50%;
+  background: #16a34a;
+  box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.25);
 }
 
 .status-badge.inativo {
-  background: #f5f5f5;
-  color: #9e9e9e;
+  background: #fff7ed;
+  color: #c2410c;
+  border: 1px solid #fed7aa;
 }
 
 .status-badge.inativo::before {
-  content: '';
-  width: 6px;
-  height: 6px;
-  background: #bdbdbd;
-  border-radius: 50%;
+  background: #f97316;
 }
 
 /* ===== FOOTER DO CARD ===== */
 .card-footer {
-  margin-top: auto;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 /* ===== BADGE DO CÓDIGO DO BANCO ===== */
 .banco-codigo-badge {
   display: inline-flex;
   align-items: center;
-  padding: 6px 12px;
-  background: #e8f5e9;
-  color: #2e7d32;
+  padding: 4px 12px;
+  background: #eff6ff;
+  color: #1d4ed8;
   border-radius: 6px;
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: 0.78rem;
+  font-weight: 700;
   width: fit-content;
-  border: 1px solid #c8e6c9;
+  border: 1px solid #bfdbfe;
+  letter-spacing: 0.2px;
 }
 
-/* ===== LINKS DE VALIDADORES ===== */
+/* ===== GRUPOS DE VALIDADORES ===== */
 .validador-grupos {
   display: flex;
   flex-direction: column;
@@ -175,15 +316,15 @@
 .validador-grupo {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 7px;
 }
 
 .grupo-label {
-  font-size: 10px;
-  font-weight: 700;
-  color: #9e9e9e;
+  font-size: 9.5px;
+  font-weight: 800;
+  color: #9ca3af;
   text-transform: uppercase;
-  letter-spacing: 0.8px;
+  letter-spacing: 1px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -193,7 +334,7 @@
   content: '';
   flex: 1;
   height: 1px;
-  background: #e0e0e0;
+  background: #e5e7eb;
 }
 
 .validador-links {
@@ -202,31 +343,34 @@
   gap: 8px;
 }
 
+/* ===== BOTÕES DE VALIDADOR ===== */
 .validador-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 16px;
-  background: linear-gradient(135deg, #1976d2 0%, #1e88e5 100%);
-  color: #fff;
+  padding: 9px 18px;
+  background: #1d4ed8;
+  color: #ffffff;
   border-radius: 8px;
-  font-weight: 500;
-  font-size: 0.875rem;
+  font-weight: 600;
+  font-size: 0.83rem;
   text-decoration: none;
-  box-shadow: 0 2px 4px rgba(25, 118, 210, 0.2);
   transition: all 0.2s ease;
   border: none;
   cursor: pointer;
+  letter-spacing: 0.15px;
+  line-height: 1;
 }
 
 .validador-btn:hover {
-  background: linear-gradient(135deg, #1565c0 0%, #1976d2 100%);
-  box-shadow: 0 4px 8px rgba(25, 118, 210, 0.3);
+  background: #1e40af;
+  box-shadow: 0 4px 14px rgba(29, 78, 216, 0.38);
   transform: translateY(-1px);
 }
 
 .validador-btn:active {
   transform: translateY(0);
+  box-shadow: none;
 }
 
 /* ===== SEM VALIDADOR ===== */
@@ -234,125 +378,87 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: #9e9e9e;
-  font-size: 0.875rem;
-  padding: 10px 16px;
-  background: #f5f5f5;
+  color: #9ca3af;
+  font-size: 0.84rem;
+  padding: 9px 16px;
+  background: #f9fafb;
   border-radius: 8px;
-  border: 1px dashed #e0e0e0;
+  border: 1px dashed #e5e7eb;
   font-weight: 500;
+}
+
+/* ===== ESTADO VAZIO ===== */
+.empty-state {
+  text-align: center;
+  padding: 80px 40px;
+}
+
+.empty-state-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+
+.empty-state-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 8px 0;
+}
+
+.empty-state-text {
+  color: #6b7280;
+  font-size: 0.95rem;
 }
 
 /* ===== RESPONSIVIDADE ===== */
 @media (max-width: 768px) {
   .validador-list {
-    padding: 24px 16px;
+    padding: 20px 16px 48px;
+  }
+
+  .list-header {
+    padding: 28px 24px;
+    border-radius: 16px;
+    margin-bottom: 28px;
   }
 
   .validador-list h2 {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
+  }
+
+  .subtitle-info {
+    font-size: 0.93rem;
+    margin-bottom: 20px;
   }
 
   .bancos-grid {
     grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .card-header {
-    gap: 12px;
+    gap: 14px;
   }
 
   .banco-logo {
-    width: 48px;
-    height: 48px;
-    min-width: 48px;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
   }
 
-  .banco-nome {
-    font-size: 1rem;
+  .banco-card {
+    padding: 18px 20px 16px;
   }
 }
 
 @media (max-width: 480px) {
-  .status-badge {
-    font-size: 0.7rem;
-    padding: 3px 8px;
+  .list-header {
+    padding: 24px 18px;
   }
 
   .validador-btn {
     width: 100%;
     justify-content: center;
   }
-}
 
-/* ===== CABEÇALHOS DE SEÇÃO ===== */
-.section-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 20px;
-  margin-bottom: 16px;
-  padding: 12px 16px;
-  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-  border-radius: 10px;
-  border-left: 4px solid #4caf50;
-}
-
-.section-header.em-breve {
-  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-  border-left-color: #ff9800;
-  margin-top: 40px;
-}
-
-.section-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #2e7d32;
-  margin: 0;
-}
-
-.section-header.em-breve .section-title {
-  color: #e65100;
-}
-
-.section-count {
-  font-size: 0.85rem;
-  color: #666;
-  background: rgba(255,255,255,0.7);
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-weight: 500;
-}
-
-/* ===== CARDS ATIVOS ===== */
-.banco-card.ativo-card {
-  border: 1px solid #c8e6c9;
-  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.1);
-}
-
-.banco-card.ativo-card:hover {
-  border-color: #4caf50;
-  box-shadow: 0 4px 16px rgba(76, 175, 80, 0.2);
-}
-
-/* ===== CARDS INATIVOS / EM BREVE ===== */
-.banco-card.inativo-card {
-  border: 1px solid #e0e0e0;
-  opacity: 0.75;
-  filter: grayscale(30%);
-}
-
-.banco-card.inativo-card:hover {
-  opacity: 1;
-  filter: grayscale(0%);
-}
-
-.em-breve-grid .banco-card {
-  background: #fafafa;
-}
-
-/* ===== BADGE EM BREVE ===== */
-.status-badge.inativo {
-  background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
-  color: #fff;
+  .status-badge {
+    font-size: 0.63rem;
+    padding: 4px 9px;
+  }
 }
