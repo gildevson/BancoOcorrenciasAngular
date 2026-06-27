@@ -34,7 +34,7 @@ import { Component } from '@angular/core';
               Experimente grátis por 30 dias.
             </p>
             <div class="sponsor-cta-row">
-              <a href="#" class="sponsor-cta" target="_blank" rel="noopener noreferrer">
+              <a href="https://finanblue.com.br" class="sponsor-cta" target="_blank" rel="noopener noreferrer">
                 Saiba mais
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                   <path d="M5 12h14M12 5l7 7-7 7"/>
