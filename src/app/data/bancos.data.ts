@@ -170,7 +170,8 @@ export const BANCOS_DATA: BancoData[] = [
     logo: 'https://www.bancopaulista.com.br/Imagens/logo_banco_paulista.png',
     ativo: true,
     validadores: [
-      { nome: 'Remessa CNAB 400/444', routerLink: '/validadores/paulista/cnab400' }
+      { nome: 'Remessa CNAB 400/444', routerLink: '/validadores/paulista/cnab400', grupo: 'CNAB 400' },
+      { nome: 'Retorno CNAB 400', routerLink: '/validadores/paulista/retorno400', grupo: 'CNAB 400' },
     ]
   },
   {

@@ -94,6 +94,13 @@ export const routes: Routes = [
         .then(m => m.PaulistaCnab400ValidadorComponent),
   },
   {
+    path: 'validadores/paulista/retorno400',
+    title: 'Validador Retorno Banco Paulista/Frontis CNAB 400',
+    loadComponent: () =>
+      import('./pages/validadores/paulista/paulista-retorno400-validador.component')
+        .then(m => m.PaulistaRetorno400ValidadorComponent),
+  },
+  {
     path: 'validadores/santander/cnab400',
     title: 'Validador Santander CNAB 400',
     loadComponent: () =>
