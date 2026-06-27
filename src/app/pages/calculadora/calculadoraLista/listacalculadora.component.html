@@ -1,8 +1,43 @@
 <section class="calc-list">
   <div class="container">
-    <div class="header-section">
-      <h1>Calculos Operacionais Financeiros</h1>
-      <p>Escolha o tipo de cálculo que deseja realizar</p>
+    <div class="calc-hero">
+      <img class="calc-hero-img" src="assets/logo/LayoutFinancas.jpg" alt="" aria-hidden="true">
+
+      <div class="calc-hero-left">
+        <div class="calc-hero-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <path d="M9 9h1v6M12 9h3M12 12h2M12 15h3"/>
+          </svg>
+        </div>
+        <div>
+          <h1>Cálculos Operacionais Financeiros</h1>
+          <p class="calc-hero-sub">Ferramentas para simulação de encargos bancários — deságio, IOF, mora, juros e multas sobre operações financeiras.</p>
+          <div class="calc-hero-stats">
+            <div class="calc-stat">
+              <span class="calc-stat-num">7</span>
+              <span class="calc-stat-label">Calculadoras</span>
+            </div>
+            <div class="calc-stat-div"></div>
+            <div class="calc-stat">
+              <span class="calc-stat-num">100%</span>
+              <span class="calc-stat-label">Gratuito</span>
+            </div>
+            <div class="calc-stat-div"></div>
+            <div class="calc-stat">
+              <span class="calc-stat-num">CNAB</span>
+              <span class="calc-stat-label">Compatível</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="calc-hero-badges">
+        <span class="calc-badge">Deságio</span>
+        <span class="calc-badge calc-badge-b">IOF</span>
+        <span class="calc-badge calc-badge-c">Mora</span>
+        <span class="calc-badge calc-badge-d">Juros</span>
+      </div>
     </div>
 
     <div class="calculadoras-list">
@@ -129,6 +164,25 @@
           </svg>
         </div>
       </a>
+      <!-- JUROS COMPOSTOS -->
+      <a class="calc-item" routerLink="/calculadora/juros-compostos">
+        <div class="calc-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
+            <polyline points="16 7 22 7 22 13" />
+          </svg>
+        </div>
+        <div class="calc-info">
+          <h3>Juros Compostos</h3>
+          <p>Simule o crescimento do seu investimento com aportes mensais</p>
+        </div>
+        <div class="calc-arrow">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </div>
+      </a>
+
       <!-- CÁLCULO COMPLETO (desabilitado) -->
       <div class="calc-item disabled">
         <div class="calc-icon">

@@ -1,52 +1,101 @@
-<div class="home-layout">
-  <div class="home-center">
-    <app-moedas></app-moedas>
+<app-banner-promo></app-banner-promo>
+<app-mercado-resumo></app-mercado-resumo>
 
-    <section class="news">
-      <div class="news-inner">
-        <div class="news-head">
-          <h2>Últimas publicações</h2>
-          <a class="link" routerLink="/noticias">Ver todas</a>
-        </div>
+<div class="news-page">
+  <div class="news-container">
 
-        <div class="loading-container" *ngIf="loading">
-          <div class="spinner"></div>
-          <p>Carregando notícias...</p>
-        </div>
+    @if (loading) {
+      <div class="loading-container">
+        <div class="spinner"></div>
+        <p>Carregando notícias...</p>
+      </div>
+    }
 
-        <div class="news-grid" *ngIf="!loading && noticias.length">
-          <a class="news-card" *ngFor="let n of noticias" [routerLink]="['/noticia', n.slug]">
-            <div class="img">
-              <img
-                [src]="n.imagemCapa || 'https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?w=400&q=80'"
-                [alt]="n.titulo"
-                (error)="onImageError($event)"
-              >
-              <span class="tag" *ngIf="n.categoria">{{ n.categoria }}</span>
+    @if (!loading && noticias.length) {
+
+      <!-- Cabeçalho com link "ver todas" -->
+      <div class="page-head">
+        <h2>Últimas publicações</h2>
+        <a class="link" routerLink="/noticias">Ver todas</a>
+      </div>
+
+      <!-- ===== HERO: 1ª notícia grande + 3 na lateral ===== -->
+      <div class="news-hero-row">
+        <a class="hero-card" [routerLink]="['/noticia', noticias[0].slug]">
+          <div class="hero-img">
+            <img [src]="noticias[0].imagemCapa || DEFAULT_IMG" [alt]="noticias[0].titulo" (error)="onImageError($event)">
+          </div>
+          <div class="hero-body">
+            @if (noticias[0].categoria) {
+              <span class="cat-label">{{ noticias[0].categoria }}</span>
+            }
+            <h2>{{ noticias[0].titulo }}</h2>
+            <p>{{ noticias[0].resumo }}</p>
+            <div class="meta">
+              <span class="material-icons">event</span>
+              <span>{{ formatarData(noticias[0].dataPublicacao) }}</span>
+              <span class="dot">•</span>
+              <span>{{ calcularTempoLeitura(noticias[0].conteudo) }} min de leitura</span>
             </div>
-            <div class="content">
-              <div class="meta">
-                <span class="material-icons">event</span>
-                <span>{{ formatarData(n.dataPublicacao) }}</span>
-                <span class="dot">•</span>
-                <span class="material-icons">schedule</span>
-                <span>{{ calcularTempoLeitura(n.conteudo) }} MIN DE LEITURA</span>
+          </div>
+        </a>
+
+        <div class="side-list">
+          @for (n of noticias.slice(1, 4); track n.slug) {
+            <a class="side-item" [routerLink]="['/noticia', n.slug]">
+              <div class="side-img">
+                <img [src]="n.imagemCapa || DEFAULT_IMG" [alt]="n.titulo" (error)="onImageError($event)">
               </div>
-              <h3>{{ n.titulo }}</h3>
-              <p>{{ n.resumo }}</p>
-              <span class="read">Ler mais</span>
-            </div>
-          </a>
-        </div>
-
-        <div class="empty" *ngIf="!loading && !noticias.length">
-          <span class="material-icons">article</span>
-          <p>Nenhuma publicação disponível no momento.</p>
+              <div class="side-body">
+                @if (n.categoria) {
+                  <span class="cat-label">{{ n.categoria }}</span>
+                }
+                <h3>{{ n.titulo }}</h3>
+                <div class="meta">
+                  <span>{{ formatarData(n.dataPublicacao) }}</span>
+                </div>
+              </div>
+            </a>
+          }
         </div>
       </div>
-    </section>
 
-    <app-finance-highlights></app-finance-highlights>
+      <!-- ===== SEÇÕES POR CATEGORIA ===== -->
+      @for (grupo of gruposPorCategoria; track grupo.categoria) {
+        <div class="cat-section">
+          <div class="cat-section-header">
+            <h2>{{ grupo.categoria }}</h2>
+            <a class="link-ver" routerLink="/noticias">Ver mais</a>
+          </div>
+
+          <div class="cat-grid">
+            @for (n of grupo.noticias.slice(0, 4); track n.slug) {
+              <a class="cat-card" [routerLink]="['/noticia', n.slug]">
+                <div class="cat-img">
+                  <img [src]="n.imagemCapa || DEFAULT_IMG" [alt]="n.titulo" (error)="onImageError($event)">
+                </div>
+                <span class="cat-label">{{ n.categoria }}</span>
+                <h3>{{ n.titulo }}</h3>
+                @if (n.resumo) {
+                  <p class="cat-resumo">{{ n.resumo }}</p>
+                }
+              </a>
+            }
+          </div>
+        </div>
+        <hr class="section-divider">
+      }
+
+    }
+
+    @if (!loading && !noticias.length) {
+      <div class="empty">
+        <span class="material-icons">article</span>
+        <p>Nenhuma publicação disponível no momento.</p>
+      </div>
+    }
+
   </div>
-
 </div>
+
+<app-finance-highlights></app-finance-highlights>

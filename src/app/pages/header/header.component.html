@@ -16,20 +16,41 @@
     <!-- Navegação Principal -->
     <nav id="navigation-menu" class="b3-nav-main" [class.open]="menuOpen" role="navigation"
       aria-label="Navegação principal" [attr.aria-hidden]="isMobile && !menuOpen" (click)="onMenuClick($event)">
-      <!-- Botão fechar (apenas mobile) -->
-      <button *ngIf="isMobile && menuOpen" class="mobile-close" type="button" (click)="closeMenu()"
-        aria-label="Fechar menu de navegação">
-        <span class="material-icons" aria-hidden="true">close</span>
-      </button>
+
+      <!-- Cabeçalho do drawer (apenas mobile) -->
+      <div class="mobile-drawer-head" *ngIf="isMobile">
+        <div class="mobile-drawer-brand">
+          <img src="../assets/logo/logoBo.png" alt="Logo" class="mobile-drawer-logo" />
+          <span>Banco <strong>Ocorrência</strong></span>
+        </div>
+        <button class="mobile-close" type="button" (click)="closeMenu()" aria-label="Fechar menu">
+          <span class="material-icons" aria-hidden="true">close</span>
+        </button>
+      </div>
+
+      <!-- Área de login/usuário (apenas mobile) -->
+      <div class="mobile-user-area" *ngIf="isMobile">
+        <ng-container *ngIf="(user$ | async) as u; else mobileLoginBtn">
+          <div class="mobile-user-card">
+            <span class="material-icons">account_circle</span>
+            <div class="mobile-user-info">
+              <span class="mobile-user-greeting">Olá,</span>
+              <strong class="mobile-user-name">{{ u.nome }}</strong>
+            </div>
+            <button class="mobile-logout-btn" (click)="logout()">Sair</button>
+          </div>
+        </ng-container>
+        <ng-template #mobileLoginBtn>
+          <a class="mobile-login-btn" [routerLink]="[{ outlets: { modal: ['login'] } }]"
+             (click)="closeMenu()" aria-label="Fazer login como administrador">
+            <span class="material-icons">account_circle</span>
+            <span>Login Administrativo</span>
+            <span class="material-icons mobile-login-arrow">chevron_right</span>
+          </a>
+        </ng-template>
+      </div>
 
       <ul class="b3-nav-menu">
-        <!-- Login Mobile -->
-        <li class="mobile-login-item" *ngIf="isMobile">
-          <a [routerLink]="[{ outlets: { modal: ['login'] } }]" title="Login Administrativo"
-            aria-label="Fazer login como administrador">
-            <span class="material-icons" aria-hidden="true">account_circle</span>
-          </a>
-        </li>
 
         <!-- Início -->
         <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" #rlaHome="routerLinkActive">

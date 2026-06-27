@@ -1,0 +1,274 @@
+.jc-container {
+  width: 95%;
+  max-width: 1250px;
+  margin: 0 auto;
+}
+
+/* Botão Voltar */
+.btn-voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1.2rem;
+  background: #002B49;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  margin: 1.2rem 0 1rem;
+  box-shadow: 0 2px 8px rgba(0,43,73,0.18);
+}
+.btn-voltar:hover { background: #003d6b; transform: translateX(-4px); }
+
+/* Header */
+.jc-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.jc-header h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 0 0 0.4rem;
+  background: linear-gradient(135deg, #00253F 0%, #003d66 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.subtitle { color: #7f8c8d; font-size: 0.85rem; margin: 0; }
+
+/* Fórmula */
+.formula-info {
+  background: linear-gradient(135deg, #e8f4fc 0%, #d6eaf8 100%);
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  border-left: 3px solid #00253F;
+}
+.formula-info h3 { color: #00253F; font-size: 0.95rem; margin: 0 0 0.75rem; font-weight: 600; }
+.formulas { display: flex; flex-direction: column; gap: 0.5rem; }
+.formula-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.8rem;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #cce0eb;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.formula-item.total {
+  background: linear-gradient(135deg, #003d66 0%, #00253F 100%);
+  color: white;
+}
+.formula-item.total code { background: rgba(255,255,255,.2); color: white; border-color: rgba(255,255,255,.3); }
+.formula-label { font-weight: 500; color: #2c3e50; font-size: 0.85rem; }
+.formula-item.total .formula-label { color: white; }
+.formulas code {
+  background: #fff;
+  padding: 0.25rem 0.6rem;
+  border-radius: 5px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.78rem;
+  color: #00253F;
+  border: 1px solid #cce0eb;
+  font-weight: 500;
+}
+
+/* Formulário */
+.form-section { display: flex; flex-direction: column; gap: 1.2rem; margin-bottom: 1.5rem; }
+.form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+.form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+
+label {
+  font-weight: 500;
+  color: #34495e;
+  font-size: 0.875rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.hint { font-size: 0.75rem; color: #95a5a6; font-weight: 400; }
+
+input[type="number"] {
+  padding: 0.7rem 0.9rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  background: #f8f9fa;
+  color: #2c3e50;
+}
+input[type="number"]:focus {
+  outline: none;
+  border-color: #00253F;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(0,37,63,0.1);
+}
+
+select {
+  padding: 0.7rem 0.9rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  background: #f8f9fa;
+  color: #2c3e50;
+  cursor: pointer;
+}
+select:focus { outline: none; border-color: #00253F; }
+
+.input-with-suffix { position: relative; display: flex; align-items: center; }
+.input-with-suffix input { flex: 1; padding-right: 2.5rem; }
+.suffix { position: absolute; right: 0.8rem; color: #00253F; font-weight: 600; font-size: 0.9rem; }
+
+.input-with-select { display: flex; gap: 0.5rem; }
+.input-with-select input { flex: 1; }
+.input-with-select select { width: 110px; flex-shrink: 0; }
+
+/* Botões */
+.button-group { display: flex; gap: 0.8rem; margin-top: 0.5rem; }
+button {
+  flex: 1;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+.btn-calcular {
+  background: linear-gradient(135deg, #003d66 0%, #00253F 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(0,37,63,0.3);
+}
+.btn-calcular:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,37,63,0.4); }
+.btn-limpar { background: #ecf0f1; color: #34495e; }
+.btn-limpar:hover { background: #bdc3c7; transform: translateY(-2px); }
+.btn-icon { font-size: 1rem; }
+
+/* Resultado */
+.resultado {
+  background: linear-gradient(135deg, #e8f4fc 0%, #d6eaf8 100%);
+  padding: 1.5rem;
+  border-radius: 10px;
+  border: 2px solid #00253F;
+  animation: slideIn 0.3s ease;
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.resultado h3 { color: #00253F; font-size: 1.1rem; margin: 0 0 1.2rem; font-weight: 600; text-align: center; }
+
+/* Cards de resultado */
+.resultado-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.8rem;
+  margin-bottom: 1.2rem;
+}
+.res-card {
+  background: white;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  border: 1px solid #cce0eb;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.res-card.destaque {
+  background: linear-gradient(135deg, #003d66 0%, #00253F 100%);
+  border: none;
+  grid-column: span 2;
+}
+.res-label { font-size: 0.75rem; color: #7f8c8d; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
+.res-card.destaque .res-label { color: rgba(255,255,255,.7); }
+.res-valor { font-size: 1.1rem; font-weight: 700; color: #00253F; }
+.res-valor.grande { font-size: 1.6rem; color: white; }
+.res-valor.verde { color: #27ae60; font-size: 1.2rem; }
+
+/* Barra de composição */
+.barra-composicao { margin-bottom: 1rem; }
+.barra-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #4b6373;
+  margin-bottom: 6px;
+}
+.barra-track {
+  display: flex;
+  height: 10px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #e0e0e0;
+}
+.barra-investido { background: #00253F; transition: width 0.5s ease; }
+.barra-juros { background: #27ae60; transition: width 0.5s ease; }
+
+/* Toggle tabela */
+.btn-tabela {
+  flex: unset;
+  width: 100%;
+  background: rgba(0,37,63,0.08);
+  color: #00253F;
+  border: 1px solid #cce0eb;
+  border-radius: 8px;
+  padding: 0.6rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-bottom: 1rem;
+}
+.btn-tabela:hover { background: rgba(0,37,63,0.14); }
+
+/* Tabela de evolução */
+.tabela-wrap {
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #cce0eb;
+  max-height: 360px;
+  overflow-y: auto;
+}
+.evolucao-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+.evolucao-table thead { position: sticky; top: 0; background: #00253F; color: white; }
+.evolucao-table th { padding: 10px 12px; text-align: right; font-weight: 700; white-space: nowrap; }
+.evolucao-table th:first-child { text-align: left; }
+.evolucao-table td { padding: 8px 12px; text-align: right; border-bottom: 1px solid #e8f0f5; color: #2c3e50; }
+.evolucao-table td:first-child { text-align: left; font-weight: 600; }
+.evolucao-table tr:hover td { background: #f0f7ff; }
+.td-juros { color: #27ae60; font-weight: 600; }
+.td-saldo { color: #00253F; font-weight: 700; }
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .resultado-cards { grid-template-columns: 1fr 1fr; }
+  .res-card.destaque { grid-column: 1 / -1; }
+  .button-group { flex-direction: column; }
+  .formula-item { flex-direction: column; align-items: flex-start; gap: 0.4rem; }
+  .form-row { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .jc-container { padding: 0 0.5rem; }
+  .resultado-cards { grid-template-columns: 1fr; }
+  .res-valor.grande { font-size: 1.3rem; }
+  .input-with-select { flex-direction: column; }
+  .input-with-select select { width: 100%; }
+}
+
+::placeholder { color: #95a5a6; opacity: 1; font-size: 0.9rem; }
