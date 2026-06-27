@@ -203,6 +203,7 @@ export const BANCOS_DATA: BancoData[] = [
     ativo: true,
     validadores: [
       { nome: 'Remessa CNAB 400', routerLink: '/validadores/uy3/cnab400', grupo: 'CNAB 400' },
+      { nome: 'Retorno CNAB 400', routerLink: '/validadores/uy3/retorno400', grupo: 'CNAB 400' },
     ]
   },
 ];

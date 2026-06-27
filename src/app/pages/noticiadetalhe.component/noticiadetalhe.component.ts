@@ -3,7 +3,7 @@ import { CommonModule, DecimalPipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NoticiasService } from '../../service/noticias.service';
 import { Noticia } from '../../models/noticia.model';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-noticia-detalhe',
@@ -14,6 +14,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 })
 export class NoticiaDetalheComponent implements OnInit {
   noticia?: Noticia;
+  youtubeEmbedUrl: SafeResourceUrl | null = null;
   loading = true;
   erro = '';
   linkCopiado = false;
@@ -58,6 +59,11 @@ export class NoticiaDetalheComponent implements OnInit {
       next: (data) => {
         this.noticia = data;
         this.loading = false;
+
+        const ytId = this.getYouTubeId(data.videoUrl);
+        this.youtubeEmbedUrl = ytId
+          ? this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${ytId}`)
+          : null;
 
         // registra visualização (sem travar a tela se falhar)
         this.noticiasService.registrarVisualizacao(data.id).subscribe({
@@ -144,6 +150,12 @@ export class NoticiaDetalheComponent implements OnInit {
     if (shareUrl) {
       window.open(shareUrl, '_blank', 'width=600,height=400');
     }
+  }
+
+  getYouTubeId(url: string | null | undefined): string | null {
+    if (!url) return null;
+    const m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+    return m ? m[1] : null;
   }
 
   copiarLink(): void {

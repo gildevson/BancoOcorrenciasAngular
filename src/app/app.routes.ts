@@ -150,6 +150,13 @@ export const routes: Routes = [
         .then(m => m.Uy3Cnab400ValidadorComponent),
   },
   {
+    path: 'validadores/uy3/retorno400',
+    title: 'Validador UY3 DTVM CNAB 400 Retorno',
+    loadComponent: () =>
+      import('./pages/validadores/uy3/uy3-retorno400-validador.component')
+        .then(m => m.Uy3Retorno400ValidadorComponent),
+  },
+  {
     path: 'validadores/vortx/cnab400',
     title: 'Validador VORTX CNAB 400 Remessa',
     loadComponent: () =>

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { NoticiasService } from '../../service/noticias.service';
 import { Router, RouterLink } from '@angular/router';
 
@@ -20,7 +21,8 @@ export class NoticiaCadastrarComponent {
   constructor(
     private fb: FormBuilder,
     private noticiasService: NoticiasService,
-    private router: Router
+    private router: Router,
+    private sanitizer: DomSanitizer
   ) {
     this.noticiaForm = this.fb.group({
       titulo: ['', Validators.required],
@@ -39,7 +41,8 @@ export class NoticiaCadastrarComponent {
       fonteNome: [''],
       fonteUrl: [''],
       fontePublicadaEm: [''],
-      fonteAutor: ['']
+      fonteAutor: [''],
+      videoUrl: ['']
     });
   }
 
@@ -64,6 +67,7 @@ export class NoticiaCadastrarComponent {
       fonteNome: raw.fonteNome?.trim(),
       fonteUrl: raw.fonteUrl?.trim(),
       fonteAutor: raw.fonteAutor?.trim(),
+      videoUrl: raw.videoUrl?.trim() || null,
       // Datas no formato ISO completo ou null
       dataPublicacao: raw.dataPublicacao ? this.toIsoWithSeconds(raw.dataPublicacao) : null,
       fontePublicadaEm: raw.fontePublicadaEm ? this.toIsoWithSeconds(raw.fontePublicadaEm) : null,
@@ -80,6 +84,16 @@ export class NoticiaCadastrarComponent {
 
   onImgPreviewError(event: Event): void {
     (event.target as HTMLImageElement).style.display = 'none';
+  }
+
+  getYouTubeId(url: string | null | undefined): string | null {
+    if (!url) return null;
+    const m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+    return m ? m[1] : null;
+  }
+
+  getYouTubeEmbed(id: string): SafeResourceUrl {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${id}`);
   }
 
   // Converte "2026-01-20T23:47" para "2026-01-20T23:47:00"

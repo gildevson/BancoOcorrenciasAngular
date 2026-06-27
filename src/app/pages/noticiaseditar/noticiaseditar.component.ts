@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { NoticiasService } from '../../service/noticias.service';
 import { Noticia } from '../../models/noticia.model';
 
@@ -23,7 +24,8 @@ export class NoticiasEditarComponent implements OnInit {
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private noticiasService: NoticiasService,
-    private router: Router
+    private router: Router,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
@@ -43,11 +45,12 @@ export class NoticiasEditarComponent implements OnInit {
           destaque: [noticia.destaque],
           visualizacoes: [noticia.visualizacoes],
           metaDescription: [noticia.metaDescription],
-          imagemCapa: [noticia.imagemCapa],
+          imagemUrl: [noticia.imagemCapa],
           fonteNome: [noticia.fonteNome],
           fonteUrl: [noticia.fonteUrl],
           fontePublicadaEm: [noticia.fontePublicadaEm],
-          fonteAutor: [noticia.fonteAutor]
+          fonteAutor: [noticia.fonteAutor],
+          videoUrl: [noticia.videoUrl ?? '']
         });
         this.loading = false;
       },
@@ -62,12 +65,24 @@ export class NoticiasEditarComponent implements OnInit {
     if (this.noticiaForm.invalid) return;
     this.loading = true;
     this.errorMsg = '';
-    this.noticiasService.updateNoticia(this.noticiaId, this.noticiaForm.value).subscribe({
+    const raw = this.noticiaForm.value;
+    const payload = { ...raw, videoUrl: raw.videoUrl?.trim() || null };
+    this.noticiasService.updateNoticia(this.noticiaId, payload).subscribe({
       next: () => this.router.navigate(['/noticias-admin']),
       error: () => {
         this.errorMsg = 'Erro ao atualizar notícia.';
         this.loading = false;
       }
     });
+  }
+
+  getYouTubeId(url: string | null | undefined): string | null {
+    if (!url) return null;
+    const m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+    return m ? m[1] : null;
+  }
+
+  getYouTubeEmbed(id: string): SafeResourceUrl {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${id}`);
   }
 }

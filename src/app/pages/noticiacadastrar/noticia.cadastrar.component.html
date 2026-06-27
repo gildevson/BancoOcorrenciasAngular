@@ -221,6 +221,44 @@
       </div>
     </div>
 
+    <!-- SEÇÃO 3B: Vídeo -->
+    <div class="form-card">
+      <div class="card-header">
+        <span class="material-icons">play_circle</span>
+        <h2>Vídeo</h2>
+        <span class="card-badge">Opcional</span>
+      </div>
+
+      <div class="card-body">
+        <div class="field">
+          <label for="videoUrl">
+            URL do vídeo
+            <span class="label-hint">YouTube, Vimeo ou link direto</span>
+          </label>
+          <input
+            id="videoUrl"
+            type="url"
+            formControlName="videoUrl"
+            placeholder="https://www.youtube.com/watch?v=..."
+          />
+        </div>
+
+        <!-- Preview embed YouTube -->
+        @if (getYouTubeId(noticiaForm.get('videoUrl')?.value); as ytId) {
+          <div class="video-preview">
+            <iframe
+              [src]="getYouTubeEmbed(ytId)"
+              width="100%"
+              height="220"
+              frameborder="0"
+              allowfullscreen
+              loading="lazy"
+            ></iframe>
+          </div>
+        }
+      </div>
+    </div>
+
     <!-- SEÇÃO 4: Fonte -->
     <div class="form-card">
       <div class="card-header">

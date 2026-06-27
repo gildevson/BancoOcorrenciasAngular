@@ -94,6 +94,29 @@
           <!-- Corpo do artigo -->
           <div class="article-body" [innerHTML]="getConteudoSeguro()"></div>
 
+          <!-- Vídeo (aparece apenas se houver videoUrl) -->
+          @if (noticia.videoUrl) {
+            <div class="article-video">
+              <div class="video-label">
+                <span class="material-icons">play_circle</span>
+                Vídeo
+              </div>
+              <div class="video-wrapper">
+                @if (youtubeEmbedUrl) {
+                  <iframe
+                    [src]="youtubeEmbedUrl"
+                    frameborder="0"
+                    allowfullscreen
+                    loading="lazy"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  ></iframe>
+                } @else {
+                  <video [src]="noticia.videoUrl" controls></video>
+                }
+              </div>
+            </div>
+          }
+
           <!-- Tags / Categorias -->
           <div class="article-tags" *ngIf="noticia.categoria">
             <span class="tag-label">Categoria:</span>

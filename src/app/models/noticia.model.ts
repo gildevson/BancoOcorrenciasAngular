@@ -21,4 +21,5 @@ export interface Noticia {
   fonteUrl?: string;
   fontePublicadaEm?: string;
   fonteAutor?: string;
+  videoUrl?: string | null;
 }

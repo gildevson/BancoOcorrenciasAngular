@@ -118,20 +118,61 @@ export class PaulistaCnab400ValidadorComponent implements OnDestroy {
   // TODOS OS 47 CAMPOS MAPEADOS CORRETAMENTE
   // ========================================
   camposDetalhe: CampoLayout[] = [
-    { nome: 'Tipo Registro', ini: 0, fim: 1, tamanho: 1, tipo: 'N', obrigatorio: true, valores: ['1'], cor: '#f8bbd0', descricao: 'Identificação Registro (1)' },
+    { nome: 'Tipo Registro', ini: 0, fim: 1, tamanho: 1, tipo: 'N', obrigatorio: true, valores: ['1'], cor: '#f8bbd0', descricao: 'Identificação Registro (1)',
+      lookup: [
+        { codigo: '1', descricao: 'Detalhe / Transação — 1 linha por título registrado' },
+      ]
+    },
     { nome: 'Déb. Auto — Banco', ini: 1, fim: 4, tamanho: 3, tipo: 'N', obrigatorio: false, cor: '#e3f2fd', descricao: 'Débito Automático: Código do Banco do sacado (3 pos) — Branco para cobrança normal' },
     { nome: 'Déb. Auto — Agência', ini: 4, fim: 9, tamanho: 5, tipo: 'N', obrigatorio: false, cor: '#e8f5e9', descricao: 'Débito Automático: Agência do sacado (5 pos) — Branco para cobrança normal' },
     { nome: 'Déb. Auto — Conta C/C', ini: 9, fim: 19, tamanho: 10, tipo: 'N', obrigatorio: false, cor: '#fff8e1', descricao: 'Débito Automático: Conta Corrente do sacado (10 pos) — Branco para cobrança normal' },
-    { nome: 'Déb. Auto — Dígito', ini: 19, fim: 20, tamanho: 1, tipo: 'N', obrigatorio: false, cor: '#fce4ec', descricao: 'Débito Automático: Dígito verificador da conta (1 pos) — Branco para cobrança normal' },
+    { nome: 'Déb. Auto — Dígito', ini: 19, fim: 20, tamanho: 1, tipo: 'N', obrigatorio: false, cor: '#fce4ec', descricao: 'Débito Automático: Dígito verificador da conta (1 pos) — Branco para cobrança normal',
+      lookup: [
+        { codigo: ' ', descricao: 'Branco — cobrança normal (não Débito Automático)' },
+        { codigo: '0–9', descricao: 'Dígito verificador da conta C/C do sacado — somente quando usar Débito Automático (preencher também Banco, Agência e Conta C/C acima)' },
+      ]
+    },
     { nome: 'Coobrigação', ini: 20, fim: 22, tamanho: 2, tipo: 'N', obrigatorio: false, valores: ['01', '02'], cor: '#ffe082', descricao: '01=Com, 02=Sem Coobrigação',
       lookup: [
         { codigo: '01', descricao: 'Com Coobrigação' },
         { codigo: '02', descricao: 'Sem Coobrigação' },
       ]
     },
-    { nome: 'Caract. Especial', ini: 22, fim: 24, tamanho: 2, tipo: 'N', obrigatorio: false, cor: '#fff9c4', descricao: 'Característica Especial - Anexo 8 SRC3040' },
-    { nome: 'Modal. Operação', ini: 24, fim: 28, tamanho: 4, tipo: 'N', obrigatorio: false, cor: '#c5cae9', descricao: 'Modalidade Operação - Anexo 3 SRC3040 (4 pos)' },
-    { nome: 'Nat. Operação', ini: 28, fim: 30, tamanho: 2, tipo: 'N', obrigatorio: false, cor: '#e1bee7', descricao: 'Natureza Operação - Anexo 2 SRC3040' },
+    { nome: 'Caract. Especial', ini: 22, fim: 24, tamanho: 2, tipo: 'N', obrigatorio: false, cor: '#fff9c4', descricao: 'Característica Especial - Anexo 8 SRC3040',
+      lookup: [
+        { codigo: '00', descricao: 'Sem Característica Especial (padrão para cobrança simples)' },
+        { codigo: '01', descricao: 'FIDC — Crédito Comercial (duplicatas / NP)' },
+        { codigo: '02', descricao: 'FIDC — Crédito Financeiro' },
+        { codigo: '03', descricao: 'FIDC — Agronegócio' },
+        { codigo: '04', descricao: 'FIDC — Crédito Imobiliário' },
+        { codigo: '05', descricao: 'FIDC — Crédito Pessoal / Consignado' },
+      ]
+    },
+    { nome: 'Modal. Operação', ini: 24, fim: 28, tamanho: 4, tipo: 'N', obrigatorio: false, cor: '#c5cae9', descricao: 'Modalidade Operação - Anexo 3 SRC3040 (4 pos)',
+      lookup: [
+        { codigo: '0000', descricao: 'Não Classificado / Padrão (mais comum para FIDC Paulista)' },
+        { codigo: '0201', descricao: 'Desconto de Duplicatas' },
+        { codigo: '0202', descricao: 'Desconto de Cheques' },
+        { codigo: '0203', descricao: 'Antecipação de Recebíveis de Cartão de Crédito' },
+        { codigo: '0401', descricao: 'Crédito Pessoal não Consignado' },
+        { codigo: '0402', descricao: 'Crédito Pessoal Consignado — INSS' },
+        { codigo: '0403', descricao: 'Crédito Pessoal Consignado — Setor Privado' },
+        { codigo: '0404', descricao: 'Crédito Pessoal Consignado — Setor Público' },
+      ]
+    },
+    { nome: 'Nat. Operação', ini: 28, fim: 30, tamanho: 2, tipo: 'N', obrigatorio: false, cor: '#e1bee7', descricao: 'Natureza Operação - Anexo 2 SRC3040',
+      lookup: [
+        { codigo: '00', descricao: 'Não Classificado / Padrão' },
+        { codigo: '10', descricao: 'Desconto de Títulos — principal uso FIDC Paulista' },
+        { codigo: '11', descricao: 'Desconto de Cheques' },
+        { codigo: '13', descricao: 'Antecipação de Recebíveis de Cartão de Crédito' },
+        { codigo: '14', descricao: 'Adiantamento a Depositantes' },
+        { codigo: '15', descricao: 'Repasse / CDC (Crédito Direto ao Consumidor)' },
+        { codigo: '17', descricao: 'Empréstimo / Financiamento Geral' },
+        { codigo: '25', descricao: 'Financiamento de Importações' },
+        { codigo: '26', descricao: 'Financiamento de Exportações' },
+      ]
+    },
     { nome: 'Origem Recurso', ini: 30, fim: 34, tamanho: 4, tipo: 'N', obrigatorio: false, cor: '#d1c4e9', descricao: 'Origem Recurso - Anexo 4 SRC3040 (4 pos)' },
     { nome: 'Classe Risco', ini: 34, fim: 36, tamanho: 2, tipo: 'A', obrigatorio: false, valores: ['AA','A ','B ','C ','D ','E ','F ','G ','H '], cor: '#ffcc80', descricao: 'Classificação de risco de crédito do título (Resolução CMN 2.682/99 — Anexo 17 SRC3040). AA=menor risco, H=maior risco.',
       lookup: [
@@ -146,11 +187,20 @@ export class PaulistaCnab400ValidadorComponent implements OnDestroy {
         { codigo: 'H ', descricao: 'H  — Risco máximo (provisão 100%)' },
       ]
     },
-    { nome: 'Zeros', ini: 36, fim: 37, tamanho: 1, tipo: 'N', obrigatorio: false, cor: '#f5f5f5', descricao: 'Separador de alinhamento (1 pos) — byte fixo entre Classe Risco e Nº Controle. Sempre 0, sem significado de negócio.' },
+    { nome: 'Zeros', ini: 36, fim: 37, tamanho: 1, tipo: 'N', obrigatorio: false, cor: '#f5f5f5', descricao: 'Separador de alinhamento (1 pos) — byte fixo entre Classe Risco e Nº Controle. Sempre 0, sem significado de negócio.',
+      lookup: [
+        { codigo: '0', descricao: 'Separador fixo — byte de alinhamento entre Classe Risco e Nº Controle (sempre zero, sem significado de negócio)' },
+      ]
+    },
     { nome: 'Nº Controle', ini: 37, fim: 62, tamanho: 25, tipo: 'A', obrigatorio: true, cor: '#b3e5fc', descricao: 'Nº Controle Participante - Ident. título (25 pos)' },
     { nome: 'Nº Banco', ini: 62, fim: 65, tamanho: 3, tipo: 'N', obrigatorio: true, cor: '#81d4fa', descricao: 'Número Banco (obrig. se Espécie=Cheque, senão 000)' },
     { nome: 'Zeros', ini: 65, fim: 70, tamanho: 5, tipo: 'N', obrigatorio: true, cor: '#f5f5f5', descricao: 'Zeros (5 pos)' },
-    { nome: 'Ident. Título', ini: 70, fim: 81, tamanho: 11, tipo: 'N', obrigatorio: false, cor: '#ffccbc', descricao: 'Identificação Título no Banco - Branco (11 pos)' },
+    { nome: 'Ident. Título', ini: 70, fim: 81, tamanho: 11, tipo: 'N', obrigatorio: false, cor: '#ffccbc', descricao: 'Identificação Título no Banco - Branco (11 pos)',
+      lookup: [
+        { codigo: '00000000000', descricao: 'Zeros / Branco — padrão para remessa de novos títulos (banco ainda não atribuiu ID)' },
+        { codigo: '0000000000X', descricao: 'Com ID — preenchido pelo banco no retorno; reenvie o valor recebido em ocorrências de recompra/baixa' },
+      ]
+    },
     { nome: 'Dígito N/N', ini: 81, fim: 82, tamanho: 1, tipo: 'A', obrigatorio: false, cor: '#ffab91', descricao: 'Dígito Nosso Número - Branco' },
     { nome: 'Valor Pago', ini: 82, fim: 92, tamanho: 10, tipo: 'N', obrigatorio: false, cor: '#4db6ac', descricao: 'Valor pago na liquidação/baixa (10 pos, 2 dec)' },
     { nome: 'Cond. Papeleta', ini: 92, fim: 93, tamanho: 1, tipo: 'N', obrigatorio: false, valores: ['1', '2', '3'], cor: '#e8eaf6', descricao: 'Condição de Emissão da Papeleta/Boleto (1 pos) — indica quem emite e envia o boleto ao sacado.',

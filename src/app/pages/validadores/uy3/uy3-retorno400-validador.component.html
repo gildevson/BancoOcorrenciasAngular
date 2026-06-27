@@ -1,0 +1,325 @@
+<div class="cnab-validador">
+  <a routerLink="/validadores" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#e8f4fc;border:1px solid #cce0eb;border-radius:8px;color:#00253F;font-size:13px;font-weight:700;text-decoration:none;margin-bottom:20px;">← Voltar</a>
+  <h2 class="titulo">🏦 Validador Retorno UY3 DTVM CNAB 400</h2>
+
+  <div class="upload-area">
+    <input type="file" accept=".ret,.txt,.RET,.TXT" (change)="onFileChange($event)" />
+  </div>
+
+  @if (linhasEditadas.length > 0) {
+    <div class="toolbar-edicao">
+      <button class="btn-gerar" (click)="gerarRetorno()">
+        ⬇ Gerar Retorno (.RET)
+        @if (totalEdicoes > 0) {
+          <span class="edicoes-badge">{{ totalEdicoes }} edição{{ totalEdicoes > 1 ? 'ões' : '' }}</span>
+        }
+      </button>
+      <span class="toolbar-hint">💡 Clique em qualquer célula da matriz para editar</span>
+    </div>
+  }
+
+  @if (error) {
+    <div class="erro-container">❌ {{ error }}</div>
+  }
+
+  @if (estatisticas && validado) {
+    <div class="estatisticas-grid">
+      <div class="stat-card stat-total">
+        <div class="stat-valor">{{ estatisticas.totalLinhas }}</div>
+        <div class="stat-label">Total Linhas</div>
+      </div>
+      <div class="stat-card stat-header">
+        <div class="stat-valor">{{ estatisticas.headers }}</div>
+        <div class="stat-label">Headers (0)</div>
+      </div>
+      <div class="stat-card stat-detalhe">
+        <div class="stat-valor">{{ estatisticas.detalhes }}</div>
+        <div class="stat-label">Detalhes (1)</div>
+      </div>
+      <div class="stat-card stat-trailer">
+        <div class="stat-valor">{{ estatisticas.trailers }}</div>
+        <div class="stat-label">Trailers (9)</div>
+      </div>
+    </div>
+  }
+
+  @if (totaisRetorno) {
+    <div class="totais-panel">
+      <div class="totais-titulo">📊 Resumo Financeiro do Retorno</div>
+      <div class="totais-grid">
+        <div class="total-item">
+          <span class="total-label">Total Registros</span>
+          <span class="total-val total-count">{{ totaisRetorno.totalDetalhes }}</span>
+        </div>
+        <div class="total-item destaque">
+          <span class="total-label">Liquidações (ocor. 06)</span>
+          <span class="total-val total-liq">{{ totaisRetorno.liquidacoes }}</span>
+        </div>
+        <div class="total-item destaque">
+          <span class="total-label">Valor Total Pago</span>
+          <span class="total-val total-pago">{{ formatarReais(totaisRetorno.valorTotalPago) }}</span>
+        </div>
+        <div class="total-item">
+          <span class="total-label">Entradas Confirmadas (02)</span>
+          <span class="total-val total-ok">{{ totaisRetorno.entradasConfirmadas }}</span>
+        </div>
+        <div class="total-item">
+          <span class="total-label">Baixas (09/10)</span>
+          <span class="total-val total-desc">{{ totaisRetorno.baixas }}</span>
+        </div>
+        <div class="total-item">
+          <span class="total-label">Rejeitadas (03)</span>
+          <span class="total-val total-rej">{{ totaisRetorno.rejeitadas }}</span>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (getErrosPorSeveridade('erro').length > 0) {
+    <div class="erros-container erros-criticos">
+      <strong>🚫 {{ getErrosPorSeveridade('erro').length }} erro(s) crítico(s):</strong>
+      <ul>
+        @for (e of getErrosPorSeveridade('erro'); track e.posicao) {
+          <li class="erro-item-clicavel" (click)="editarErro(e, $event)" title="Clique para abrir o editor neste campo">
+            <strong class="erro-linha">Linha {{ e.linha }}</strong> -
+            <span class="erro-campo">{{ e.campo }}</span>
+            <span class="erro-posicao">[{{ e.posicao }}]</span>:
+            <code class="erro-valor">{{ e.valor }}</code>
+            → <span class="erro-msg">{{ e.mensagem }}</span>
+            <span class="erro-editar-hint">✏ editar</span>
+          </li>
+        }
+      </ul>
+    </div>
+  }
+
+  @if (getErrosPorSeveridade('aviso').length > 0) {
+    <div class="erros-container erros-avisos">
+      <strong>⚠️ {{ getErrosPorSeveridade('aviso').length }} aviso(s):</strong>
+      <ul>
+        @for (e of getErrosPorSeveridade('aviso'); track e.posicao) {
+          <li><strong>Linha {{ e.linha }}</strong> - {{ e.campo }}: {{ e.mensagem }}</li>
+        }
+      </ul>
+    </div>
+  }
+
+  @if (validado && getErrosPorSeveridade('erro').length === 0) {
+    <div class="sucesso-container">
+      <strong>✅ Arquivo válido!</strong>
+      @if (getErrosPorSeveridade('aviso').length > 0) {
+        <span class="avisos-count">({{ getErrosPorSeveridade('aviso').length }} aviso(s))</span>
+      }
+    </div>
+  }
+
+  @if (legendaCampos.length > 0) {
+    <div class="legenda-container">
+      <strong>📌 Legenda — Retorno UY3 DTVM CNAB 400 (clique para destacar):</strong>
+      <div class="legenda-campos">
+        @for (campo of legendaCampos; track campo.nome) {
+          <span
+            (click)="selecionarCampo(campo.nome)"
+            class="legenda-item"
+            [class.selecionado]="campoSelecionado === campo.nome"
+            [style.background]="campo.cor"
+            [title]="campo.descricao || 'Clique para destacar'">
+            {{ campo.nome }} <span class="legenda-pos">[{{ campo.ini + 1 }}-{{ campo.fim }}]</span>
+          </span>
+        }
+      </div>
+    </div>
+  }
+
+  @if (visualHtml) {
+    <div class="matriz-container" [innerHTML]="visualHtml" (click)="onMatrizClick($event)"></div>
+    @if (statusBar) {
+      <div class="status-bar">{{ statusBar }}</div>
+    }
+  }
+
+  @if (!visualHtml && !error) {
+    <div class="placeholder">
+      📄 Anexe um arquivo .RET (Retorno CNAB 400 — UY3 DTVM) para iniciar a validação
+    </div>
+  }
+</div>
+
+<!-- Editor Flutuante -->
+@if (editorPos) {
+  <div class="editor-flutuante"
+       [style.top.px]="editorPos.top"
+       [style.left.px]="editorPos.left"
+       (click)="$event.stopPropagation()">
+
+    @if (editorCarregando) {
+      <div class="editor-header editor-header-loading">
+        <div class="editor-skeleton editor-skeleton-titulo"></div>
+        <div class="editor-skeleton editor-skeleton-meta"></div>
+      </div>
+      <div class="editor-body">
+        <div class="editor-spinner"></div>
+        <span class="editor-loading-txt">Identificando campo…</span>
+      </div>
+    } @else if (campoAtivo) {
+      <div class="editor-header">
+        <div class="editor-campo-info">
+          <span class="editor-campo-nome">{{ campoAtivo.nome }}</span>
+          <span class="editor-meta">Pos {{ campoAtivo.ini + 1 }}–{{ campoAtivo.fim }} · Tipo {{ campoAtivo.tipo }} · {{ campoAtivo.tamanho }} char{{ campoAtivo.tamanho > 1 ? 's' : '' }}</span>
+          @if (campoAtivo.descricao) {
+            <span class="editor-desc">{{ campoAtivo.descricao }}</span>
+          }
+        </div>
+        <button class="editor-close" (click)="fecharEditor()" title="Fechar">×</button>
+      </div>
+      <div class="editor-body">
+        <span class="editor-ln">Ln {{ linhaAtiva + 1 }}</span>
+        <div class="editor-input-wrap">
+          <input
+            class="editor-input"
+            [(ngModel)]="valorCampoAtivo"
+            [maxlength]="campoAtivo.tamanho"
+            [placeholder]="campoAtivo.tipo === 'N' ? 'Somente números' : 'Texto livre'"
+            (keydown.enter)="aplicarEdicao()"
+            (keydown.escape)="fecharEditor()"
+          />
+          <span class="editor-contador"
+                [class.editor-contador-cheio]="valorCampoAtivo.length === campoAtivo.tamanho"
+                [class.editor-contador-quase]="valorCampoAtivo.length > campoAtivo.tamanho * 0.8 && valorCampoAtivo.length < campoAtivo.tamanho">
+            {{ valorCampoAtivo.length }}/{{ campoAtivo.tamanho }}
+          </span>
+        </div>
+        <button class="editor-btn-aplicar" [class.editor-btn-ok]="aplicadoFeedback" (click)="aplicarEdicao()">
+          {{ aplicadoFeedback ? '✓' : 'Aplicar' }}
+        </button>
+      </div>
+
+      @if (campoAtivo.valores && campoAtivo.valores.length > 0 && !campoEhOcorrencia && !campoTemLookup) {
+        <div class="editor-valores-validos">
+          Valores válidos:
+          @for (v of campoAtivo.valores; track v) {
+            <code class="editor-valor-chip" style="cursor:pointer" (click)="valorCampoAtivo = v">{{ v }}</code>
+          }
+        </div>
+      }
+
+      @if (campoTemLookup) {
+        @if (descricaoValorLookupAtivo) {
+          <div class="editor-ocorrencia-info">
+            <span class="ocor-cod">{{ valorCampoAtivo.trim() }}</span>
+            <span class="ocor-desc">{{ descricaoValorLookupAtivo }}</span>
+          </div>
+        } @else if (valorCampoAtivo.trim()) {
+          <div class="editor-ocorrencia-info">
+            <span class="ocor-cod ocor-desconhecido">{{ valorCampoAtivo.trim() }}</span>
+            <span class="ocor-desc">Valor não reconhecido</span>
+          </div>
+        }
+        <div class="editor-instrucao-tabela">
+          <div class="editor-instrucao-titulo">📋 Valores válidos — clique para selecionar</div>
+          <div class="editor-instrucao-lista">
+            @for (item of valoresLookup; track item.valor) {
+              <button class="editor-instrucao-item"
+                      [class.editor-instrucao-ativo]="valorCampoAtivo.trim() === item.valor.trim()"
+                      (click)="selecionarValorLookup(item.valor)">
+                <span class="instr-cod">{{ item.valor }}</span>
+                <span class="instr-desc">{{ item.descricao }}</span>
+              </button>
+            }
+          </div>
+        </div>
+      }
+
+      @if (campoEhMotivo) {
+        <div class="editor-instrucao-tabela">
+          <div class="editor-instrucao-titulo">📋 Campo contém até 5 códigos de 2 dígitos concatenados</div>
+          @if (motivosAtivos.length > 0) {
+            <div style="margin-bottom:6px;">
+              @for (m of motivosAtivos; track m.codigo) {
+                <div class="editor-instrucao-item" style="cursor:default;">
+                  <span class="instr-cod">{{ m.codigo }}</span>
+                  <span class="instr-desc">{{ m.descricao }}
+                    <em style="color:#9e9e9e;font-size:10px;"> · ocor. {{ m.ocorrencias }}</em>
+                  </span>
+                </div>
+              }
+            </div>
+          }
+          <div class="editor-instrucao-titulo" style="margin-top:6px;">Todos os códigos de motivo disponíveis:</div>
+          <div class="editor-instrucao-lista">
+            @for (item of motivosRejeicao; track item.codigo) {
+              <div class="editor-instrucao-item" style="cursor:default;">
+                <span class="instr-cod">{{ item.codigo }}</span>
+                <span class="instr-desc">{{ item.descricao }}
+                  <em style="color:#9e9e9e;font-size:10px;"> · ocor. {{ item.ocorrencias }}</em>
+                </span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      @if (campoEhCartorio) {
+        <div class="editor-instrucao-tabela">
+          <div class="editor-instrucao-titulo">📋 Número do Cartório — campo livre (00–99)</div>
+          <div class="editor-instrucao-lista" style="gap:4px;">
+            <div class="editor-instrucao-item" style="cursor:default;">
+              <span class="instr-cod">00</span>
+              <span class="instr-desc">Sem cartório / não enviado para protesto</span>
+            </div>
+            <div class="editor-instrucao-item" style="cursor:default;">
+              <span class="instr-cod">01–99</span>
+              <span class="instr-desc">Número atribuído pelo banco conforme cartório responsável pelo protesto</span>
+            </div>
+          </div>
+          <div class="editor-instrucao-titulo" style="margin-top:8px;">Ocorrências em que este campo é preenchido:</div>
+          <div class="editor-instrucao-lista" style="gap:4px;">
+            <div class="editor-instrucao-item" style="cursor:default;">
+              <span class="instr-cod">15</span>
+              <span class="instr-desc">Liquidação em Cartório</span>
+            </div>
+            <div class="editor-instrucao-item" style="cursor:default;">
+              <span class="instr-cod">23</span>
+              <span class="instr-desc">Entrada do Título em Cartório</span>
+            </div>
+            <div class="editor-instrucao-item" style="cursor:default;">
+              <span class="instr-cod">34</span>
+              <span class="instr-desc">Retirado de Cartório e Manutenção Carteira</span>
+            </div>
+          </div>
+        </div>
+      }
+
+      @if (campoEhOcorrencia) {
+        <div class="editor-ocorrencia-info">
+          @if (descricaoOcorrencia) {
+            <span class="ocor-cod">{{ valorCampoAtivo.trim() }}</span>
+            <span class="ocor-desc">{{ descricaoOcorrencia }}</span>
+          } @else if (valorCampoAtivo.trim()) {
+            <span class="ocor-cod ocor-desconhecido">{{ valorCampoAtivo.trim() }}</span>
+            <span class="ocor-desc">Código não encontrado</span>
+          }
+        </div>
+        <div class="editor-instrucao-tabela">
+          <div class="editor-instrucao-titulo">📋 Ocorrências Retorno UY3 — clique para selecionar</div>
+          <div class="editor-instrucao-lista">
+            @for (item of codigosOcorrencia; track item.codigo) {
+              <button class="editor-instrucao-item"
+                      [class.editor-instrucao-ativo]="valorCampoAtivo.trim() === item.codigo"
+                      (click)="valorCampoAtivo = item.codigo">
+                <span class="instr-cod">{{ item.codigo }}</span>
+                <span class="instr-desc">{{ item.descricao }}</span>
+              </button>
+            }
+          </div>
+        </div>
+      }
+    } @else {
+      <div class="editor-header editor-header-sem-campo">
+        <span class="editor-campo-nome">Campo não mapeado</span>
+        <button class="editor-close" (click)="fecharEditor()">×</button>
+      </div>
+      <div class="editor-body" style="color:#888;font-size:12px;">Esta posição não pertence a nenhum campo definido.</div>
+    }
+  </div>
+}
