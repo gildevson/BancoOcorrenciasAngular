@@ -6,11 +6,13 @@ import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './pages/header/header.component';
 import { FooterComponent } from './pages/footer/footer.component';
 import { CookieBannerComponent } from './pages/cookie-banner/cookie-banner.component';
+import { TickerComponent } from './pages/home/ticker.component';
+import { LoadingBarComponent } from './pages/loading-bar/loading-bar.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, HeaderComponent, FooterComponent, CookieBannerComponent],
+  imports: [CommonModule, RouterOutlet, HeaderComponent, FooterComponent, CookieBannerComponent, TickerComponent, LoadingBarComponent],
   templateUrl: './app.html',
   styleUrls: ['./app.css'],
 })

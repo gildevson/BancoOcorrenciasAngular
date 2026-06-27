@@ -22,7 +22,6 @@ export class NoticiasComponent implements OnInit {
     this.carregarNoticias();
   }
 
-
   carregarNoticias(): void {
     this.loading = true;
     this.erro = '';
@@ -42,7 +41,6 @@ export class NoticiasComponent implements OnInit {
 
   formatarData(data: string | null): string {
     if (!data) return 'Data não disponível';
-
     const date = new Date(data);
     return date.toLocaleDateString('pt-BR', {
       day: '2-digit',
@@ -53,8 +51,7 @@ export class NoticiasComponent implements OnInit {
 
   calcularTempoLeitura(conteudo: string): number {
     const palavras = conteudo.split(/\s+/).length;
-    const minutos = Math.ceil(palavras / 250);
-    return minutos;
+    return Math.ceil(palavras / 250);
   }
 
   onImageError(event: Event): void {

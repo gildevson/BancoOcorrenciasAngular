@@ -283,6 +283,10 @@
   transform: translateY(-1px);
 }
 
+@media (min-width: 901px) {
+  .menu-toggle { display: none; }
+}
+
 /* =========================================================
    ÍCONE ORGANIZAR OCORRÊNCIAS (NOVO)
    ========================================================= */
@@ -441,8 +445,12 @@
     width: min(86vw, 380px);
     height: 100vh;
 
+    flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
+
+    overflow-y: auto;
+    overflow-x: hidden;
 
     transform: translateX(110%);
     transition: transform .18s ease;
@@ -453,8 +461,7 @@
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
 
-    /* ✅ padding interno do menu */
-    padding: 14px 12px 16px;
+    padding: 16px 14px 24px;
   }
 
   .b3-nav-main.open{ transform: translateX(0); }
@@ -482,14 +489,14 @@
     align-items: center;
     justify-content: center;
 
-    width: 44px;
-    height: 44px;
-    margin-left: auto;
+    width: 38px;
+    height: 38px;
 
-    border-radius: 14px;
+    border-radius: 12px;
     border: 1px solid rgba(255,255,255,0.14);
     background: rgba(255,255,255,0.08);
     color: var(--bo-text);
+    flex-shrink: 0;
   }
 
   /* item admin */
@@ -552,6 +559,115 @@
   .b3-controls {
     gap: 8px;
   }
+}
+
+/* =========================================================
+   MOBILE DRAWER – CABEÇALHO + ÁREA DE USUÁRIO
+   ========================================================= */
+.mobile-drawer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 4px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+  margin-bottom: 12px;
+}
+.mobile-drawer-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--bo-text);
+  font-weight: 700;
+  font-size: 14px;
+}
+.mobile-drawer-brand strong { color: #7fd0ff; }
+.mobile-drawer-logo {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,.35));
+}
+
+/* Área usuário / login */
+.mobile-user-area {
+  margin-bottom: 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+  padding-bottom: 14px;
+}
+
+/* Card do usuário logado */
+.mobile-user-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+.mobile-user-card .material-icons {
+  font-size: 30px;
+  color: #7fd0ff;
+  flex-shrink: 0;
+}
+.mobile-user-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+.mobile-user-greeting {
+  font-size: 11px;
+  color: rgba(234,243,255,0.55);
+}
+.mobile-user-name {
+  font-size: 14px;
+  color: var(--bo-text);
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mobile-logout-btn {
+  background: rgba(255,80,80,0.12);
+  border: 1px solid rgba(255,80,80,0.22);
+  color: #ffaaaa;
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.mobile-logout-btn:hover { background: rgba(255,80,80,0.22); }
+
+/* Botão Login (não logado) */
+.mobile-login-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 14px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  text-decoration: none;
+  color: var(--bo-text);
+  transition: background 0.15s;
+}
+.mobile-login-btn:hover { background: rgba(255,255,255,0.10); }
+.mobile-login-btn .material-icons:first-child {
+  font-size: 26px;
+  color: #7fd0ff;
+}
+.mobile-login-btn > span:nth-child(2) {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 600;
+}
+.mobile-login-arrow {
+  font-size: 18px !important;
+  color: rgba(234,243,255,0.45);
 }
 
 /* MOBILE ADMIN LINKS */

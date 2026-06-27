@@ -3,18 +3,20 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
 import { FinanceHighlightsComponent } from '../financehighlights/financehighlights.component';
-import { MoedasComponent } from '../moeda/moedas.component';
+import { MercadoResumoComponent } from './mercado-resumo.component';
+import { BannerPromoComponent } from './banner-promo.component';
 import { NoticiasService } from '../../service/noticias.service';
 import { Noticia } from '../../models/noticia.model';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterLink, FinanceHighlightsComponent, MoedasComponent],
+  imports: [CommonModule, RouterLink, FinanceHighlightsComponent, MercadoResumoComponent, BannerPromoComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {
+  readonly DEFAULT_IMG = 'https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?w=800&q=80';
   noticias: Noticia[] = [];
   loading = false;
   erro = '';
@@ -37,7 +39,7 @@ export class HomeComponent implements OnInit {
           return dataB - dataA;
         });
 
-        this.noticias = noticiasOrdenadas.slice(0, 6);
+        this.noticias = noticiasOrdenadas;
         this.loading = false;
       },
       error: (err: unknown) => {
@@ -69,6 +71,16 @@ export class HomeComponent implements OnInit {
   onImageError(event: Event): void {
     const img = event.target as HTMLImageElement;
     img.src = 'https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?w=400&q=80';
+  }
+
+  get gruposPorCategoria(): { categoria: string; noticias: Noticia[] }[] {
+    const map = new Map<string, Noticia[]>();
+    for (const n of this.noticias.slice(4)) {
+      const cat = n.categoria || 'Geral';
+      if (!map.has(cat)) map.set(cat, []);
+      map.get(cat)!.push(n);
+    }
+    return Array.from(map.entries()).map(([categoria, noticias]) => ({ categoria, noticias }));
   }
 
   recarregar(): void {

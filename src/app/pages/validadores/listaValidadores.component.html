@@ -1,11 +1,42 @@
 <div class="validador-list">
   <!-- Cabeçalho -->
   <div class="list-header">
-    <h2>Layouts de Banco</h2>
-    <p class="subtitle-info">
-      Consulte por banco, número e tipo (CNAB240/CNAB400) com logos oficiais dos principais bancos brasileiros.
-    </p>
-    <span class="bancos-count">{{ bancosComValidadores.length }} validadores disponíveis • {{ bancosSemValidadores.length }} em breve</span>
+    <img class="hero-bg-img" src="assets/logo/ValidadoresBancos.jpg" alt="" aria-hidden="true">
+
+    <div class="hero-left">
+      <div class="hero-icon-box">
+        <span class="material-icons">account_balance</span>
+      </div>
+      <div>
+        <h2>Validadores Bancários</h2>
+        <p class="subtitle-info">
+          Valide arquivos CNAB 240 e CNAB 400 dos principais bancos brasileiros. Remessa e retorno com verificação de layout e campos obrigatórios.
+        </p>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <span class="hero-stat-num">{{ bancosComValidadores.length }}</span>
+            <span class="hero-stat-label">Disponíveis</span>
+          </div>
+          <div class="hero-stat-divider"></div>
+          <div class="hero-stat">
+            <span class="hero-stat-num">{{ bancosSemValidadores.length }}</span>
+            <span class="hero-stat-label">Em breve</span>
+          </div>
+          <div class="hero-stat-divider"></div>
+          <div class="hero-stat">
+            <span class="hero-stat-num">2</span>
+            <span class="hero-stat-label">Formatos</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-badges-col">
+      <span class="hbadge">CNAB 240</span>
+      <span class="hbadge hbadge-green">CNAB 400</span>
+      <span class="hbadge hbadge-dark">Remessa</span>
+      <span class="hbadge hbadge-dark">Retorno</span>
+    </div>
   </div>
 
   <!-- Seção: Bancos com Validadores Disponíveis -->

@@ -281,6 +281,13 @@ export const routes: Routes = [
           import('./pages/calculadora/calculadoraIofVariado/calculadoraiofvariado.component')
             .then(m => m.CalculadoraIofVariadoComponent),
       },
+      {
+        path: 'juros-compostos',
+        title: 'Simulador de Juros Compostos',
+        loadComponent: () =>
+          import('./pages/calculadora/calculadoraJurosCompostos/calculadoraJurosCompostos.component')
+            .then(m => m.CalculadoraJurosCompostosComponent),
+      },
     ],
   },
 
