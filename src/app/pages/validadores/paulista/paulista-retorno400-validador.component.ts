@@ -1,5 +1,4 @@
 import { Component, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -38,9 +37,9 @@ interface EstatisticasArquivo {
 @Component({
   selector: 'app-paulista-retorno400-validador',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [RouterModule, FormsModule],
   templateUrl: './paulista-retorno400-validador.component.html',
-  styleUrls: ['./paulistacnab400-validador.component.css']
+  styleUrls: ['./paulista-retorno400-validador.component.css']
 })
 export class PaulistaRetorno400ValidadorComponent implements OnDestroy {
   visualHtml: SafeHtml | null = null;
