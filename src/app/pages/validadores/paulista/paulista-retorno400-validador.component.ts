@@ -594,32 +594,47 @@ export class PaulistaRetorno400ValidadorComponent implements OnDestroy {
     const tipo = line[0];
     const ident = line.length > 1 ? line[1] : '';
     let campos: CampoLayout[];
-    let rowClass: string;
-    if (tipo === '0' && ident === '2') { campos = this.camposHeader; rowClass = 'cnab-row-header'; }
-    else if (tipo === '1') { campos = this.camposDetalhe; rowClass = 'cnab-row-detalhe'; }
-    else if (tipo === '9' && ident === '2') { campos = this.camposTrailer; rowClass = 'cnab-row-trailer'; }
-    else { campos = []; rowClass = 'cnab-row-unknown'; }
+    let tipoNome: string;
+    let tipoColor: string;
 
-    const cells: string[] = [];
-    let pos = 0;
-    for (const campo of campos) {
-      if (campo.ini > pos) {
-        const txt = line.slice(pos, campo.ini);
-        cells.push(`<span class="cnab-mc cnab-mc-unmapped" data-li="${li}" data-ci="${pos}">${this.escHtml(txt)}</span>`);
-      }
-      const txt = line.slice(campo.ini, campo.fim);
-      const cls = this.campoClass(campo.nome);
-      const hasErr = this.erros.some(e => e.linha === li + 1 && e.campo === campo.nome);
-      cells.push(`<span class="cnab-mc ${cls}${hasErr ? ' cnab-mc-err' : ''}" data-li="${li}" data-ci="${campo.ini}" style="background:${campo.cor}" title="${campo.nome} [${campo.ini + 1}–${campo.fim}]">${this.escHtml(txt)}</span>`);
-      pos = campo.fim;
+    if (tipo === '0' && ident === '2') {
+      campos = this.camposHeader; tipoNome = 'Header Retorno'; tipoColor = '#7b1fa2';
+    } else if (tipo === '1') {
+      campos = this.camposDetalhe; tipoNome = 'Detalhe Retorno'; tipoColor = '#388e3c';
+    } else if (tipo === '9' && ident === '2') {
+      campos = this.camposTrailer; tipoNome = 'Trailer Retorno'; tipoColor = '#c2185b';
+    } else {
+      campos = []; tipoNome = 'Desconhecido'; tipoColor = '#d32f2f';
     }
-    if (pos < line.length) {
-      cells.push(`<span class="cnab-mc cnab-mc-unmapped" data-li="${li}" data-ci="${pos}">${this.escHtml(line.slice(pos))}</span>`);
+
+    let html = `<div style="margin-bottom:12px;padding:8px;background:#fafafa;border-radius:4px;border:1px solid #e0e0e0;width:max-content;min-width:100%;">`;
+    html += `<div style="display:flex;align-items:center;margin-bottom:6px;gap:10px;flex-wrap:wrap;">`;
+    html += `<span style="min-width:80px;font-size:12px;font-weight:600;color:${tipoColor};">Linha ${li + 1}</span>`;
+    html += `<span style="padding:3px 10px;background:${tipoColor};color:#fff;border-radius:4px;font-size:11px;font-weight:600;text-transform:uppercase;">${tipoNome}</span>`;
+    html += `<span style="padding:3px 8px;background:#757575;color:#fff;border-radius:4px;font-size:10px;font-weight:500;">${line.length} chars</span>`;
+    const errosLinha = this.erros.filter(e => e.linha === li + 1 && e.severidade === 'erro');
+    if (errosLinha.length > 0) {
+      html += `<span style="padding:3px 10px;background:#d32f2f;color:#fff;border-radius:4px;font-size:11px;margin-left:auto;font-weight:600;">⚠️ ${errosLinha.length} erro(s)</span>`;
     }
-    return `<div class="cnab-row ${rowClass}" data-li="${li}">${cells.join('')}</div>`;
+    html += `</div>`;
+    html += `<div style="font-family:'Courier New',Courier,monospace;font-size:11px;line-height:1;white-space:nowrap;background:#fff;padding:6px;border-radius:4px;border:1px solid #e0e0e0;">`;
+
+    for (let i = 0; i < 400; i++) {
+      const char = i < line.length ? line[i] : ' ';
+      const campo = campos.find(c => i >= c.ini && i < c.fim);
+      const cor = campo ? campo.cor : '#f5f5f5';
+      const nomeCampo = campo ? campo.nome : 'N/D';
+      const temErro = campo ? this.erros.some(e => e.linha === li + 1 && e.campo === campo.nome && e.severidade === 'erro') : false;
+      const bordaErro = temErro ? 'border:2px solid #d32f2f;' : 'border:1px solid rgba(0,0,0,0.08);';
+      const cls = campo ? `cnab-mc ${this.campoClass(campo.nome)}` : 'cnab-mc';
+      const title = `${nomeCampo} - Pos ${i + 1}${campo?.descricao ? '\n' + campo.descricao : ''}`;
+      html += `<span class="${cls}" data-li="${li}" data-ci="${i}" style="display:inline-block;width:13px;height:18px;line-height:18px;text-align:center;vertical-align:top;background:${cor};${bordaErro}font-size:11px;font-family:monospace;cursor:pointer;user-select:none;" title="${this.escHtml(title)}">${char === ' ' ? '&nbsp;' : this.escHtml(char)}</span>`;
+    }
+    html += '</div></div>';
+    return html;
   }
 
   private escHtml(s: string): string {
-    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 }

@@ -117,38 +117,6 @@
     </div>
   }
 
-  @if (validado) {
-    <div class="legenda-container" style="margin-bottom:8px;">
-      <strong>📋 Tipos de Registro — Banco Paulista / Frontis CNAB 400 Retorno</strong>
-      <div class="legenda-campos" style="margin-top:8px;gap:8px;">
-        <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;background:#fce4ec;border:1px solid #e57373;border-radius:8px;min-width:0;">
-          <span style="font-size:18px;font-weight:900;color:#c62828;font-family:monospace;min-width:22px;text-align:center;">02</span>
-          <div style="display:flex;flex-direction:column;gap:1px;">
-            <span style="font-weight:700;font-size:12px;color:#333;">Header Retorno</span>
-            <span style="font-size:11px;color:#666;">Abertura do arquivo — 1 linha obrigatória</span>
-            <span style="font-size:10px;color:#888;">Pos 1 = <code style="background:#fce4ec;padding:0 3px;border-radius:3px;">0</code>, Pos 2 = <code style="background:#fce4ec;padding:0 3px;border-radius:3px;">2</code> · Contém originador, banco, data</span>
-          </div>
-        </div>
-        <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;background:#e8f5e9;border:1px solid #66bb6a;border-radius:8px;min-width:0;">
-          <span style="font-size:18px;font-weight:900;color:#2e7d32;font-family:monospace;min-width:22px;text-align:center;">1</span>
-          <div style="display:flex;flex-direction:column;gap:1px;">
-            <span style="font-weight:700;font-size:12px;color:#333;">Detalhe / Transação</span>
-            <span style="font-size:11px;color:#666;">1 linha por título — com ocorrência de retorno</span>
-            <span style="font-size:10px;color:#888;">Pos 1 = <code style="background:#e8f5e9;padding:0 3px;border-radius:3px;">1</code> · Contém ocorrência, valor pago, motivo rejeição</span>
-          </div>
-        </div>
-        <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;background:#e3f2fd;border:1px solid #42a5f5;border-radius:8px;min-width:0;">
-          <span style="font-size:18px;font-weight:900;color:#1565c0;font-family:monospace;min-width:22px;text-align:center;">92</span>
-          <div style="display:flex;flex-direction:column;gap:1px;">
-            <span style="font-weight:700;font-size:12px;color:#333;">Trailer Retorno</span>
-            <span style="font-size:11px;color:#666;">Encerramento do arquivo — 1 linha obrigatória</span>
-            <span style="font-size:10px;color:#888;">Pos 1 = <code style="background:#e3f2fd;padding:0 3px;border-radius:3px;">9</code>, Pos 2 = <code style="background:#e3f2fd;padding:0 3px;border-radius:3px;">2</code> · Totais e sequencial final</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  }
-
   @if (legendaCampos.length > 0) {
     <div class="legenda-container">
       <strong>📌 Legenda — Retorno Paulista CNAB 400 (clique para destacar):</strong>
