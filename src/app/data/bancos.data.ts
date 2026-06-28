@@ -204,6 +204,7 @@ export const BANCOS_DATA: BancoData[] = [
     ativo: true,
     validadores: [
       { nome: 'Remessa CCB CNAB 444', routerLink: '/validadores/singulare/ccb444', grupo: 'CNAB 444' },
+      { nome: 'Gerador CCB CNAB 444', routerLink: '/validadores/singulare/gerador-ccb444', grupo: 'CNAB 444' },
     ]
   },
   {

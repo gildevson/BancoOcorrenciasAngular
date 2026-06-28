@@ -185,6 +185,13 @@ export const routes: Routes = [
         .then(m => m.SingulareCcb444ValidadorComponent),
   },
   {
+    path: 'validadores/singulare/gerador-ccb444',
+    title: 'Gerador Remessa Singulare CCB CNAB 444',
+    loadComponent: () =>
+      import('./pages/validadores/singulare/singulare-gerador-ccb444.component')
+        .then(m => m.SingulareGeradorCcb444Component),
+  },
+  {
     path: 'validadores/xml',
     title: 'Leitor / Validador de XML',
     loadComponent: () =>

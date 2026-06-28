@@ -1,0 +1,319 @@
+<div class="gerador-ccb">
+  <a routerLink="/validadores" class="btn-voltar">← Voltar</a>
+  <h2 class="titulo">⚙️ Gerador Remessa Singulare — CCB CNAB 444</h2>
+  <p class="subtitulo">Preencha os dados abaixo e gere o arquivo de remessa para testes diários no sistema.</p>
+
+  <!-- ============================================================ -->
+  <!-- SEÇÃO: DADOS DO ARQUIVO                                      -->
+  <!-- ============================================================ -->
+  <div class="secao">
+    <div class="secao-titulo">📄 Dados do Arquivo</div>
+    <div class="form-grid">
+      <div class="form-grupo">
+        <label>Cód. Originador <span class="dica">20 chars numérico</span></label>
+        <input type="text" [(ngModel)]="arquivo.codOriginador" maxlength="20" class="input-mono" />
+      </div>
+      <div class="form-grupo">
+        <label>Nome Originador <span class="dica">29 chars</span></label>
+        <input type="text" [(ngModel)]="arquivo.nomeOriginador" maxlength="29" />
+      </div>
+      <div class="form-grupo">
+        <label>Data Gravação</label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="date" [(ngModel)]="arquivo.dataGravacao" />
+          <button class="btn-hoje" (click)="hoje()" title="Usar hoje em Data Gravação e Data Operação">Hoje</button>
+        </div>
+      </div>
+      <div class="form-grupo">
+        <label>Nº Seq. Arquivo <span class="dica">7 dígitos</span></label>
+        <input type="text" [(ngModel)]="arquivo.numSeqArquivo" maxlength="7" class="input-mono" style="width:120px" />
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- SEÇÃO: CEDENTE                                               -->
+  <!-- ============================================================ -->
+  <div class="secao">
+    <div class="secao-titulo">🏢 Cedente</div>
+    <div class="form-grid">
+      <div class="form-grupo form-grupo-wide">
+        <label>Nome Cedente <span class="dica">46 chars</span></label>
+        <input type="text" [(ngModel)]="cedente.nome" maxlength="46" />
+      </div>
+      <div class="form-grupo">
+        <label>CNPJ Cedente <span class="dica">14 dígitos, sem pontuação</span></label>
+        <input type="text" [(ngModel)]="cedente.cnpj" maxlength="14" class="input-mono" placeholder="00000000000000" />
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- SEÇÃO: TOMADOR                                               -->
+  <!-- ============================================================ -->
+  <div class="secao">
+    <div class="secao-titulo">👤 Tomador</div>
+    <div class="form-grid">
+      <div class="form-grupo">
+        <label>Tipo Inscrição</label>
+        <select [(ngModel)]="tomador.tipoInsc">
+          <option value="01">01 — CPF (Pessoa Física)</option>
+          <option value="02">02 — CNPJ (Pessoa Jurídica)</option>
+        </select>
+      </div>
+      <div class="form-grupo">
+        <label>CPF / CNPJ <span class="dica">14 dígitos</span></label>
+        <input type="text" [(ngModel)]="tomador.cpfCnpj" maxlength="14" class="input-mono" placeholder="00000000000000" />
+      </div>
+      <div class="form-grupo form-grupo-wide">
+        <label>Nome do Tomador <span class="dica">40 chars</span></label>
+        <input type="text" [(ngModel)]="tomador.nome" maxlength="40" />
+      </div>
+      <div class="form-grupo form-grupo-wide">
+        <label>Endereço <span class="dica">40 chars</span></label>
+        <input type="text" [(ngModel)]="tomador.endereco" maxlength="40" />
+      </div>
+      <div class="form-grupo">
+        <label>CEP <span class="dica">8 dígitos</span></label>
+        <input type="text" [(ngModel)]="tomador.cep" maxlength="8" class="input-mono" placeholder="00000000" />
+      </div>
+      <div class="form-grupo">
+        <label>Insc. Estadual <span class="dica">14 chars</span></label>
+        <input type="text" [(ngModel)]="tomador.inscEst" maxlength="14" class="input-mono" />
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- SEÇÃO: CONFIGURAÇÕES DA OPERAÇÃO                             -->
+  <!-- ============================================================ -->
+  <div class="secao">
+    <div class="secao-titulo">⚙️ Configurações da Operação</div>
+    <div class="form-grid">
+      <div class="form-grupo">
+        <label>Data da Operação <span class="alerta">⚠ Vencimento deve ser POSTERIOR a esta data</span></label>
+        <input type="date" [(ngModel)]="operacao.dataEmissao" />
+      </div>
+      <div class="form-grupo">
+        <label>Cód. Ocorrência</label>
+        <select [(ngModel)]="operacao.ocorrencia">
+          @for (o of ocorrencias; track o.codigo) {
+            <option [value]="o.codigo">{{ o.codigo }} — {{ o.descricao }}</option>
+          }
+        </select>
+      </div>
+      <div class="form-grupo">
+        <label>Coobrigação</label>
+        <select [(ngModel)]="operacao.coobrigacao">
+          <option value="01">01 — Com Coobrigação</option>
+          <option value="02">02 — Sem Coobrigação</option>
+        </select>
+      </div>
+      <div class="form-grupo">
+        <label>Classe Risco</label>
+        <select [(ngModel)]="operacao.classeRisco">
+          <option value="AA">AA — Risco mínimo</option>
+          <option value="A">A  — Risco muito baixo</option>
+          <option value="B">B  — Risco baixo</option>
+          <option value="C">C  — Risco médio</option>
+          <option value="D">D  — Risco médio-alto</option>
+          <option value="E">E  — Risco alto</option>
+          <option value="H">H  — Risco máximo</option>
+        </select>
+      </div>
+      <div class="form-grupo">
+        <label>Prefixo Nº Controle <span class="dica">15 chars</span></label>
+        <input type="text" [(ngModel)]="operacao.prefixoControle" maxlength="15" class="input-mono" />
+      </div>
+      <div class="form-grupo">
+        <label>Nº Termo Cessão <span class="dica">19 chars</span></label>
+        <input type="text" [(ngModel)]="operacao.numTermoCessao" maxlength="19" class="input-mono" />
+      </div>
+      <div class="form-grupo">
+        <label>Caract. Especial</label>
+        <select [(ngModel)]="operacao.caractEspecial">
+          <option value="00">00 — Sem característica</option>
+          <option value="01">01 — FIDC Crédito Comercial</option>
+          <option value="02">02 — FIDC Crédito Financeiro</option>
+          <option value="05">05 — FIDC Crédito Pessoal</option>
+        </select>
+      </div>
+      <div class="form-grupo">
+        <label>Modalidade Operação</label>
+        <input type="text" [(ngModel)]="operacao.modalidade" maxlength="4" class="input-mono" style="width:80px" />
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- SEÇÃO: GERADOR DE SÉRIE MENSAL                               -->
+  <!-- ============================================================ -->
+  <div class="secao secao-serie">
+    <div class="secao-titulo">🗓 Gerador de Série Mensal</div>
+    <p class="secao-desc">Preencha abaixo e clique em <strong>Gerar Série</strong> para criar automaticamente parcelas mensais.</p>
+    <div class="form-grid">
+      <div class="form-grupo">
+        <label>Número Base <span class="dica">ex: 723971</span></label>
+        <input type="text" [(ngModel)]="serie.baseDocumento" maxlength="6" class="input-mono" placeholder="723971" />
+      </div>
+      <div class="form-grupo">
+        <label>Início da Seq. <span class="dica">ex: 13 (para evitar 001–012)</span></label>
+        <input type="number" [(ngModel)]="serie.inicioSeq" min="1" max="999" style="width:80px" />
+      </div>
+      <div class="form-grupo">
+        <label>Data 1º Vencimento</label>
+        <input type="date" [(ngModel)]="serie.dataVencimento" />
+      </div>
+      <div class="form-grupo">
+        <label>Valor da Parcela (R$)</label>
+        <input type="number" [(ngModel)]="serie.valor" step="0.01" min="0.01" style="width:130px" />
+      </div>
+      <div class="form-grupo">
+        <label>Qtd. Parcelas</label>
+        <input type="number" [(ngModel)]="serie.qtdParcelas" min="1" max="360" style="width:80px" />
+      </div>
+      <div class="form-grupo" style="align-self:flex-end;">
+        <button class="btn-serie" (click)="gerarSerie()">🗓 Gerar Série</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- SEÇÃO: PARCELAS                                              -->
+  <!-- ============================================================ -->
+  <div class="secao">
+    <div class="secao-titulo-row">
+      <span class="secao-titulo">📋 Parcelas</span>
+      <span class="badge-total">{{ totalParcelas }} parcela(s) · {{ formatarReais(valorTotal) }}</span>
+      <button class="btn-add" (click)="adicionarParcela()">+ Adicionar Parcela</button>
+    </div>
+
+    @if (parcelas.length === 0) {
+      <div class="parcelas-vazio">
+        Nenhuma parcela adicionada. Use o <strong>Gerador de Série</strong> acima ou clique em <strong>+ Adicionar Parcela</strong>.
+      </div>
+    } @else {
+      <div class="tabela-wrapper">
+        <table class="tabela-parcelas">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nº Documento <span class="dica">10 chars</span></th>
+              <th>Data Vencimento</th>
+              <th>Valor Título (R$)</th>
+              <th>Valor Presente (R$)</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (p of parcelas; track p.id; let i = $index) {
+              <tr [class.linha-erro]="p.dataVencimento && p.dataVencimento <= operacao.dataEmissao">
+                <td class="col-seq">{{ i + 1 }}</td>
+                <td>
+                  <input type="text"
+                         [(ngModel)]="p.numDocumento"
+                         maxlength="10"
+                         class="input-mono input-doc"
+                         placeholder="123456/001" />
+                </td>
+                <td>
+                  <input type="date"
+                         [(ngModel)]="p.dataVencimento"
+                         [class.input-erro]="p.dataVencimento && p.dataVencimento <= operacao.dataEmissao"
+                         class="input-date" />
+                  @if (p.dataVencimento && p.dataVencimento <= operacao.dataEmissao) {
+                    <div class="aviso-venc">⚠ Venc. deve ser posterior a {{ operacao.dataEmissao }}</div>
+                  }
+                </td>
+                <td>
+                  <input type="number"
+                         [(ngModel)]="p.valorTitulo"
+                         (ngModelChange)="sincronizarValores(p)"
+                         step="0.01"
+                         min="0.01"
+                         class="input-valor" />
+                </td>
+                <td>
+                  <input type="number"
+                         [(ngModel)]="p.valorPresente"
+                         step="0.01"
+                         min="0.01"
+                         class="input-valor" />
+                </td>
+                <td>
+                  <button class="btn-remover" (click)="removerParcela(p.id)" title="Remover parcela">✕</button>
+                </td>
+              </tr>
+            }
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="3" class="col-total-label">Total</td>
+              <td colspan="2" class="col-total-val">{{ formatarReais(valorTotal) }}</td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    }
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ERROS DE GERAÇÃO                                             -->
+  <!-- ============================================================ -->
+  @if (errosGeracao.length > 0) {
+    <div class="erros-box">
+      <strong>🚫 Corrija os problemas antes de gerar:</strong>
+      <ul>
+        @for (e of errosGeracao; track e) {
+          <li>{{ e }}</li>
+        }
+      </ul>
+    </div>
+  }
+
+  <!-- ============================================================ -->
+  <!-- BOTÃO GERAR                                                  -->
+  <!-- ============================================================ -->
+  <div class="acoes-row">
+    <button class="btn-gerar" (click)="gerarArquivo()" [disabled]="parcelas.length === 0">
+      ⚡ Gerar Remessa CNAB 444
+    </button>
+    @if (conteudoGerado) {
+      <button class="btn-baixar" (click)="baixarArquivo()">
+        ⬇ Baixar .TXT
+      </button>
+      <button class="btn-copiar" (click)="copiarPreview()">
+        {{ _copiado ? '✓ Copiado!' : '📋 Copiar' }}
+      </button>
+    }
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- PREVIEW                                                      -->
+  <!-- ============================================================ -->
+  @if (mostrarPreview && conteudoGerado) {
+    <div class="preview-box">
+      <div class="preview-titulo">
+        ✅ Arquivo gerado — {{ totalParcelas + 2 }} linha(s) × 444 chars
+        <span class="preview-info">Header + {{ totalParcelas }} CCB(s) + Trailer</span>
+      </div>
+      <div class="preview-linhas">
+        @for (linha of conteudoGerado.split('\r\n'); track $index; let i = $index) {
+          <div class="preview-linha">
+            <span class="preview-ln">{{ i + 1 }}</span>
+            <span class="preview-tipo"
+                  [class.tipo-header]="linha[0] === '0'"
+                  [class.tipo-detalhe]="linha[0] === '1'"
+                  [class.tipo-trailer]="linha[0] === '9'">
+              {{ linha[0] === '0' ? 'HEADER' : linha[0] === '9' ? 'TRAILER' : 'CCB ' + i }}
+            </span>
+            <span class="preview-content">{{ linha.substring(0, 80) }}<span class="preview-reticencias">…</span></span>
+            <span class="preview-chars">{{ linha.length }}</span>
+          </div>
+        }
+      </div>
+      <textarea class="preview-raw" readonly [value]="conteudoGerado" rows="6"></textarea>
+    </div>
+  }
+</div>
