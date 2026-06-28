@@ -178,6 +178,13 @@ export const routes: Routes = [
         .then(m => m.VortxRetorno400ValidadorComponent),
   },
   {
+    path: 'validadores/singulare/ccb444',
+    title: 'Validador Singulare CCB CNAB 444',
+    loadComponent: () =>
+      import('./pages/validadores/singulare/singulare-ccb444-validador.component')
+        .then(m => m.SingulareCcb444ValidadorComponent),
+  },
+  {
     path: 'validadores/xml',
     title: 'Leitor / Validador de XML',
     loadComponent: () =>
