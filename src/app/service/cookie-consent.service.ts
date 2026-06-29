@@ -1,13 +1,23 @@
 import { Injectable } from '@angular/core';
 
+const ADSENSE_CLIENT = 'ca-pub-9860091265748356';
+
 @Injectable({ providedIn: 'root' })
 export class CookieConsentService {
   private readonly KEY = 'cookie_consent';
+  private adsenseLoaded = false;
 
   hasConsented(): boolean | null {
     const val = localStorage.getItem(this.KEY);
     if (val === null) return null;
     return val === 'true';
+  }
+
+  /** Chamado na inicialização do app — carrega scripts se o usuário já havia aceitado */
+  initOnStartup(): void {
+    if (this.hasConsented() === true) {
+      this.loadTrackingScripts();
+    }
   }
 
   accept(): void {
@@ -20,12 +30,28 @@ export class CookieConsentService {
   }
 
   private loadTrackingScripts(): void {
+    this.loadAdSense();
     this.loadMetaPixel();
     this.loadGTM();
   }
 
+  private loadAdSense(): void {
+    if (this.adsenseLoaded) return;
+    if (document.querySelector('script[src*="adsbygoogle"]')) {
+      this.adsenseLoaded = true;
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`;
+    script.crossOrigin = 'anonymous';
+    document.head.appendChild(script);
+    this.adsenseLoaded = true;
+  }
+
   private loadMetaPixel(): void {
-    const pixelId = 'SEU_META_PIXEL_ID'; // substituir após criar no Meta
+    const pixelId = 'SEU_META_PIXEL_ID';
     if (pixelId === 'SEU_META_PIXEL_ID') return;
 
     const script = document.createElement('script');
@@ -45,7 +71,7 @@ export class CookieConsentService {
   }
 
   private loadGTM(): void {
-    const gtmId = 'SEU_GTM_ID'; // substituir após criar no GTM
+    const gtmId = 'SEU_GTM_ID';
     if (gtmId === 'SEU_GTM_ID') return;
 
     const script = document.createElement('script');

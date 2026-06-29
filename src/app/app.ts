@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
@@ -8,6 +8,7 @@ import { FooterComponent } from './pages/footer/footer.component';
 import { CookieBannerComponent } from './pages/cookie-banner/cookie-banner.component';
 import { TickerComponent } from './pages/home/ticker.component';
 import { LoadingBarComponent } from './pages/loading-bar/loading-bar.component';
+import { CookieConsentService } from './service/cookie-consent.service';
 
 @Component({
   selector: 'app-root',
@@ -16,17 +17,20 @@ import { LoadingBarComponent } from './pages/loading-bar/loading-bar.component';
   templateUrl: './app.html',
   styleUrls: ['./app.css'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   private router = inject(Router);
+  private consent = inject(CookieConsentService);
 
-  // ✅ Renomeado para isModalOpen (detecta qualquer modal)
   isModalOpen = signal(false);
+
+  ngOnInit(): void {
+    this.consent.initOnStartup();
+  }
 
   constructor() {
     this.router.events
       .pipe(filter(e => e instanceof NavigationEnd))
       .subscribe(() => {
-        // ✅ Detecta qualquer rota dentro do outlet modal
         this.isModalOpen.set(this.router.url.includes('(modal:'));
       });
   }
