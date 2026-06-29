@@ -451,6 +451,18 @@
   box-shadow: none;
 }
 
+/* Remessa — azul navy (padrão) */
+.btn-remessa { background: #1565c0; }
+.btn-remessa:hover { background: #0d47a1; box-shadow: 0 4px 14px rgba(21,101,192,0.38); }
+
+/* Retorno — laranja */
+.btn-retorno { background: #e65100; }
+.btn-retorno:hover { background: #bf360c; box-shadow: 0 4px 14px rgba(230,81,0,0.38); }
+
+/* Gerador — teal/verde */
+.btn-gerador { background: #00695c; }
+.btn-gerador:hover { background: #004d40; box-shadow: 0 4px 14px rgba(0,105,92,0.38); }
+
 /* ===== SEM VALIDADOR ===== */
 .no-validador {
   display: inline-flex;

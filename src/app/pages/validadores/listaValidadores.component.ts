@@ -61,6 +61,13 @@ export class ListaValidadoresComponent {
     return !!(banco.validadores?.some(v => v.grupo));
   }
 
+  getBtnClass(nome: string): string {
+    const n = nome.toLowerCase();
+    if (n.includes('gerador')) return 'validador-btn btn-gerador';
+    if (n.includes('retorno')) return 'validador-btn btn-retorno';
+    return 'validador-btn btn-remessa';
+  }
+
   getValidadoresAgrupados(banco: BancoData): { grupo: string; items: { nome: string; routerLink: string; nomeExibido: string }[] }[] {
     if (!banco.validadores) return [];
     const map = new Map<string, { nome: string; routerLink: string; nomeExibido: string }[]>();

@@ -91,7 +91,7 @@
                   @for (v of grupo.items; track v.routerLink) {
                     <a
                       [routerLink]="v.routerLink"
-                      class="validador-btn"
+                      [class]="getBtnClass(v.nome)"
                       [attr.aria-label]="'Acessar validador ' + v.nome + ' do ' + banco.nome">
                       {{ v.nomeExibido }}
                     </a>
@@ -105,7 +105,7 @@
             @for (validador of (banco.validadores ?? []); track validador.routerLink) {
               <a
                 [routerLink]="validador.routerLink"
-                class="validador-btn"
+                [class]="getBtnClass(validador.nome)"
                 [attr.aria-label]="'Acessar validador ' + validador.nome + ' do ' + banco.nome">
                 {{ validador.nome }}
               </a>

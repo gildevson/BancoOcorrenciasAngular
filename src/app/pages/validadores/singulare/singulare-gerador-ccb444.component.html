@@ -154,7 +154,10 @@
     <div class="form-grid">
       <div class="form-grupo">
         <label>Número Base <span class="dica">ex: 723971</span></label>
-        <input type="text" [(ngModel)]="serie.baseDocumento" maxlength="6" class="input-mono" placeholder="723971" />
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="text" [(ngModel)]="serie.baseDocumento" maxlength="6" class="input-mono" placeholder="723971" />
+          <button class="btn-hoje" (click)="gerarBaseAleatoria()" title="Gerar número base aleatório">🎲 Aleatório</button>
+        </div>
       </div>
       <div class="form-grupo">
         <label>Início da Seq. <span class="dica">ex: 13 (para evitar 001–012)</span></label>
@@ -281,7 +284,7 @@
     </button>
     @if (conteudoGerado) {
       <button class="btn-baixar" (click)="baixarArquivo()">
-        ⬇ Baixar .TXT
+        ⬇ Baixar .REM
       </button>
       <button class="btn-copiar" (click)="copiarPreview()">
         {{ _copiado ? '✓ Copiado!' : '📋 Copiar' }}

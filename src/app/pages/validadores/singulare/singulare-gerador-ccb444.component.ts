@@ -128,6 +128,11 @@ export class SingulareGeradorCcb444Component {
   // ============================================================
   // GERADOR DE SÉRIE MENSAL
   // ============================================================
+  gerarBaseAleatoria(): void {
+    const base = Math.floor(100000 + Math.random() * 900000).toString();
+    this.serie.baseDocumento = base;
+  }
+
   gerarSerie(): void {
     if (!this.serie.dataVencimento) { alert('Informe a data do 1º vencimento.'); return; }
     if (this.serie.qtdParcelas < 1 || this.serie.qtdParcelas > 360) { alert('Qtd. de parcelas inválida (1–360).'); return; }
@@ -339,7 +344,7 @@ export class SingulareGeradorCcb444Component {
     const a = document.createElement('a');
     a.href = url;
     const dataStr = this.arquivo.dataGravacao.replace(/-/g, '');
-    a.download = `remessa_singulare_ccb_${dataStr}_seq${this.arquivo.numSeqArquivo}.TXT`;
+    a.download = `remessa_singulare_ccb_${dataStr}_seq${this.arquivo.numSeqArquivo}.rem`;
     a.click();
     URL.revokeObjectURL(url);
   }

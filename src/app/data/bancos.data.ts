@@ -200,7 +200,7 @@ export const BANCOS_DATA: BancoData[] = [
     id: 'a3b4c5d6-e7f8-9012-bcde-f12345678901',
     codigo: '363',
     nome: 'Singulare CTVM',
-    logo: 'https://singulare.com.br/wp-content/uploads/2022/08/logo-singulare.svg',
+    logo: 'assets/logo/singulare.webp',
     ativo: true,
     validadores: [
       { nome: 'Remessa CCB CNAB 444', routerLink: '/validadores/singulare/ccb444', grupo: 'CNAB 444' },
@@ -211,7 +211,7 @@ export const BANCOS_DATA: BancoData[] = [
     id: 'c7d8e9f0-1234-5678-90ab-cdef12345678',
     codigo: '457',
     nome: 'UY3 DTVM',
-    logo: 'https://i.imgur.com/placeholder.png',
+    logo: 'assets/logo/uy3.png',
     ativo: true,
     validadores: [
       { nome: 'Remessa CNAB 400', routerLink: '/validadores/uy3/cnab400', grupo: 'CNAB 400' },
