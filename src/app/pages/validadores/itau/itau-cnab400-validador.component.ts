@@ -30,6 +30,7 @@ interface EstatisticasArquivo {
   totalLinhas: number;
   headers: number;
   tipo1: number;
+  tipo5: number;
   trailers: number;
   desconhecidos: number;
 }
@@ -194,6 +195,25 @@ export class ItauCnab400ValidadorComponent implements OnDestroy {
     { nome: 'Sequencial do Registro',    ini: 394, fim: 400, tamanho: 6,   tipo: 'N', obrigatorio: true,               cor: '#b2ebf2', descricao: 'Nº Sequencial do Último Registro' },
   ];
 
+  // ===================================================
+  // LAYOUT TIPO 5 — Registro Complementar do Sacado
+  // Itaú CNAB 400: endereço/CNPJ do sacado/avalista
+  // ===================================================
+  camposTipo5: CampoLayout[] = [
+    { nome: 'Identificação do Registro',    ini: 0,   fim: 1,   tamanho: 1,   tipo: 'N', obrigatorio: true,  valores: ['5'],                                                    cor: '#f8bbd0', descricao: 'Tipo 5 — Registro Complementar do Sacado' },
+    { nome: 'Tipo Inscrição do Sacado',     ini: 1,   fim: 2,   tamanho: 1,   tipo: 'N', obrigatorio: false, valoresDescricao: { '1': 'CPF', '2': 'CNPJ', '5': 'Isento/N.Id.' }, cor: '#ffe082', descricao: '1=CPF · 2=CNPJ · 5=Isento/Não identificado' },
+    { nome: 'Branco',                       ini: 2,   fim: 121, tamanho: 119, tipo: 'A', obrigatorio: false,                                                                    cor: '#f5f5f5', descricao: 'Branco (119 pos)' },
+    { nome: 'Tipo Inscrição Complementar',  ini: 121, fim: 123, tamanho: 2,   tipo: 'N', obrigatorio: false, valoresDescricao: { '00': 'Isento', '01': 'CPF', '02': 'CNPJ', '04': 'Isento/Estrang.' }, cor: '#ffe082', descricao: '01=CPF · 02=CNPJ · 04=Isento/Estrangeiro' },
+    { nome: 'CNPJ/CPF do Sacado',           ini: 123, fim: 137, tamanho: 14,  tipo: 'N', obrigatorio: false,                                                                    cor: '#b2dfdb', descricao: 'CNPJ (14 dígitos) ou CPF (11 dígitos, zeros à esq.)' },
+    { nome: 'Endereço do Sacado',           ini: 137, fim: 177, tamanho: 40,  tipo: 'A', obrigatorio: false,                                                                    cor: '#ffe0b2', descricao: 'Logradouro e número do sacado/avalista (40 pos)' },
+    { nome: 'Bairro do Sacado',             ini: 177, fim: 189, tamanho: 12,  tipo: 'A', obrigatorio: false,                                                                    cor: '#e1bee7', descricao: 'Bairro do sacado/avalista (12 pos)' },
+    { nome: 'CEP do Sacado',                ini: 189, fim: 197, tamanho: 8,   tipo: 'N', obrigatorio: false,                                                                    cor: '#c8e6c9', descricao: 'CEP apenas dígitos, sem hífen (8 pos)' },
+    { nome: 'Cidade do Sacado',             ini: 197, fim: 212, tamanho: 15,  tipo: 'A', obrigatorio: false,                                                                    cor: '#f8bbd0', descricao: 'Cidade do sacado/avalista (15 pos)' },
+    { nome: 'UF do Sacado',                 ini: 212, fim: 214, tamanho: 2,   tipo: 'A', obrigatorio: false,                                                                    cor: '#f48fb1', descricao: 'Sigla do estado (2 pos)' },
+    { nome: 'Branco',                       ini: 214, fim: 394, tamanho: 180, tipo: 'A', obrigatorio: false,                                                                    cor: '#f5f5f5', descricao: 'Branco (180 pos)' },
+    { nome: 'Sequencial do Registro',       ini: 394, fim: 400, tamanho: 6,   tipo: 'N', obrigatorio: true,                                                                     cor: '#b2ebf2', descricao: 'Nº sequencial do registro' },
+  ];
+
   readonly codigosOcorrencia: { codigo: string; descricao: string }[] = [
     { codigo: '01', descricao: 'Remessa — Entrada de Título' },
     { codigo: '02', descricao: 'Pedido de Baixa' },
@@ -290,6 +310,7 @@ export class ItauCnab400ValidadorComponent implements OnDestroy {
     const tipo = this.linhasEditadas[li]?.[0];
     if (tipo === '0') return this.camposHeader;
     if (tipo === '1') return this.camposDetalhe;
+    if (tipo === '5') return this.camposTipo5;
     if (tipo === '9') return this.camposTrailer;
     return [];
   }
@@ -422,7 +443,7 @@ export class ItauCnab400ValidadorComponent implements OnDestroy {
   validarEHighlight(content: string): string {
     const lines = content.split(/\r?\n/).filter(l => l.length > 0);
     if (lines.length === 0) { this.error = 'Arquivo vazio ou sem linhas válidas.'; return ''; }
-    this.estatisticas = { totalLinhas: lines.length, headers: 0, tipo1: 0, trailers: 0, desconhecidos: 0 };
+    this.estatisticas = { totalLinhas: lines.length, headers: 0, tipo1: 0, tipo5: 0, trailers: 0, desconhecidos: 0 };
     let sequenciaEsperada = 1;
 
     for (let idx = 0; idx < lines.length; idx++) {
@@ -435,13 +456,8 @@ export class ItauCnab400ValidadorComponent implements OnDestroy {
         case '1': campos = this.camposDetalhe; this.estatisticas.tipo1++;   break;
         case '9': campos = this.camposTrailer; this.estatisticas.trailers++; break;
         case '5':
-          campos = [];
-          this.estatisticas.desconhecidos++;
-          this.erros.push({
-            linha: idx + 1, campo: 'Tipo Registro', posicao: '1', valor: tipo,
-            mensagem: 'Tipo 5 — Registro Complementar do Sacado (CNPJ/endereço). Registro opcional do Itaú, informativo.',
-            severidade: 'aviso'
-          });
+          campos = this.camposTipo5;
+          this.estatisticas.tipo5++;
           break;
         default:
           campos = [];
@@ -536,9 +552,10 @@ export class ItauCnab400ValidadorComponent implements OnDestroy {
     let tipoColor = '';
 
     switch (tipo) {
-      case '0': campos = this.camposHeader;  tipoNome = 'Header';    tipoColor = '#7b1fa2'; break;
-      case '1': campos = this.camposDetalhe; tipoNome = 'Detalhe';   tipoColor = '#388e3c'; break;
-      case '9': campos = this.camposTrailer; tipoNome = 'Trailer';   tipoColor = '#c2185b'; break;
+      case '0': campos = this.camposHeader;  tipoNome = 'Header';           tipoColor = '#7b1fa2'; break;
+      case '1': campos = this.camposDetalhe; tipoNome = 'Detalhe';          tipoColor = '#388e3c'; break;
+      case '5': campos = this.camposTipo5;   tipoNome = 'Compl. Sacado';    tipoColor = '#f57c00'; break;
+      case '9': campos = this.camposTrailer; tipoNome = 'Trailer';          tipoColor = '#c2185b'; break;
       default:  campos = [];                 tipoNome = 'Desconhecido'; tipoColor = '#d32f2f';
     }
 

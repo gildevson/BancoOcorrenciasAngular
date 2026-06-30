@@ -40,6 +40,12 @@
         <div class="stat-valor">{{ estatisticas.trailers }}</div>
         <div class="stat-label">Trailers (9)</div>
       </div>
+      @if (estatisticas.tipo5 > 0) {
+        <div class="stat-card stat-compl">
+          <div class="stat-valor">{{ estatisticas.tipo5 }}</div>
+          <div class="stat-label">Compl. Sacado (5)</div>
+        </div>
+      }
     </div>
   }
 
