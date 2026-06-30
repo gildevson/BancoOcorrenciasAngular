@@ -129,24 +129,20 @@ export class VortxRetorno400ValidadorComponent implements OnDestroy {
     { nome: 'Tipo Inscrição Empresa',           ini: 1,   fim: 3,   tamanho: 2,   tipo: 'N', obrigatorio: true,  valores: ['01', '02'],   cor: '#ffe082', valoresDescricao: { '01': 'CPF — Pessoa Física', '02': 'CNPJ — Pessoa Jurídica' }, descricao: '01=CPF · 02=CNPJ' },
     { nome: 'CNPJ/CPF Empresa',                ini: 3,   fim: 17,  tamanho: 14,  tipo: 'N', obrigatorio: true,                           cor: '#b2dfdb', descricao: 'CPF/CNPJ Empresa (14 pos)' },
     { nome: 'Identificação Empresa no Banco',  ini: 17,  fim: 37,  tamanho: 20,  tipo: 'A', obrigatorio: true,                           cor: '#c5cae9', descricao: 'Código empresa no VORTX (20 pos)' },
-    { nome: 'Nosso Número',                    ini: 37,  fim: 47,  tamanho: 10,  tipo: 'N', obrigatorio: true,                           cor: '#ffccbc', descricao: 'Nosso Número (10 pos)' },
-    { nome: 'Dígito Nosso Número',             ini: 47,  fim: 48,  tamanho: 1,   tipo: 'A', obrigatorio: false,                          cor: '#ffab91', descricao: 'Dígito Verificador N/N' },
-    { nome: 'Uso do Banco',                    ini: 48,  fim: 62,  tamanho: 14,  tipo: 'A', obrigatorio: false,                          cor: '#e0e0e0', descricao: 'Uso Interno (14 pos)' },
-    { nome: 'Ident. Ocorrência',               ini: 62,  fim: 64,  tamanho: 2,   tipo: 'N', obrigatorio: true,                           cor: '#80deea', descricao: '02=Entrada, 06=Liquidação, 09/10=Baixa…' },
-    { nome: 'Data Ocorrência',                 ini: 64,  fim: 70,  tamanho: 6,   tipo: 'N', obrigatorio: true,  formato: 'DDMMAA',        cor: '#fff9c4', descricao: 'Data Ocorrência DDMMAA' },
-    { nome: 'Número Documento',                ini: 70,  fim: 90,  tamanho: 20,  tipo: 'A', obrigatorio: false,                          cor: '#c5e1a5', descricao: 'Número do Documento (20 pos)' },
-    { nome: 'Data Vencimento',                 ini: 90,  fim: 96,  tamanho: 6,   tipo: 'N', obrigatorio: false, formato: 'DDMMAA',        cor: '#fff59d', descricao: 'Data Vencimento DDMMAA' },
-    { nome: 'Valor do Título',                 ini: 96,  fim: 109, tamanho: 13,  tipo: 'N', obrigatorio: false,                          cor: '#ef9a9a', descricao: 'Valor Título (13 pos, 2 dec)' },
-    { nome: 'Banco Cobrador',                  ini: 109, fim: 112, tamanho: 3,   tipo: 'N', obrigatorio: false,                          cor: '#b3e5fc', descricao: 'Código Banco Cobrador' },
-    { nome: 'Agência Cobradora',               ini: 112, fim: 117, tamanho: 5,   tipo: 'N', obrigatorio: false,                          cor: '#81d4fa', descricao: 'Código Agência Cobradora' },
-    { nome: 'Desconto Concedido',              ini: 117, fim: 130, tamanho: 13,  tipo: 'N', obrigatorio: false,                          cor: '#80cbc4', descricao: 'Valor Desconto (13 pos, 2 dec)' },
-    { nome: 'Abatimento Concedido',            ini: 130, fim: 143, tamanho: 13,  tipo: 'N', obrigatorio: false,                          cor: '#a5d6a7', descricao: 'Valor Abatimento (13 pos, 2 dec)' },
-    { nome: 'Valor Pago',                      ini: 143, fim: 156, tamanho: 13,  tipo: 'N', obrigatorio: false,                          cor: '#66bb6a', descricao: 'Valor Pago (13 pos, 2 dec)' },
-    { nome: 'Juros de Mora',                   ini: 156, fim: 169, tamanho: 13,  tipo: 'N', obrigatorio: false,                          cor: '#ffab91', descricao: 'Juros Mora (13 pos, 2 dec)' },
-    { nome: 'Outras Deduções',                 ini: 169, fim: 182, tamanho: 13,  tipo: 'N', obrigatorio: false,                          cor: '#ff8a65', descricao: 'Outras Deduções (13 pos, 2 dec)' },
-    { nome: 'Data do Crédito',                 ini: 182, fim: 188, tamanho: 6,   tipo: 'N', obrigatorio: false, formato: 'DDMMAA',        cor: '#c8e6c9', descricao: 'Data Crédito DDMMAA' },
-    { nome: 'Motivos de Rejeição',             ini: 188, fim: 198, tamanho: 10,  tipo: 'N', obrigatorio: false,                          cor: '#e57373', descricao: 'Motivos (até 5 códigos de 2 dígitos)' },
-    { nome: 'Branco',                          ini: 198, fim: 394, tamanho: 196, tipo: 'A', obrigatorio: false,                          cor: '#f5f5f5', descricao: 'Branco (196 pos)' },
+    { nome: 'Uso do Banco',                    ini: 37,  fim: 56,  tamanho: 19,  tipo: 'A', obrigatorio: false,                          cor: '#e0e0e0', descricao: 'Uso interno banco (19 pos — zeros)' },
+    { nome: 'Nosso Número',                    ini: 56,  fim: 62,  tamanho: 6,   tipo: 'N', obrigatorio: true,                           cor: '#ffccbc', descricao: 'Nosso Número retornado pelo banco (6 pos)' },
+    { nome: 'Uso do Banco',                    ini: 62,  fim: 70,  tamanho: 8,   tipo: 'A', obrigatorio: false,                          cor: '#e8e8e8', descricao: 'Uso interno banco (8 pos — zeros)' },
+    { nome: 'Valor do Título',                 ini: 70,  fim: 83,  tamanho: 13,  tipo: 'N', obrigatorio: false,                          cor: '#ef9a9a', descricao: 'Valor de face do título (13 pos, 2 dec)' },
+    { nome: 'Uso do Banco',                    ini: 83,  fim: 108, tamanho: 25,  tipo: 'A', obrigatorio: false,                          cor: '#eeeeee', descricao: 'Uso interno banco (25 pos — zeros)' },
+    { nome: 'Ident. Ocorrência',               ini: 108, fim: 110, tamanho: 2,   tipo: 'N', obrigatorio: true,                           cor: '#80deea', descricao: '02=Entrada, 06=Liquidação, 09/10=Baixa…' },
+    { nome: 'Data Ocorrência',                 ini: 110, fim: 116, tamanho: 6,   tipo: 'N', obrigatorio: true,  formato: 'DDMMAA',        cor: '#fff9c4', descricao: 'Data Ocorrência DDMMAA' },
+    { nome: 'Número Documento',                ini: 116, fim: 136, tamanho: 20,  tipo: 'A', obrigatorio: false,                          cor: '#c5e1a5', descricao: 'Número do Documento (20 pos)' },
+    { nome: 'Data Vencimento',                 ini: 136, fim: 142, tamanho: 6,   tipo: 'N', obrigatorio: false, formato: 'DDMMAA',        cor: '#fff59d', descricao: 'Data Vencimento DDMMAA' },
+    { nome: 'Uso do Banco / Encargos',         ini: 142, fim: 252, tamanho: 110, tipo: 'A', obrigatorio: false,                          cor: '#f5f5f5', descricao: 'Área de encargos e uso banco (110 pos — banco/agência/juros/multa)' },
+    { nome: 'Valor Pago',                      ini: 252, fim: 265, tamanho: 13,  tipo: 'N', obrigatorio: false,                          cor: '#66bb6a', descricao: 'Valor efetivamente pago (13 pos, 2 dec)' },
+    { nome: 'Uso do Banco',                    ini: 265, fim: 295, tamanho: 30,  tipo: 'A', obrigatorio: false,                          cor: '#f0f0f0', descricao: 'Uso banco / complemento (30 pos)' },
+    { nome: 'Data do Crédito',                 ini: 295, fim: 301, tamanho: 6,   tipo: 'N', obrigatorio: false, formato: 'DDMMAA',        cor: '#c8e6c9', descricao: 'Data Crédito DDMMAA' },
+    { nome: 'Branco',                          ini: 301, fim: 394, tamanho: 93,  tipo: 'A', obrigatorio: false,                          cor: '#f5f5f5', descricao: 'Branco (93 pos)' },
     { nome: 'Nº Sequencial',                   ini: 394, fim: 400, tamanho: 6,   tipo: 'N', obrigatorio: true,                           cor: '#b2ebf2', descricao: 'Sequencial do Registro' },
   ];
 
@@ -381,8 +377,8 @@ export class VortxRetorno400ValidadorComponent implements OnDestroy {
     if (detalhes.length === 0) { this.totaisRetorno = null; return; }
     let liquidacoes = 0, valorTotalPago = 0, entradasConfirmadas = 0, baixas = 0, rejeitadas = 0;
     for (const l of detalhes) {
-      const ocor = l.substring(62, 64);
-      if (ocor === '06') { liquidacoes++; valorTotalPago += parseInt(l.substring(143, 156) || '0', 10); }
+      const ocor = l.substring(108, 110);
+      if (['06','07','08','15','17'].includes(ocor)) { liquidacoes++; valorTotalPago += parseInt(l.substring(252, 265) || '0', 10); }
       if (ocor === '02') entradasConfirmadas++;
       if (ocor === '09' || ocor === '10') baixas++;
       if (ocor === '03') rejeitadas++;
