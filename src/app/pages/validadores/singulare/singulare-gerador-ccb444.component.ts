@@ -171,6 +171,13 @@ export class SingulareGeradorCcb444Component {
     return String(val || '').replace(/\D/g, '').padStart(len, '0').substring(0, len);
   }
 
+  private padDocumentoInscricao(val: string | number, len = 14): string {
+    const texto = String(val || '').trim().toUpperCase();
+    return /[A-Z]/.test(texto)
+      ? this.padA(texto.replace(/[^A-Z0-9]/g, ''), len)
+      : this.padN(texto, len);
+  }
+
   private ddmmaa(iso: string): string {
     if (!iso || iso.length < 10) return '000000';
     const [y, m, d] = iso.split('-');
@@ -179,6 +186,51 @@ export class SingulareGeradorCcb444Component {
 
   private centavos(val: number, len: number): string {
     return Math.round((val || 0) * 100).toString().padStart(len, '0').substring(0, len);
+  }
+
+  private numeroAleatorio(max: number): number {
+    return Math.floor(Math.random() * max);
+  }
+
+  private calcularDigitoCnpj(base: number[]): number {
+    const pesos = base.length === 12
+      ? [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]
+      : [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+
+    const soma = base.reduce((total, digito, index) => total + digito * pesos[index], 0);
+    const resto = soma % 11;
+    return resto < 2 ? 0 : 11 - resto;
+  }
+
+  private gerarCnpjValido(): string {
+    const base = Array.from({ length: 8 }, () => this.numeroAleatorio(10));
+    base.push(0, 0, 0, 1);
+    const primeiroDigito = this.calcularDigitoCnpj(base);
+    const segundoDigito = this.calcularDigitoCnpj([...base, primeiroDigito]);
+    return [...base, primeiroDigito, segundoDigito].join('');
+  }
+
+  private gerarInscricaoAlfanumerica(): string {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    return Array.from({ length: 14 }, () => chars[this.numeroAleatorio(chars.length)]).join('');
+  }
+
+  gerarCnpjCedente(): void {
+    this.cedente.cnpj = this.gerarCnpjValido();
+  }
+
+  gerarCnpjTomador(): void {
+    this.tomador.tipoInsc = '02';
+    this.tomador.cpfCnpj = this.gerarCnpjValido();
+  }
+
+  gerarInscricaoAlfanumericaCedente(): void {
+    this.cedente.cnpj = this.gerarInscricaoAlfanumerica();
+  }
+
+  gerarInscricaoAlfanumericaTomador(): void {
+    this.tomador.tipoInsc = '02';
+    this.tomador.cpfCnpj = this.gerarInscricaoAlfanumerica();
   }
 
   // ============================================================
@@ -257,14 +309,14 @@ export class SingulareGeradorCcb444Component {
     l += this.centavos(p.valorPresente, 13);          // pos 192-204 — Valor Presente
     l += this.padN('', 13);                           // pos 205-217 — Valor Abatimento
     l += this.padN(t.tipoInsc, 2);                   // pos 218-219 — Tipo Insc. Tomador
-    l += this.padN(t.cpfCnpj, 14);                   // pos 220-233 — CPF/CNPJ Tomador
+    l += this.padDocumentoInscricao(t.cpfCnpj, 14);  // pos 220-233 — CPF/CNPJ Tomador
     l += this.padA(t.nome, 40);                       // pos 234-273 — Nome do Tomador
     l += this.padA(t.endereco, 40);                   // pos 274-313 — Endereço Tomador
     l += this.padA('', 9);                            // pos 314-322 — Nº Doc. Referência
     l += this.padA('', 3);                            // pos 323-325 — Compl. Referência
     l += this.padN(t.cep, 8);                         // pos 326-333 — CEP
     l += this.padA(c.nome, 46);                       // pos 334-379 — Nome Cedente
-    l += this.padN(c.cnpj, 14);                       // pos 380-393 — CNPJ Cedente
+    l += this.padDocumentoInscricao(c.cnpj, 14);      // pos 380-393 — CNPJ Cedente
     l += this.padA('', 44);                           // pos 394-437 — Branco
     l += this.padN(String(seq), 6);                   // pos 438-443 — Seq. Registro
 

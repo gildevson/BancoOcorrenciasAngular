@@ -42,8 +42,12 @@
         <input type="text" [(ngModel)]="cedente.nome" maxlength="46" />
       </div>
       <div class="form-grupo">
-        <label>CNPJ Cedente <span class="dica">14 dígitos, sem pontuação</span></label>
-        <input type="text" [(ngModel)]="cedente.cnpj" maxlength="14" class="input-mono" placeholder="00000000000000" />
+        <label>CNPJ Cedente <span class="dica">14 chars</span></label>
+        <div class="input-acoes">
+          <input type="text" [(ngModel)]="cedente.cnpj" maxlength="14" class="input-mono" placeholder="00000000000000" />
+          <button type="button" class="btn-mini" (click)="gerarCnpjCedente()" title="Gerar CNPJ válido">CNPJ</button>
+          <button type="button" class="btn-mini btn-mini-alt" (click)="gerarInscricaoAlfanumericaCedente()" title="Gerar inscrição alfanumérica">A-Z</button>
+        </div>
       </div>
     </div>
   </div>
@@ -62,8 +66,12 @@
         </select>
       </div>
       <div class="form-grupo">
-        <label>CPF / CNPJ <span class="dica">14 dígitos</span></label>
-        <input type="text" [(ngModel)]="tomador.cpfCnpj" maxlength="14" class="input-mono" placeholder="00000000000000" />
+        <label>CPF / CNPJ <span class="dica">14 chars</span></label>
+        <div class="input-acoes">
+          <input type="text" [(ngModel)]="tomador.cpfCnpj" maxlength="14" class="input-mono" placeholder="00000000000000" />
+          <button type="button" class="btn-mini" (click)="gerarCnpjTomador()" title="Gerar CNPJ válido">CNPJ</button>
+          <button type="button" class="btn-mini btn-mini-alt" (click)="gerarInscricaoAlfanumericaTomador()" title="Gerar inscrição alfanumérica">A-Z</button>
+        </div>
       </div>
       <div class="form-grupo form-grupo-wide">
         <label>Nome do Tomador <span class="dica">40 chars</span></label>

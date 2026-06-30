@@ -162,6 +162,13 @@ select:focus {
   letter-spacing: 0.5px;
 }
 
+.input-acoes {
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) auto auto;
+  gap: 6px;
+  align-items: center;
+}
+
 /* ===================================
    BOTÕES
    =================================== */
@@ -178,6 +185,28 @@ select:focus {
   transition: background 0.15s;
 }
 .btn-hoje:hover { background: #b2dfdb; }
+
+.btn-mini {
+  min-width: 48px;
+  padding: 8px 9px;
+  background: #e0f2f1;
+  border: 1px solid #80cbc4;
+  border-radius: 6px;
+  color: #00695c;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+.btn-mini:hover { background: #b2dfdb; }
+
+.btn-mini-alt {
+  background: #eef5ff;
+  border-color: #90caf9;
+  color: #01579b;
+}
+.btn-mini-alt:hover { background: #d7ebff; }
 
 .btn-serie {
   padding: 10px 20px;
@@ -482,5 +511,6 @@ select:focus {
   .gerador-ccb { padding: 12px; }
   .titulo { font-size: 20px; }
   .form-grupo-wide { grid-column: span 1; }
+  .input-acoes { grid-template-columns: 1fr 48px 48px; }
   .input-doc, .input-date, .input-valor { width: 100%; }
 }
