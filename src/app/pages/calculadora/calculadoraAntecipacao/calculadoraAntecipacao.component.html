@@ -1,0 +1,283 @@
+<div class="antecipacao-container">
+  <a class="btn-voltar" routerLink="/calculadora">← Voltar</a>
+
+  <div class="antecipacao-header">
+    <h2>⏩ Calculadora de Antecipação</h2>
+    <p class="subtitle">Calcule o deságio e o valor bruto para operações de antecipação de recebíveis</p>
+  </div>
+
+  <!-- Fórmulas -->
+  <div class="formula-info">
+    <h3>Como funciona o cálculo?</h3>
+    <div class="formulas">
+      <div class="formula-item">
+        <span class="formula-label">Prazo (dias):</span>
+        <code>Vencimento − Data de Antecipação</code>
+      </div>
+      <div class="formula-item">
+        <span class="formula-label">Taxa Efetiva no Prazo:</span>
+        <code>(1 + Fator%)^(Prazo ÷ 30) − 1</code>
+      </div>
+      <div class="formula-item">
+        <span class="formula-label">Deságio:</span>
+        <code>Valor Antecipação × Taxa Efetiva</code>
+      </div>
+      <div class="formula-item total">
+        <span class="formula-label">Valor Bruto:</span>
+        <code>Valor Antecipação + Deságio + Mora</code>
+      </div>
+      <div class="formula-item conferencia">
+        <span class="formula-label">Conferência (linear):</span>
+        <code>Valor Bruto × (Fator ÷ 30) × Prazo ÷ 100</code>
+      </div>
+    </div>
+    <p class="formula-obs">
+      <strong>Obs.:</strong> O cálculo principal transforma a taxa nominal em taxa efetiva no prazo.
+      A conferência utiliza o fator nominal direto sobre o valor bruto calculado.
+    </p>
+  </div>
+
+  <!-- Formulário Principal -->
+  <div class="form-section">
+    <h3 class="section-title">Cálculo na Operação</h3>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="valorAntecipacao">
+          Valor Antecipação (R$)
+          <span class="hint">Valor líquido a ser desembolsado</span>
+        </label>
+        <input
+          id="valorAntecipacao"
+          type="number"
+          [(ngModel)]="valorAntecipacao"
+          step="0.01"
+          min="0"
+          placeholder="Ex: 100.000,00">
+      </div>
+
+      <div class="form-group">
+        <label for="fator">
+          Fator (% a.m.)
+          <span class="hint">Taxa nominal mensal</span>
+        </label>
+        <div class="input-with-suffix">
+          <input
+            id="fator"
+            type="number"
+            [(ngModel)]="fator"
+            step="0.0001"
+            min="0"
+            placeholder="Ex: 2,50">
+          <span class="suffix">%</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="mora">
+          Mora (R$)
+          <span class="hint">Valor de mora já calculado (opcional)</span>
+        </label>
+        <input
+          id="mora"
+          type="number"
+          [(ngModel)]="mora"
+          step="0.01"
+          min="0"
+          placeholder="Ex: 500,00">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="dataAntecipacao">
+          Data de Antecipação
+          <span class="hint">Data do desembolso</span>
+        </label>
+        <input
+          id="dataAntecipacao"
+          type="date"
+          [(ngModel)]="dataAntecipacao">
+      </div>
+
+      <div class="form-group">
+        <label for="dataVencimento">
+          Vencimento
+          <span class="hint">Data de vencimento do título</span>
+        </label>
+        <input
+          id="dataVencimento"
+          type="date"
+          [(ngModel)]="dataVencimento">
+      </div>
+
+      <div class="form-group prazo-display">
+        <label>
+          Prazo (dias)
+          <span class="hint">Calculado automaticamente</span>
+        </label>
+        <div class="prazo-valor" [class.prazo-ativo]="prazoCalculado > 0">
+          {{ prazoCalculado > 0 ? prazoCalculado + ' dias' : '—' }}
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="erro" class="erro-msg">⚠ {{ erro }}</div>
+
+    <div class="button-group">
+      <button type="button" class="btn-calcular" (click)="calcular()">
+        <span class="btn-icon">⏩</span>
+        Calcular Antecipação
+      </button>
+      <button type="button" class="btn-limpar" (click)="limpar()" *ngIf="resultado || valorAntecipacao || fator">
+        <span class="btn-icon">🔄</span>
+        Nova Simulação
+      </button>
+    </div>
+  </div>
+
+  <!-- Amortizações -->
+  <div class="form-section amort-section">
+    <div class="amort-header">
+      <h3 class="section-title">Cálculo de Amortizações <span class="opcional">(opcional)</span></h3>
+      <button
+        type="button"
+        class="btn-add-amort"
+        (click)="adicionarAmortizacao()"
+        [disabled]="amortizacoes.length >= 5">
+        + Adicionar Amortização
+      </button>
+    </div>
+    <p class="amort-obs">
+      Caso haja amortizações antes do vencimento, o sistema calcula o deságio restante sobre o saldo devedor.
+    </p>
+
+    <div *ngFor="let amort of amortizacoes; let i = index" class="amort-item">
+      <div class="amort-titulo">
+        <span>Amortização {{ i + 1 }}</span>
+        <button type="button" class="btn-remover" (click)="removerAmortizacao(i)">✕</button>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>
+            Valor da Amortização (R$)
+            <span class="hint">Valor líquido amortizado</span>
+          </label>
+          <input
+            type="number"
+            [(ngModel)]="amort.valor"
+            step="0.01"
+            min="0"
+            placeholder="Ex: 30.000,00">
+        </div>
+        <div class="form-group">
+          <label>
+            Data da Amortização
+            <span class="hint">Deve ser entre antecipação e vencimento</span>
+          </label>
+          <input type="date" [(ngModel)]="amort.data">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resultado -->
+  <div *ngIf="resultado" class="resultado">
+    <h3>📋 Resultado da Simulação</h3>
+
+    <!-- Resumo de Entradas -->
+    <div class="input-summary">
+      <div class="summary-item">
+        <span class="label">Valor Antecipação</span>
+        <span class="value">{{ formatarMoeda(resultado.valorAntecipacao) }}</span>
+      </div>
+      <div class="summary-item">
+        <span class="label">Fator Mensal</span>
+        <span class="value taxa">{{ resultado.fator }}% a.m.</span>
+      </div>
+      <div class="summary-item">
+        <span class="label">Prazo</span>
+        <span class="value">{{ resultado.prazo }} dias</span>
+      </div>
+      <div class="summary-item">
+        <span class="label">Taxa Efetiva no Prazo</span>
+        <span class="value taxa">{{ formatarPct(resultado.taxaEfetiva) }}</span>
+      </div>
+    </div>
+
+    <!-- Breakdown -->
+    <div class="calculo-breakdown">
+      <div class="breakdown-item" *ngIf="resultado.mora > 0">
+        <div class="breakdown-header">
+          <span class="breakdown-label">Mora</span>
+        </div>
+        <div class="breakdown-value accent">+ {{ formatarMoeda(resultado.mora) }}</div>
+      </div>
+
+      <div class="breakdown-item">
+        <div class="breakdown-header">
+          <span class="breakdown-label">Deságio (taxa efetiva)</span>
+          <span class="breakdown-formula">
+            {{ formatarMoeda(resultado.valorAntecipacao) }} × {{ formatarPct(resultado.taxaEfetiva) }}
+          </span>
+        </div>
+        <div class="breakdown-value negative">+ {{ formatarMoeda(resultado.desagio) }}</div>
+      </div>
+
+      <div class="breakdown-item total">
+        <div class="breakdown-header">
+          <span class="breakdown-label">Valor Bruto Antecipação</span>
+          <span class="breakdown-formula" style="color:rgba(255,255,255,0.7)">
+            Valor + Deságio{{ resultado.mora > 0 ? ' + Mora' : '' }}
+          </span>
+        </div>
+        <div class="breakdown-value-total">{{ formatarMoeda(resultado.valorBruto) }}</div>
+      </div>
+
+      <div class="breakdown-item conferencia-box">
+        <div class="breakdown-header">
+          <span class="breakdown-label">Conferência (método linear)</span>
+          <span class="breakdown-formula">
+            Valor Bruto × ({{ resultado.fator }}% ÷ 30) × {{ resultado.prazo }} ÷ 100
+          </span>
+        </div>
+        <div class="breakdown-value conf-value">{{ formatarMoeda(resultado.conferencia) }}</div>
+      </div>
+    </div>
+
+    <!-- Amortizações -->
+    <div *ngIf="resultado.amortizacoes.length > 0" class="amort-resultado">
+      <h4>Detalhamento das Amortizações</h4>
+
+      <div *ngFor="let amort of resultado.amortizacoes" class="amort-card">
+        <div class="amort-card-title">Amortização {{ amort.numero }}</div>
+        <div class="amort-grid">
+          <div class="amort-dado">
+            <span class="dado-label">Valor Amortizado</span>
+            <span class="dado-valor">{{ formatarMoeda(amort.valor) }}</span>
+          </div>
+          <div class="amort-dado">
+            <span class="dado-label">Prazo (dias até amortização)</span>
+            <span class="dado-valor">{{ amort.prazo }} dias</span>
+          </div>
+          <div class="amort-dado">
+            <span class="dado-label">FATOR Antecipado</span>
+            <span class="dado-valor taxa">{{ formatarPct(amort.fatorAntecipado) }}</span>
+          </div>
+          <div class="amort-dado">
+            <span class="dado-label">Deságio Antecipado</span>
+            <span class="dado-valor negative">{{ formatarMoeda(amort.desagioAntecipado) }}</span>
+          </div>
+          <div class="amort-dado">
+            <span class="dado-label">Dif. Adto Prop.</span>
+            <span class="dado-valor positive">{{ formatarMoeda(amort.difAdtoProp) }}</span>
+          </div>
+          <div class="amort-dado destaque">
+            <span class="dado-label">Saldo Devedor</span>
+            <span class="dado-valor">{{ formatarMoeda(amort.saldoDevedor) }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -316,6 +316,13 @@ export const routes: Routes = [
           import('./pages/calculadora/calculadoraJurosCompostos/calculadoraJurosCompostos.component')
             .then(m => m.CalculadoraJurosCompostosComponent),
       },
+      {
+        path: 'antecipacao',
+        title: 'Calculadora de Antecipação',
+        loadComponent: () =>
+          import('./pages/calculadora/calculadoraAntecipacao/calculadoraAntecipacao.component')
+            .then(m => m.CalculadoraAntecipacaoComponent),
+      },
     ],
   },
 

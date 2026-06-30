@@ -1,0 +1,360 @@
+.antecipacao-container {
+  width: 95%;
+  max-width: 1250px;
+  margin: 0 auto;
+}
+
+.btn-voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1.2rem;
+  background: #002B49;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  margin: 1.2rem 0 1rem;
+  box-shadow: 0 2px 8px rgba(0,43,73,0.18);
+}
+.btn-voltar:hover { background: #003d6b; transform: translateX(-4px); }
+
+.antecipacao-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.antecipacao-header h2 {
+  font-size: 1.6rem;
+  margin: 0 0 0.4rem 0;
+  font-weight: 600;
+  background: linear-gradient(135deg, #00253F 0%, #003d66 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.subtitle {
+  color: #7f8c8d;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* Fórmulas */
+.formula-info {
+  background: linear-gradient(135deg, #e8f4fc 0%, #d6eaf8 100%);
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  border-left: 3px solid #00253F;
+}
+.formula-info h3 {
+  color: #00253F;
+  font-size: 0.95rem;
+  margin: 0 0 0.75rem 0;
+  font-weight: 600;
+}
+.formulas {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.formula-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.8rem;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #cce0eb;
+}
+.formula-item.total {
+  background: linear-gradient(135deg, #003d66 0%, #00253F 100%);
+  color: white;
+  font-weight: 600;
+}
+.formula-item.total code { background: rgba(255,255,255,0.2); color: white; border-color: rgba(255,255,255,0.3); }
+.formula-item.conferencia { background: #f0f7f0; border-color: #a8d5a2; }
+.formula-item.conferencia .formula-label { color: #2e7d32; }
+.formula-item.conferencia code { color: #2e7d32; border-color: #a8d5a2; }
+.formula-label { font-weight: 500; color: #2c3e50; font-size: 0.85rem; }
+.formula-item.total .formula-label { color: white; font-size: 0.9rem; }
+.formulas code {
+  background: #fff;
+  padding: 0.25rem 0.6rem;
+  border-radius: 5px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+  color: #00253F;
+  border: 1px solid #cce0eb;
+  font-weight: 500;
+}
+.formula-obs {
+  font-size: 0.78rem;
+  color: #5d6d7e;
+  margin: 0.8rem 0 0;
+  font-style: italic;
+}
+
+/* Seções */
+.form-section {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 1.2rem;
+  margin-bottom: 1.2rem;
+}
+.section-title {
+  color: #00253F;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.6rem;
+  border-bottom: 2px solid #e8f4fc;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+label {
+  font-weight: 500;
+  color: #34495e;
+  font-size: 0.875rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.hint { font-size: 0.75rem; color: #95a5a6; font-weight: 400; }
+
+input[type="number"],
+input[type="date"] {
+  padding: 0.7rem 0.9rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  background: #f8f9fa;
+  color: #2c3e50;
+}
+input[type="number"]:focus,
+input[type="date"]:focus {
+  outline: none;
+  border-color: #00253F;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(0,37,63,0.1);
+}
+
+.input-with-suffix { position: relative; display: flex; align-items: center; }
+.input-with-suffix input { flex: 1; padding-right: 2.5rem; }
+.input-with-suffix .suffix { position: absolute; right: 0.8rem; color: #00253F; font-weight: 600; font-size: 0.9rem; }
+
+/* Prazo calculado */
+.prazo-display .prazo-valor {
+  padding: 0.7rem 0.9rem;
+  border: 2px dashed #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #95a5a6;
+  background: #f8f9fa;
+  text-align: center;
+}
+.prazo-display .prazo-valor.prazo-ativo {
+  border-color: #00253F;
+  color: #00253F;
+  background: #e8f4fc;
+}
+
+/* Erro */
+.erro-msg {
+  background: #fdecea;
+  color: #c0392b;
+  border: 1px solid #e74c3c;
+  border-radius: 6px;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.85rem;
+  margin-bottom: 0.8rem;
+}
+
+/* Botões */
+.button-group { display: flex; gap: 0.8rem; margin-top: 0.5rem; }
+button {
+  flex: 1;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+.btn-calcular {
+  background: linear-gradient(135deg, #003d66 0%, #00253F 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(0,37,63,0.3);
+}
+.btn-calcular:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,37,63,0.4); }
+.btn-limpar { background: #ecf0f1; color: #34495e; }
+.btn-limpar:hover { background: #bdc3c7; transform: translateY(-2px); }
+.btn-icon { font-size: 1rem; }
+
+/* Amortizações - formulário */
+.amort-section { }
+.amort-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem; flex-wrap: wrap; gap: 0.5rem; }
+.opcional { font-size: 0.75rem; color: #95a5a6; font-weight: 400; }
+.amort-obs { font-size: 0.78rem; color: #7f8c8d; margin: 0 0 1rem 0; font-style: italic; }
+.btn-add-amort {
+  flex: none;
+  padding: 0.4rem 0.9rem;
+  background: #003d66;
+  color: white;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+.btn-add-amort:hover:not(:disabled) { background: #00253F; transform: none; }
+.btn-add-amort:disabled { opacity: 0.5; cursor: not-allowed; }
+.amort-item {
+  background: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 0.9rem;
+  margin-bottom: 0.8rem;
+}
+.amort-titulo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  color: #00253F;
+  font-size: 0.85rem;
+  margin-bottom: 0.7rem;
+}
+.btn-remover {
+  flex: none;
+  background: #e74c3c;
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-remover:hover { background: #c0392b; transform: none; }
+
+/* Resultado */
+.resultado {
+  background: linear-gradient(135deg, #e8f4fc 0%, #d6eaf8 100%);
+  padding: 1.5rem;
+  border-radius: 10px;
+  border: 2px solid #00253F;
+  animation: slideIn 0.3s ease;
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.resultado h3 { color: #00253F; font-size: 1.1rem; margin: 0 0 1.2rem 0; font-weight: 600; text-align: center; }
+
+.input-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.8rem;
+  padding: 0.8rem;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #cce0eb;
+  margin-bottom: 1rem;
+}
+.summary-item { display: flex; flex-direction: column; gap: 0.2rem; }
+.summary-item .label { font-size: 0.75rem; color: #7f8c8d; font-weight: 500; text-transform: uppercase; letter-spacing: 0.3px; }
+.summary-item .value { font-size: 0.95rem; color: #2c3e50; font-weight: 600; }
+.summary-item .value.taxa { color: #00253F; }
+
+.calculo-breakdown { display: flex; flex-direction: column; gap: 0.8rem; }
+.breakdown-item {
+  background: white;
+  padding: 0.9rem;
+  border-radius: 8px;
+  border: 1px solid #cce0eb;
+}
+.breakdown-item.total {
+  background: linear-gradient(135deg, #003d66 0%, #00253F 100%);
+  border: none;
+  color: white;
+}
+.breakdown-item.conferencia-box {
+  background: #f0f7f0;
+  border-color: #a8d5a2;
+}
+.breakdown-header { display: flex; flex-direction: column; gap: 0.2rem; margin-bottom: 0.6rem; }
+.breakdown-label { font-weight: 600; color: #2c3e50; font-size: 0.85rem; }
+.breakdown-item.total .breakdown-label { color: white; font-size: 0.9rem; }
+.breakdown-item.conferencia-box .breakdown-label { color: #2e7d32; }
+.breakdown-formula { font-family: 'Courier New', monospace; font-size: 0.75rem; color: #7f8c8d; }
+.breakdown-value { font-size: 1.2rem; font-weight: 700; color: #00253F; }
+.breakdown-value.negative { color: #e74c3c; }
+.breakdown-value.accent { color: #e67e22; }
+.breakdown-value.conf-value { color: #2e7d32; font-size: 1.1rem; }
+.breakdown-value-total { font-size: 1.5rem; font-weight: 700; color: white; }
+
+/* Resultado amortizações */
+.amort-resultado { margin-top: 1.2rem; }
+.amort-resultado h4 { color: #00253F; font-size: 0.95rem; font-weight: 600; margin: 0 0 0.8rem 0; }
+.amort-card {
+  background: white;
+  border: 1px solid #cce0eb;
+  border-radius: 8px;
+  padding: 0.9rem;
+  margin-bottom: 0.8rem;
+}
+.amort-card-title { font-weight: 600; color: #003d66; font-size: 0.85rem; margin-bottom: 0.7rem; }
+.amort-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.7rem;
+}
+.amort-dado { display: flex; flex-direction: column; gap: 0.15rem; }
+.dado-label { font-size: 0.72rem; color: #7f8c8d; font-weight: 500; text-transform: uppercase; letter-spacing: 0.3px; }
+.dado-valor { font-size: 0.9rem; color: #2c3e50; font-weight: 600; }
+.dado-valor.taxa { color: #00253F; }
+.dado-valor.negative { color: #e74c3c; }
+.dado-valor.positive { color: #27ae60; }
+.amort-dado.destaque .dado-valor { color: #003d66; font-size: 1rem; }
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .antecipacao-container { width: 100%; padding: 0.75rem; }
+  .antecipacao-header h2 { font-size: 1.4rem; }
+  .button-group { flex-direction: column; }
+  .formula-item { flex-direction: column; align-items: flex-start; gap: 0.4rem; }
+  .form-row { grid-template-columns: 1fr; }
+  .amort-header { flex-direction: column; align-items: flex-start; }
+  .input-summary { grid-template-columns: 1fr 1fr; }
+  .breakdown-value { font-size: 1.1rem; }
+  .breakdown-value-total { font-size: 1.3rem; }
+}
+@media (max-width: 480px) {
+  .antecipacao-container { padding: 0.6rem; }
+  .antecipacao-header h2 { font-size: 1.2rem; }
+  .formula-info { padding: 0.8rem; }
+  .resultado { padding: 1rem; }
+  .input-summary { grid-template-columns: 1fr; }
+  .amort-grid { grid-template-columns: 1fr 1fr; }
+}
+::placeholder { color: #95a5a6; opacity: 1; font-size: 0.9rem; }
