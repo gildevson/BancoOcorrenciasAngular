@@ -164,6 +164,20 @@ export const routes: Routes = [
         .then(m => m.Uy3Retorno400ValidadorComponent),
   },
   {
+    path: 'validadores/itau/cnab400',
+    title: 'Validador Itaú CNAB 400 Remessa',
+    loadComponent: () =>
+      import('./pages/validadores/itau/itau-cnab400-validador.component')
+        .then(m => m.ItauCnab400ValidadorComponent),
+  },
+  {
+    path: 'validadores/itau/retorno400',
+    title: 'Validador Itaú CNAB 400 Retorno',
+    loadComponent: () =>
+      import('./pages/validadores/itau/itau-retorno400-validador.component')
+        .then(m => m.ItauRetorno400ValidadorComponent),
+  },
+  {
     path: 'validadores/vortx/cnab400',
     title: 'Validador VORTX CNAB 400 Remessa',
     loadComponent: () =>

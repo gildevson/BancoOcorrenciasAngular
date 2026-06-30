@@ -41,7 +41,10 @@ export const BANCOS_DATA: BancoData[] = [
     nome: 'Itaú Unibanco',
     logo: 'https://raw.githubusercontent.com/Tgentil/Bancos-em-SVG/73d82e89efe74b80154053f560f50e16d981c351/Ita%C3%BA%20Unibanco%20S.A/itau-fundo-azul.svg',
     ativo: true,
-    // Validadores em breve
+    validadores: [
+      { nome: 'Remessa CNAB 400', routerLink: '/validadores/itau/cnab400', grupo: 'CNAB 400' },
+      { nome: 'Retorno CNAB 400', routerLink: '/validadores/itau/retorno400', grupo: 'CNAB 400' },
+    ]
   },
   {
     id: 'ae2a0308-abe3-4aa1-a9cb-9cf9b597636e',
